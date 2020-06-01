@@ -8,8 +8,8 @@
 node_modules/
 bundle.js
 bundle.js.map
-/public/assets
-/public
+public/assets
+public/
 
 # Ignore bundler config.
 /.bundle
