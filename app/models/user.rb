@@ -7,6 +7,8 @@ class User < ApplicationRecord
 
   after_initialize :ensure_session_token
 
+  belongs_to :activatable, polymorphic: true, optional: true
+
   def self.find_by_credentials(username, password)
     user = User.find_by(username: username)    
     !user.nil? && user.is_password?(password) ? user : nil 
@@ -34,6 +36,14 @@ class User < ApplicationRecord
   
   def ensure_session_token
     self.session_token ||= self.class.generate_session_token
+  end
+
+  def email_and_username_do_not_clash
+    if  (  self.email == self.username 
+        || self.class.exists?(email: self.username)
+        || self.class.exists?(username: self.email) ) do
+      errors.add(:username, 'or email are not unique credentials')
+    end
   end
 
 end
