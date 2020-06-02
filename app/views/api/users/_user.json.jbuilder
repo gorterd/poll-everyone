@@ -1,0 +1,1 @@
+json.extract! user, :id, :username, :email, :activatable_type, :activatable_id

@@ -1,5 +1,8 @@
 class Api::UsersController < ApplicationController
 
+  before_action :ensure_logged_in, only: [:show]
+  before_action :ensure_current_user, only: [:update]
+
   def show
     @user = User.find_by(id: params[:id])
     render json: @user
@@ -10,7 +13,7 @@ class Api::UsersController < ApplicationController
 
     if @user.save
       login!(@user)
-      render json: @user
+      render :show
     else
       render json: @user.errors.full_messages, status: 422
     end
@@ -20,7 +23,7 @@ class Api::UsersController < ApplicationController
     @user = User.find_by(id: params[:id])
 
     if @user.update(user_params)
-      render json: @user
+      render :show
     else
       render json: @user.errors.full_messages, status: 422
     end
@@ -30,6 +33,12 @@ class Api::UsersController < ApplicationController
 
   def user_params
     params.require(:user).permit(:username, :email, :password)
+  end
+
+  def ensure_current_user
+    unless current_user.id == params[:id]
+      render json: ['Not authorized to make this request.'], status: 401
+    end
   end
 
 end

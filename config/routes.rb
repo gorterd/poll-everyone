@@ -21,7 +21,9 @@ Rails.application.routes.draw do
   
   namespace :api, defaults: {format: :json} do
     resources :users, only: [:show, :create, :update]
-    resource :session, only: [:create, :destroy]
+    resource :session, only: [:create, :destroy] do
+      get 'session/exists', to: 'session#username_or_email_exists'
+    end
   end
 
 

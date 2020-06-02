@@ -20,7 +20,7 @@ class ApplicationController < ActionController::Base
   end
 
   def ensure_logged_in
-     render json: ['Not authorized to make this request.'], status: 401  unless logged_in?
+     render json: ['Login required for this request.'], status: 403  unless logged_in?
   end
 
 end

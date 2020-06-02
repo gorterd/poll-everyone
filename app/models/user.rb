@@ -1,16 +1,30 @@
 class User < ApplicationRecord
-
-  attr_reader :password
+  
+  EMAIL_REGEX = /^[a-zA-Z0-9_\-\.]+@[a-zA-Z0-9\-]+\.[a-z]{2,}$/
+  USERNAME_REGEX = /^[a-zA-Z0-9]+$/
 
   validates :username, :email, :password_digest, :session_token, presence: true, uniqueness: true
+  validates :username, length: {minimum: 4}
   validates :password, length: {minimum: 7}, allow_nil: true
-
+  validate :valid_email_syntax, :valid_username_syntax
+  
   after_initialize :ensure_session_token
 
+  attr_reader :password
+  
   belongs_to :activatable, polymorphic: true, optional: true
 
-  def self.find_by_credentials(username, password)
-    user = User.find_by(username: username)    
+  def self.username_or_email_exists?(username_or_email)
+    User.exists?(username: username_or_email) || User.exists?(email: username_or_email)
+  end
+
+  def self.find_by_credentials(username_or_email, password)
+    if EMAIL_REGEX =~ username_or_email 
+      user = User.find_by(email: username_or_email)    
+    else
+      user = User.find_by(username: username_or_email)
+    end
+
     !user.nil? && user.is_password?(password) ? user : nil 
   end
 
@@ -33,11 +47,23 @@ class User < ApplicationRecord
   end
 
   private
+
   
   def ensure_session_token
     self.session_token ||= self.class.generate_session_token
   end
 
+  def valid_email_syntax
+    unless EMAIL_REGEX =~ self.email
+      self.errors[:email] << 'address invalid'
+    end
+  end
+  
+  def valid_username_syntax
+    unless USERNAME_REGEX =~ self.username
+      self.errors[:username] << 'can only contain letters or numbers'
+    end
+  end
 
 end
 
