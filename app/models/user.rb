@@ -3,7 +3,8 @@ class User < ApplicationRecord
   EMAIL_REGEX = /^[a-zA-Z0-9_\-\.]+@[a-zA-Z0-9\-]+\.[a-z]{2,}$/
   USERNAME_REGEX = /^[a-zA-Z0-9]+$/
 
-  validates :first_name, :last_name, :username, :email, :password_digest, :session_token, presence: true, uniqueness: true
+  validates :username, :email, :password_digest, :session_token, presence: true, uniqueness: true
+  validates :first_name, :last_name, presence: true
   validates :username, length: {minimum: 4}
   validates :password, length: {minimum: 7}, allow_nil: true
   validate :valid_email_syntax, :valid_username_syntax

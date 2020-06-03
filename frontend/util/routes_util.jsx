@@ -21,7 +21,7 @@ const Protected = ({ Component, exact, path, loggedIn }) => {
 
 const mapState = ({session}, ownProps) => ({ 
   loggedIn: Boolean(session.currentType === 'user'),
-  Component: ownProps.children
+  Component: ownProps.children[0]
 })
 
 
