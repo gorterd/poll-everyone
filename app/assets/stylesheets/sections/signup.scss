@@ -1,0 +1,140 @@
+.signup {
+  display: flex;
+  position: fixed;
+  bottom: 0;
+  height: calc( 100vh - 72px);
+  width: 100%;
+  min-height: 0;
+
+
+  &> div[class*="signup-div"] {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow-y: auto;
+    
+    p { 
+      font-size: $fontsize-strong;
+    }
+
+    &.signup-div-left {
+      flex: 2;
+      background: $gradient;
+
+      h1, p { color: white; }
+
+
+      .signup-div-text {
+        width: fit-content;
+      }
+    }
+    
+    &.signup-div-right {
+      flex: 1;
+      background: white;
+
+      .signup-div-text {
+        min-width: 300px;
+        width: min-content;
+      }
+
+    }
+  }
+  
+  .signup-div-text {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    height: 100%;
+    
+    &>* {
+      margin: 8px 0;
+    }
+
+    &::before{ margin-top: auto; content: ''}
+    &::after{ margin-bottom: auto; content: ''}
+    
+  }
+}
+
+.signup-splash {
+  .button {
+    border-radius: 3px;
+  }
+}
+
+.signup-form-container  {
+
+  .signup-div-text {
+    align-items: center; 
+  }
+
+
+}
+
+.signup-form {
+  width: 385px;
+  padding: 36px;
+  background-color: white;
+  border-radius: 5px;
+
+  input {
+    border: 1px solid $grey;
+    background-color: white;
+    width: 100%;
+    padding: 8px 10px;
+  }
+
+  &>* {
+    margin: 16px 0;
+  }
+
+  .button {
+    width: 100%;
+  }
+
+  ::placeholder {
+    color: $grey;
+  }
+
+  .signup-input-container {
+    position: relative;
+
+    .signup-error {
+      position: absolute;
+      background: $soft-coral;
+      border: 1px solid $rich-coral;
+      padding: 10px 30px;
+      border-radius: 5px;
+      top: 50%;
+      left: 101.5%;
+      transform: translate(0, -50%);
+      width: fit-content;
+      max-width: calc((66vw - 385px)/1.8);
+      
+      .error-message { color: $charcoal; font-size: 1rem; }
+
+      .error-triangle-outline {
+        position: absolute;
+        right: 100%;
+        top: 50%;
+        transform: translate(0,-50%);
+        border-right: 12px solid $rich-coral;
+        border-top: 12px solid transparent;
+        border-bottom: 12px solid transparent;
+      }
+
+      .error-triangle-fill {
+        position: absolute;
+        right: 100%;
+        top: 50%;
+        transform: translate(0,-50%);
+        border-right: 11px solid $soft-coral;
+        border-top: 11px solid transparent;
+        border-bottom: 11px solid transparent;
+      }
+
+      strong { font-weight: 700;}
+    }
+  }
+}

@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { logout } from '../../actions/session_actions';
+import { logout } from '../../../../actions/session_actions';
 import AppNavbar from './app_navbar';
 
 const mapState = state => {

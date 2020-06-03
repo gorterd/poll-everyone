@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { checkIfUserExists, signup } from "../../actions/session_actions";
+import { checkIfUserExists, signup } from "../../../actions/session_actions";
 import SignupForm from './signup_form';
 
 const mapState = state => {

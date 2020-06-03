@@ -12,5 +12,83 @@
   position: fixed;
   top: 0;
   left: 0;
+  z-index: 1000;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+
+  li {
+    padding: 0 25px;
+  }
+
+  li:not(:first-child) {
+    font-size: $fontsize-h4;
+    font-weight: $fontweight-h4;
+
+    &:hover {
+      color: $grey;
+    }
+  }
+}
+
+.nav-triangle{
+  border-bottom: 36px solid $royal-blue;
+  border-right: 18px solid $royal-blue;
+  border-left: 18px solid transparent;
+  border-top: 36px solid transparent;
+}
+
+.nav-tools-container {
+  display: flex;
+  align-items: center;
+  height: 100%
+}
+
+.nav-tools {
+  display: flex;
+  align-items: center;
+  background: $gradient;
+  min-width: 50px;
+  height: 100%;
+  padding: 0 5px;
+
+  li {
+    padding: 0 20px;
+  }
+
+  .button {
+    border: 1px solid $royal-blue;
+    
+    &:hover {
+      border: 1px solid $grey;
+    }
+  }
+
+  .nav-tool {
+    font-size: $fontsize-strong;
+    font-weight: $fontweight-strong;
+    color: white;
+
+    &:hover {
+      color: $light-grey;
+    }
+  }
+}
+
+.logo {
+
+  display: flex;
+  span {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: $royal-blue;
+  }
+
+  img {
+    width: 32px;
+    margin-right: 5px;
+  }
 }
 

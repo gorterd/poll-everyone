@@ -1,0 +1,42 @@
+.home-splash-pane {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 575px;
+}
+
+.first-pane-sub {
+  margin: 35px 20px;
+}
+
+.first-pane-text {
+  width: 515px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+
+  &>* {
+    margin: 18px 0;
+  }
+
+  h3 {
+    line-height: 1.5em;
+  }
+
+  .button {
+    color: white;
+    width: fit-content;
+    background-color: $forest-green;
+  }
+
+  .button:hover {
+    background-color: $forest-green-hover;
+  }
+}
+
+
+.splash01 {
+  width: 470px; 
+  border-radius: 10px;
+}

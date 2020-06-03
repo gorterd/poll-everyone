@@ -2,7 +2,7 @@ class ApplicationController < ActionController::Base
 
   helper_method :current_user, :logged_in?
 
-  before_action :make_keys_snake_case
+  # before_action :make_keys_snake_case
 
   def current_user
     @current_user ||= User.find_by(session_token: session[:session_token])
@@ -25,8 +25,12 @@ class ApplicationController < ActionController::Base
      render json: ['Login required for this request.'], status: 403  unless logged_in?
   end
 
-  def make_keys_snake_case
-    params.transform_keys! { |k| k.underscore }
+  def snake_params(required = nil)
+    if required
+      params.require(required).transform_keys(&:underscore)
+    else
+      params.transform_keys(&:underscore)
+    end
   end
 
 end

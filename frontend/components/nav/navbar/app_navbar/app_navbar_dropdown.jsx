@@ -24,7 +24,7 @@ class AppNavbarDropdown extends React.Component {
     
     return (
       <div >
-        <button onClick={this.clickHandler}>{currentUser.username}</button>
+        <button className = "nav-tool" onClick={this.clickHandler}>{currentUser.username}</button>
         <ul className={"dropdown " + (this.state.drop ? "" : "hidden")} onBlur={this.blurHandler}>
           <li><Link to="/account">My settings</Link></li>
           <li><button onClick={logout}>Log out</button></li>

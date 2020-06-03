@@ -40,11 +40,14 @@ input[type="submit"] {
 
 // Broad Parent Styling
 
-body {
+#root {
   margin-top: 72px;
   background: $light-grey;
-  height: 1500px;
   font-family: $sans;
+  // min-height: 90vh;
 }
+
+
+
 
 

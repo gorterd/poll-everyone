@@ -4,7 +4,8 @@ import { Link } from 'react-router-dom';
 const Logo = ({relativeRootPath}) => {
   return (
     <Link to={relativeRootPath} className="logo">
-      Poll Everyone
+      <img src={window.logoURL} alt='Poll Everyone logo'/>
+      <span> Poll Everyone</span>
     </Link>
   )
 }

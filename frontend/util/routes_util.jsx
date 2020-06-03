@@ -2,22 +2,18 @@ import { connect } from 'react-redux'
 import React from 'react'
 import { Redirect, Route } from 'react-router-dom'
 
-const Auth = ({ component: Component, exact, path, loggedIn }) => {
+const Auth = ({ Component, exact, path, loggedIn }) => {
   return (
-    <Route
-      exact={exact}
-      path={path}
-      render={ props =>
-        loggedIn ? <Redirect to="/polls" /> : <Component {...props} />
-      }
-    />
+    <Route exact={exact} path={path}>
+        {loggedIn ? <Redirect to="/polls" /> : <Component />}
+    </Route>
   )
 }
 
 const Protected = ({ Component, exact, path, loggedIn }) => {
   return (
     <Route exact={exact} path={path}>
-      {loggedIn ? Component : <Redirect to="/login" />}
+      {loggedIn ? {Component} : <Redirect to="/login" />}
     </Route>
   )
 }
