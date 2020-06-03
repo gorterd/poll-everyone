@@ -28,3 +28,10 @@ export const logout = () => {
     url: '/api/session'
   });
 }
+
+export const checkIfUserExists = usernameOrEmail => {
+  return $.ajax({
+    url: '/api/session/exists',
+    data: { query: usernameOrEmail }
+  })
+}

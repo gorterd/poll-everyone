@@ -2,6 +2,7 @@
 #
 #                    Prefix Verb   URI Pattern                                                                              Controller#Action
 #                      root GET    /                                                                                        static_pages#root
+#     api_user_users_exists GET    /api/users/:user_id/users/exists(.:format)                                               api/users#check_if_user_exists {:format=>:json}
 #                 api_users POST   /api/users(.:format)                                                                     api/users#create {:format=>:json}
 #                  api_user GET    /api/users/:id(.:format)                                                                 api/users#show {:format=>:json}
 #                           PATCH  /api/users/:id(.:format)                                                                 api/users#update {:format=>:json}
@@ -21,9 +22,9 @@ Rails.application.routes.draw do
   
   namespace :api, defaults: {format: :json} do
     resources :users, only: [:show, :create, :update]
-    resource :session, only: [:create, :destroy] do
-      get 'session/exists', to: 'session#username_or_email_exists'
-    end
+    
+    resource :session, only: [:create, :destroy]
+    get 'session/exists', to: 'sessions#check_if_user_exists'
   end
 
 

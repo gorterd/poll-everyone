@@ -10,7 +10,7 @@ class Api::SessionsController < ApplicationController
 
     if @user
       login!(@user)
-      render :show
+      render 'api/users/show'
     else
       render json: ['Incorrect password'], status: 422
     end
@@ -22,11 +22,11 @@ class Api::SessionsController < ApplicationController
     render json: { id: id }
   end
 
-  def username_or_email_exists
-    if User.username_or_email_exists(params[:user][:username_or_email])
-      render status: 200
+  def check_if_user_exists
+    if User.username_or_email_exists?(params[:query])
+      render json: {}, status: 200
     else
-      render json: ['No account with that email or username exists'], status: 422
+      render json: ['No account with that email or username exists'], status: 404
     end
   end
 
