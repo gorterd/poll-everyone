@@ -90,6 +90,21 @@
   background-color: white;
   border-radius: 5px;
 
+  .session-errors-container{
+    background-color: $soft-coral;
+    border: 1px solid $rich-coral;
+    border-radius: 5px;
+    padding: 10px;
+
+    color: $dark-brick;
+
+    & > h2 { color: $dark-brick; }
+
+    .session-errors {
+      margin: 25px 0 15px 0;
+    }
+  }
+
   input {
     border: 1px solid $grey;
     background-color: white;
@@ -103,6 +118,10 @@
 
   .button {
     width: 100%;
+
+    &.disabled {
+      background-color: $royal-blue-disabled;
+    }
   }
 
   ::placeholder {
@@ -111,6 +130,24 @@
 
   .signup-input-container {
     position: relative;
+
+    &:last-of-type {
+      display: flex;
+      justify-content: flex-start;
+
+      .signup-error { 
+        top: -14px;
+        left: 24px;
+        transform: unset;
+      }
+
+      input { width: min-content; margin-left: 5px;}
+      label { 
+        flex: 1; 
+        margin-left: 12px;
+        line-height: 1.7rem;
+      }
+    }
 
     .signup-error {
       position: absolute;

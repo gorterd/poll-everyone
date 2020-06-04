@@ -54,7 +54,11 @@ class LoginForm extends React.Component {
           completed={true}
           type="text"
           value={usernameOrEmail}
-          onFocus={() => this.setState({fullForm: false})}
+          onFocus={() => {
+            this.props.resetSessionErrors();
+            this.setState({fullForm: false})
+          }
+          }
         />
 
         <LoginInput
@@ -96,7 +100,7 @@ class LoginForm extends React.Component {
           {form}
           <div className="login-form-posttext">
             <p ><a>Forgot your password?</a></p>
-            <p >Need an account? <Link to='/signup/splash'>Create one now</Link></p>
+            <p >Need an account? <Link className="login-link" to='/signup/splash'>Create one now</Link></p>
           </div>
         </div>
       </section>

@@ -14,3 +14,11 @@ demo = User.create(
   email: "isThisTheRealLife@isThisJustFantasy.idk",
   password: "its_all_a_simulation"
 )
+
+easy = User.create(
+  first_name: "easy",
+  last_name: "peasy",
+  username: "easy",
+  email: "easy@easy.com",
+  password: "123123123"
+)

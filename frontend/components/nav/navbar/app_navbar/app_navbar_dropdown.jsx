@@ -15,7 +15,7 @@ class AppNavbarDropdown extends React.Component {
   }
   
   blurHandler(){
-    this.setState({ drop: false});
+    setTimeout( () => this.setState({ drop: false}), 50);
   }
 
   render() {
@@ -23,13 +23,13 @@ class AppNavbarDropdown extends React.Component {
 
     
     return (
-      <>
-        <button className = "nav-tool" onClick={this.clickHandler}>{currentUser.username}</button>
-        <ul className={"dropdown " + (this.state.drop ? "" : "hidden")} onBlur={this.blurHandler}>
-          <li><Link to="/account">My settings</Link></li>
-          <li><button onClick={logout}>Log out</button></li>
+      <button className="nav-dropdown-container" onBlur={this.blurHandler}>
+        <button className="nav-tool" onClick={this.clickHandler}>{currentUser.username}</button>
+        <ul className={"navbar-dropdown " + (this.state.drop ? "" : "hidden")} >
+          <li className="dropdown-li"><Link className="dropdown-item" to="/account">My settings</Link></li>
+          <li className="dropdown-li"><button className="dropdown-item" onClick={logout}>Log out</button></li>
         </ul>
-      </>
+      </button>
     )
   }
 };

@@ -28,7 +28,7 @@ const receiveSessionErrors = errors => {
   }
 }
 
-const resetSessionErrors = () => {
+export const resetSessionErrors = () => {
   return {
     type: RESET_SESSION_ERRORS
   }

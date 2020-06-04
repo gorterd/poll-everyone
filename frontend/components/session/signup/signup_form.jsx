@@ -12,13 +12,16 @@ class SignupForm extends React.Component {
         lastName: '',
         email: '',
         password: '',
+        terms: false,
       },
       displayError: {
         firstName: false,
         lastName: false,
         email: false,
-        password: false
-      }
+        password: false,
+        terms: false,
+      },
+      submitDisabled: false
     }
 
     this.validations = {
@@ -26,49 +29,81 @@ class SignupForm extends React.Component {
       lastName: validName,
       email: validEmail,
       password: validPassword,
+      terms: status => status
     }
 
     this.submit = this.submit.bind(this)
     this.handleInput = this.handleInput.bind(this)
     this.validateInput = this.validateInput.bind(this)
-    this.isError = this.isError.bind(this)
+    this.validateForm = this.validateForm.bind(this)
   };
 
   submit(e) {
     e.preventDefault();
-     
-    this.props.signup(this.state.formData)
-      .then(() => this.props.history.push('/polls'));
+    if (this.validateForm()){
+      this.props.signup(this.state.formData)
+        .then(() => this.props.history.push('/polls'));
+    } 
   }
 
   handleInput(field) {
     return e => {
-      const nextFormData = Object.assign({}, this.state.formData, { [field]: e.target.value });
+      const value = (field === 'terms') ? e.target.checked : e.target.value
+      const nextFormData = Object.assign({}, this.state.formData, { [field]: value });
       this.setState({ formData: nextFormData })
     }
   }
   
+  _validate(field, value){
+    const isValid = this.validations[field](value);
+    
+    
+    this.setState( (state, props) => {
+      const newDisplayError = Object.assign({}, state.displayError, {[field]: !isValid});
+      return {displayError: newDisplayError};
+    });
+    return isValid;
+  }
+
   validateInput(field) {
     return e => {
-      const isValid = this.validations[field](e.target.value);
-      const newDisplayError = Object.assign({}, this.state.displayError, {[field]: !isValid})
-      this.setState({displayError: newDisplayError});
+      const value = (field === 'terms') ? e.target.checked : e.target.value
+      this._validate(field, value);
+
+      const { submitDisabled, displayError } = this.state;
+
+      if (submitDisabled && !Object.values(displayError).some( bool => bool)) {
+        this.setState({submitDisabled: false})
+      }
     }
   }
   
-  isError() {
-    return Object.values(this.state.displayError).some( bool => bool );
-  }
+  validateForm() {
+    const { formData } = this.state;
+    let valid = true;
 
+    
+    Object.keys(formData).forEach( field => {
+      if ( !this._validate(field, formData[field]) ){ valid = false; }
+    });
+    
+    if (!valid) {
+      this.setState({submitedDisabled: true})
+    }
+
+    return valid;
+  }
+  
   render() {
 
-    const { displayError, formData } = this.state;
+    const { displayError, formData, submitDisabled } = this.state;
 
     const errorMessages = {
       firstName: <p className="error-message">First name can't be blank</p>,
       lastName: <p className="error-message">Last name can't be blank</p>, 
       password: <p className="error-message">Your password needs to be at least 7 characters</p>,
-      email: <><p className="error-message">That doesn't look right.</p> <strong>(We won't spam you.)</strong></>
+      email: <><p className="error-message">That doesn't look right.</p> <strong>(We won't spam you.)</strong></>,
+      terms: <p className="error-message">They're not optional, buddy</p>
     }
 
     const inputProps = { 
@@ -79,6 +114,14 @@ class SignupForm extends React.Component {
       validateInput: this.validateInput,  
     }
 
+    const sessionErrors = this.props.sessionErrors.length ? 
+      <div className="session-errors-container">
+        <h2>Uh oh! Couldn't make that account for ya.</h2>
+        There were problems with the following fields:
+        <div className="session-errors">
+          {this.props.sessionErrors}
+        </div>
+      </div> : null
 
     return (
       <section className='signup signup-form-container' >
@@ -90,12 +133,24 @@ class SignupForm extends React.Component {
 
             <form onSubmit={this.submit} className="signup-form">
 
+              {sessionErrors}
+
               <SignupInput type='text' field='firstName' text='First name' {...inputProps} />
               <SignupInput type='text' field='lastName' text='Last name' {...inputProps} />
               <SignupInput type='text' field='email' text='Email' {...inputProps} />
               <SignupInput type='password' field='password' text='Password' {...inputProps} />
+              <SignupInput type='checkbox' field='terms' 
+                text='Agree to the nonexistent Terms and Conditions' 
+                id="terms-checkbox"
+                {...inputProps} />
 
-              <button type='submit' className="button button-blue" disabled={this.isError()} >Sign up </button>
+              {/* <input type="checkbox" onBlur={this.validateInput('terms')}/> */}
+
+              <button 
+                type='submit' 
+                className={"button button-blue" + (submitDisabled ? " disabled": "") }
+                disabled={submitDisabled}
+              >Sign up </button>
 
             </form>
 
