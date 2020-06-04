@@ -1,5 +1,6 @@
 import React from 'react';
 import AttributedImage from '../shared/attributed_image';
+import { Link } from 'react-router-dom';
 
 const HomeSplash = () => {
   return (
@@ -8,7 +9,7 @@ const HomeSplash = () => {
         <div className="first-pane-sub first-pane-text">
           <h1>Host engaging realtime surveys, wherever, whenever.</h1>
           <h3>Gather informative feedback instantly in your class, meeting, conference, or any other event.</h3>
-          <button className="button">Get started</button>
+          <Link className="button" to="/signup/splash">Get started</Link>
         </div>
         <div className="first-pane-sub first-pane-image">
           <AttributedImage 

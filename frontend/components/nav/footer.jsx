@@ -5,41 +5,41 @@ const Footer = () => {
   const FOOTER_LINKS = {
     "Services": [
       "Events",
-      "Learning & Development",
-      "K-12",
-      "Higher-ed",
+      "Learning & redevelopment",
+      "Primary education",
+      "Postsecondary education",
       "International",
-      "Enterprise",
-      "Online meetings",
+      "Business",
+      "Cloud meetings",
     ],
     
     "Desktop apps": [
-      "PowerPoint",
-      "Keynote",
-      "Google Slides",
-      "Slack",
+      "PowerPresentation",
+      "Keynotation",
+      "Goggle Slides",
+      "Slacker",
     ],
     
     "Mobile apps": [
-      "iOS",
-      "Android",
+      "eOS",
+      "Droid",
     ],
     
     "Support": [
-      "Plans & pricing",
+      "Plans & prices",
       "Premium features",
+      "Super premium features",
       "How it works",
       "Support",
-      "Case studies",
       "Guides",
-      "Video guide",
+      "Visual guide",
       "Webinars",
     ],
     
     "Company": [
-      "About",
+      "About us",
       "Blog",
-      "Jobs",
+      "Career",
       "Security",
     ]
   };

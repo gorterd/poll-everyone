@@ -1,12 +1,12 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import Navbar from '../navbar';
 import AppNavbarDropdown from './app_navbar_dropdown';
 
 const AppNavbar = props => {
   const links = [
-    <Link to='/polls'>Polls</Link>,
-    <Link to='/reports'>Reports</Link>
+    <NavLink activeClassName="navbar-active" to='/polls'>Polls</NavLink>,
+    <NavLink activeClassName="navbar-active" to='/reports'>Reports</NavLink>
   ];
 
   const tools = [<AppNavbarDropdown {...props} />]

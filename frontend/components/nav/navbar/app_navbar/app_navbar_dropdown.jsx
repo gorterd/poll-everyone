@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 
 class AppNavbarDropdown extends React.Component {
   constructor(props) {
@@ -8,6 +8,7 @@ class AppNavbarDropdown extends React.Component {
   
     this.clickHandler = this.clickHandler.bind(this);
     this.blurHandler = this.blurHandler.bind(this);
+    this.handleLogout = this.handleLogout.bind(this);
   };
 
   clickHandler(){
@@ -18,20 +19,24 @@ class AppNavbarDropdown extends React.Component {
     setTimeout( () => this.setState({ drop: false}), 50);
   }
 
+  handleLogout(){
+    this.props.logout().then( () => this.props.history.push('/'))
+  }
+
   render() {
-    const { currentUser, logout } = this.props;
+    const { currentUser } = this.props;
 
     
     return (
       <button className="nav-dropdown-container" onBlur={this.blurHandler}>
-        <button className="nav-tool" onClick={this.clickHandler}>{currentUser.username}</button>
+        <span className="nav-tool" onClick={this.clickHandler}>{currentUser.username}</span>
         <ul className={"navbar-dropdown " + (this.state.drop ? "" : "hidden")} >
           <li className="dropdown-li"><Link className="dropdown-item" to="/account">My settings</Link></li>
-          <li className="dropdown-li"><button className="dropdown-item" onClick={logout}>Log out</button></li>
+          <li className="dropdown-li"><span className="dropdown-item" onClick={this.handleLogout}>Log out</span></li>
         </ul>
       </button>
     )
   }
 };
 
-export default AppNavbarDropdown;
+export default withRouter(AppNavbarDropdown);

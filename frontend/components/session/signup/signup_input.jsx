@@ -28,7 +28,7 @@ const SignupInput =
   ): (
     <div className="signup-input-container">
       <input
-        className={"signup-input" + displayError[field] ? "signup-input-error" : ""}
+        className={"signup-input" + (displayError[field] ? " signup-input-error" : "")}
         type={type}
         placeholder={text}
         value={formData[field]}

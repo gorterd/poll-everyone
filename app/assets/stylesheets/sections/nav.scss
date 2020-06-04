@@ -32,6 +32,19 @@
       color: $grey;
     }
   }
+
+  .navbar-active {
+    position: relative;
+
+    &::after{
+      position: absolute;
+      content: '';
+      left: 7%;
+      right: 7%;
+      top: 43px;
+      border-bottom: 4px solid $royal-blue;
+    }
+  }
 }
 
 .nav-triangle{

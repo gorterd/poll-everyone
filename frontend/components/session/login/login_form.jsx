@@ -18,6 +18,10 @@ class LoginForm extends React.Component {
     this.handleInput = this.handleInput.bind(this)
   };
 
+  componentDidMount() {
+    this.props.resetSessionErrors();
+  }
+
   submit(e){
     e.preventDefault();
     this.props.login(this.state.formData)
@@ -41,6 +45,7 @@ class LoginForm extends React.Component {
 
     const { fullForm, formData: { usernameOrEmail, password }} = this.state;
     const errorMsg = this.props.sessionErrors[0];
+    const { sessionIsLoading } = this.props;
 
     const form = fullForm ? (
 
@@ -70,7 +75,8 @@ class LoginForm extends React.Component {
           onChange={this.handleInput('password')}
         />
 
-        <button className='button button-red' type='submit'>Log in</button>
+        <button className='button button-red' type='submit' disabled={sessionIsLoading}>
+          {sessionIsLoading ? "Logging in..." : "Log in"}</button>
 
       </form>
 
@@ -87,7 +93,8 @@ class LoginForm extends React.Component {
         />
           
 
-        <button className='button button-red' type='submit'>Next</button>
+        <button className='button button-red' type='submit' disabled={sessionIsLoading}>
+          {sessionIsLoading ? "Checking..." : "Next"}</button>
 
       </form>
 

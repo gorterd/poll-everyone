@@ -18,12 +18,23 @@ const Protected = ({ Component, exact, path, loggedIn }) => {
   )
 }
 
-
 const mapState = ({session}, ownProps) => ({ 
   loggedIn: Boolean(session.currentType === 'user'),
   Component: ownProps.children
 })
 
-
 export const AuthRoute = connect(mapState)(Auth);
 export const ProtectedRoute = connect(mapState, null)(Protected);
+
+export class StartAtTop extends React.Component {
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.location.pathname !== this.props.location.pathname) {
+      window.scrollTo(0, 0);
+    }
+  }
+
+  render() {
+    return null;
+  }
+}

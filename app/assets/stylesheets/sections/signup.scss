@@ -119,7 +119,7 @@
   .button {
     width: 100%;
 
-    &.disabled {
+    &:disabled {
       background-color: $royal-blue-disabled;
     }
   }
@@ -137,7 +137,7 @@
 
       .signup-error { 
         top: -14px;
-        left: 24px;
+        left: 26px;
         transform: unset;
       }
 
@@ -147,6 +147,10 @@
         margin-left: 12px;
         line-height: 1.7rem;
       }
+    }
+
+    .signup-input-error {
+      color: $brick-red;
     }
 
     .signup-error {

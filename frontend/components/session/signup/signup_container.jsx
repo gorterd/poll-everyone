@@ -1,17 +1,19 @@
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { signup } from "../../../actions/session_actions";
+import { signup, resetSessionErrors } from "../../../actions/session_actions";
 import SignupForm from './signup_form';
 
 const mapState = state => {
   return {
     sessionErrors: state.errors.session,
+    sessionIsLoading: state.ui.session.loading,
   }
 }
 
 const mapDispatch = dispatch => {
   return {
     signup: formData => dispatch(signup(formData)),
+    resetSessionErrors: () => dispatch(resetSessionErrors()),
   }
 }
 

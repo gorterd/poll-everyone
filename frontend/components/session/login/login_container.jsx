@@ -5,7 +5,8 @@ import LoginForm from './login_form';
 
 const mapState = state => {
   return {
-    sessionErrors: state.errors.session,
+    sessionErrors: state.errors.session,  
+    sessionIsLoading: state.ui.session.loading,
   }
 }
 

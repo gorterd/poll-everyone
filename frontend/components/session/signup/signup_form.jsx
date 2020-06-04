@@ -38,12 +38,18 @@ class SignupForm extends React.Component {
     this.validateForm = this.validateForm.bind(this)
   };
 
+  componentDidMount() {
+    this.props.resetSessionErrors();
+  }
+
   submit(e) {
     e.preventDefault();
     if (this.validateForm()){
       this.props.signup(this.state.formData)
         .then(() => this.props.history.push('/polls'));
-    } 
+    } else {
+      this.setState({submitDisabled: true})
+    }
   }
 
   handleInput(field) {
@@ -61,7 +67,13 @@ class SignupForm extends React.Component {
     this.setState( (state, props) => {
       const newDisplayError = Object.assign({}, state.displayError, {[field]: !isValid});
       return {displayError: newDisplayError};
-    });
+    }, (() => {
+      const {submitDisabled, displayError} = this.state;
+      if (submitDisabled && !Object.values(displayError).some(bool => bool)) {
+          this.setState({ submitDisabled: false })
+      };
+    }));
+
     return isValid;
   }
 
@@ -69,12 +81,6 @@ class SignupForm extends React.Component {
     return e => {
       const value = (field === 'terms') ? e.target.checked : e.target.value
       this._validate(field, value);
-
-      const { submitDisabled, displayError } = this.state;
-
-      if (submitDisabled && !Object.values(displayError).some( bool => bool)) {
-        this.setState({submitDisabled: false})
-      }
     }
   }
   
@@ -97,6 +103,7 @@ class SignupForm extends React.Component {
   render() {
 
     const { displayError, formData, submitDisabled } = this.state;
+    const { sessionErrors, sessionIsLoading } = this.props;
 
     const errorMessages = {
       firstName: <p className="error-message">First name can't be blank</p>,
@@ -114,12 +121,12 @@ class SignupForm extends React.Component {
       validateInput: this.validateInput,  
     }
 
-    const sessionErrors = this.props.sessionErrors.length ? 
+    const sessionErrorsDiv = sessionErrors.length ? 
       <div className="session-errors-container">
         <h2>Uh oh! Couldn't make that account for ya.</h2>
         There were problems with the following fields:
         <div className="session-errors">
-          {this.props.sessionErrors}
+          {sessionErrors}
         </div>
       </div> : null
 
@@ -133,7 +140,7 @@ class SignupForm extends React.Component {
 
             <form onSubmit={this.submit} className="signup-form">
 
-              {sessionErrors}
+              {sessionErrorsDiv}
 
               <SignupInput type='text' field='firstName' text='First name' {...inputProps} />
               <SignupInput type='text' field='lastName' text='Last name' {...inputProps} />
@@ -144,13 +151,11 @@ class SignupForm extends React.Component {
                 id="terms-checkbox"
                 {...inputProps} />
 
-              {/* <input type="checkbox" onBlur={this.validateInput('terms')}/> */}
-
               <button 
                 type='submit' 
-                className={"button button-blue" + (submitDisabled ? " disabled": "") }
-                disabled={submitDisabled}
-              >Sign up </button>
+                className="button button-blue"
+                disabled={submitDisabled || sessionIsLoading}
+              >{ sessionIsLoading ? "Signing up..." : "Sign up" }</button>
 
             </form>
 

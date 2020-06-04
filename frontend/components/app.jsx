@@ -9,16 +9,12 @@ import { AuthRoute, ProtectedRoute } from '../util/routes_util';
 import LoginFormContainer from './session/login/login_container';
 import SignupFormContainer from './session/signup/signup_container';
 import SignupSplash from './session/signup/signup_splash';
-import { ScrollToTop } from '../util/window_util'
 
 
 
 const App = () => {
   return (
-    <>
-      
-      <ScrollToTop />    
-
+    <>     
       <section className='content'>
         <Switch>
           <Route exact path='/'><HomeNavbarContainer /></Route>
