@@ -1,6 +1,7 @@
 import React from 'react';
 import { validEmail, validName, validPassword } from "../../../util/validation_util";
 import SignupInput from './signup_input';
+import AttributedImage from '../../shared/attributed_image';
 
 class SignupForm extends React.Component {
   constructor(props) {
@@ -100,7 +101,17 @@ class SignupForm extends React.Component {
 
           </div>
         </div>
-        <div className="signup-div-right"></div>
+        <div className="signup-div-right">
+          <AttributedImage
+            id="signup-form-img"
+            src={window.signupSplash02URL}
+            alt={"Person Looking at Charts"}
+            imgClass="signup-splash-img"
+            iconClass="icon-dark"
+          >
+            <a href="https://stories.freepik.com/illustration/setup-analytics/rafiki#FF725EFF">Illustration vector created by stories - stories.freepik.com</a>
+          </AttributedImage>
+        </div>
       </section >
     )
 
@@ -109,3 +120,4 @@ class SignupForm extends React.Component {
 };
 
 export default SignupForm;
+

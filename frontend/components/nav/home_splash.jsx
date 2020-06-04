@@ -3,7 +3,7 @@ import AttributedImage from '../shared/attributed_image';
 
 const HomeSplash = () => {
   return (
-    <section>
+    <section className='home-splash-container'>
       <div className="home-splash-pane">
         <div className="first-pane-sub first-pane-text">
           <h1>Host engaging realtime surveys, wherever, whenever.</h1>
@@ -12,9 +12,11 @@ const HomeSplash = () => {
         </div>
         <div className="first-pane-sub first-pane-image">
           <AttributedImage 
-            src={window.splash01URL} 
+            src={window.homeSplash01URL} 
             alt={"Woman Conducting a Survey"} 
-            imgClass="splash01">
+            imgClass="home-splash-img"
+            iconClass="icon-grey"
+            >
             <a href="https://www.freepik.com/free-photos-vectors/illustration">Illustration vector created by stories - www.freepik.com</a>
           </AttributedImage>
         </div>

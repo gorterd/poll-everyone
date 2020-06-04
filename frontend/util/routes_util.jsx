@@ -5,7 +5,7 @@ import { Redirect, Route } from 'react-router-dom'
 const Auth = ({ Component, exact, path, loggedIn }) => {
   return (
     <Route exact={exact} path={path}>
-        {loggedIn ? <Redirect to="/polls" /> : <Component />}
+        {loggedIn ? <Redirect to="/polls" /> : Component}
     </Route>
   )
 }
@@ -13,7 +13,7 @@ const Auth = ({ Component, exact, path, loggedIn }) => {
 const Protected = ({ Component, exact, path, loggedIn }) => {
   return (
     <Route exact={exact} path={path}>
-      {loggedIn ? {Component} : <Redirect to="/login" />}
+      {loggedIn ? Component : <Redirect to="/login" />}
     </Route>
   )
 }
@@ -21,7 +21,7 @@ const Protected = ({ Component, exact, path, loggedIn }) => {
 
 const mapState = ({session}, ownProps) => ({ 
   loggedIn: Boolean(session.currentType === 'user'),
-  Component: ownProps.children[0]
+  Component: ownProps.children
 })
 
 

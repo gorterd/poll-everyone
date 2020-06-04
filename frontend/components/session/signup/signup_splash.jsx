@@ -1,5 +1,6 @@
 import React from 'react';
 import {Link} from 'react-router-dom'
+import AttributedImage from '../../shared/attributed_image';
 
 const SignupSplash = () => {
   return (
@@ -11,6 +12,16 @@ const SignupSplash = () => {
           <Link className="button button-white" to='/signup/create'>I'm a presenter</Link>
 
         </div>
+
+        <AttributedImage
+          src={window.signupSplash01URL}
+          alt={"Business Presentation"}
+          imgClass="signup-splash-img"
+          iconClass="icon-light"
+          >
+          <a href="https://stories.freepik.com/illustration/on-the-office/rafiki">Illustration vector created by stories - stories.freepik.com</a>
+        </AttributedImage>
+        
       </div>
       <div className="signup-div-right">
         <div className="signup-div-text">

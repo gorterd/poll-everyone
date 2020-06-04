@@ -3,9 +3,11 @@ class Api::SessionsController < ApplicationController
   before_action :ensure_logged_in, only: [:destroy]
 
   def create
+    login_params = snake_params(:user)
+
     @user = User.find_by_credentials(
-      params[:user][:username_or_email],
-      params[:user][:password]
+      login_params[:username_or_email],
+      login_params[:password]
     )
 
     if @user

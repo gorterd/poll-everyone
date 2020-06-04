@@ -12,14 +12,26 @@ $fontweight-strong: 600;
 
 // color
 $light-grey: #ededed;
+$lightest-grey: #f7f7f7;
+$soft-grey: #d9d9d9;
+$grey: #919191;
+$dark-grey: #4d4d4d;
+$charcoal: #2E2E2E;
 $royal-blue: #007acc;
 $royal-blue-hover: #0068ad;
 $forest-green: #058f00;
 $forest-green-hover: #067000;
-$grey: #919191;
-$charcoal: #2E2E2E;
 $soft-coral: #fce5e3;
 $rich-coral: #f05e51;
 
 $gradient: linear-gradient(90deg, $royal-blue, #005085);
+
+// mixins
+
+%wide-flexbox-container {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+}
 

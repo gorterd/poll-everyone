@@ -1,6 +1,7 @@
 import { connect} from 'react-redux';
 import { logout } from '../../../../actions/session_actions';
 import HomeNavbar from './home_navbar';
+import { withRouter } from 'react-router-dom';
 
 const mapState = state => {
   return {
@@ -11,7 +12,8 @@ const mapState = state => {
 const mapDispatch = dispatch => {
   return {
     logout: () => dispatch(logout()),
+    login: formData => dispatch(login(formData)),
   }
 }
 
-export default connect(mapState, mapDispatch)(HomeNavbar);
+export default withRouter(connect(mapState, mapDispatch)(HomeNavbar));

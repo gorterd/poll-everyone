@@ -18,14 +18,14 @@ class AttributedImage extends React.Component {
   }
 
   render() {
-    const { children, imgClass, ...rest } = this.props;
+    const { children, imgClass, iconClass, ...rest } = this.props;
 
     return (
       <div className="attributed-image-container">
         <img className={"attributed-image " + imgClass} {...rest} />
         <div className="attribution-container">
           <button className="attribution-button" tabIndex="0"  onBlur={this.hide} onClick={this.reveal}>
-              <i className="fas fa-at attribution-icon"></i>
+            <span className={"attribution-icon " + iconClass}><i className="fas fa-at"></i></span>
           </button>
           <div  className={"attribution-popup " + (this.state.revealed ? "" : "hidden")}>
             {children}

@@ -10,6 +10,8 @@
   text-transform: inherit;
   background: transparent;
   box-sizing: border-box;
+
+  outline: none;
 }
 
 ol, ul {
@@ -40,11 +42,11 @@ input[type="submit"] {
 
 // Broad Parent Styling
 
+
+
 #root {
-  margin-top: 72px;
   background: $light-grey;
   font-family: $sans;
-  // min-height: 90vh;
 }
 
 

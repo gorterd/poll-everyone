@@ -9,10 +9,16 @@ import { AuthRoute, ProtectedRoute } from '../util/routes_util';
 import LoginFormContainer from './session/login/login_container';
 import SignupFormContainer from './session/signup/signup_container';
 import SignupSplash from './session/signup/signup_splash';
+import { ScrollToTop } from '../util/window_util'
+
+
 
 const App = () => {
   return (
     <>
+      
+      <ScrollToTop />    
+
       <Switch>
         <Route exact path='/'><HomeNavbarContainer /></Route>
         <ProtectedRoute path={['/polls', '/account', '/reports']}><AppNavbarContainer /></ProtectedRoute>
@@ -23,19 +29,21 @@ const App = () => {
         <HomeSplash />
       </Route>
 
-      <Route path='/login'>
+      <AuthRoute path='/login'>
         <LoginFormContainer/>
-      </Route>
+      </AuthRoute>
 
-      <Route path='/signup/splash'>
+      <AuthRoute path='/signup/splash'>
         <SignupSplash />
-      </Route>
+      </AuthRoute>
 
-      <Route path='/signup/create'>
+      <AuthRoute path='/signup/create'>
         <SignupFormContainer />
-      </Route>
+      </AuthRoute>
 
-      <Footer />
+      <Route exact path={['/', '/polls', '/account']}>
+        <Footer />
+      </Route>
     </>
   )
 }

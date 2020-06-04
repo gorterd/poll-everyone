@@ -1,0 +1,18 @@
+.login-form-section {
+  position: fixed;
+  bottom: 0;
+  height: calc( 100vh - 72px);
+  width: 100%;
+  min-height: 0;
+
+  padding-top: 50px;
+
+  form {
+    width: 468px;
+    margin: 50px auto;
+
+    h3 {
+      font-weight: 700;
+    }
+  }
+}

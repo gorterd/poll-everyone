@@ -1,4 +1,5 @@
 import React from 'react';
+import LoginInput from './login_input';
 
 class LoginForm extends React.Component {
   constructor(props) {
@@ -74,16 +75,25 @@ class LoginForm extends React.Component {
 
       <form onSubmit={this.next}>
 
-        <div className={errorMsg ? "error" : ""}>
+        {/* <div className={errorMsg ? "error" : ""}>
           <label htmlFor="usernameOrEmail">Username or Email Address</label>
           <input 
             type="text" 
             id="usernameOrEmail" 
             value={usernameOrEmail} 
             onChange={this.handleInput('usernameOrEmail')}
-          />
+            />
           {errorMsg}
-        </div>
+        </div> */}
+
+        <LoginInput
+          errorMsg={errorMsg}
+          text="Email or username"
+          type="text"
+          value={usernameOrEmail}
+          onChange={this.handleInput('usernameOrEmail')}
+        />
+          
 
         <button type='submit'>Next</button>
 
@@ -92,9 +102,10 @@ class LoginForm extends React.Component {
     );
 
     return (
-      <>
+      <section className="login-form-section">
+        <h3>Log in</h3>
         {form}
-      </>
+      </section>
     )
   }
 };

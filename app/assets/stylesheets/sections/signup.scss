@@ -25,7 +25,8 @@
 
 
       .signup-div-text {
-        width: fit-content;
+        min-width: 300px;
+        width: min-content;
       }
     }
     
@@ -61,14 +62,25 @@
   .button {
     border-radius: 3px;
   }
+
+  .signup-splash-img {
+    width: 450px;
+  }
 }
 
 .signup-form-container  {
-
+  
   .signup-div-text {
     align-items: center; 
   }
+  
+  .signup-splash-img {
+    width: 350px;
+  }
 
+  #signup-form-img + div .attribution-popup {
+    right: 80%;
+  }
 
 }
 

@@ -6,13 +6,14 @@
   height: 72px;
   background: white;
   box-shadow: 0 0px 12px 0px #b3b3b3;
+  position: relative;
+  z-index: 1000;
 }
 
 .nav-sticky {
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 1000;
 }
 
 .nav-links {

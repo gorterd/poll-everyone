@@ -9,7 +9,7 @@ const AppNavbar = props => {
     <Link to='/reports'>Reports</Link>
   ];
 
-  const tools = <AppNavbarDropdown {...props} />
+  const tools = [<AppNavbarDropdown {...props} />]
 
   return (
     <Navbar 
