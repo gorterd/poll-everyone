@@ -45,6 +45,15 @@ h3 {
     }
 }
 
+.button-red {
+    background-color: $brick-red;
+    color: white;
+    
+    &:hover {
+      background-color: $brick-red-hover;
+    }
+}
+
 // images
 
 .attributed-image-container {

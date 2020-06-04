@@ -51,16 +51,16 @@
   font-weight: $fontweight-strong;
   font-size: $fontsize-strong;
 
-  &>*:first-child {
+  >*:first-child {
     padding-right: 32px;
   }
 
-  &>*:not(:first-child) {
+  >*:not(:first-child) {
     padding: 3px 18px;
     border-right: 2px solid $soft-grey;
   }
 
-  &>*:last-child{
+  >*:last-child{
     border: none;
   }
 }
@@ -69,7 +69,7 @@
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  &>* { margin-left: 16px; }
+  >* { margin-left: 16px; }
 
   .icon {
     height: 28px;

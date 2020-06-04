@@ -59,7 +59,6 @@ const Footer = () => {
   }
   
   return (
-    <div className='footer-filler'></div>
     <section className='footer'>
       <div className='footer-pane'>
         <div className='footer-pane-container'>

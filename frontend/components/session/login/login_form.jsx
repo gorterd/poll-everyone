@@ -1,5 +1,6 @@
 import React from 'react';
 import LoginInput from './login_input';
+import {Link} from 'react-router-dom';
 
 class LoginForm extends React.Component {
   constructor(props) {
@@ -45,46 +46,33 @@ class LoginForm extends React.Component {
 
       <form onSubmit={this.submit}>
 
-        <label htmlFor="usernameOrEmail">Username or Email Address</label>
-        <input 
+        <LoginInput
           readOnly 
           tabIndex="-1" 
-          type="text" 
-          id="usernameOrEmail" 
-          value={usernameOrEmail} 
+          errorMsg={errorMsg}
+          text="Email or username"
+          completed={true}
+          type="text"
+          value={usernameOrEmail}
           onFocus={() => this.setState({fullForm: false})}
         />
 
-        <div className={ errorMsg ? "error" : "" }>
-          <label htmlFor="password">Password</label>
-          <input 
-            autoFocus 
-            type="password" 
-            id="password" 
-            value={password} 
-            onChange={this.handleInput('password')}
-          />
-          {errorMsg}
-        </div>
+        <LoginInput
+          autoFocus
+          errorMsg={errorMsg}
+          text="Password"
+          type="password"
+          value={password}
+          onChange={this.handleInput('password')}
+        />
 
-        <button type='submit'>Log in</button>
+        <button className='button button-red' type='submit'>Log in</button>
 
       </form>
 
     ) : (
 
       <form onSubmit={this.next}>
-
-        {/* <div className={errorMsg ? "error" : ""}>
-          <label htmlFor="usernameOrEmail">Username or Email Address</label>
-          <input 
-            type="text" 
-            id="usernameOrEmail" 
-            value={usernameOrEmail} 
-            onChange={this.handleInput('usernameOrEmail')}
-            />
-          {errorMsg}
-        </div> */}
 
         <LoginInput
           errorMsg={errorMsg}
@@ -95,7 +83,7 @@ class LoginForm extends React.Component {
         />
           
 
-        <button type='submit'>Next</button>
+        <button className='button button-red' type='submit'>Next</button>
 
       </form>
 
@@ -103,8 +91,14 @@ class LoginForm extends React.Component {
 
     return (
       <section className="login-form-section">
-        <h3>Log in</h3>
-        {form}
+        <div className='login-form-container'>
+          <h3>Log in</h3>
+          {form}
+          <div className="login-form-posttext">
+            <p ><a>Forgot your password?</a></p>
+            <p >Need an account? <Link to='/signup/splash'>Create one now</Link></p>
+          </div>
+        </div>
       </section>
     )
   }

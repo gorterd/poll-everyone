@@ -21,23 +21,25 @@ class LoginInput extends React.Component {
 
   render(){
 
-    const { errorMsg, text, ...rest } = this.props;
+    const { errorMsg, text, value, completed, ...rest } = this.props;
+    const activated = Boolean(value || this.state.focus);
+    const erroredOut = Boolean(errorMsg && !completed);
 
-    const errorEle = errorMsg ? <strong className="login-error-msg">{errorMsg}</strong> : null
-    
-    const smallLabel = this.state.focus ? <div className="small-input-label">{text}</div> : null
-  
-  
+    const errorEle = erroredOut ? <div className="login-error-msg">{errorMsg}</div> : null
+    const smallLabel =  activated ? <div className="small-input-label">{text}</div> : null
+
     return (
   
-      <div className={"login-input-container" + (errorMsg ? " input-error" : "")}>
-        <input 
-          placeholder={text} 
-          onFocus={this.handleFocus} 
-          onBlur={this.handleLeave}
-          {...rest}
-        />
-        {smallLabel}
+      <div className={"login-input-container" + (erroredOut ? " input-error" : "")}>
+        <div className={"login-input-wrapper" + ( activated ? " activated" : "")}>
+          <input 
+            placeholder={ activated || completed ? null : text} 
+            onFocus={this.handleFocus} 
+            onBlur={this.handleLeave}
+            {...rest}
+          />
+          {smallLabel}
+        </div>
         {errorEle}
       </div>
     )

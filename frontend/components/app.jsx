@@ -19,27 +19,29 @@ const App = () => {
       
       <ScrollToTop />    
 
-      <Switch>
-        <Route exact path='/'><HomeNavbarContainer /></Route>
-        <ProtectedRoute path={['/polls', '/account', '/reports']}><AppNavbarContainer /></ProtectedRoute>
-        <Navbar relativeRootPath={'/'} additionalClasses='nav-sticky' links={[]} tools={[]}/>
-      </Switch>
+      <section className='content'>
+        <Switch>
+          <Route exact path='/'><HomeNavbarContainer /></Route>
+          <ProtectedRoute path={['/polls', '/account', '/reports']}><AppNavbarContainer /></ProtectedRoute>
+          <Navbar relativeRootPath={'/'} additionalClasses='nav-sticky' links={[]} tools={[]}/>
+        </Switch>
 
-      <Route exact path='/'>
-        <HomeSplash />
-      </Route>
+        <Route exact path='/'>
+          <HomeSplash />
+        </Route>
 
-      <AuthRoute path='/login'>
-        <LoginFormContainer/>
-      </AuthRoute>
+        <AuthRoute path='/login'>
+          <LoginFormContainer/>
+        </AuthRoute>
 
-      <AuthRoute path='/signup/splash'>
-        <SignupSplash />
-      </AuthRoute>
+        <AuthRoute path='/signup/splash'>
+          <SignupSplash />
+        </AuthRoute>
 
-      <AuthRoute path='/signup/create'>
-        <SignupFormContainer />
-      </AuthRoute>
+        <AuthRoute path='/signup/create'>
+          <SignupFormContainer />
+        </AuthRoute>
+      </section>
 
       <Route exact path={['/', '/polls', '/account']}>
         <Footer />
