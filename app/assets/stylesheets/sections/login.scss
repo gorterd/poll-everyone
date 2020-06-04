@@ -49,6 +49,22 @@
             padding-bottom: 5px;
             padding-top: 25px;
           }
+
+          .view-password-button {
+            padding: 5px 1px;
+            position: absolute;
+            right: 2px;
+            top: 4px;
+            font-size: 1.5rem;
+            color: $grey;
+            border: 1px solid transparent;
+            transition: color .3s, border .3s ease-in;
+
+            &:hover {
+              border: 1px solid $light-grey;
+              color: $charcoal;
+            }
+          }
         }
 
         ::placeholder{
