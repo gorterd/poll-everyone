@@ -12,8 +12,6 @@ const SignupInput =
       {errorMessages[field]}
     </div>
   ) : null
-
-  // if (type === 'checkbox') {debugger;}
   
   return (type === 'checkbox') ? (
     <div className="signup-input-container">
