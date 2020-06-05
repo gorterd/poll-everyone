@@ -1,0 +1,21 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  title: MyString
+  type: 
+  ord: 1
+  locked: false
+  allow_changes: false
+  allow_anonymous: false
+  num_responses_allowed: 1
+  group_id: 1
+
+two:
+  title: MyString
+  type: 
+  ord: 1
+  locked: false
+  allow_changes: false
+  allow_anonymous: false
+  num_responses_allowed: 1
+  group_id: 1

@@ -5,15 +5,25 @@ class User < ApplicationRecord
 
   validates :username, :email, :password_digest, :session_token, presence: true, uniqueness: true
   validates :first_name, :last_name, presence: true
-  validates :username, length: {minimum: 4}
-  validates :password, length: {minimum: 7}, allow_nil: true
+  validates :username, length: { minimum: 4 }
+  validates :password, length: { minimum: 7 }, allow_nil: true
   validate :valid_email_syntax, :valid_username_syntax
   
-  after_initialize :ensure_session_token, :ensure_username
+  after_initialize :ensure_session_token, :ensure_username, :ensure_default_group
 
   attr_reader :password
   
-  belongs_to :activatable, polymorphic: true, optional: true
+  # belongs_to :activatable, polymorphic: true, optional: true
+
+  has_many :groups, 
+    autosave: true,
+    dependent: :destroy
+  
+  has_many :polls, 
+    through: :groups, 
+    source: :polls
+
+  # class methods
 
   def self.username_or_email_exists?(username_or_email)
     User.exists?(username: username_or_email) || User.exists?(email: username_or_email)
@@ -21,7 +31,7 @@ class User < ApplicationRecord
 
   def self.find_by_credentials(username_or_email, password)
     if EMAIL_REGEX =~ username_or_email 
-      user = User.find_by(email: username_or_email)    
+      user = User.find_by(email: username_or_email) 
     else
       user = User.find_by(username: username_or_email)
     end
@@ -43,6 +53,23 @@ class User < ApplicationRecord
     username
   end
 
+  #REMOVE FOR PRODUCTION
+  def self.ru()
+    self.create!(
+      first_name: ("first" + rand(100..999).to_s),
+      last_name: ("last" + rand(100..999).to_s),
+      email: ("email" + rand(100..999).to_s + "@gmail.com"),
+      password: "123456789"
+    )
+  end
+  # logic
+
+  def default_group
+    @default_group = self.groups.find_by(default: true) || @default_group
+  end
+
+  # auth methods
+
   def reset_session_token!
     self.update! session_token: self.class.generate_session_token
     self.session_token
@@ -56,18 +83,21 @@ class User < ApplicationRecord
   def is_password?(password)
     BCrypt::Password.new(self.password_digest).is_password?(password)
   end
-
-  def ensure_username
-    self.username ||= self.class.generate_username(self.first_name, self.last_name)
-  end
-
+  
   private
-
+  
   
   def ensure_session_token
     self.session_token ||= self.class.generate_session_token
   end
 
+  def ensure_username
+    self.username ||= self.class.generate_username(self.first_name, self.last_name)
+  end
+
+  def ensure_default_group
+    @default_group ||= self.groups.build(title: "Default", default: "true")
+  end
 
   def valid_email_syntax
     unless EMAIL_REGEX =~ self.email

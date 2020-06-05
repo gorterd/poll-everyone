@@ -10,10 +10,45 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_06_02_223820) do
+ActiveRecord::Schema.define(version: 2020_06_05_010847) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "answer_options", force: :cascade do |t|
+    t.string "key", null: false
+    t.string "body", null: false
+    t.boolean "correct", default: false, null: false
+    t.integer "poll_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["key", "poll_id"], name: "index_answer_options_on_key_and_poll_id", unique: true
+    t.index ["poll_id"], name: "index_answer_options_on_poll_id"
+  end
+
+  create_table "groups", force: :cascade do |t|
+    t.string "title", null: false
+    t.integer "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.boolean "default", default: false
+    t.index ["user_id"], name: "index_groups_on_user_id"
+  end
+
+  create_table "polls", force: :cascade do |t|
+    t.string "title", null: false
+    t.string "poll_type", null: false
+    t.integer "ord", null: false
+    t.boolean "locked", default: false, null: false
+    t.boolean "allow_changes", default: false, null: false
+    t.boolean "allow_anonymous", default: false, null: false
+    t.integer "num_responses_allowed", default: 1, null: false
+    t.integer "group_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["group_id"], name: "index_polls_on_group_id"
+    t.index ["ord"], name: "index_polls_on_ord"
+  end
 
   create_table "users", force: :cascade do |t|
     t.string "username", null: false

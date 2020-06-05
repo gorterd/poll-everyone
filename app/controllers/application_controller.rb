@@ -25,12 +25,28 @@ class ApplicationController < ActionController::Base
      render json: ['Login required for this request.'], status: 403  unless logged_in?
   end
 
+  def update_and_render(model, params)
+    if model.update(params)
+      render :show
+    else 
+      render json: model.errors.full_messages, status: 422
+    end
+  end
+
   def snake_params(required = nil)
     if required
       params.require(required).transform_keys(&:underscore)
     else
       params.transform_keys(&:underscore)
     end
+  end
+
+  def ensure_current_user(id)
+    unless current_user.id == id
+      render json: ['Not authorized to make this request.'], status: 401
+    end
+
+    current_user.id == id
   end
 
 end

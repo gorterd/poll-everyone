@@ -1,7 +1,10 @@
 class Api::UsersController < ApplicationController
 
   before_action :ensure_logged_in, only: [:show]
-  before_action :ensure_current_user, only: [:update]
+  
+  before_action only: [:update] do
+     ensure_current_user(params[:id]) 
+  end
 
   def show
     @user = User.find_by(id: params[:id])
@@ -33,12 +36,6 @@ class Api::UsersController < ApplicationController
 
   def user_params
     snake_params(:user).permit(:username, :email, :password, :first_name, :last_name)
-  end
-
-  def ensure_current_user
-    unless current_user.id == params[:id]
-      render json: ['Not authorized to make this request.'], status: 401
-    end
   end
 
 end
