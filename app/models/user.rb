@@ -9,7 +9,8 @@ class User < ApplicationRecord
   validates :password, length: { minimum: 7 }, allow_nil: true
   validate :valid_email_syntax, :valid_username_syntax
   
-  after_initialize :ensure_session_token, :ensure_username, :ensure_default_group
+  after_initialize :ensure_session_token, :ensure_username
+  after_create :generate_default_group, if: Proc.new { ordered_group_ids.empty? }
 
   attr_reader :password
   
@@ -66,19 +67,22 @@ class User < ApplicationRecord
   # logic
 
   def default_group
-    @default_group = self.groups.find_by(id: self.ordered_group_ids.first) || @default_group
+    @default_group = @default_group || self.groups.find_by(id: self.ordered_group_ids.first)
   end
 
   def make_default_group(group_id)
     self.ordered_group_ids.unshift(group_id)
+    self.save
   end
 
   def remove_group_id_from_order(group_id)
     self.ordered_group_ids.delete(group_id)
+    self.save
   end
 
   def add_group_id_to_order(group_id)
     self.ordered_group_ids << group_id
+    self.save
   end
 
   # auth methods
@@ -109,9 +113,9 @@ class User < ApplicationRecord
     self.username ||= self.class.generate_username(self.first_name, self.last_name)
   end
 
-  def ensure_default_group
-    @default_group ||= self.groups.build(title: "Default")
-    self.ordered_group_ids[0] = @default_group.id
+  def generate_default_group
+    @default_group ||= self.groups.create(title: "Default")
+    self.update(ordered_group_ids: [@default_group.id])
   end
 
   def valid_email_syntax

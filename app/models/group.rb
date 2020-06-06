@@ -19,10 +19,12 @@ class Group < ApplicationRecord
   
   def remove_poll_id_from_order(poll_id)
     self.ordered_poll_ids.delete(poll_id)
+    self.save
   end
 
   def add_poll_id_to_order(poll_id)
     self.ordered_poll_ids << poll_id
+    self.save
   end
 
   def make_default!

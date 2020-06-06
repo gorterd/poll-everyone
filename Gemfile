@@ -51,6 +51,7 @@ group :development do
 
   gem 'annotate'
   gem 'faker'
+  gem 'faker-bot'
   gem 'pry-rails'
   gem 'better_errors'
   gem 'binding_of_caller'
