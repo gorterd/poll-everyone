@@ -11,7 +11,7 @@ class Poll < ApplicationRecord
   has_many :correct_answers, -> { where(correct: true) }, foreign_key: :poll, class_name: 'AnswerOption'
 
   after_initialize :ensure_poll_type
-  after_create :add_to_order
+  after_save :add_to_ordered_poll_ids, if: Proc.new { :saved_change_to_group_id && !group.ordered_poll_ids.include?(id) }
 
     #REMOVE FOR PRODUCTION
   def self.rp
@@ -42,11 +42,14 @@ class Poll < ApplicationRecord
   end
 
   def self.move_poll(poll_id, new_group_id, pos)
-    return false unless new_group = Group.find_by(id: new_group_id) && poll = Poll.find_by(id: poll_id)
+    new_group = Group.find_by(id: new_group_id)
+    poll = Poll.find_by(id: poll_id)
+    return false unless (new_group && poll )
     
     Poll.transaction do
-      poll(group_id: new_group_id)
+      poll.group.remove_poll_id_from_order(poll_id)
       new_group.add_poll_id_at_pos(poll_id, pos)
+      poll.update!(group_id: new_group_id)
     end
     true
 
@@ -70,8 +73,8 @@ class Poll < ApplicationRecord
     self.poll_type ||= POLL_TYPES.first
   end
 
-  def add_to_order
-    self.user.
+  def add_to_ordered_poll_ids
+    self.group.update!(ordered_poll_ids: self.group.ordered_poll_ids.push(self.id))
   end
 
 end

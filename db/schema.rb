@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_06_06_024607) do
+ActiveRecord::Schema.define(version: 2020_06_06_052931) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -43,7 +43,7 @@ ActiveRecord::Schema.define(version: 2020_06_06_024607) do
     t.integer "group_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "ordered_anwer_option_ids", default: [], null: false, array: true
+    t.integer "ordered_answer_option_ids", default: [], null: false, array: true
     t.index ["group_id"], name: "index_polls_on_group_id"
   end
 

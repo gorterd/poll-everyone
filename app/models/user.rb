@@ -85,6 +85,10 @@ class User < ApplicationRecord
     self.save
   end
 
+  def add_poll_id_at_pos(poll_id, pos)
+    add_record_id_at_pos(poll_id, pos)
+  end
+
   # auth methods
 
   def reset_session_token!

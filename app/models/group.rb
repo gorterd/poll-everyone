@@ -6,6 +6,8 @@ class Group < ApplicationRecord
   has_many :polls
   
   before_destroy :destroy_or_remove_polls
+  after_save :add_to_ordered_group_ids, if: :saved_change_to_user_id
+
 
   #REMOVE FOR PRODUCTION
   def self.rg
@@ -27,6 +29,13 @@ class Group < ApplicationRecord
     self.save
   end
 
+  def add_poll_id_at_pos(poll_id, pos)
+    return false if pos < 0 || pos > self.ordered_poll_ids.size
+    self.ordered_poll_ids.delete(poll_id)
+    self.ordered_poll_ids.insert(pos, poll_id)
+    self.save!
+  end
+
   def make_default!
     unless self.default?
       self.user.make_default_group(self.id)
@@ -38,6 +47,11 @@ class Group < ApplicationRecord
   end
 
   private
+
+  def add_to_ordered_group_ids
+    self.user.update!(ordered_group_ids: self.user.ordered_group_ids.push(self.id))
+  end
+
   
   def destroy_or_remove_polls
     if self.user.ordered_group_ids.length == 1
