@@ -8,8 +8,23 @@
 
 require 'faker'
 
+easy = User.create!(
+  first_name: "easy",
+  last_name: "peasy",
+  username: "easy",
+  email: "e@e.com",
+  password: "123123123"
+)
 
-10.times do 
+demo = User.create!(
+  first_name: "Truman",
+  last_name: "Burbank",
+  username: "trumanburbank123",
+  email: "isThisTheRealLife@isThisJustFantasy.idk",
+  password: "its_all_a_simulation"
+)
+
+8.times do 
   User.create!(
     first_name: Faker::Name.first_name,
     last_name: Faker::Name.last_name,
@@ -51,19 +66,3 @@ poll_ids.each do |poll_id|
     )
   end
 end
-
-easy = User.create!(
-  first_name: "easy",
-  last_name: "peasy",
-  username: "easy",
-  email: "e@e.com",
-  password: "123123123"
-)
-
-demo = User.create!(
-  first_name: "Truman",
-  last_name: "Burbank",
-  username: "trumanburbank123",
-  email: "isThisTheRealLife@isThisJustFantasy.idk",
-  password: "its_all_a_simulation"
-)

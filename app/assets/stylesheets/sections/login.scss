@@ -47,7 +47,6 @@
         .login-input-wrapper {
           position: relative;
           height: 54px;
-          padding: 15px;
           background-color: white;
           border: 1px solid $robin-blue;
           margin: 2px 0;
@@ -58,12 +57,16 @@
             background: transparent;
             position: relative;
             z-index: 1;
+            &.activated {
+              padding-bottom: 5px;
+              padding-top: 25px;
+            }
           }
           
-          &.activated {
-            padding-bottom: 5px;
-            padding-top: 25px;
-          }
+          // &.activated {
+          //   padding-bottom: 5px;
+          //   padding-top: 25px;
+          // }
 
           .view-password-button {
             padding: 5px 1px;
@@ -74,6 +77,7 @@
             color: $grey;
             border: 1px solid transparent;
             transition: color .3s, border .3s ease-in;
+            z-index: 2;
 
             &:hover {
               border: 1px solid $light-grey;
@@ -85,6 +89,7 @@
         .placeholder-input-label-container {
           position: absolute;
           bottom: 15px;
+          left: 15px;
 
           .placeholder-input-label {
             font-style: italic;
@@ -96,28 +101,13 @@
         .small-input-label-container {
           position: absolute;
           bottom: 28px;
+          left: 15px;
 
           .small-input-label {
             font-size: $fontsize-small;
             color: $grey;
           }
         }
-
-        /* Placeholder Animation Alt
-        .login-placeholder-new {
-          font-style: italic;
-          font-size: $fontsize-strong;
-          color: $grey;  
-          position: relative;
-          bottom: 20px;
-        }
-        .login-placeholder-new.small-placeholder {
-          bottom: 40px;
-          font-style: unset;
-          font-size: $fontsize-small;
-          color: $grey;
-          transition: all 0.2s cubic-bezier(.18,.29,0,.99);
-        } */
 
         &.input-error {
           padding: 2px;

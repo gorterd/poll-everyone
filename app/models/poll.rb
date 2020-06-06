@@ -35,7 +35,7 @@ class Poll < ApplicationRecord
   def self.move_poll(poll_id, new_group_id, pos)
     new_group = Group.find_by(id: new_group_id)
     poll = Poll.find_by(id: poll_id)
-    return false unless (new_group && poll )
+    return false unless ( new_group && poll )
     
     Poll.transaction do
       new_group.insert_poll_at_pos(poll_id, pos)

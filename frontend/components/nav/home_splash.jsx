@@ -9,7 +9,7 @@ const HomeSplash = () => {
         <div className="first-pane-sub first-pane-text">
           <h1>Host engaging realtime surveys, wherever, whenever.</h1>
           <h3>Gather informative feedback instantly in your class, meeting, conference, or any other event.</h3>
-          <Link className="button" to="/signup/splash">Get started</Link>
+          <Link className="button button-green" to="/signup/splash">Get started</Link>
         </div>
         <div className="first-pane-sub first-pane-image">
           <AttributedImage 

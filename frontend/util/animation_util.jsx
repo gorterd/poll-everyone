@@ -10,7 +10,6 @@ class AnimatedElement extends React.Component {
     if (this.props.exiting && !prevProps.exiting ){
       if (this.props.exitAnimation) {
         setTimeout( () => {
-          debugger;
           this.setState({rendered: false})
         }, parseInt(this.props.exitAnimation.animationDuration) - 20);
       } else {

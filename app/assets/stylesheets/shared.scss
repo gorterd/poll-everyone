@@ -23,41 +23,133 @@ h3 {
   display: none;
 }
 
+// inputs
+
+.login-input-wrapper {
+  border: 1px solid $robin-blue;
+}
+
+
+.login-input-wrapper {
+  position: relative;
+  height: 54px;
+  background-color: white;
+  margin: 2px 0;
+
+  input {
+    display: block;
+    width: 100%;
+    height: 100%;
+    padding-left: 15px;
+    background: transparent;
+    position: relative;
+    z-index: 1;
+    &.activated {
+      padding-bottom: 5px;
+      padding-top: 25px;
+    }
+  }
+  
+
+  .view-password-button {
+    padding: 5px 1px;
+    position: absolute;
+    right: 2px;
+    top: 5px;
+    font-size: 1.5rem;
+    color: $grey;
+    border: 1px solid transparent;
+    transition: color .3s, border .3s ease-in;
+
+    &:hover {
+      border: 1px solid $light-grey;
+      color: $charcoal;
+    }
+  }
+}
+
+.placeholder-input-label-container {
+  position: absolute;
+  bottom: 15px;
+
+  .placeholder-input-label {
+    font-style: italic;
+    font-size: $fontsize-strong;
+    color: $grey;  
+  }          
+}
+
+.small-input-label-container {
+  position: absolute;
+  bottom: 28px;
+
+  .small-input-label {
+    font-size: $fontsize-small;
+    color: $grey;
+  }
+}
+
 // buttons & links
 
-.button {
+button {
+  outline: none;
+}
+
+@mixin button($bkgnd-color, $hover-color, $txt-color) {
+
   font-size: $fontsize-strong;
   font-weight: $fontweight-strong;
   padding: 8px 14px;
   text-align: center;
   transition: all 0.2s;
+  background-color: $bkgnd-color;
+  color: $txt-color;
+
+  &:hover {
+    background-color: $hover-color;
+  }
 }
 
+// .button {
+//   font-size: $fontsize-strong;
+//   font-weight: $fontweight-strong;
+//   padding: 8px 14px;
+//   text-align: center;
+//   transition: all 0.2s;
+// }
+
 .button-white {
-    background-color: white;
-    color: $royal-blue;
+  @include button(white, $light-grey, $royal-blue)
+    // background-color: white;
+    // color: $royal-blue;
     
-    &:hover {
-      background-color: $light-grey;
-    }
+    // &:hover {
+    //   background-color: $light-grey;
+    // }
 }
 
 .button-blue {
-    background-color: $royal-blue;
-    color: white;
+  @include button($royal-blue, $royal-blue-hover, white)
+    // background-color: $royal-blue;
+    // color: white;
     
-    &:hover {
-      background-color: $royal-blue-hover;
-    }
+    // &:hover {
+    //   background-color: $royal-blue-hover;
+    // }
 }
 
 .button-red {
-    background-color: $brick-red;
-    color: white;
+  @include button($brick-red, $brick-red-hover, white)
+    // background-color: $brick-red;
+    // color: white;
     
-    &:hover {
-      background-color: $brick-red-hover;
-    }
+    // &:hover {
+    //   background-color: $brick-red-hover;
+    // }
+}
+
+.button-green {
+  @include button($forest-green, $forest-green-hover, white)
 }
 
 // images

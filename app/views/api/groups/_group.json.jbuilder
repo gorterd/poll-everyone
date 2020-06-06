@@ -1,1 +1,2 @@
-json.extract! group :title, 
+json.extract! group, :title
+json.polls_count

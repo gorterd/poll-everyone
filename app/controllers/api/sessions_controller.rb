@@ -12,6 +12,7 @@ class Api::SessionsController < ApplicationController
 
     if @user
       login!(@user)
+      @groups = @user.groups.includes(:polls)
       render 'api/users/show'
     else
       render json: ['Incorrect password'], status: 422

@@ -1,0 +1,1 @@
+json.extract! poll, :title, :poll_type

@@ -6,14 +6,6 @@ class AnswerOption < ApplicationRecord
 
   belongs_to :poll, inverse_of: :answer_options, counter_cache: true
 
-#REMOVE FOR PRODUCTION
-  def self.ra()
-  # debugger
-    self.create!(
-      body: ("answer_option" + rand(100..999).to_s),
-      poll_id: Poll.first.id
-    )
-  end
   # logic
   
   private

@@ -35,7 +35,7 @@ class LoginInput extends React.Component {
     const errorEle = erroredOut ? <div className="login-error-msg">{errorMsg}</div> : null
     const passwordButton = (type === 'password') ? (
       <span className='view-password-button' onClick={this.togglePasswordVisible}>
-        <i class="fas fa-eye"></i>
+        <i className="fas fa-eye"></i>
       </span>
     ) : null
 
@@ -58,6 +58,7 @@ class LoginInput extends React.Component {
       <div className={"login-input-container" + (erroredOut ? " input-error" : "")}>
         <div className={"login-input-wrapper" + ( activated ? " activated" : "")}>
           <input 
+            className={activated ? " activated" : ""}
             onFocus={this.handleFocus} 
             onBlur={this.handleLeave}
             type={this.state.curType}

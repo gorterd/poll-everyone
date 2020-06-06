@@ -1,4 +1,6 @@
 import * as SessionApiUtil from '../util/session_api_util';
+import * as GroupActions from './group_actions';
+import * as PollActions from './poll_actions';
 
 export const RECEIVE_CURRENT_USER = 'RECEIVE_CURRENT_USER';
 export const REMOVE_CURRENT_USER = 'REMOVE_CURRENT_USER';
@@ -51,8 +53,9 @@ export const signup = user => dispatch => {
 
   return SessionApiUtil.signup(user)
     .then( 
-      user => {
-        dispatch(receiveCurrentUser(user));
+      data => {
+        dispatch(receiveCurrentUser(data.user));
+        dispatch(GroupActions.receiveGroups(data.groups));
         dispatch(resetSessionLoading());
         dispatch(resetSessionErrors());
       }, err => {
@@ -83,8 +86,10 @@ export const login = user => dispatch => {
 
   return SessionApiUtil.login(user)
     .then( 
-      user => {
-        dispatch(receiveCurrentUser(user));
+      data => {
+        dispatch(receiveCurrentUser(data.user));
+        dispatch(GroupActions.receiveGroups(data.groups));
+        dispatch(PollActions.receivePolls(data.polls));
         dispatch(resetSessionLoading());
         dispatch(resetSessionErrors());
       }, err => {
