@@ -67,7 +67,7 @@ class User < ApplicationRecord
   # logic
 
   def default_group
-    @default_group = @default_group || self.groups.find_by(id: self.ordered_group_ids.first)
+    @default_group = @default_group || self.groups.find_by(ord: 1)
   end
 
   def make_default_group(group_id)
