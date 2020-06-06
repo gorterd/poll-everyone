@@ -1,6 +1,6 @@
 class Group < ApplicationRecord
 
-  validates :title, presence: true
+  validates :title, :ord, presence: true
 
   before_validation :prevent_repeat_default
   
@@ -10,8 +10,8 @@ class Group < ApplicationRecord
   after_destroy :destroy_or_remove_polls
   
   def make_default!
-    unless self.default
-      self.user.default_group.update!(default: false)
+    unless self.default == 1
+      self.user.default_group.update!(ord: false)
       self.update!(default: true)
     end
   end
@@ -31,8 +31,8 @@ class Group < ApplicationRecord
   private
   
   def prevent_repeat_default
-    if self.default && self.class.where(user_id: self.user.id).find_by(default: true)
-      self.default = false
+    if self.order == 1 && self.class.where(user_id: self.user.id).find_by(order: 1)
+      self.order = false
     end
   end
   

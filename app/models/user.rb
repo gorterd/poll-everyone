@@ -55,6 +55,7 @@ class User < ApplicationRecord
 
   #REMOVE FOR PRODUCTION
   def self.ru()
+    # debugger
     self.create!(
       first_name: ("first" + rand(100..999).to_s),
       last_name: ("last" + rand(100..999).to_s),
@@ -65,7 +66,11 @@ class User < ApplicationRecord
   # logic
 
   def default_group
-    @default_group = self.groups.find_by(default: true) || @default_group
+    @default_group = self.groups.find_by(ord: 1) || @default_group
+  end
+
+  def last_group_ord
+    self.groups.order(ord: :desc).limit(1).pluck(:ord).first
   end
 
   # auth methods
@@ -85,7 +90,8 @@ class User < ApplicationRecord
   end
   
   private
-  
+
+  # validations and callbacks
   
   def ensure_session_token
     self.session_token ||= self.class.generate_session_token
@@ -96,7 +102,7 @@ class User < ApplicationRecord
   end
 
   def ensure_default_group
-    @default_group ||= self.groups.build(title: "Default", default: "true")
+    @default_group ||= self.groups.build(title: "Default", ord: 1)
   end
 
   def valid_email_syntax

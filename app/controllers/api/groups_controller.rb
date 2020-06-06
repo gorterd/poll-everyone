@@ -4,12 +4,11 @@ class Api::AnswerOptionsController < ApplicationController
     ensure_current_user(params[:user_id])
   end
 
-  before_action only: [:index] do 
-    ensure_current_user(params[:user_id])
-  end
-
   def index
     @user = User.find_by(id: params[:user_id])
+
+    @groups = User.groups.includes(:polls)
+    render :index
   end
 
   def show
