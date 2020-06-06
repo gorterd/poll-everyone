@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_06_06_065155) do
+ActiveRecord::Schema.define(version: 2020_06_06_074612) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -21,7 +21,7 @@ ActiveRecord::Schema.define(version: 2020_06_06_065155) do
     t.integer "poll_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "ord", default: 1, null: false
+    t.integer "ord", default: 0, null: false
     t.index ["poll_id"], name: "index_answer_options_on_poll_id"
   end
 
@@ -30,7 +30,8 @@ ActiveRecord::Schema.define(version: 2020_06_06_065155) do
     t.integer "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "ord", default: 1, null: false
+    t.integer "ord", default: 0, null: false
+    t.integer "polls_count"
     t.index ["user_id"], name: "index_groups_on_user_id"
   end
 
@@ -44,7 +45,8 @@ ActiveRecord::Schema.define(version: 2020_06_06_065155) do
     t.integer "group_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "ord", default: 1, null: false
+    t.integer "ord", default: 0, null: false
+    t.integer "answer_options_count"
     t.index ["group_id"], name: "index_polls_on_group_id"
   end
 
@@ -59,6 +61,7 @@ ActiveRecord::Schema.define(version: 2020_06_06_065155) do
     t.datetime "updated_at", null: false
     t.string "first_name", null: false
     t.string "last_name", null: false
+    t.integer "groups_count"
     t.index ["activatable_id", "activatable_type"], name: "index_users_on_activatable_id_and_activatable_type", unique: true
     t.index ["activatable_type", "activatable_id"], name: "index_users_on_activatable_type_and_activatable_id"
     t.index ["session_token"], name: "index_users_on_session_token", unique: true

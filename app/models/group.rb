@@ -1,69 +1,57 @@
 class Group < ApplicationRecord
 
-  validates :title, presence: true
+  validates :title, :ord, presence: true
   
-  belongs_to :user, inverse_of: :groups
-  has_many :polls
+  before_destroy :remove_from_order_and_destroy_polls
+  before_create :ensure_ord
   
-  before_destroy :destroy_or_remove_polls
-  after_save :add_to_ordered_group_ids, if: :saved_change_to_user_id
+  belongs_to :user, inverse_of: :groups, counter_cache: true
+  has_many :polls, inverse_of: :group
 
-
-  #REMOVE FOR PRODUCTION
-  def self.rg
-    # debugger
-    self.create!(
-      title: ("group" + rand(100..999).to_s),
-      user_id: User.first.id
-    )
-  end
   # logic
   
-  def remove_poll_id_from_order(poll_id)
-    self.ordered_poll_ids.delete(poll_id)
-    self.save
+  def ordered_polls
+    self.polls.order(:ord)
   end
 
-  def add_poll_id_to_order(poll_id)
-    self.ordered_poll_ids << poll_id
-    self.save
+  def ordered_poll_ids
+    self.ordered_polls.pluck(:id)
   end
 
-  def add_poll_id_at_pos(poll_id, pos)
-    return false if pos < 0 || pos > self.ordered_poll_ids.size
-    self.ordered_poll_ids.delete(poll_id)
-    self.ordered_poll_ids.insert(pos, poll_id)
-    self.save!
+  def next_ord
+    self.polls.size
   end
 
-  def make_default!
-    unless self.default?
-      self.user.make_default_group(self.id)
-    end
+  def remove_poll_from_order(poll_id)
+    new_order = self.ordered_poll_ids
+    new_order.delete(poll_id)
+    update_ords(new_order, Poll)
   end
 
-  def default?
-    self.id == self.user.ordered_group_ids.first
+  def insert_poll_at_pos(poll_id, pos)
+    return false if pos < 1 || pos > self.next_ord
+
+    new_order = self.ordered_poll_ids
+    new_order.delete(poll_id)
+    new_order.insert(poll_id, pos)
+
+    self.update_ords(new_order, Poll)
   end
 
   private
-
-  def add_to_ordered_group_ids
-    self.user.update!(ordered_group_ids: self.user.ordered_group_ids.push(self.id))
-  end
-
   
   def destroy_or_remove_polls
-    if self.user.ordered_group_ids.length == 1
+    if self.user.groups.size == 1 || self.ord == 1 
       self.polls.destroy_all
-    elsif self.default? 
-      incumbent_default = self.user.ordered_group_ids[1]
-      incumbent_default << self.polls
     else
       self.user.default_group.polls << self.polls
     end
 
-    self.user.remove_group_id_from_order(self.id)
+    self.user.remove_group_from_order(self.id)
+  end
+
+  def ensure_ord
+    self.ord = self.user.next_ord
   end
   
 end

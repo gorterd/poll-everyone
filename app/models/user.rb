@@ -10,16 +10,15 @@ class User < ApplicationRecord
   validate :valid_email_syntax, :valid_username_syntax
   
   after_initialize :ensure_session_token, :ensure_username
-  after_create :generate_default_group, if: Proc.new { ordered_group_ids.empty? }
+  after_create :generate_default_group
 
   attr_reader :password
   
-  # belongs_to :activatable, polymorphic: true, optional: true
-
   has_many :groups, 
+    inverse_of: :user,
     autosave: true,
     dependent: :destroy
-  
+    
   has_many :polls, 
     through: :groups, 
     source: :polls
@@ -54,39 +53,46 @@ class User < ApplicationRecord
     username
   end
 
-  #REMOVE FOR PRODUCTION
+  #REMOVE FOR PRODUCTION # debugger
+
   def self.ru
-    # debugger
     self.create!(
-      first_name: ("first" + rand(100..999).to_s),
-      last_name: ("last" + rand(100..999).to_s),
-      email: ("email" + rand(100..999).to_s + "@gmail.com"),
-      password: "123456789"
-    )
+      first_name: ("first" + rand(100..999).to_s), last_name: ("last" + rand(100..999).to_s),
+      email: ("email" + rand(100..999).to_s + "@gmail.com"), password: "123456789" )
   end
+
   # logic
 
+  def ordered_groups
+    self.groups.order(:ord)
+  end
+
+  def ordered_group_ids
+    self.ordered_groups.pluck(:id)
+  end
+
+  def next_ord
+    self.groups.size
+  end
+
+  def remove_group_from_order(group_id)
+    new_order = self.ordered_group_ids
+    new_order.delete(group_id)
+    update_ords(new_order, Group)
+  end
+
+  def insert_group_at_pos(group_id, pos)
+    return false if pos < 1 || pos > self.next_ord
+
+    new_order = self.ordered_group_ids
+    new_order.delete(group_id)
+    new_order.insert(group_id, pos)
+
+    self.update_ords(new_order, Group)
+  end
+
   def default_group
-    @default_group = @default_group || self.groups.find_by(ord: 1)
-  end
-
-  def make_default_group(group_id)
-    self.ordered_group_ids.unshift(group_id)
-    self.save
-  end
-
-  def remove_group_id_from_order(group_id)
-    self.ordered_group_ids.delete(group_id)
-    self.save
-  end
-
-  def add_group_id_to_order(group_id)
-    self.ordered_group_ids << group_id
-    self.save
-  end
-
-  def add_poll_id_at_pos(poll_id, pos)
-    add_record_id_at_pos(poll_id, pos)
+    @default_group = @default_group || self.groups.find_by(ord: 0)
   end
 
   # auth methods
@@ -118,8 +124,7 @@ class User < ApplicationRecord
   end
 
   def generate_default_group
-    @default_group ||= self.groups.create(title: "Default")
-    self.update(ordered_group_ids: [@default_group.id])
+    @default_group ||= self.groups.create(title: "Default", ord: 0)
   end
 
   def valid_email_syntax

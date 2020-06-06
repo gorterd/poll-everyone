@@ -2,9 +2,9 @@ class AnswerOption < ApplicationRecord
 
   validates :body, presence: true
 
-  after_save :add_to_ordered_answer_option_ids, if: :saved_change_to_poll_id
+  before_save :ensure_ord
 
-  belongs_to :poll, inverse_of: :answer_options
+  belongs_to :poll, inverse_of: :answer_options, counter_cache: true
 
 #REMOVE FOR PRODUCTION
   def self.ra()
@@ -18,8 +18,8 @@ class AnswerOption < ApplicationRecord
   
   private
 
-  def add_to_ordered_answer_option_ids
-    self.poll.update!(ordered_answer_option_ids: self.poll.ordered_answer_option_ids.push(self.id))
+  def ensure_ord
+    self.ord = self.poll.next_ord
   end
 
 end
