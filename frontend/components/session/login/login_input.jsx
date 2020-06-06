@@ -1,4 +1,5 @@
 import React from 'react';
+import { Animated } from '../../../util/animation_util';
 
 class LoginInput extends React.Component {
 
@@ -32,26 +33,55 @@ class LoginInput extends React.Component {
     const erroredOut = Boolean(errorMsg && !completed);
 
     const errorEle = erroredOut ? <div className="login-error-msg">{errorMsg}</div> : null
-    const smallLabel =  activated ? <div className="small-input-label">{text}</div> : null
     const passwordButton = (type === 'password') ? (
       <span className='view-password-button' onClick={this.togglePasswordVisible}>
         <i class="fas fa-eye"></i>
       </span>
     ) : null
 
+    const upAndIn = {
+      animationName: "slide-up-and-in",
+      animationDuration: "200ms",
+      animationIterationCount: 1,
+      animationTimingFunction: "ease-out",
+    };
+    
+    const downAndOut = {
+      animationName: "slide-down-and-out",
+      animationDuration: "200ms",
+      animationIterationCount: 1,
+      animationTimingFunction: "ease-in",
+    };
+    
     return (
   
       <div className={"login-input-container" + (erroredOut ? " input-error" : "")}>
         <div className={"login-input-wrapper" + ( activated ? " activated" : "")}>
           <input 
-            placeholder={ activated || completed ? null : text} 
             onFocus={this.handleFocus} 
             onBlur={this.handleLeave}
             type={this.state.curType}
             {...rest}
-          />
+            />
+          <div className="small-input-label-container">
+            <Animated
+              renderCondition={activated}
+              enterAnimation={upAndIn}
+              exitAnimation={downAndOut} 
+              ><div className="small-input-label">{text}</div>
+            </Animated>
+          </div>
+          <div className="placeholder-input-label-container">
+            <Animated
+              renderCondition={!activated}
+              enterAnimation={upAndIn}
+              ><div className="placeholder-input-label">{text}</div>
+            </Animated>
+          </div>
+          { /* Alternate Label 
+            <div className={"login-placeholder-new" + (activated ? " small-placeholder": "")}>{text}</div>
+          */}
           {passwordButton}
-          {smallLabel}
         </div>
         {errorEle}
       </div>
