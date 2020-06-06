@@ -53,14 +53,6 @@ class User < ApplicationRecord
     username
   end
 
-  #REMOVE FOR PRODUCTION # debugger
-
-  def self.ru
-    self.create!(
-      first_name: ("first" + rand(100..999).to_s), last_name: ("last" + rand(100..999).to_s),
-      email: ("email" + rand(100..999).to_s + "@gmail.com"), password: "123456789" )
-  end
-
   # logic
 
   def ordered_groups
