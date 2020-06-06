@@ -54,7 +54,7 @@ class User < ApplicationRecord
   end
 
   #REMOVE FOR PRODUCTION
-  def self.ru()
+  def self.ru
     # debugger
     self.create!(
       first_name: ("first" + rand(100..999).to_s),
@@ -66,11 +66,19 @@ class User < ApplicationRecord
   # logic
 
   def default_group
-    @default_group = self.groups.find_by(ord: 1) || @default_group
+    @default_group = self.groups.find_by(id: self.ordered_group_ids.first) || @default_group
   end
 
-  def last_group_ord
-    self.groups.order(ord: :desc).limit(1).pluck(:ord).first
+  def make_default_group(group_id)
+    self.ordered_group_ids.unshift(group_id)
+  end
+
+  def remove_group_id_from_order(group_id)
+    self.ordered_group_ids.delete(group_id)
+  end
+
+  def add_group_id_to_order(group_id)
+    self.ordered_group_ids << group_id
   end
 
   # auth methods
@@ -102,7 +110,8 @@ class User < ApplicationRecord
   end
 
   def ensure_default_group
-    @default_group ||= self.groups.build(title: "Default", ord: 1)
+    @default_group ||= self.groups.build(title: "Default")
+    self.ordered_group_ids[0] = @default_group.id
   end
 
   def valid_email_syntax

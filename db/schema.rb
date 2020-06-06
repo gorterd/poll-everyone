@@ -10,19 +10,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_06_06_003516) do
+ActiveRecord::Schema.define(version: 2020_06_06_024607) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "answer_options", force: :cascade do |t|
-    t.string "key", null: false
     t.string "body", null: false
     t.boolean "correct", default: false, null: false
     t.integer "poll_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["key", "poll_id"], name: "index_answer_options_on_key_and_poll_id", unique: true
     t.index ["poll_id"], name: "index_answer_options_on_poll_id"
   end
 
@@ -31,14 +29,13 @@ ActiveRecord::Schema.define(version: 2020_06_06_003516) do
     t.integer "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "ord"
+    t.integer "ordered_poll_ids", default: [], null: false, array: true
     t.index ["user_id"], name: "index_groups_on_user_id"
   end
 
   create_table "polls", force: :cascade do |t|
     t.string "title", null: false
     t.string "poll_type", null: false
-    t.integer "ord", null: false
     t.boolean "locked", default: false, null: false
     t.boolean "allow_changes", default: false, null: false
     t.boolean "allow_anonymous", default: false, null: false
@@ -46,8 +43,8 @@ ActiveRecord::Schema.define(version: 2020_06_06_003516) do
     t.integer "group_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "ordered_anwer_option_ids", default: [], null: false, array: true
     t.index ["group_id"], name: "index_polls_on_group_id"
-    t.index ["ord"], name: "index_polls_on_ord"
   end
 
   create_table "users", force: :cascade do |t|
@@ -61,6 +58,7 @@ ActiveRecord::Schema.define(version: 2020_06_06_003516) do
     t.datetime "updated_at", null: false
     t.string "first_name", null: false
     t.string "last_name", null: false
+    t.integer "ordered_group_ids", default: [], null: false, array: true
     t.index ["activatable_id", "activatable_type"], name: "index_users_on_activatable_id_and_activatable_type", unique: true
     t.index ["activatable_type", "activatable_id"], name: "index_users_on_activatable_type_and_activatable_id"
     t.index ["session_token"], name: "index_users_on_session_token", unique: true
