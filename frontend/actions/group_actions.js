@@ -37,3 +37,16 @@ export const fetchGroups = userId => dispatch => {
       }
     ); 
 }
+
+export const batchDestroy = selections => dispatch => {
+  dispatch(groupsAreLoading());
+
+  return GroupsApiUtil.batchDestroy(selections)
+    .then(
+      data => {
+        dispatch(receiveGroups(data.groups));
+        dispatch(PollActions.receivePolls(data.polls));
+        dispatch(resetGroupsLoading());
+      }
+    );
+}

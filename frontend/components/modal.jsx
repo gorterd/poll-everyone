@@ -4,7 +4,7 @@ import { closeModal } from '../actions/ui_actions';
 import { AnimatedModal } from '../util/component/animation_util';
 import NewPollForm from './polls/new_poll_form';
 
-const Modal = ({ modal }) => {
+const Modal = ({ modal, closeModal }) => {
 
   const NEW_POLL = 'new-poll';
 
@@ -24,6 +24,8 @@ const Modal = ({ modal }) => {
   const defaultModalClass = 'modal';
 
   const DEFAULTS = {
+    modalData: modal.data,
+    closeModal: closeModal,
     enterAnimation: defaultEnterAnimation,
     exitAnimation: defaultExitAnimation,
     backgroundClass: defaultBackgroundClass,
@@ -36,7 +38,7 @@ const Modal = ({ modal }) => {
     component: NewPollForm 
   });
 
-  switch (modal) {
+  switch (modal.type) {
     case NEW_POLL:
       newPollProps.renderCondition = true;
       break;
@@ -53,5 +55,11 @@ const Modal = ({ modal }) => {
 
 const mapState = ({ ui: { modal } }) => ({ modal })
 
-export default connect(mapState)(Modal);
+const mapDispatch = dispatch => {
+  return {
+    closeModal: () => dispatch(closeModal())
+  }
+}
+
+export default connect(mapState, mapDispatch)(Modal);
 

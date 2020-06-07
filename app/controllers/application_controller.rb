@@ -42,12 +42,11 @@ class ApplicationController < ActionController::Base
   end
 
   def ensure_current_user(id)
-    
-    unless current_user.id == id.to_i
-      render json: ['Not authorized to make this request.'], status: 401
-    end
-    
+    render_not_authorized unless current_user.id == id.to_i    
     current_user.id == id.to_i
   end
 
+  def render_not_authorized
+    render json: ['Not authorized to make this request.'], status: 401
+  end
 end

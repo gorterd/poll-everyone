@@ -1,11 +1,11 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 
 const GroupHeader = ({
-  group, drawerVisible, toggleDrawer, toggleSelectGroup, rename, duplicate, addActivity
+  group, drawerVisible, toggleDrawer, selections, receiveGroupSelection, clearGroupSelection, rename, duplicate, addActivity
 }) => {
 
-  const {title, ord, pollsCount} = group;
+  const {id, title, ord, pollsCount} = group;
+  const checked = selections.groupIds.includes(id);
 
   const optionalControls = (ord == 0) ? null : (
     <>
@@ -16,10 +16,19 @@ const GroupHeader = ({
 
   const activitiesCount = `${pollsCount} activit${(pollsCount == 1) ? "y" : "ies"}`
 
+  const handleCheckbox = e => {
+    if (e.target.checked) {
+      receiveGroupSelection(group);
+    } else {
+      clearGroupSelection(group);
+    }
+  }
+
   return (
     <div className="group-header">
+
       <div className="group-header-left">
-        <input type="checkbox" onChange={toggleSelectGroup}/>
+        <input type="checkbox" onChange={handleCheckbox} checked={checked}/>
         <span 
           className={"drawer-chevron " + (drawerVisible ? "open-drawer-chevron" : "")}
           onClick={toggleDrawer}
@@ -27,6 +36,7 @@ const GroupHeader = ({
         </span>
         <span className="group-header-title">{title}</span>
       </div>
+
       <div className="group-header-right">
         <ul className="group-header-controls">
           <li> <span className="group-header-link" onClick={addActivity}>Add activity</span></li>

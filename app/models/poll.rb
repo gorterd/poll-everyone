@@ -7,6 +7,7 @@ class Poll < ApplicationRecord
 
   after_initialize :ensure_poll_type
   before_create :ensure_ord
+  after_destroy :remove_from_order
 
   belongs_to :group, inverse_of: :polls, counter_cache: true
   has_one :user, through: :group, source: :user
@@ -88,5 +89,10 @@ class Poll < ApplicationRecord
   def ensure_ord
     self.ord = self.group.next_ord
   end
+
+  def remove_from_order
+    self.group.remove_poll_from_order(self.id) unless self.destroyed_by_association
+  end
+
 end
 

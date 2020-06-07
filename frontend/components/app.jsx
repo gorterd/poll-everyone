@@ -12,7 +12,7 @@ import LoginFormContainer from './session/login/login_container';
 import SignupSplash from './session/signup/signup_splash';
 import SignupFormContainer from './session/signup/signup_container';
 
-import GroupsIndexContainer from './polls/goups_index_container';
+import GroupsIndexContainer from './polls/groups_index/groups_index_container';
 import { AuthRoute, ProtectedRoute } from '../util/component/routes_util';
 import Modal from './modal';
 

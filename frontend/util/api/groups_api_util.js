@@ -4,3 +4,11 @@ export const fetchGroups = userId => {
     url: `/api/users/${userId}/groups`
   });
 }
+
+export const batchDestroy = selections => {
+  return $.ajax({
+    method: 'DELETE',
+    url: `/api/groups/batch_destroy`,
+    data: selections
+  });
+}

@@ -115,6 +115,10 @@ button {
   @include button(white, $light-grey, $royal-blue)
 }
 
+.button-grey {
+  @include button($soft-grey, $grey, $charcoal)
+}
+
 .button-blue {
   @include button($royal-blue, $royal-blue-hover, white)
 }

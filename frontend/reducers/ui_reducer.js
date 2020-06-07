@@ -6,7 +6,10 @@ const _baseUi = {
   sessionLoading: false,
   groupsLoading: false,
   stickyNav: true,
-  modal: ""
+  modal: {
+    type: "",
+    data: {}
+  }
 }
 
 export default (state = _baseUi, action) => {
@@ -22,7 +25,7 @@ export default (state = _baseUi, action) => {
     case RECEIVE_MODAL:
       return Object.assign({}, state, { modal: action.modal });
     case CLEAR_MODAL:
-      return Object.assign({}, state, { modal: "" });
+      return Object.assign({}, state, { modal: _baseUi.modal });
     default:
       return state;
   }

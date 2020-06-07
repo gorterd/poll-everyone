@@ -14,14 +14,9 @@ class User < ApplicationRecord
 
   attr_reader :password
   
-  has_many :groups, 
-    inverse_of: :user,
-    autosave: true,
-    dependent: :destroy
-    
-  has_many :polls, 
-    through: :groups, 
-    source: :polls
+  has_many :groups, inverse_of: :user, autosave: true, dependent: :destroy
+
+  has_many :polls, through: :groups
 
   # class methods
 

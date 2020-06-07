@@ -44,7 +44,12 @@ Rails.application.routes.draw do
 
     resources :groups, only: [:update, :destroy] do
       resources :polls, only: [:create]
+      collection do 
+        delete 'batch_destroy'
+      end
+
     end
+
 
     resources :polls, only: [:show, :update, :destroy] do 
       resources :answer_options, only: [:create]

@@ -42,6 +42,23 @@ class Api::GroupsController < ApplicationController
     render :index
   end
 
+  def batch_destroy
+    group_ids = snake_params[:group_ids]
+    poll_ids = snake_params[:poll_ids]
+    
+    @groups_to_destroy = Group.where(id: snake_params[:group_ids].map(&:to_i))
+    @polls_to_destroy = Poll.where(id: snake_params[:poll_ids].map(&:to_i))
+
+    render_not_authorized unless @groups_to_destroy.pluck(:user_id).all? { |id| id == current_user.id }
+    render_not_authorized unless @polls_to_destroy.all? { |poll| poll.user.id == current_user.id }
+
+    @polls_to_destroy.destroy_all
+    @groups_to_destroy.destroy_all
+
+    @groups = current_user.groups.includes(:polls)
+    render :index
+  end
+
   private
 
   def group_params

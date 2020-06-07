@@ -2,11 +2,11 @@ class Group < ApplicationRecord
 
   validates :title, :ord, presence: true
   
-  before_destroy :remove_from_order_and_destroy_polls
+  after_destroy :remove_from_order
   before_create :ensure_ord, :ensure_title
   
   belongs_to :user, inverse_of: :groups, counter_cache: true
-  has_many :polls, inverse_of: :group
+  has_many :polls, inverse_of: :group, dependent: :destroy
 
   # class methods
 
@@ -21,8 +21,12 @@ class Group < ApplicationRecord
     rescue
       false
   end
-
+    
   # logic
+
+  def move_group(pos)
+      self.user.insert_group_at_pos(self.id, pos)
+    end
   
   def ordered_polls
     self.polls.order(:ord)
@@ -53,15 +57,9 @@ class Group < ApplicationRecord
   end
 
   private
-  
-  def destroy_or_remove_polls
-    if self.user.groups.size == 1 || self.ord == 1 
-      self.polls.destroy_all
-    else
-      self.user.default_group.polls << self.polls
-    end
 
-    self.user.remove_group_from_order(self.id)
+  def remove_from_order
+    self.user.remove_group_from_order(self.id) unless self.destroyed_by_association
   end
 
   def ensure_ord
