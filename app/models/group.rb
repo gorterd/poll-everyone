@@ -3,10 +3,24 @@ class Group < ApplicationRecord
   validates :title, :ord, presence: true
   
   before_destroy :remove_from_order_and_destroy_polls
-  before_create :ensure_ord
+  before_create :ensure_ord, :ensure_title
   
   belongs_to :user, inverse_of: :groups, counter_cache: true
   has_many :polls, inverse_of: :group
+
+  # class methods
+
+  def self.save_with_polls(group, poll_ids)
+    
+    Group.transaction do 
+      group.save!
+      Poll.move_polls(poll_ids, group.id)
+    end
+
+    true
+    rescue
+      false
+  end
 
   # logic
   
@@ -53,6 +67,9 @@ class Group < ApplicationRecord
   def ensure_ord
     self.ord = self.user.next_ord
   end
-  
+
+  def ensure_title
+    self.title ||= "New group"
+  end
 end
   

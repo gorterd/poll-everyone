@@ -1,4 +1,6 @@
 import React from 'react';
+import {connect} from 'react-redux';
+import { closeModal } from '../../actions/ui_actions';
 
 class AnimatedElement extends React.Component {
   constructor(props){
@@ -39,7 +41,10 @@ class AnimatedElement extends React.Component {
 export class Animated extends React.Component {
   constructor(props){
     super(props)
-    this.state = { entering: false, exiting: false }
+    this.state = { 
+      entering: false, 
+      exiting: false 
+    }
   }
 
   componentDidUpdate(prevProps){
@@ -55,3 +60,23 @@ export class Animated extends React.Component {
     return <AnimatedElement component={children} {...this.state} {...rest} />
   }
 }
+
+const AnimatedModalComponent = ({backgroundClass, modalClass, component: Component, ...rest}) => {
+  return (
+    <Animated {...rest}>
+      <section className={backgroundClass} onClick={closeModal}>
+        <div className={modalClass} onClick={e => e.stopPropagation()}>
+          <Component />
+        </div>
+      </section>
+    </Animated>
+  )
+}
+
+const mapDispatch = dispatch => {
+  return {
+    closeModal: () => dispatch(closeModal())
+  }
+}
+
+export const AnimatedModal = connect(null, mapDispatch)(AnimatedModalComponent);

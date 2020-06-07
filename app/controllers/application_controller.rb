@@ -25,9 +25,9 @@ class ApplicationController < ActionController::Base
      render json: ['Login required for this request.'], status: 403  unless logged_in?
   end
 
-  def update_and_render(model, params)
+  def update_and_render(model, params, render_on_success = :show)
     if model.update(params)
-      render :show
+      render render_on_success
     else 
       render json: model.errors.full_messages, status: 422
     end
@@ -42,11 +42,12 @@ class ApplicationController < ActionController::Base
   end
 
   def ensure_current_user(id)
-    unless current_user.id == id
+    
+    unless current_user.id == id.to_i
       render json: ['Not authorized to make this request.'], status: 401
     end
-
-    current_user.id == id
+    
+    current_user.id == id.to_i
   end
 
 end

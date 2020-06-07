@@ -19,6 +19,7 @@ h3 {
 }
 
 // visibility
+
 .hidden {
   display: none;
 }
@@ -96,7 +97,6 @@ button {
 }
 
 @mixin button($bkgnd-color, $hover-color, $txt-color) {
-
   font-size: $fontsize-strong;
   font-weight: $fontweight-strong;
   padding: 8px 14px;
@@ -110,42 +110,17 @@ button {
   }
 }
 
-// .button {
-//   font-size: $fontsize-strong;
-//   font-weight: $fontweight-strong;
-//   padding: 8px 14px;
-//   text-align: center;
-//   transition: all 0.2s;
-// }
 
 .button-white {
   @include button(white, $light-grey, $royal-blue)
-    // background-color: white;
-    // color: $royal-blue;
-    
-    // &:hover {
-    //   background-color: $light-grey;
-    // }
 }
 
 .button-blue {
   @include button($royal-blue, $royal-blue-hover, white)
-    // background-color: $royal-blue;
-    // color: white;
-    
-    // &:hover {
-    //   background-color: $royal-blue-hover;
-    // }
 }
 
 .button-red {
   @include button($brick-red, $brick-red-hover, white)
-    // background-color: $brick-red;
-    // color: white;
-    
-    // &:hover {
-    //   background-color: $brick-red-hover;
-    // }
 }
 
 .button-green {
@@ -238,6 +213,26 @@ button {
     opacity: 0;
     transform: translateY(100%);
   }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fade-out {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+// layout
+
+@mixin fullpage {
+  position: fixed;
+  bottom: 0;
+  height: calc( 100vh - 72px);
+  width: 100%;
+  min-height: 0;
 }
 
 

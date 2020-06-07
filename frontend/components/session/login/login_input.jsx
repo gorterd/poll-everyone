@@ -1,5 +1,5 @@
 import React from 'react';
-import { Animated } from '../../../util/animation_util';
+import { Animated } from '../../../util/component/animation_util';
 
 class LoginInput extends React.Component {
 

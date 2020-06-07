@@ -1,4 +1,4 @@
-import * as PollsApiUtil from '../util/polls_api_util';
+import * as PollsApiUtil from '../util/api/polls_api_util';
 
 export const RECEIVE_POLLS = 'RECEIVE_POLLS';
 

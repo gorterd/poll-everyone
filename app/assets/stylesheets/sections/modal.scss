@@ -1,0 +1,18 @@
+.freeze-scroll {
+  position: fixed;
+  overflow: hidden;
+  width: 100%;
+}
+
+.standard-modal-background {
+  @include fullpage;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: (0,0,0,0.5);
+}
+
+.new-poll-modal {
+  width: 100%;
+  height: 100%;
+}

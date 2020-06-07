@@ -11,6 +11,7 @@ class Poll < ApplicationRecord
   belongs_to :group, inverse_of: :polls, counter_cache: true
   has_one :user, through: :group, source: :user
   has_many :answer_options, inverse_of: :poll, autosave: true, dependent: :destroy
+  accepts_nested_attributes_for :answer_options, allow_destroy: true
   has_many :correct_answers, -> { where(correct: true) }, foreign_key: :poll, class_name: 'AnswerOption'
 
   def self.move_polls(poll_ids, new_group_id)    
