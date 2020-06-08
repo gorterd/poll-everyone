@@ -14,7 +14,7 @@ import SignupFormContainer from './session/signup/signup_container';
 
 import GroupsIndexContainer from './polls/groups_index/groups_index_container';
 import { AuthRoute, ProtectedRoute } from '../util/component/routes_util';
-import Modal from './modal';
+import { Modal } from './polls/modals/modal';
 
 
 
@@ -22,8 +22,6 @@ const App = () => {
   return (
     <>     
       <section className='content'>
-        <Modal />
-
         <Switch>
           <Route exact path='/'><HomeNavbarContainer /></Route>
           <ProtectedRoute path={['/polls', '/account', '/reports']}><AppNavbarContainer /></ProtectedRoute>
@@ -54,6 +52,8 @@ const App = () => {
       <Route exact path={['/', '/polls', '/account']}>
         <Footer />
       </Route>
+
+      <Modal />
     </>
   )
 }

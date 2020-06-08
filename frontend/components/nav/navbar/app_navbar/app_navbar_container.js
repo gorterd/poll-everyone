@@ -5,6 +5,8 @@ import AppNavbar from './app_navbar';
 const mapState = state => {
   return {
     currentUser: state.entities.users[state.session.currentId],
+    modalType: state.ui.modal.type,
+    stickyToolbar: state.ui.stickyToolbar,
   }
 }
 

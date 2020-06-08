@@ -16,13 +16,12 @@ const SignupInput =
   return (type === 'checkbox') ? (
     <div className="signup-input-container">
       <input
-        id={id}
         className={"signup-input" + (displayError[field] ? " signup-input-error" : "")}
         type={type}
         value={formData[field]}
         onChange={handleInput(field)}
         onBlur={validateInput(field)}
-      /> <label htmlFor={id}>{text}</label>
+      /><label>{text}</label>
       {error}
     </div>
   ): (

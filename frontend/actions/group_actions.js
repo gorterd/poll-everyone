@@ -1,5 +1,6 @@
 import * as GroupsApiUtil from '../util/api/groups_api_util';
 import * as PollActions from './poll_actions'
+import { clearSelections } from './selection_actions/poll_selection_actions';
 
 export const RECEIVE_GROUPS = 'RECEIVE_GROUPS';
 
@@ -47,6 +48,7 @@ export const batchDestroy = selections => dispatch => {
         dispatch(receiveGroups(data.groups));
         dispatch(PollActions.receivePolls(data.polls));
         dispatch(resetGroupsLoading());
+        dispatch(clearSelections());
       }
     );
 }

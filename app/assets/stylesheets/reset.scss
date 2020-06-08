@@ -38,6 +38,10 @@ input[type="submit"] {
   cursor: pointer;
 }
 
+:disabled {
+  cursor: not-allowed;
+}
+
 // Broad Parent Styling
 
 

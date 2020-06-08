@@ -14,7 +14,7 @@ class AttributedImage extends React.Component {
   }
   
   hide(e){
-    setTimeout( () => this.setState({revealed: false}), 50);
+    window.setTimeout( () => this.setState({revealed: false}), 50);
   }
 
   render() {

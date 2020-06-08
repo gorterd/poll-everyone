@@ -1,16 +1,24 @@
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { fetchGroups, batchDestroy } from "../../../actions/group_actions";
-import { receiveGroupSelection, clearGroupSelection, clearSelections } from '../../../actions/selection_actions/poll_selection_actions'
-import { orderedGroups } from "../../../util/selectors";
+
 import {  } from "../../../actions/poll_actions";
+import { fetchGroups, batchDestroy } from "../../../actions/group_actions";
+import { receiveGroupSelection, clearGroupSelection, receiveSelections, clearSelections } from '../../../actions/selection_actions/poll_selection_actions'
+import { openModal, setScrollY, setStickyToolbar, clearStickyToolbar } from '../../../actions/ui_actions';
+
+import { orderedGroups } from "../../../util/selectors";
+
 import GroupsIndex from './groups_index';
 
 const mapState = state => {
   return {
     orderedGroups: orderedGroups(state) || [],
     selections: state.selections.polls,
-    currentUserId: state.session.currentId
+    currentUserId: state.session.currentId,
+    scrollY: state.ui.data.scrollY,
+    stickyToolbar: state.ui.stickyToolbar,
+    modalType: state.ui.modal.type,
+    modalExiting: state.ui.modal.exiting
   }
 }
 
@@ -20,7 +28,12 @@ const mapDispatch = dispatch => {
     batchDestroy: selections => dispatch(batchDestroy(selections)),
     receiveGroupSelection: group => dispatch(receiveGroupSelection(group)),
     clearGroupSelection: group => dispatch(clearGroupSelection(group)),
+    receiveSelections: selections => dispatch(receiveSelections(selections)),
     clearSelections: () => dispatch(clearSelections()),
+    setScrollY: scrollY => dispatch(setScrollY(scrollY)),
+    setStickyToolbar: height => dispatch(setStickyToolbar(height)),
+    clearStickyToolbar: () => dispatch(clearStickyToolbar()),
+    openModal: modal => dispatch(openModal(modal)),
   }
 }
 

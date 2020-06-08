@@ -1,0 +1,165 @@
+.polls-index {
+  display: flex;
+  width: 100%;
+  background-color: white;
+}
+
+.polls-sidebar {
+  width: 225px;
+  padding: 16px;
+
+  button {
+    width: 100%;
+  }
+}
+
+.groups-index-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  margin: 16px 16px 0 0;
+}
+
+.groups-index-toolbar {
+  margin-bottom: 14px;
+  
+  *[class*="button-"] {
+    border: 1px solid $soft-grey;
+    &:hover { border-color: $medium-grey;}
+    &:disabled { border-color: $light-grey }
+    margin-right: 4px;
+
+    &:not(:first-child) {
+      width: 130px;
+    }
+  }
+
+  &.sticky-toolbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    box-shadow: 0 0px 12px 0px #b3b3b3;
+    background-color: white;
+    width: 100%;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    z-index: 10;
+
+    .button-blue { border: none;}
+
+  }
+}
+
+.groups-index {
+  display: flex;
+  flex-direction: column;
+}
+
+.group-polls-index-container {
+  margin-bottom: 18px;
+
+  .group-polls-row {
+    margin-bottom: 1px;
+    padding: 0 15px;
+    height: 54px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .group-header {
+    background-color: $light-grey;
+
+    .drawer-chevron:hover {
+      color: $royal-blue; 
+    }
+
+    .open-drawer-chevron {
+      transform: rotate(90deg);
+    }
+
+    .group-header-title {
+      font-weight: $fontweight-strong;
+    }
+    
+
+
+
+    .group-header-right {
+      display: flex;
+      align-items: center;
+    }
+    
+    .group-header-controls {
+      display: flex;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 250ms, visibility 250ms;
+      padding-right: 35px;
+      
+    }
+    
+    &:hover .group-header-controls {
+      opacity: 1;
+      visibility: visible;
+      transition: all 100ms;
+    }
+
+    .group-header-activities {
+      padding: 0 50px;
+      font-weight: 600;
+      color: $royal-blue-hover;
+      text-align: center;
+    }
+  }
+}
+
+
+
+
+.group-polls-link {
+  display: block;
+  padding: 0 15px;
+  margin-left: 2px;
+  color: $royal-blue-hover;
+  &:hover {
+    color: $brick-red;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+}
+
+.group-row-left {
+  display: flex;
+  align-items: center;
+  font-size: $fontsize-strong;
+  color: $dark-grey;
+
+  > * {
+    margin: 0 10px;
+    display: block;
+  }
+
+  .poll-type-icon {
+    display: flex;
+    justify-content: center;
+    width: 30px;
+    margin: 0;
+  }
+}
+
+.poll-list-item {
+
+  &:hover {
+    background-color: $lightest-grey;
+  }
+
+  .group-polls-link {
+    padding: 0;
+  }
+}
+
+
+
+

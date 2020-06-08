@@ -1,42 +1,28 @@
 import React from 'react';
 import { Link, withRouter } from 'react-router-dom';
+import DropdownWrapper from '../../../shared/dropdown';
 
-class AppNavbarDropdown extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = { drop: false }
-  
-    this.clickHandler = this.clickHandler.bind(this);
-    this.blurHandler = this.blurHandler.bind(this);
-    this.handleLogout = this.handleLogout.bind(this);
-  };
+const AppNavbarDropdown = ({currentUser, logout, history}) => {
 
-  clickHandler(){
-    this.setState({ drop: !this.state.drop});
-  }
-  
-  blurHandler(){
-    setTimeout( () => this.setState({ drop: false}), 50);
+  const handleLogout = () => {
+    logout();
+    history.push('/');
   }
 
-  handleLogout(){
-    this.props.logout().then( () => this.props.history.push('/'))
-  }
+  const Button = () => <span className='nav-tool'>{currentUser.username}</span>
 
-  render() {
-    const { currentUser } = this.props;
+  const Dropdown = () => (
+    <ul className='navbar-dropdown'>
+      <li className="dropdown-li"><Link className="dropdown-item" to="/account">My settings</Link></li>
+      <li className="dropdown-li"><span className="dropdown-item" onClick={handleLogout}>Log out</span></li>
+    </ul>
+  )
 
-    
-    return (
-      <button className="nav-dropdown-container" onBlur={this.blurHandler}>
-        <span className="nav-tool" onClick={this.clickHandler}>{currentUser.username}</span>
-        <ul className={"navbar-dropdown " + (this.state.drop ? "" : "hidden")} >
-          <li className="dropdown-li"><Link className="dropdown-item" to="/account">My settings</Link></li>
-          <li className="dropdown-li"><span className="dropdown-item" onClick={this.handleLogout}>Log out</span></li>
-        </ul>
-      </button>
-    )
-  }
-};
+  return <DropdownWrapper 
+    containerClass='nav-dropdown-container'
+    button={Button}
+    dropdown={Dropdown}
+  />
+}
 
 export default withRouter(AppNavbarDropdown);

@@ -1,17 +1,6 @@
 import React from 'react';
-import GroupHeader from './group_header'
-
-const PollListItem = ({poll}) => {
-  return (
-    <li>
-      <span>
-        {poll.pollType} 
-        {poll.title}
-      </span>
-    </li>
-  )
-}
-
+import GroupHeader from './group_header';
+import PollListItem from './poll-list-item';
 
 class GroupPollsIndex extends React.Component {
   constructor(props) {
@@ -22,38 +11,41 @@ class GroupPollsIndex extends React.Component {
     this.addActivity = this.addActivity.bind(this);
     this.rename = this.rename.bind(this);
     this.duplicate = this.duplicate.bind(this);
+    this.togglePollSelect = this.togglePollSelect.bind(this);
   };
 
   toggleDrawer(){
-    console.log(`${this.state.drawerVisible ? "hide" : "show"} drawer`)
     this.setState({drawerVisible: !this.state.drawerVisible})
   }
-  
-  toggleSelectGroup(e){
-    console.log(`${this.state.groupSelected ? "un" : ""}select group`)
-    this.setState({groupSelected: e.target.checked}, ({groupSelected}) => {
-      if (!groupSelected){
 
-      }
-    })
-    this.props.updateSelection
+  addActivity(e) {
+    e.stopPropagation();
+    const { openModal, stickyToolbar } = this.props;
+    
+    openModal({
+      type: 'new-poll', 
+      data: { group: this.group }, 
+      offset: ( stickyToolbar || 72 )
+    });
   }
 
-  addActivity(){
-    console.log('Add activity')
-    this.props.openModal(
-      {type: 'new-poll', data: { group: this.group } }
-    );
-  }
-
-  rename(){
+  rename(e) {
     console.log('Rename')
-    
+    e.stopPropagation()
   }
 
-  duplicate(){
-    console.log('Duplicate')
-    
+  duplicate(e) {
+    e.stopPropagation()
+    console.log('Duplicate') 
+  }
+
+  togglePollSelect(pollId, selected) {
+    const { group, receivePollSelection, clearPollSelection } = this.props;
+    if (selected) {
+      receivePollSelection({ group, pollId });
+    } else {
+      clearPollSelection({ group, pollId});
+    }
   }
 
   render() {
@@ -69,11 +61,16 @@ class GroupPollsIndex extends React.Component {
     }
 
     return (
-      <div>
+      <div className='group-polls-index-container'>
         <GroupHeader {...headerProps} />
-        <ul className={"group-polls-list "+ ( drawerVisible ? "" : "hidden")}>
+        <ul className={"group-polls-index "+ ( drawerVisible ? "" : "hidden")}>
           {orderedPolls.map(poll => {
-            return <PollListItem key={poll.id} poll={poll} selections={selections} />
+            return <PollListItem 
+              key={poll.id} 
+              poll={poll} 
+              selections={selections} 
+              togglePollSelect={this.togglePollSelect}
+            />
           })}
         </ul>
       </div>

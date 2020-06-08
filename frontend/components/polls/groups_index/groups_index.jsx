@@ -19,20 +19,35 @@ class GroupsIndex extends React.Component {
   }
 
   render() {
-    const { orderedGroups, selections, receiveGroupSelection, clearGroupSelection, clearSelections } = this.props;
+    const { orderedGroups, openModal, stickyToolbar } = this.props;
     
     return (
-      <section className="groups-index">
-        <GroupsIndexToolbar batchDestroy={this.batchDestroy} selections={selections} clearSelections={clearSelections}/>
-        {orderedGroups.map( group => {
-          return <GroupPollsIndexContainer 
-            key={group.id} 
-            group={group} 
-            selections={selections} 
-            receiveGroupSelection={receiveGroupSelection}
-            clearGroupSelection={clearGroupSelection}
+      <section className="polls-index">
+
+        <aside className='polls-sidebar'>
+          <button 
+            className={'button-blue' + (stickyToolbar ? ' hidden' : '') }
+            onClick={ () => openModal({type:'new-poll', data: {}, offset: 72 })}
+          >Create</button>
+        </aside>
+
+        <section className='groups-index-container'>
+          <GroupsIndexToolbar 
+            batchDestroy={this.batchDestroy} 
+            groups={orderedGroups}
+            {...this.props}
           />
-        })}
+
+          <div className='groups-index'>
+            {orderedGroups.map( group => {
+              return <GroupPollsIndexContainer 
+                key={group.id} 
+                group={group} 
+                {...this.props}
+              />
+            })}
+          </div>
+        </section>
       </section>
     )
   }

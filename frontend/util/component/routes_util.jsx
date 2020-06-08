@@ -31,7 +31,7 @@ export const ProtectedRoute = connect(mapStateToRoutes, null)(Protected);
 const mapDispatchToMiddleware = dispatch => {
   return {
     closeModal: () => {
-      dispatch(closeModal())
+      dispatch(closeModal(0))
     }
   }
 }

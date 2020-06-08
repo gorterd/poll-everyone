@@ -6,7 +6,7 @@ import SignupForm from './signup_form';
 const mapState = state => {
   return {
     sessionErrors: state.errors.session,
-    sessionIsLoading: state.ui.session.loading,
+    sessionIsLoading: state.ui.sessionLoading,
   }
 }
 

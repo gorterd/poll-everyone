@@ -24,6 +24,10 @@ h3 {
   display: none;
 }
 
+.invisible {
+  visibility: hidden;
+}
+
 // inputs
 
 .login-input-wrapper {
@@ -112,23 +116,30 @@ button {
 
 
 .button-white {
-  @include button(white, $light-grey, $royal-blue)
+  @include button(white, $light-grey, $royal-blue);
 }
 
 .button-grey {
-  @include button($soft-grey, $grey, $charcoal)
+  @include button($light-grey, $softer-grey, $dark-grey);
+  &:disabled { 
+    background-color: $lightest-grey;
+    color: $grey; 
+  }
 }
 
 .button-blue {
-  @include button($royal-blue, $royal-blue-hover, white)
+  @include button($royal-blue, $royal-blue-hover, white);
+  &:disabled { background-color: $royal-blue-disabled }
 }
 
 .button-red {
-  @include button($brick-red, $brick-red-hover, white)
+  @include button($brick-red, $brick-red-hover, white);
+
+  &:disabled { background-color: $brick-red-disabled; }
 }
 
 .button-green {
-  @include button($forest-green, $forest-green-hover, white)
+  @include button($forest-green, $forest-green-hover, white);
 }
 
 // images
@@ -231,10 +242,10 @@ button {
 
 // layout
 
-@mixin fullpage {
+@mixin fullpage($offset){
   position: fixed;
   bottom: 0;
-  height: calc( 100vh - 72px);
+  height: calc(100vh - #{$offset});
   width: 100%;
   min-height: 0;
 }
