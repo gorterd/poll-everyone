@@ -85,6 +85,7 @@ class LoginForm extends React.Component {
       <form onSubmit={this.next}>
 
         <LoginInput
+          autoFocus
           errorMsg={errorMsg}
           text="Email or username"
           type="text"

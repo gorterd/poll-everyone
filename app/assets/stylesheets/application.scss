@@ -13,7 +13,6 @@
  *= require_self
  */
 
- @import "./constants.scss";
- @import "./reset.scss";
- @import "./shared.scss";
+ @import "./base/*";
+ @import "./shared/*";
  @import "./sections/*";

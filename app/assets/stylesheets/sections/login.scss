@@ -1,15 +1,3 @@
-@keyframes slide-up-and-in {
-  from {
-    opacity: 0;
-    transform: translateY(100%);
-  }
-  
-  to {
-    opacity: unset;
-    transform: translateY(0%);
-  }
-}
-
 .login-form-section {
   position: fixed;
   bottom: 0;
@@ -17,118 +5,110 @@
   width: 100%;
   min-height: 0;
   background-color: white;
+}
 
-  .login-form-container {
-    width: 468px;
-    margin: 25px auto;
-    overflow-y: scroll;
+.login-form-container {
+  width: 468px;
+  margin: 25px auto;
+  overflow-y: scroll;
 
-    >*{
-      margin: 20px 0;
-    }
-
-    h3 {
-      font-weight: 700;
-      color: $dark-grey;
-    }
-
-    .login-form-posttext {
-      color: $dark-grey;
-      line-height: 1.5rem;
-      text-align: center;
-
-      a, .login-link { text-decoration: underline;}
-    }
-
-    form {
-  
-      .login-input-container {
-        
-        .login-input-wrapper {
-          position: relative;
-          height: 54px;
-          background-color: white;
-          border: 1px solid $robin-blue;
-          margin: 2px 0;
-
-          input {
-            width: 100%;
-            height: 100%;
-            background: transparent;
-            position: relative;
-            z-index: 1;
-            &.activated {
-              padding-bottom: 5px;
-              padding-top: 25px;
-            }
-          }
-          
-          // &.activated {
-          //   padding-bottom: 5px;
-          //   padding-top: 25px;
-          // }
-
-          .view-password-button {
-            padding: 5px 1px;
-            position: absolute;
-            right: 2px;
-            top: 5px;
-            font-size: 1.5rem;
-            color: $grey;
-            border: 1px solid transparent;
-            transition: color .3s, border .3s ease-in;
-            z-index: 2;
-
-            &:hover {
-              border: 1px solid $light-grey;
-              color: $charcoal;
-            }
-          }
-        }
-
-        .placeholder-input-label-container {
-          position: absolute;
-          bottom: 15px;
-          left: 15px;
-
-          .placeholder-input-label {
-            font-style: italic;
-            font-size: $fontsize-strong;
-            color: $grey;  
-          }          
-        }
-
-        .small-input-label-container {
-          position: absolute;
-          bottom: 28px;
-          left: 15px;
-
-          .small-input-label {
-            font-size: $fontsize-small;
-            color: $grey;
-          }
-        }
-
-        &.input-error {
-          padding: 2px;
-          background-color: $medium-coral;
-        }
-
-        .login-error-msg {
-          font-weight: 700;
-          color: $dark-brick;
-          padding: 5px;
-        }
-
-        
-      }
-
-      .button { 
-        margin-top: 18px;
-        width: 100%;
-      }
-    }
+  >*{
+    margin: 20px 0;
   }
 
+  h3 {
+    font-weight: 700;
+    color: $dark-grey;
+  }
+
+  .login-form-posttext {
+    color: $dark-grey;
+    line-height: 1.5rem;
+    text-align: center;
+
+    a, .login-link { text-decoration: underline;}
+  }
+
+  form .button { 
+    margin-top: 18px;
+    width: 100%;
+  }
+
+}
+        
+        // .login-input-wrapper {
+        //   position: relative;
+        //   height: 54px;
+        //   background-color: white;
+        //   border: 1px solid $robin-blue;
+        //   margin: 2px 0;
+
+        //   input {
+        //     width: 100%;
+        //     height: 100%;
+        //     background: transparent;
+        //     position: relative;
+        //     z-index: 1;
+        //     &.activated {
+        //       padding-bottom: 5px;
+        //       padding-top: 25px;
+        //     }
+        //   }
+
+  
+
+        // .placeholder-input-label-container {
+        //   position: absolute;
+        //   bottom: 15px;
+        //   left: 15px;
+
+        //   .placeholder-input-label {
+        //     font-style: italic;
+        //     font-size: $fontsize-strong;
+        //     color: $grey;  
+        //   }          
+        // }
+
+        // .small-input-label-container {
+        //   position: absolute;
+        //   bottom: 28px;
+        //   left: 15px;
+
+        //   .small-input-label {
+        //     font-size: $fontsize-small;
+        //     color: $grey;
+        //   }
+        // }
+
+        // &.input-error {
+        //   padding: 2px;
+        //   background-color: $medium-coral;
+        // }
+
+        // .login-error-msg {
+        //   font-weight: 700;
+        //   color: $dark-brick;
+        //   padding: 5px;
+        // }
+
+        
+.login-input-container {
+
+  .view-password-button {
+    padding: 5px 1px;
+    position: absolute;
+    right: 2px;
+    top: 5px;
+    font-size: 1.5rem;
+    color: $grey;
+    border: 1px solid transparent;
+    transition: color .3s, border .3s ease-in;
+    z-index: 2;
+
+    &:hover {
+      border: 1px solid $light-grey;
+      color: $charcoal;
+    }
+  }
 
 }

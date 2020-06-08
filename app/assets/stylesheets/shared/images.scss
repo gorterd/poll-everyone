@@ -1,0 +1,30 @@
+.attributed-image-container {
+  position: relative;
+
+  .attribution-container {
+    position:absolute;
+    top: calc(100% - 30px);
+    left: 100%;
+    
+    button { outline: none;}
+    
+    .attribution-popup {
+      position: relative;
+      right: 40%;
+      top: 10px;
+      padding: 10px;
+      background-color: $charcoal;
+      color: white;
+      opacity: .7;
+      border-radius: 5px;
+      box-shadow: 0 0 5px 0 $charcoal;
+      text-align: center;
+      
+      a { 
+        font-weight: 600; 
+        &:hover { text-decoration: underline;}
+      }
+      
+    }
+  }
+}

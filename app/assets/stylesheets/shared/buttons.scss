@@ -1,0 +1,45 @@
+button {
+  outline: none;
+}
+
+@mixin button($bkgnd-color, $hover-color, $txt-color) {
+  font-size: $fontsize-strong;
+  font-weight: $fontweight-strong;
+  padding: 8px 14px;
+  text-align: center;
+  transition: all 0.2s;
+  background-color: $bkgnd-color;
+  color: $txt-color;
+
+  &:hover {
+    background-color: $hover-color;
+  }
+}
+
+
+.button-white {
+  @include button(white, $light-grey, $royal-blue);
+}
+
+.button-grey {
+  @include button($light-grey, $softer-grey, $dark-grey);
+  &:disabled { 
+    background-color: $lightest-grey;
+    color: $grey; 
+  }
+}
+
+.button-blue {
+  @include button($royal-blue, $royal-blue-hover, white);
+  &:disabled { background-color: $royal-blue-disabled }
+}
+
+.button-red {
+  @include button($brick-red, $brick-red-hover, white);
+
+  &:disabled { background-color: $brick-red-disabled; }
+}
+
+.button-green {
+  @include button($forest-green, $forest-green-hover, white);
+}

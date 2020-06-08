@@ -1,46 +1,80 @@
-// handleFocus(e){
-//   this.setState({ focus: true })
-// }
+import React from 'react';
+import { Animated } from '../../util/component/animation_util';
 
-// handleLeave(e){
-//   this.setState({ focus: false })
-// }
+class LargeInput extends React.Component {
 
-// const activated = Boolean(value || this.state.focus);
+  constructor(props) {
+    super(props);
 
+    this.state = { focus: false }
 
-// const upAndIn = {
-//   animationName: "slide-up-and-in",
-//   animationDuration: "200ms",
-//   animationIterationCount: 1,
-//   animationTimingFunction: "ease-out",
-// };
+    this.handleFocus = this.handleFocus.bind(this)
+    this.handleLeave = this.handleLeave.bind(this)
+  }
 
-// const downAndOut = {
-//   animationName: "slide-down-and-out",
-//   animationDuration: "200ms",
-//   animationIterationCount: 1,
-//   animationTimingFunction: "ease-in",
-// };
+  handleFocus(e) {
+    this.setState({ focus: true })
+  }
 
-//   <input
-//     onFocus={this.handleFocus}
-//     onBlur={this.handleLeave}
-//     type={this.state.curType}
-//     {...rest}
-//   />
-//   <div className="small-input-label-container">
-//     <Animated
-//       renderCondition={activated}
-//       enterAnimation={upAndIn}
-//       exitAnimation={downAndOut}
-//       ><div className="small-input-label">{text}</div>
-//     </Animated>
-//   </div>
-//     <div className="placeholder-input-label-container">
-//       <Animated
-//         renderCondition={!activated}
-//         enterAnimation={upAndIn}
-//         ><div className="placeholder-input-label">{text}</div>
-//       </Animated>
-//   </div>
+  handleLeave(e) {
+    this.setState({ focus: false })
+  }
+
+  render() {
+
+    const { errorMsg, type, text, value, errorConditions, klass,
+      leftSideComponents, rightSideComponents, ...rest } = this.props;
+
+    const activated = Boolean(value || this.state.focus);
+    const erroredOut = Boolean(errorMsg && errorConditions);
+
+    const errorEle = erroredOut ? <div className="large-input-error-msg">{errorMsg}</div> : null
+
+    const upAndIn = {
+      animationName: "slide-up-and-in",
+      animationDuration: "200ms",
+      animationIterationCount: 1,
+      animationTimingFunction: "ease-out",
+    };
+
+    const downAndOut = {
+      animationName: "slide-down-and-out",
+      animationDuration: "200ms",
+      animationIterationCount: 1,
+      animationTimingFunction: "ease-in",
+    };
+
+    return (
+      <div className={`large-input-container ${klass} ${(erroredOut ? "input-error" : "")}`}>
+        <div className={"large-input-wrapper" + (activated ? " activated" : "")}>
+          {leftSideComponents}
+          <input
+            className={activated ? " activated" : ""}
+            onFocus={this.handleFocus}
+            onBlur={this.handleLeave}
+            {...rest}
+          />
+          <div className="small-input-label-container">
+            <Animated
+              renderCondition={activated}
+              enterAnimation={upAndIn}
+              exitAnimation={downAndOut}
+            ><div className="small-input-label">{text}</div>
+            </Animated>
+          </div>
+          <div className="placeholder-input-label-container">
+            <Animated
+              renderCondition={!activated}
+              enterAnimation={upAndIn}
+            ><div className="placeholder-input-label">{text}</div>
+            </Animated>
+          </div>
+          {rightSideComponents}
+        </div>
+        {errorEle}
+      </div>
+    )
+  }
+}
+
+export default LargeInput;
