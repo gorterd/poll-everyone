@@ -1,11 +1,12 @@
 class Api::PollsController < ApplicationController
 
   before_action only: [:create] do 
-    ensure_current_user(params[:user_id])
+    @group = Group.find_by(id: params[:group_id])
+    ensure_current_user(@group.user.id)
   end
 
   before_action only: [:update, :destroy] do 
-    @poll = Poll.find_by(params[:id])
+    @poll = Poll.find_by(id: params[:id])
     ensure_current_user(@poll.user.id)
   end
 
@@ -34,7 +35,7 @@ class Api::PollsController < ApplicationController
   def poll_params
     snake_params(:poll)
       .permit( :title, :poll_type, :locked, :allow_changes, :allow_anonymous, :num_responses_allowed,
-      answer_option_attributes: [:body, :ord, :correct, :_destroy] )
+      answer_options_attributes: [:body, :ord, :correct, :_destroy] )
   end
 
 end

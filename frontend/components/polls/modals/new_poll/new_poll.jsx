@@ -5,6 +5,7 @@ import NewPollToolbar from './new_poll_toolbar';
 import MultipleChoiceForm from './multiple_choice_form';
 import { orderedGroups } from '../../../../util/selectors';
 import { createPoll } from '../../../../actions/poll_actions';
+import { closeModal } from '../../../../actions/ui_actions';
 
 const MULTIPLE_CHOICE = 'multiple_choice';
 
@@ -39,7 +40,6 @@ class NewPollForm extends React.Component {
 
     this.selectPollOption = this.selectPollOption.bind(this);
     this.createPoll = this.createPoll.bind(this);
-    this.selectPollOption = this.selectPollOption.bind(this);
     this.clickGroup = this.clickGroup.bind(this);
     this.submitGroup = this.submitGroup.bind(this);
     this.searchHandler = this.searchHandler.bind(this);
@@ -81,8 +81,7 @@ class NewPollForm extends React.Component {
         .map( (option, idx) => (Object.assign(option, { ord: idx })));
       const data = Object.assign(formData, { pollType: this.state.activeOption, answerOptionsAttributes });
       const groupId = this.state.group ? this.state.group.id : this.props.groups.find( g => g.ord === 0).id;
-      debugger;
-      // this.props.createPoll(data, this.state.group.id).then( () => this.props.history.push('/polls'));
+      this.props.createPoll(data, groupId).then( () => this.props.closeModal());
     }
   }
 
@@ -113,14 +112,13 @@ class NewPollForm extends React.Component {
     const { groups } = this.props;
     const { searching, query, activeOption, group, groupsOpen, error } = this.state;
 
-    let searchText, matchingGroups, isPlaceholder;
+    let searchText, matchingGroups;
     if ( searching && query ) {
       searchText = query;
       matchingGroups = groups.filter(group => new RegExp(`^${query}`, 'i').test(group.title));
     } else if ( group && !searching ) {
       searchText = group.title;
     } else {
-      isPlaceholder = true;
       searchText = '';
     }
 
@@ -153,7 +151,7 @@ class NewPollForm extends React.Component {
             />
 
             <div className='new-poll-bottom-bar'>
-              <button onBlur={() => window.setTimeout( () => this.setState({ groupsOpen: false }), 80)}>
+              <button onBlur={() => window.setTimeout( () => this.setState({ groupsOpen: false }), 1)}>
                 <form onSubmit={e => {
                   e.preventDefault();
                   this.submitGroup(query);
@@ -170,7 +168,7 @@ class NewPollForm extends React.Component {
                 <span onClick={this.toggleDrawer} className='button-grey'><i className="fas fa-chevron-down"></i></span>
                 <ul className={'group-search-list' + (groupsOpen ? '' : ' hidden')}>
                   {drawerGroups.map(group => (
-                    <li key={group.id} onClick={() => this.clickGroup(group)} tabIndex='0'>
+                    <li key={group.id} onClick={() => this.clickGroup(group)}>
                       {group.title}
                     </li>
                   ))}
@@ -195,7 +193,8 @@ const mapState = state => {
 
 const mapDispatch = dispatch => {
   return {
-    createPoll: poll => dispatch(createPoll(poll)),
+    createPoll: (poll, groupId) => dispatch(createPoll(poll, groupId)),
+    closeModal: () => dispatch(closeModal(400))
   }
 }
 
