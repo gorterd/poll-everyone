@@ -2,7 +2,7 @@ import React from 'react';
 import { connect} from 'react-redux';
 import { closeModal } from '../../../actions/ui_actions';
 import { AnimatedModal } from '../../../util/component/animation_util';
-import NewPollForm from './new_poll/new_poll_form';
+import NewPollForm from './new_poll/new_poll';
 import NewGroupModal from './new_group_modal';
 
 export const defaultEnterAnimation = {

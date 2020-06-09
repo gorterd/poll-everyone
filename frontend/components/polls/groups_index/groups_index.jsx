@@ -27,7 +27,10 @@ class GroupsIndex extends React.Component {
         <aside className='polls-sidebar'>
           <button 
             className={'button-blue' + (stickyToolbar ? ' hidden' : '') }
-            onClick={ () => openModal({type:'new-poll', data: {}, offset: 72 })}
+            onClick={ () => openModal({
+              type:'new-poll', 
+              data: {}, 
+              offset: 72 })}
           >Create</button>
         </aside>
 

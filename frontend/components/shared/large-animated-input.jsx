@@ -26,7 +26,7 @@ class LargeInput extends React.Component {
       leftSide: LeftSide, leftSideProps, rightSide: RightSide, rightSideProps, ...rest } = this.props;
 
     const activated = Boolean(value || this.state.focus);
-    const erroredOut = Boolean(errorMsg && errorConditions);
+    const erroredOut = (typeof errorConditions === 'undefined') ? errorMsg : Boolean(errorMsg && errorConditions);
 
     const errorEle = erroredOut ? <div className="large-input-error-msg">{errorMsg}</div> : null
 

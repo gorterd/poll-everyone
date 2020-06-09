@@ -6,7 +6,7 @@ import { defaultExitAnimation } from '../modal'
 const NewPollToolbar = ({closeModal, hideOnSticky, stickyToolbar }) => {
   const klass = 'new-poll-toolbar' 
     + (stickyToolbar ? ' sticky-new-poll-toolbar' : '') 
-    + ((stickyToolbar && hideOnSticky) ? ' invisible' : '');
+    + ((stickyToolbar && hideOnSticky) ? ' hidden' : '');
 
   return (
     <div className={klass}>

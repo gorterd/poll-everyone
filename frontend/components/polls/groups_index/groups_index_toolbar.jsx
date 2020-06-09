@@ -54,7 +54,8 @@ class GroupsIndexToolbar extends React.Component {
   }
 
   render() {
-    const { batchDestroy, clearSelections, selections, openModal, modalType, modalExiting, stickyToolbar } = this.props;
+    const { batchDestroy, clearSelections, selections, openModal, 
+      modalType, modalExiting, stickyToolbar, groups } = this.props;
     const { selectAll } = this;
 
     const Button = () => <span className='button-grey'><i className="fas fa-check"></i></span>
@@ -70,7 +71,14 @@ class GroupsIndexToolbar extends React.Component {
 
     const createButton = stickyToolbar ? 
       <div className='polls-sidebar'>
-        <button className='button-blue' onClick={() => openModal({ type: 'new-poll', data: {}, offset: stickyToolbar })}>Create</button>
+        <button 
+          className='button-blue' 
+          onClick={() => openModal({ 
+            type: 'new-poll', 
+            data: { }, 
+            offset: stickyToolbar 
+          })}
+        >Create</button>
       </div>
       : null;
 

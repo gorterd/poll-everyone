@@ -24,7 +24,7 @@ class GroupPollsIndex extends React.Component {
     
     openModal({
       type: 'new-poll', 
-      data: { group: this.group }, 
+      data: { group: this.props.group }, 
       offset: ( stickyToolbar || 72 )
     });
   }

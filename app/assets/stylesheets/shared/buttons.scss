@@ -34,6 +34,12 @@ button {
   &:disabled { background-color: $royal-blue-disabled }
 }
 
+.button-blue-alt {
+  @include button(white, $royal-blue-hover, $royal-blue);
+  border: 1px solid $royal-blue;
+  &:hover { color: white; border-color: $royal-blue-hover;}
+}
+
 .button-red {
   @include button($brick-red, $brick-red-hover, white);
 
