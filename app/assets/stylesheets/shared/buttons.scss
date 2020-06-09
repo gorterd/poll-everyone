@@ -29,8 +29,8 @@ button {
   }
 }
 
-.button-grey-alt {
-  @include button(white, $light-grey, $dark-grey);
+.button-transparent {
+  @include button(transparent, $light-grey, $dark-grey);
 }
 
 .button-blue {

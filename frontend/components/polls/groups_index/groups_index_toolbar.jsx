@@ -62,7 +62,7 @@ class GroupsIndexToolbar extends React.Component {
 
   render() {
     const { batchDestroy, clearSelections, selections, openModal, 
-      modalType, modalExiting, stickyToolbar } = this.props;
+      modalType, modalExiting, stickyToolbar, toggleMoveDrawer } = this.props;
     const { selectAll } = this;
 
     const Button = () => <span className='button-grey'><i className="fas fa-check"></i></span>
@@ -98,6 +98,7 @@ class GroupsIndexToolbar extends React.Component {
         <button className='button-grey' onClick={this.openNewGroupModal}>New group</button>
         <button className='button-grey' onClick={this.ungroup} disabled={noSelection}>Ungroup</button>
         <button className='button-grey' onClick={() => batchDestroy(selections)} disabled={noSelection}>Delete</button>
+        <button className='button-grey' onClick={toggleMoveDrawer} disabled={noSelection}>Move</button>
       </>
     )
 

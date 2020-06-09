@@ -2,12 +2,16 @@ import React from 'react';
 import { orderedGroups } from '../../../util/selectors';
 import GroupPollsIndexContainer from '../group_polls/group_polls_index_container';
 import GroupsIndexToolbar from './groups_index_toolbar';
+import MoveDrawer from './move_drawer';
 
 class GroupsIndex extends React.Component {
   constructor(props) {
     super(props)
 
+    this.state = { moveDrawerVisible: false }
+
     this.batchDestroy = this.batchDestroy.bind(this)
+    this.toggleMoveDrawer = this.toggleMoveDrawer.bind(this)
   };
 
   componentDidMount(){
@@ -18,8 +22,13 @@ class GroupsIndex extends React.Component {
     this.props.batchDestroy(this.props.selections);
   }
 
+  toggleMoveDrawer(){
+    this.setState({ moveDrawerVisible: !this.state.moveDrawerVisible })
+  }
+
   render() {
-    const { orderedGroups, openModal, stickyToolbar } = this.props;
+    const { orderedGroups, openModal, stickyToolbar, selections } = this.props;
+
     
     return (
       <section className="polls-index">
@@ -38,8 +47,16 @@ class GroupsIndex extends React.Component {
           <GroupsIndexToolbar 
             batchDestroy={this.batchDestroy} 
             groups={orderedGroups}
+            toggleMoveDrawer={this.toggleMoveDrawer}
             {...this.props}
           />
+
+          <MoveDrawer 
+            visible={this.state.moveDrawerVisible} 
+            toggleVisible={this.toggleMoveDrawer} 
+            groups={orderedGroups}
+            selections={selections}
+          /> 
 
           <div className='groups-index'>
             {orderedGroups.map( group => {

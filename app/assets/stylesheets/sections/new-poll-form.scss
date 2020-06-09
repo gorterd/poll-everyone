@@ -192,6 +192,7 @@
 
   > div {
     display: flex;
+    &:focus { outline: none; }
   }
 
 
@@ -217,6 +218,8 @@
   background-color: white;
   padding: 0 10px;
   color: $charcoal;
+
+  &:focus { outline: none; }
 
   &::placeholder {
     color: $grey-lighter;
