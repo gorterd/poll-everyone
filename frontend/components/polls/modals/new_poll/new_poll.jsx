@@ -144,27 +144,29 @@ class NewPollForm extends React.Component {
             />
 
             <div className='new-poll-bottom-bar'>
-              <form onSubmit={e => {
-                e.preventDefault();
-                this.submitGroup(query);
-              }}><input
-                  type="text"
-                  className='new-poll-group-search'
-                  placeholder={placeholderText}
-                  value={searchText}
-                  onChange={this.searchHandler}
-                  onBlur={this.handleLeave}
-                /></form>
+              <button onBlur={() => window.setTimeout( () => this.setState({ groupsOpen: false }), 20)}>
+                <form onSubmit={e => {
+                  e.preventDefault();
+                  this.submitGroup(query);
+                }}><input
+                    type="text"
+                    className='new-poll-group-search'
+                    placeholder={placeholderText}
+                    value={searchText}
+                    onChange={this.searchHandler}
+                    onBlur={this.handleLeave}
+                  />
+                </form>
 
-              <button onClick={this.toggleDrawer} className='button-grey'><i className="fas fa-chevron-down"></i></button>
-              <ul className={'group-search-list' + (groupsOpen ? '' : ' hidden')}>
-                {drawerGroups.map(group => (
-                  <li key={group.id} onClick={() => this.clickGroup(group)} tabIndex='0'>
-                    {group.title}
-                  </li>
-                ))}
-              </ul>
-
+                <span onClick={this.toggleDrawer} className='button-grey'><i className="fas fa-chevron-down"></i></span>
+                <ul className={'group-search-list' + (groupsOpen ? '' : ' hidden')}>
+                  {drawerGroups.map(group => (
+                    <li key={group.id} onClick={() => this.clickGroup(group)} tabIndex='0'>
+                      {group.title}
+                    </li>
+                  ))}
+                </ul>
+              </button>
             </div>
           </div>
         </div>

@@ -181,8 +181,12 @@
   position: relative;
   margin-bottom: 70px;
 
+  > button {
+    display: flex;
+  }
 
-  button {
+
+  .button-grey {
     display: flex;
     width: 32px;
     height: 52px;
@@ -215,10 +219,11 @@
   top: 70px;
   background-color: white;
   width: 486px;
-  max-height: 135px;
+  max-height: 140px;
   font-size: $fontsize-strong;
   border-top: 1px solid $medium-grey;
   margin-bottom: 70px;
+  overflow: scroll;
 
   > li {
     height: 45px;
