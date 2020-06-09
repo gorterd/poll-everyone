@@ -49,7 +49,7 @@ class NewGroupModal extends React.Component {
           onChange={ e => this.setState({ title: e.target.value})}/>
 
         <div className='buttons'>
-          <button className='button-grey-alt' onClick={closeModal}>Cancel</button>
+          <button className='button-transparent' onClick={closeModal}>Cancel</button>
           <button className='button-blue' onClick={this.createGroup}>Create group</button>
         </div>
       </>

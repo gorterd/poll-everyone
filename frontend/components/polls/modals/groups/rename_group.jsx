@@ -32,7 +32,7 @@ class EditGroupModal extends React.Component {
           onChange={e => this.setState({ title: e.target.value })} />
 
         <div className='buttons'>
-          <button className='button-grey-alt' onClick={closeModal}>Cancel</button>
+          <button className='button-transparent' onClick={closeModal}>Cancel</button>
           <button className='button-blue' disabled={ !Boolean(this.state.title) }
           onClick={this.updateGroup}>Update name</button>
         </div>

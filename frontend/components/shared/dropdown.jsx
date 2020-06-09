@@ -4,6 +4,7 @@ class DropdownWrapper extends React.Component {
   constructor(props) {
     super(props)
     this.state = { drop: false }
+    this.disableUnfocus = false;
 
     this.clickHandler = this.clickHandler.bind(this);
     this.clearDropdown = this.clearDropdown.bind(this);
@@ -11,10 +12,15 @@ class DropdownWrapper extends React.Component {
 
   clickHandler() {
     this.setState({ drop: !this.state.drop });
+    this.disableUnfocus = true;
   }
 
   clearDropdown() {
-    window.setTimeout(() => this.setState({ drop: false }), 10);
+    this.disableUnfocus = false;
+    window.setTimeout(() => {
+      if (!this.disableUnfocus) { this.setState({ drop: false }) };
+      this.disableUnfocus = false;
+    }, 10);
   }
 
   render() {

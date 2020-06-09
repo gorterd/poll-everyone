@@ -9,6 +9,7 @@ class GroupSearch extends React.Component {
       groupsOpen: false,
       searching: false,
     }
+    this.disableUnfocus = false,
 
     this.clickGroup = this.clickGroup.bind(this);
     this.submitGroup = this.submitGroup.bind(this);
@@ -20,6 +21,7 @@ class GroupSearch extends React.Component {
 
   clickGroup(group) {
     this.props.setGroup(group);
+    this.disableUnfocus = true;
     this.setState({ searching: false, groupsOpen: false })
   }
 
@@ -51,11 +53,18 @@ class GroupSearch extends React.Component {
   }
 
   toggleDrawer() {
+    this.disableUnfocus = true;
     this.setState({ groupsOpen: !this.state.groupsOpen })
   }
 
   unfocus(){
-    this.setState( () => ({ groupsOpen: false }));
+    this.disableUnfocus = false;
+    window.setTimeout( () => {
+      if (!this.disableUnfocus) {
+         this.setState({ groupsOpen: false });
+      }
+      this.disableUnfocus = false;
+    }, 10);
   }
 
   render() {

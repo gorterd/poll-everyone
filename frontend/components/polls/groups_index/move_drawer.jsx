@@ -27,7 +27,7 @@ class MoveDrawer extends React.Component {
     const { group } = this.state;
 
     const numSelections = selections.pollIds.length;
-    const buttonText = `Apply to ${numSelections} activit${ numSelections > 1 ? 'ies' : 'y' }`;
+    const buttonText = `Apply to ${numSelections} activit${ numSelections === 1 ? 'y' : 'ies' }`;
 
     return (
       <div className='move-drawer-anchor'>
@@ -46,7 +46,7 @@ class MoveDrawer extends React.Component {
             </div>
 
             <div className='move-buttons'>
-              <button className='button-blue' onClick={this.movePolls}>{buttonText}</button>
+              <button className='button-blue' onClick={this.movePolls} disabled={!group}>{buttonText}</button>
               <button className='button-transparent' onClick={toggleVisible}>Cancel</button>
             </div>
           </div>
