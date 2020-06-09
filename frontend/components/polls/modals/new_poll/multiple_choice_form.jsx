@@ -21,6 +21,7 @@ class MultipleChoiceForm extends React.Component {
   }
 
   handleTitle(e){
+    if (this.titleError) { this.props.clearErrors() }
     this.setState({ title: e.target.value});
   }
 
@@ -28,6 +29,7 @@ class MultipleChoiceForm extends React.Component {
     const answerOptionsAttributes = Array.from(this.state.answerOptionsAttributes);
     answerOptionsAttributes[idx] = 
       Object.assign( {}, answerOptionsAttributes[idx], {body: e.target.value });
+    if ( this.answerError ) { this.props.clearErrors() }
     this.setState({ answerOptionsAttributes });
   }
 
@@ -48,14 +50,16 @@ class MultipleChoiceForm extends React.Component {
   addOption(e){
     e.preventDefault();
     const answerOptionsAttributes = 
-      Array.from(this.state.answerOptionsAttributes).concat({ correct: false, body: ''})
+      Array.from(this.state.answerOptionsAttributes).concat({ correct: false, body: ''});
+    if (answerOptionsAttributes.length === 1) { this.props.clearErrors() }
     this.setState({ answerOptionsAttributes });
   }
 
   handleSubmit(e) {
-    // debugger;
     e.preventDefault();
-    this.props.createPoll(this.state);
+    const answerOptionsAttributes = this.state.answerOptionsAttributes
+      .filter( option => option.body ); 
+    this.props.createPoll(Object.assign({}, this.state, { answerOptionsAttributes}));
   }
 
   render(){
@@ -63,8 +67,8 @@ class MultipleChoiceForm extends React.Component {
     const { title, answerOptionsAttributes } = this.state;
 
     const errorMsg = errorMessages[errorKeys[error]];
-    const titleError = (error === errorKeys.TITLE_BLANK) ? errorMsg : '';
-    const answerError = (error === errorKeys.ANSWER_OPTIONS_BLANK) ? errorMsg : '';
+    this.titleError = (error === errorKeys.TITLE_BLANK) ? errorMsg : '';
+    this.answerError = (error === errorKeys.ANSWER_OPTIONS_BLANK) ? errorMsg : '';
 
     const CorrectButton = ({selected, idx}) => (
       <span 
@@ -88,7 +92,7 @@ class MultipleChoiceForm extends React.Component {
         <LargeInput
           klass='title-input-container'
           type='text'
-          errorMsg={titleError}
+          errorMsg={this.titleError}
           text='Title' 
           value={title}
           onChange={this.handleTitle}
@@ -99,7 +103,7 @@ class MultipleChoiceForm extends React.Component {
             key={idx}
             klass='answer-option-input-container'
             type='text'
-            errorMsg={ idx ? '' : answerError }
+            errorMsg={ idx ? '' : this.answerError }
             text='Text'
             value={option.body}
             onChange={ e => this.handleAnswerBody(e, idx)}
@@ -111,11 +115,14 @@ class MultipleChoiceForm extends React.Component {
         ))}
 
         <div className='new-poll-form-buttons'>
-          <button className='button-blue-alt' onClick={this.addOption}>
-            <i className="fas fa-plus"></i><span>Add option</span>
-          </button>
+          <div>
+            <button className='button-blue-alt' onClick={this.addOption}>
+              <i className="fas fa-plus"></i><span>Add option</span>
+            </button>
+            {answerOptionsAttributes.length === 0 ? <span>{errorMsg}</span> : null }
+          </div>
 
-          <button className='button-blue' type='submit' onClick={this.handleSubmit}>Create</button>
+          <button className='button-blue' type='submit' onClick={this.handleSubmit} tabIndex='2'>Create</button>
         </div>
       </form>
     )

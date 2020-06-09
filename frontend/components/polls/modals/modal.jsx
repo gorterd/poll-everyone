@@ -2,7 +2,7 @@ import React from 'react';
 import { connect} from 'react-redux';
 import { closeModal } from '../../../actions/ui_actions';
 import { AnimatedModal } from '../../../util/component/animation_util';
-import NewPollForm from './new_poll/new_poll';
+import NewPoll from './new_poll/new_poll';
 import NewGroupModal from './new_group_modal';
 
 export const defaultEnterAnimation = {
@@ -41,7 +41,7 @@ const ModalComponent = ({ modal, closeModal }) => {
     modalClass: 'new-poll-modal',
     backgroundClass: 'new-poll-modal-background',
     backgroundStyle: { height: `calc(100vh - ${modal.offset}px)` },
-    component: NewPollForm 
+    component: NewPoll
   });
 
   const newGroupProps = Object.assign({}, DEFAULTS, { 

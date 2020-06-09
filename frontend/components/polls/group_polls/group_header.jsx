@@ -4,8 +4,9 @@ const GroupHeader = ({
   group, drawerVisible, toggleDrawer, selections, receiveGroupSelection, clearGroupSelection, rename, duplicate, addActivity
 }) => {
 
-  const {id, title, ord, pollsCount} = group;
+  const {id, title, ord, pollIds } = group;
   const checked = selections.groupIds.includes(id);
+  const pollsCount = pollIds.length;
 
   const optionalControls = (ord == 0) ? null : (
     <>
@@ -13,6 +14,7 @@ const GroupHeader = ({
       <li><span className="group-polls-link" onClick={duplicate}>Duplicate</span></li>
     </>
   )
+
 
   const activitiesCount = `${pollsCount} activit${(pollsCount == 1) ? "y" : "ies"}`
 

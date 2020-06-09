@@ -35,8 +35,7 @@ const _nullNewPoll = {
 class NewPollForm extends React.Component {
   constructor(props) {
     super(props)
-    
-    this.state = _nullNewPoll;
+    this.state = Object.assign({}, _nullNewPoll, { group: this.props.modalData.group });
 
     this.selectPollOption = this.selectPollOption.bind(this);
     this.createPoll = this.createPoll.bind(this);
@@ -45,17 +44,9 @@ class NewPollForm extends React.Component {
     this.searchHandler = this.searchHandler.bind(this);
     this.handleLeave = this.handleLeave.bind(this);
     this.toggleDrawer = this.toggleDrawer.bind(this);
+    this.clearErrors = this.clearErrors.bind(this);
   };
 
-  componentDidUpdate(prevProps){
-    const { modalType, modalData: { group } } = this.props;
-    const prevGroup = prevProps.modalData.group;
-    if ((group && !prevGroup) || (!group && prevGroup) ){
-      this.setState({ group: this.props.modalData.group });
-    } else if ( !prevProps.modalType && modalType ) {
-      this.setState(_nullNewPoll);
-    }
-  }
 
   selectPollOption(option){
     this.setState({activeOption: option})
@@ -71,10 +62,14 @@ class NewPollForm extends React.Component {
     this.setState({ group: chosenGroup, searching: false, groupsOpen: false })
   }
 
+  clearErrors(){
+    this.setState({error: ''})
+  }
+
   createPoll(formData){
     if ( !formData.title ) {
       this.setState({ error: errorKeys.TITLE_BLANK })
-    } else if ( !formData.answerOptionsAttributes.some( ans => ans.body ) ) {
+    } else if (formData.answerOptionsAttributes.length === 0 ) {
       this.setState({ error: errorKeys.ANSWER_OPTIONS_BLANK })
     } else {
       const answerOptionsAttributes = formData.answerOptionsAttributes
@@ -145,13 +140,14 @@ class NewPollForm extends React.Component {
 
             <Form
               createPoll={this.createPoll}
+              clearErrors={this.clearErrors}
               error={error}
               errorKeys={errorKeys}
               errorMessages={errorMessages}
             />
 
             <div className='new-poll-bottom-bar'>
-              <button onBlur={() => window.setTimeout( () => this.setState({ groupsOpen: false }), 1)}>
+              <div tabIndex='0' onBlur={() => window.setTimeout( () => this.setState({ groupsOpen: false }), 10)}>
                 <form onSubmit={e => {
                   e.preventDefault();
                   this.submitGroup(query);
@@ -160,12 +156,13 @@ class NewPollForm extends React.Component {
                     className='new-poll-group-search'
                     placeholder={placeholderText}
                     value={searchText}
+                    tabIndex='1'
                     onChange={this.searchHandler}
                     onBlur={this.handleLeave}
                   />
                 </form>
 
-                <span onClick={this.toggleDrawer} className='button-grey'><i className="fas fa-chevron-down"></i></span>
+                <button onClick={this.toggleDrawer} className='button-grey'><i className="fas fa-chevron-down"></i></button>
                 <ul className={'group-search-list' + (groupsOpen ? '' : ' hidden')}>
                   {drawerGroups.map(group => (
                     <li key={group.id} onClick={() => this.clickGroup(group)}>
@@ -173,7 +170,7 @@ class NewPollForm extends React.Component {
                     </li>
                   ))}
                 </ul>
-              </button>
+              </div>
             </div>
           </div>
         </div>

@@ -1,8 +1,6 @@
-json.polls do 
-  json.set! @poll.id do 
-    json.partial! 'api/polls/poll', poll: @poll
-    json.answerOptionIds @poll.answer_option_ids
-  end
+json.poll do 
+  json.partial! 'api/polls/poll', poll: @poll
+  json.answerOptionIds @poll.answer_option_ids
 end
 
 json.answerOptions do

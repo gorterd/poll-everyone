@@ -14,7 +14,7 @@ class DropdownWrapper extends React.Component {
   }
 
   clearDropdown() {
-    window.setTimeout(() => this.setState({ drop: false }), 50);
+    window.setTimeout(() => this.setState({ drop: false }), 10);
   }
 
   render() {

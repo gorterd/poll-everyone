@@ -6,7 +6,8 @@ export default (state = {}, action) => {
     case RECEIVE_POLLS:
       return Object.assign({}, action.polls);
     case RECEIVE_POLL:
-      return Object.assign({}, action.data.polls);
+      let poll = { [action.data.poll.id]: action.data.poll }
+      return Object.assign( {}, state, poll );
     default:
       return state;
   }

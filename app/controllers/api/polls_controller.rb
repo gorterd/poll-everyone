@@ -13,11 +13,12 @@ class Api::PollsController < ApplicationController
   def create
     @poll = Poll.new(poll_params)
     @poll.group_id = params[:group_id]
+    
 
     if @poll.save
       render :show
     else
-      head status: 422
+      render @poll.errors.full_messages, status: 422
     end
   end
   

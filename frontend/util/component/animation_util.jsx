@@ -27,11 +27,11 @@ class AnimatedElement extends React.Component {
     let style = {}
     if (entering) { Object.assign(style, enterAnimation) }
     if (exiting) { Object.assign(style, exitAnimation) }
-    if (!this.state.rendered) { style = { display: "none" } }
+    // if (!this.state.rendered) { style = { display: "none" } }
     
     return ( 
       <div style={style}>
-        {component}
+        { this.state.rendered ? component : null}
       </div>
     )
   }
