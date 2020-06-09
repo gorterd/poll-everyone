@@ -31,8 +31,9 @@ export default (state = _baseUi, action) => {
     case RESET_GROUPS_LOADING:
       return Object.assign({}, state, { groupsLoading: false });
     case RECEIVE_MODAL:
+      newModal = Object.assign({}, state.modal, action.modal);
       return Object.assign({}, state, {
-        modal: action.modal,
+        modal: newModal,
         data: action.data,
       });
     case CLEAR_MODAL:

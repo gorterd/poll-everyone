@@ -10,18 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_06_06_074612) do
+ActiveRecord::Schema.define(version: 2020_06_09_182636) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "answer_options", force: :cascade do |t|
     t.string "body", null: false
-    t.boolean "correct", default: false, null: false
+    t.boolean "correct", null: false
     t.integer "poll_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "ord", default: 0, null: false
+    t.integer "ord", null: false
     t.index ["poll_id"], name: "index_answer_options_on_poll_id"
   end
 
@@ -30,7 +30,7 @@ ActiveRecord::Schema.define(version: 2020_06_06_074612) do
     t.integer "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "ord", default: 0, null: false
+    t.integer "ord", null: false
     t.integer "polls_count"
     t.index ["user_id"], name: "index_groups_on_user_id"
   end
@@ -45,7 +45,7 @@ ActiveRecord::Schema.define(version: 2020_06_06_074612) do
     t.integer "group_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "ord", default: 0, null: false
+    t.integer "ord", null: false
     t.integer "answer_options_count"
     t.index ["group_id"], name: "index_polls_on_group_id"
   end

@@ -19,15 +19,17 @@ class Api::GroupsController < ApplicationController
   def create
     @group = Group.new(group_params)
     @group.user_id = params[:user_id]
-    poll_ids = group_params[:poll_ids]
-    
-    if poll_ids && @group.save_with_polls(poll_ids)
+    poll_ids = snake_params[:poll_ids]
+
+    # debugger
+
+    if poll_ids && Group.save_with_polls(@group, poll_ids.map(&:to_i))
       @groups = @group.user.groups.includes(:polls)
       render :index
     elsif !poll_ids && @group.save
       render :show
     else
-      head status: 422
+      render json: @group.errors.full_messages, status: 422
     end
   end
   
@@ -65,7 +67,7 @@ class Api::GroupsController < ApplicationController
   private
 
   def group_params
-    snake_params(:group).permit(:title, :poll_ids)
+    snake_params(:group).permit(:title)
   end
 
 end

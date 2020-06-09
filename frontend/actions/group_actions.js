@@ -3,6 +3,7 @@ import * as PollActions from './poll_actions'
 import { clearSelections } from './selection_actions/poll_selection_actions';
 
 export const RECEIVE_GROUPS = 'RECEIVE_GROUPS';
+export const RECEIVE_GROUP = 'RECEIVE_GROUP';
 
 export const GROUPS_ARE_LOADING = 'GROUPS_ARE_LOADING';
 export const RESET_GROUPS_LOADING = 'RESET_GROUPS_LOADING';
@@ -26,6 +27,13 @@ const receiveGroups = groups => {
   }
 }
 
+const receiveGroup = group => {
+  return {
+    type: RECEIVE_GROUP,
+    group
+  }
+}
+
 export const fetchGroups = userId => dispatch => {
   dispatch(groupsAreLoading());
 
@@ -37,6 +45,26 @@ export const fetchGroups = userId => dispatch => {
         dispatch(resetGroupsLoading());
       }
     ); 
+}
+
+export const createGroup = (data, userId) => dispatch => {
+  dispatch(groupsAreLoading());
+
+
+  return GroupsApiUtil.createGroup(data, userId)
+    .then(
+      data => {
+        if (data.groups) {
+          dispatch(receiveGroups(data.groups));
+          dispatch(PollActions.receivePolls(data.polls));
+        } else {
+          dispatch(receiveGroup(data));
+        }
+        dispatch(resetGroupsLoading());
+      }, err => {
+        console.log(err.responseJSON);
+      }
+    );
 }
 
 export const batchDestroy = selections => dispatch => {

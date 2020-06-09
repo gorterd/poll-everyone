@@ -5,8 +5,7 @@ class Poll < ApplicationRecord
   validates :title, :poll_type, :ord, presence: true
   validates :poll_type, inclusion: {in: POLL_TYPES }
 
-  after_initialize :ensure_poll_type
-  before_create :ensure_ord
+  before_validation :ensure_poll_type, :ensure_ord, on: [:create]
   after_destroy :remove_from_order
 
   belongs_to :group, inverse_of: :polls, counter_cache: true

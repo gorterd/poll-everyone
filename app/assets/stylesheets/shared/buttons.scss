@@ -29,6 +29,10 @@ button {
   }
 }
 
+.button-grey-alt {
+  @include button(white, $light-grey, $dark-grey);
+}
+
 .button-blue {
   @include button($royal-blue, $royal-blue-hover, white);
   &:disabled { background-color: $royal-blue-disabled }

@@ -11,7 +11,6 @@ class AnimatedElement extends React.Component {
       if (this.props.exitAnimation) {
         window.setTimeout( () => {
           this.setState({rendered: false});
-          if (this.props.onExit) { this.props.onExit() };
         }, parseInt(this.props.exitAnimation.animationDuration) - 20);
       } else {
         this.setState({rendered: false})
@@ -27,7 +26,6 @@ class AnimatedElement extends React.Component {
     let style = {}
     if (entering) { Object.assign(style, enterAnimation) }
     if (exiting) { Object.assign(style, exitAnimation) }
-    // if (!this.state.rendered) { style = { display: "none" } }
     
     return ( 
       <div style={style}>
@@ -63,15 +61,12 @@ export class Animated extends React.Component {
 export const AnimatedModal = ({
   modalData, closeModal, backgroundStyle, backgroundClass, modalClass, component: Component, ...rest
 }) => {
-  const delayedCloseModal = () => {
-    closeModal(rest.exitAnimation.animationDuration || 0)
-  };
 
   return (
     <Animated {...rest}>
-      <section className={backgroundClass} onClick={delayedCloseModal} style={backgroundStyle}>
+      <section className={backgroundClass} onClick={closeModal} style={backgroundStyle}>
         <div className={modalClass} onClick={e => e.stopPropagation()}>
-          <Component modalData={modalData} closeModal={delayedCloseModal}/>
+          <Component modalData={modalData} closeModal={closeModal}/>
         </div>
       </section>
     </Animated>

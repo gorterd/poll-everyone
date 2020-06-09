@@ -3,7 +3,7 @@ class Group < ApplicationRecord
   validates :title, :ord, presence: true
   
   after_destroy :remove_from_order
-  before_create :ensure_ord, :ensure_title
+  before_validation :ensure_ord, :ensure_title, on: [:create]
   
   belongs_to :user, inverse_of: :groups, counter_cache: true
   has_many :polls, inverse_of: :group, dependent: :destroy
@@ -63,11 +63,13 @@ class Group < ApplicationRecord
   end
 
   def ensure_ord
-    self.ord = self.user.next_ord
+    # debugger
+    self.ord ||= self.user.next_ord
+    # debugger
   end
 
   def ensure_title
-    self.title ||= "New group"
+    self.title = 'New group' if self.title.empty?
   end
 end
   

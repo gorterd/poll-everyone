@@ -34,7 +34,7 @@ class GroupsIndexToolbar extends React.Component {
     const nowSticky = this.elY < scrollY;
     if (!stickyToolbar && nowSticky) {
       this.props.setStickyToolbar(56);
-    } else if (stickyToolbar && !(nowSticky || modalType == 'new-poll')) {
+    } else if (stickyToolbar && !(nowSticky || modalType)) {
       this.props.clearStickyToolbar();
     }
   }
@@ -42,7 +42,8 @@ class GroupsIndexToolbar extends React.Component {
   openNewGroupModal() {
     this.props.openModal({
       type: 'new-group',
-      data: this.props.selections
+      data: this.props.selections,
+      offset: this.props.stickyToolbar
     })
   }
 

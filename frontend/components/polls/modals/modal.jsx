@@ -74,7 +74,7 @@ const mapState = ({ ui: { modal } }) => ({ modal })
 
 const mapDispatch = dispatch => {
   return {
-    closeModal: delay => dispatch(closeModal(delay))
+    closeModal: () => dispatch(closeModal(400))
   }
 }
 
