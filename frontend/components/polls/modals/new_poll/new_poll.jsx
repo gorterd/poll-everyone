@@ -6,6 +6,7 @@ import MultipleChoiceForm from './multiple_choice_form';
 import { orderedGroups } from '../../../../util/selectors';
 import { createPoll } from '../../../../actions/poll_actions';
 import { closeModal } from '../../../../actions/ui_actions';
+import GroupSearch from '../../../shared/group_search';
 
 const MULTIPLE_CHOICE = 'multiple_choice';
 
@@ -26,9 +27,6 @@ const errorMessages = {
 const _nullNewPoll = {
   activeOption: MULTIPLE_CHOICE,
   group: undefined,
-  query: '',
-  groupsOpen: false,
-  searching: false,
   error: ''
 }
 
@@ -39,27 +37,17 @@ class NewPollForm extends React.Component {
 
     this.selectPollOption = this.selectPollOption.bind(this);
     this.createPoll = this.createPoll.bind(this);
-    this.clickGroup = this.clickGroup.bind(this);
-    this.submitGroup = this.submitGroup.bind(this);
-    this.searchHandler = this.searchHandler.bind(this);
-    this.handleLeave = this.handleLeave.bind(this);
-    this.toggleDrawer = this.toggleDrawer.bind(this);
     this.clearErrors = this.clearErrors.bind(this);
+    this.setGroup = this.setGroup.bind(this);
   };
+
+  setGroup(group) {
+    this.setState({ group });
+  }
 
 
   selectPollOption(option){
     this.setState({activeOption: option})
-  }
-
-  clickGroup(group){
-    this.setState({ group: group, searching: false, groupsOpen: false })
-  }
-
-  submitGroup(title){
-    let query = new RegExp(`^${title}`, 'i');
-    let chosenGroup = this.props.groups.find( group => query.test(group.title) );
-    this.setState({ group: chosenGroup, searching: false, groupsOpen: false })
   }
 
   clearErrors(){
@@ -80,46 +68,11 @@ class NewPollForm extends React.Component {
     }
   }
 
-  searchHandler(e){
-    let query = e.target.value;
-    let groupsOpen = this.props.groups.some(group => new RegExp(`^${query}`, 'i').test(group.title));
-    this.setState({
-      searching: true, 
-      query, 
-      groupsOpen
-    });
-  }
-
-  handleLeave(e){
-    let query = e.target.value;
-    if (query) {
-      this.submitGroup(e.target.value)
-    } else {
-      this.setState({query: '', group: undefined, searching: false})
-    }
-  }
-
-  toggleDrawer(){
-    this.setState({groupsOpen: !this.state.groupsOpen})
-  }
-
   render() {
     const { groups } = this.props;
-    const { searching, query, activeOption, group, groupsOpen, error } = this.state;
-
-    let searchText, matchingGroups;
-    if ( searching && query ) {
-      searchText = query;
-      matchingGroups = groups.filter(group => new RegExp(`^${query}`, 'i').test(group.title));
-    } else if ( group && !searching ) {
-      searchText = group.title;
-    } else {
-      searchText = '';
-    }
+    const { activeOption, group, error } = this.state;
 
     const Form = FORM_COMPONENTS[activeOption];
-    const drawerGroups = matchingGroups || groups;
-    const placeholderText = 'Assign activity to a group';
 
     return (
       <section className='new-poll-container'>
@@ -147,38 +100,18 @@ class NewPollForm extends React.Component {
             />
 
             <div className='new-poll-bottom-bar'>
-              <div tabIndex='0' onBlur={() => window.setTimeout( () => this.setState({ groupsOpen: false }), 10)}>
-                <form onSubmit={e => {
-                  e.preventDefault();
-                  this.submitGroup(query);
-                }}><input
-                    type="text"
-                    className='new-poll-group-search'
-                    placeholder={placeholderText}
-                    value={searchText}
-                    tabIndex='1'
-                    onChange={this.searchHandler}
-                    onBlur={this.handleLeave}
-                  />
-                </form>
-
-                <button onClick={this.toggleDrawer} className='button-grey'><i className="fas fa-chevron-down"></i></button>
-                <ul className={'group-search-list' + (groupsOpen ? '' : ' hidden')}>
-                  {drawerGroups.map(group => (
-                    <li key={group.id} onClick={() => this.clickGroup(group)}>
-                      {group.title}
-                    </li>
-                  ))}
-                </ul>
-              </div>
+              <GroupSearch
+                activeGroup={group}
+                setGroup={this.setGroup}
+                groups={groups}
+                placeholderText='Assign activity to a group'
+              />
             </div>
           </div>
         </div>
-        
       </section>
     )
   }
-
 };
 
 const mapState = state => {
