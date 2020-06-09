@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { createGroup } from '../../../actions/group_actions';
+import { createGroup } from '../../../../actions/group_actions';
+import { clearSelections } from '../../../../actions/selection_actions/poll_selection_actions';
 
 class NewGroupModal extends React.Component {
   constructor(props) {
@@ -16,7 +17,11 @@ class NewGroupModal extends React.Component {
 
   createGroup(){
     const data = Object.assign({ group: this.state}, { pollIds: this.props.modalData.pollIds });
-    this.props.createGroup(data, this.props.currentUserId).then( () => this.props.closeModal());
+    this.props.createGroup(data, this.props.currentUserId).then( () => {
+      this.props.clearSelections();
+      this.props.closeModal();
+    
+    });
   }
 
   render() {
@@ -40,7 +45,7 @@ class NewGroupModal extends React.Component {
       <>
         <h3>{headerText}</h3>
         <p>{subText}</p>
-        <input type="text" placeholder='Group name' value={this.state.title} 
+        <input type="text" placeholder='Group name' value={this.state.title} autoFocus
           onChange={ e => this.setState({ title: e.target.value})}/>
 
         <div className='buttons'>
@@ -61,7 +66,8 @@ const mapState = state => {
 
 const mapDispatch = dispatch => {
   return {
-    createGroup: (data, currentUserId) => dispatch(createGroup(data, currentUserId))
+    createGroup: (data, currentUserId) => dispatch(createGroup(data, currentUserId)),
+    clearSelections: () => dispatch(clearSelections())
   }
 }
 

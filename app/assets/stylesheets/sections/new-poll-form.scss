@@ -82,7 +82,7 @@
 
   .large-input-container {
 
-    outline: none;
+    * { outline: none; }
 
     .placeholder-input-label {
       font-style: normal;;

@@ -30,8 +30,14 @@ class GroupPollsIndex extends React.Component {
   }
 
   rename(e) {
-    console.log('Rename')
     e.stopPropagation()
+    const { openModal, stickyToolbar } = this.props;
+
+    openModal({
+      type: 'edit-group',
+      data: { group: this.props.group },
+      offset: stickyToolbar
+    });
   }
 
   duplicate(e) {

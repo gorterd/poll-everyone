@@ -56,7 +56,7 @@ class GroupsIndexToolbar extends React.Component {
 
   render() {
     const { batchDestroy, clearSelections, selections, openModal, 
-      modalType, modalExiting, stickyToolbar, groups } = this.props;
+      modalType, modalExiting, stickyToolbar } = this.props;
     const { selectAll } = this;
 
     const Button = () => <span className='button-grey'><i className="fas fa-check"></i></span>
@@ -90,7 +90,7 @@ class GroupsIndexToolbar extends React.Component {
         <DropdownWrapper button={Button} dropdown={Dropdown} containerClass='group-select-dropdown' />
 
         <button className='button-grey' onClick={this.openNewGroupModal}>New group</button>
-        <button className='button-grey' onClick={batchDestroy} disabled={noSelection}>Delete</button>
+        <button className='button-grey' onClick={() => batchDestroy(selections)} disabled={noSelection}>Delete</button>
       </>
     )
 

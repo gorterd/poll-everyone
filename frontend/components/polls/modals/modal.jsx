@@ -3,7 +3,8 @@ import { connect} from 'react-redux';
 import { closeModal } from '../../../actions/ui_actions';
 import { AnimatedModal } from '../../../util/component/animation_util';
 import NewPoll from './new_poll/new_poll';
-import NewGroupModal from './new_group_modal';
+import NewGroupModal from './groups/new_group';
+import EditGroupModal from './groups/rename_group';
 
 export const defaultEnterAnimation = {
   animationName: 'fade-in',
@@ -22,6 +23,7 @@ const ModalComponent = ({ modal, closeModal }) => {
 
   const NEW_POLL = 'new-poll';
   const NEW_GROUP = 'new-group';
+  const EDIT_GROUP = 'edit-group';
 
   const defaultBackgroundClass = 'standard-modal-background';
   const defaultModalClass = 'modal';
@@ -48,6 +50,11 @@ const ModalComponent = ({ modal, closeModal }) => {
     modalClass: 'new-group-modal',
     component: NewGroupModal 
   });
+
+  const editGroupProps = Object.assign({}, DEFAULTS, { 
+    modalClass: 'edit-group-modal',
+    component: EditGroupModal 
+  });
   
   if (!modal.exiting) {
     switch (modal.type) {
@@ -56,6 +63,9 @@ const ModalComponent = ({ modal, closeModal }) => {
         break;
       case NEW_GROUP:
         newGroupProps.renderCondition = true;
+        break;
+      case EDIT_GROUP:
+        editGroupProps.renderCondition = true;
         break;
       default:
         break;
@@ -66,6 +76,7 @@ const ModalComponent = ({ modal, closeModal }) => {
     <>
       <AnimatedModal {...newPollProps} />
       <AnimatedModal {...newGroupProps} />
+      <AnimatedModal {...editGroupProps} />
     </>
   )
 }

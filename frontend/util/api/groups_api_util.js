@@ -6,11 +6,18 @@ export const fetchGroups = userId => {
 }
 
 export const createGroup = (data, userId) => {
-  // debugger;
   return $.ajax({
     method: 'POST',
     url: `/api/users/${userId}/groups`,
     data
+  });
+}
+
+export const updateGroup = (group) => {
+  return $.ajax({
+    method: 'PATCH',
+    url: `/api/groups/${group.id}`,
+    data: { group }
   });
 }
 

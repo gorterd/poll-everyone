@@ -50,7 +50,6 @@ export const fetchGroups = userId => dispatch => {
 export const createGroup = (data, userId) => dispatch => {
   dispatch(groupsAreLoading());
 
-
   return GroupsApiUtil.createGroup(data, userId)
     .then(
       data => {
@@ -67,8 +66,25 @@ export const createGroup = (data, userId) => dispatch => {
     );
 }
 
+export const updateGroup = (group) => dispatch => {
+  dispatch(groupsAreLoading());
+
+  return GroupsApiUtil.updateGroup(group)
+    .then(
+      group => {
+        dispatch(receiveGroup(group));
+        dispatch(resetGroupsLoading());
+      }, err => {
+        console.log(err.responseJSON);
+      }
+    );
+}
+
 export const batchDestroy = selections => dispatch => {
   dispatch(groupsAreLoading());
+  dispatch(clearSelections());
+
+  debugger;
 
   return GroupsApiUtil.batchDestroy(selections)
     .then(
@@ -76,7 +92,6 @@ export const batchDestroy = selections => dispatch => {
         dispatch(receiveGroups(data.groups));
         dispatch(PollActions.receivePolls(data.polls));
         dispatch(resetGroupsLoading());
-        dispatch(clearSelections());
       }
     );
 }

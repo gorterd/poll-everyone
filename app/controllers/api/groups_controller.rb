@@ -5,7 +5,7 @@ class Api::GroupsController < ApplicationController
   end
 
   before_action only: [:update, :destroy] do 
-    @group = Group.find_by(params[:id])
+    @group = Group.find_by(id: params[:id])
     ensure_current_user(@group.user_id)
   end
 
@@ -21,8 +21,6 @@ class Api::GroupsController < ApplicationController
     @group.user_id = params[:user_id]
     poll_ids = snake_params[:poll_ids]
 
-    # debugger
-
     if poll_ids && Group.save_with_polls(@group, poll_ids.map(&:to_i))
       @groups = @group.user.groups.includes(:polls)
       render :index
@@ -34,7 +32,7 @@ class Api::GroupsController < ApplicationController
   end
   
   def update
-    update_and_render(@group, group_params, 'api/groups/group')
+    update_and_render(@group, group_params)
   end
 
   def destroy
