@@ -45,13 +45,15 @@ class MultipleChoiceForm extends React.Component {
     this.setState({ answerOptionsAttributes });
   }
 
-  addOption(){
+  addOption(e){
+    e.preventDefault();
     const answerOptionsAttributes = 
       Array.from(this.state.answerOptionsAttributes).concat({ correct: false, body: ''})
     this.setState({ answerOptionsAttributes });
   }
 
   handleSubmit(e) {
+    // debugger;
     e.preventDefault();
     this.props.createPoll(this.state);
   }
@@ -89,7 +91,7 @@ class MultipleChoiceForm extends React.Component {
           errorMsg={titleError}
           text='Title' 
           value={title}
-          onChange={this.handleChange}
+          onChange={this.handleTitle}
         />
 
         {answerOptionsAttributes.map( (option, idx) => (

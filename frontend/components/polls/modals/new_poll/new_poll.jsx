@@ -1,5 +1,6 @@
 import React from 'react';
 import {connect} from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import NewPollToolbar from './new_poll_toolbar';
 import MultipleChoiceForm from './multiple_choice_form';
 import { orderedGroups } from '../../../../util/selectors';
@@ -21,18 +22,20 @@ const errorMessages = {
   ANSWER_OPTIONS_BLANK: 'Please enter at least one response',
 }
 
+const _nullNewPoll = {
+  activeOption: MULTIPLE_CHOICE,
+  group: undefined,
+  query: '',
+  groupsOpen: false,
+  searching: false,
+  error: ''
+}
+
 class NewPollForm extends React.Component {
   constructor(props) {
     super(props)
     
-    this.state = {
-      activeOption: MULTIPLE_CHOICE,
-      group: undefined,
-      query: '',
-      groupsOpen: false,
-      searching: false,
-      error: ''
-    }
+    this.state = _nullNewPoll;
 
     this.selectPollOption = this.selectPollOption.bind(this);
     this.createPoll = this.createPoll.bind(this);
@@ -44,12 +47,14 @@ class NewPollForm extends React.Component {
     this.toggleDrawer = this.toggleDrawer.bind(this);
   };
 
-  componentDidUpdate(prevProps, prevState){
-    const { modalData: { group } } = this.props;
+  componentDidUpdate(prevProps){
+    const { modalType, modalData: { group } } = this.props;
     const prevGroup = prevProps.modalData.group;
     if ((group && !prevGroup) || (!group && prevGroup) ){
       this.setState({ group: this.props.modalData.group });
-    } 
+    } else if ( !prevProps.modalType && modalType ) {
+      this.setState(_nullNewPoll);
+    }
   }
 
   selectPollOption(option){
@@ -72,8 +77,12 @@ class NewPollForm extends React.Component {
     } else if ( !formData.answerOptionsAttributes.some( ans => ans.body ) ) {
       this.setState({ error: errorKeys.ANSWER_OPTIONS_BLANK })
     } else {
-      const data = Object.assign(formData, { pollType: this.state.activeOption }) 
-      this.props.createPoll(formData, this.state.group.id).then( () => this.props.history.push('/polls'));
+      const answerOptionsAttributes = formData.answerOptionsAttributes
+        .map( (option, idx) => (Object.assign(option, { ord: idx })));
+      const data = Object.assign(formData, { pollType: this.state.activeOption, answerOptionsAttributes });
+      const groupId = this.state.group ? this.state.group.id : this.props.groups.find( g => g.ord === 0).id;
+      debugger;
+      // this.props.createPoll(data, this.state.group.id).then( () => this.props.history.push('/polls'));
     }
   }
 
@@ -137,14 +146,14 @@ class NewPollForm extends React.Component {
             </ul>
 
             <Form
-              createPoll={createPoll}
+              createPoll={this.createPoll}
               error={error}
               errorKeys={errorKeys}
               errorMessages={errorMessages}
             />
 
             <div className='new-poll-bottom-bar'>
-              <button onBlur={() => window.setTimeout( () => this.setState({ groupsOpen: false }), 20)}>
+              <button onBlur={() => window.setTimeout( () => this.setState({ groupsOpen: false }), 80)}>
                 <form onSubmit={e => {
                   e.preventDefault();
                   this.submitGroup(query);
@@ -180,6 +189,7 @@ class NewPollForm extends React.Component {
 const mapState = state => {
   return {
     groups: orderedGroups(state),
+    modalType: state.ui.modal.type
   }
 }
 
@@ -189,6 +199,6 @@ const mapDispatch = dispatch => {
   }
 }
 
-export default connect(mapState, mapDispatch)(NewPollForm);
+export default withRouter(connect(mapState, mapDispatch)(NewPollForm));
 
 
