@@ -23,7 +23,7 @@ class LargeInput extends React.Component {
   render() {
 
     const { errorMsg, type, text, value, errorConditions, klass,
-      leftSideComponents, rightSideComponents, ...rest } = this.props;
+      leftSide: LeftSide, leftSideProps, rightSide: RightSide, rightSideProps, ...rest } = this.props;
 
     const activated = Boolean(value || this.state.focus);
     const erroredOut = Boolean(errorMsg && errorConditions);
@@ -47,11 +47,12 @@ class LargeInput extends React.Component {
     return (
       <div className={`large-input-container ${klass} ${(erroredOut ? "input-error" : "")}`}>
         <div className={"large-input-wrapper" + (activated ? " activated" : "")}>
-          {leftSideComponents}
+          { LeftSide ? <LeftSide {...leftSideProps} /> : null}
           <input
             className={activated ? " activated" : ""}
             onFocus={this.handleFocus}
             onBlur={this.handleLeave}
+            type={type}
             {...rest}
           />
           <div className="small-input-label-container">
@@ -69,7 +70,7 @@ class LargeInput extends React.Component {
             ><div className="placeholder-input-label">{text}</div>
             </Animated>
           </div>
-          {rightSideComponents}
+          { RightSide ? <RightSide {...rightSideProps} /> : null }
         </div>
         {errorEle}
       </div>
