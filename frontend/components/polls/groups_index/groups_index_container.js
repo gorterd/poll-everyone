@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 
 import {  } from "../../../actions/poll_actions";
-import { fetchGroups, batchDestroy } from "../../../actions/group_actions";
+import { fetchGroups, batchDestroy, movePolls } from "../../../actions/group_actions";
 import { receiveGroupSelection, clearGroupSelection, receiveSelections, clearSelections } from '../../../actions/selection_actions/poll_selection_actions'
 import { openModal, setScrollY, setStickyToolbar, clearStickyToolbar } from '../../../actions/ui_actions';
 
@@ -26,6 +26,7 @@ const mapDispatch = dispatch => {
   return {
     fetchGroups: userId => dispatch(fetchGroups(userId)),
     batchDestroy: selections => dispatch(batchDestroy(selections)),
+    movePolls: (pollIds, groupId) => dispatch(movePolls(pollIds, groupId)),
     receiveGroupSelection: group => dispatch(receiveGroupSelection(group)),
     clearGroupSelection: group => dispatch(clearGroupSelection(group)),
     receiveSelections: selections => dispatch(receiveSelections(selections)),

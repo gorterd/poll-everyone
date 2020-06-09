@@ -13,6 +13,7 @@ class GroupsIndexToolbar extends React.Component {
 
     this.openNewGroupModal = this.openNewGroupModal.bind(this)
     this.selectAll = this.selectAll.bind(this)
+    this.ungroup = this.ungroup.bind(this)
     this.handleScroll = this.handleScroll.bind(this)
   };
 
@@ -54,6 +55,11 @@ class GroupsIndexToolbar extends React.Component {
     receiveSelections({ groupIds, pollIds });
   }
 
+  ungroup(){
+    const { groups, clearSelections, selections, movePolls } = this.props;
+    movePolls(selections.pollIds, groups.find( g => g.ord === 0).id);
+  }
+
   render() {
     const { batchDestroy, clearSelections, selections, openModal, 
       modalType, modalExiting, stickyToolbar } = this.props;
@@ -90,6 +96,7 @@ class GroupsIndexToolbar extends React.Component {
         <DropdownWrapper button={Button} dropdown={Dropdown} containerClass='group-select-dropdown' />
 
         <button className='button-grey' onClick={this.openNewGroupModal}>New group</button>
+        <button className='button-grey' onClick={this.ungroup} disabled={noSelection}>Ungroup</button>
         <button className='button-grey' onClick={() => batchDestroy(selections)} disabled={noSelection}>Delete</button>
       </>
     )

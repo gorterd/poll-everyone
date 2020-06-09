@@ -4,7 +4,7 @@ class Api::GroupsController < ApplicationController
     ensure_current_user(params[:user_id])
   end
 
-  before_action only: [:update, :destroy] do 
+  before_action only: [:update, :destroy, :move_polls] do 
     @group = Group.find_by(id: params[:id])
     ensure_current_user(@group.user_id)
   end
@@ -60,6 +60,17 @@ class Api::GroupsController < ApplicationController
     else
       render_not_authorized 
     end 
+  end
+
+  def move_polls
+    poll_ids = snake_params[:poll_ids].map(&:to_i)
+
+    if Poll.move_polls(poll_ids, @group.id)
+      @groups = current_user.groups.includes(:polls)
+      render :index
+    else
+      render json: ['Could not move polls'], status: 422
+    end
   end
 
   private

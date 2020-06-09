@@ -28,3 +28,11 @@ export const batchDestroy = selections => {
     data: selections
   });
 }
+
+export const movePolls = (pollIds, groupId) => {
+  return $.ajax({
+    method: 'PATCH',
+    url: `/api/groups/${groupId}/move_polls`,
+    data: { pollIds }
+  });
+}

@@ -84,9 +84,21 @@ export const batchDestroy = selections => dispatch => {
   dispatch(groupsAreLoading());
   dispatch(clearSelections());
 
-  debugger;
-
   return GroupsApiUtil.batchDestroy(selections)
+    .then(
+      data => {
+        dispatch(receiveGroups(data.groups));
+        dispatch(PollActions.receivePolls(data.polls));
+        dispatch(resetGroupsLoading());
+      }
+    );
+}
+
+export const movePolls = (pollIds, groupId) => dispatch => {
+  dispatch(groupsAreLoading());
+  dispatch(clearSelections());
+
+  return GroupsApiUtil.movePolls(pollIds, groupId)
     .then(
       data => {
         dispatch(receiveGroups(data.groups));
