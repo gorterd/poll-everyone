@@ -9,7 +9,10 @@ const AppNavbarDropdown = ({currentUser, logout, history}) => {
     history.push('/');
   }
 
-  const Button = () => <span className='nav-tool'>{currentUser.username}</span>
+  const Button = () => <span className='nav-tool'>
+    {currentUser.username} 
+    <span>  &#x2699;</span>
+  </span>
 
   const Dropdown = () => (
     <ul className='navbar-dropdown'>

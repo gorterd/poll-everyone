@@ -84,9 +84,18 @@
     font-size: $fontsize-strong;
     font-weight: $fontweight-strong;
     color: white;
+    display: flex;
+    align-items: center;
 
     &:hover {
       color: $light-grey;
+    }
+
+    span { 
+      font-size: 1.5rem; 
+      position: relative;
+      top: -1px;
+      margin-left: 4px;
     }
   }
 }

@@ -1,6 +1,7 @@
 import { connect } from 'react-redux';
 import { logout } from '../../../../actions/session_actions';
 import AppNavbar from './app_navbar';
+import { closeModal } from '../../../../actions/ui_actions';
 
 const mapState = state => {
   return {
@@ -13,6 +14,7 @@ const mapState = state => {
 const mapDispatch = dispatch => {
   return {
     logout: () => dispatch(logout()),
+    closeModal: () => dispatch(closeModal(400)),
   }
 }
 
