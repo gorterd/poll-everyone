@@ -54,9 +54,12 @@ class SignupForm extends React.Component {
 
   handleInput(field) {
     return e => {
-      const value = (field === 'terms') ? e.target.checked : e.target.value
+      const value = (field === 'terms') ? e.target.checked : e.target.value;
       const nextFormData = Object.assign({}, this.state.formData, { [field]: value });
-      this.setState({ formData: nextFormData })
+      this.setState( state => {
+        if ( state.displayError[field] ) { this._validate(field, value) };
+        return { formData: nextFormData };
+      })
     }
   }
   

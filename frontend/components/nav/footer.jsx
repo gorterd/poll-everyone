@@ -3,44 +3,40 @@ import Logo from './logo';
 
 const Footer = () => {
   const FOOTER_LINKS = {
-    "Services": [
-      "Events",
-      "Learning & redevelopment",
-      "Primary education",
-      "Postsecondary education",
-      "International",
-      "Business",
-      "Cloud meetings",
+    "Languages": [
+      "Ruby",
+      "JavaScript",
+      "Java",
+      "SQL",
+      "HTML",
+      "CSS",
     ],
     
-    "Desktop apps": [
-      "PowerPresentation",
-      "Keynotation",
-      "Goggle Slides",
-      "Slacker",
+    "Frameworks & Libraries": [
+      "Rails",
+      "React",
+      "Redux",
+      "JQuery",
     ],
     
-    "Mobile apps": [
-      "eOS",
-      "Droid",
+    "Technologies & Tools": [
+      "Git",
+      "Heroku",
+      "Google Apps Script",
+      "Bash",
+      "RSpec",
     ],
     
-    "Support": [
-      "Plans & prices",
-      "Premium features",
-      "Super premium features",
-      "How it works",
-      "Support",
-      "Guides",
-      "Visual guide",
-      "Webinars",
+    "Knowledge": [
+      "Data Structures",
+      "RESTful Design",
+      "TDD",
     ],
     
-    "Company": [
-      "About us",
-      "Blog",
-      "Career",
-      "Security",
+    "Skills & Traits": [
+      "Attention to Detail",
+      "Resourcefulness",
+      "Curiosity",
     ]
   };
 
@@ -52,7 +48,7 @@ const Footer = () => {
         <li className='footer-link-category' key={category}><strong>{category}</strong></li>
 
         {FOOTER_LINKS[category].map( (link, i) => (
-          <li key={i} className='footer-link'><a>{link}</a></li>
+          <li key={i} className='footer-link'>{link}</li>
         ))}
       </ul>
     );
@@ -71,14 +67,18 @@ const Footer = () => {
       <div className='footer-social-pane'>
         <div className='footer-social-container'>
           <div className='footer-social-left'>
-            {['Status', 'Cookies', 'Terms', 'Privacy'].map( (link, i) => (
+            {/* {['Status', 'Cookies', 'Terms', 'Privacy'].map( (link, i) => (
               <a key={i} className="footer-social-link">{link}</a>
-            ))}
+            ))} */}
           </div>
           <div className='footer-social-right'>
-            <span className="icon icon-std icon-grey"><i className="fab fa-linkedin"></i></span>
-            <span className="icon icon-std icon-grey"><i className="fab fa-twitter"></i></span>
-            <button className="button button-blue">Contact us</button>
+            <span className="icon icon-std icon-grey">
+              <a href="https://github.com/gorterd"><i className="fab fa-github"></i></a>
+            </span>
+            <span className="icon icon-std icon-grey">
+              <a href="https://www.linkedin.com/in/daniel-gorter-87549277"><i className="fab fa-linkedin"></i></a>
+            </span>
+            <a className="button button-blue" href="mailto: danieljgorter@gmail.com">Contact me</a>
           </div>
         </div>
       </div>

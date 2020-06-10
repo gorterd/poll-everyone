@@ -15,9 +15,9 @@ const HomeNavbar = ({currentUser, login, logout, history}) => {
   }
   
   const links = [
-    <a className="nav-link" href="#">Github</a>,
-    <a className="nav-link" href="#">LinkedIn</a>,
-    <a className="nav-link" href="#">My website</a>,
+    <a className="nav-link" href="https://github.com/gorterd">Github</a>,
+    <a className="nav-link" href="https://www.linkedin.com/in/daniel-gorter-87549277">LinkedIn</a>,
+    // <a className="nav-link" href="#">My website</a>,
   ];
 
   const tools = currentUser ? 
