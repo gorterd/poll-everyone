@@ -65,7 +65,7 @@ poll_ids = Poll.all.pluck(:id)
 poll_ids.each do |poll_id|
   4.times do 
     AnswerOption.create!(
-      body: Faker::Movies::HitchhikersGuideToTheGalaxy.marvin_quote,
+      body: Faker::Movies::HitchhikersGuideToTheGalaxy.quote,
       correct: [true, false].sample,
       poll_id: poll_id
     )
