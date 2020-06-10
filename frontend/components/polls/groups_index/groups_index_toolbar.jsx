@@ -56,7 +56,7 @@ class GroupsIndexToolbar extends React.Component {
   }
 
   ungroup(){
-    const { groups, clearSelections, selections, movePolls } = this.props;
+    const { groups, selections, movePolls } = this.props;
     movePolls(selections.pollIds, groups.find( g => g.ord === 0).id);
   }
 

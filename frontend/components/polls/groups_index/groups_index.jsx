@@ -23,11 +23,14 @@ class GroupsIndex extends React.Component {
   }
 
   toggleMoveDrawer(){
-    this.setState({ moveDrawerVisible: !this.state.moveDrawerVisible })
+    if (this.props.stickyToolbar) {
+      window.scrollTo({top: 75, behavior: "smooth"});
+    }
+    this.setState({ moveDrawerVisible: !this.state.moveDrawerVisible });
   }
 
   render() {
-    const { orderedGroups, openModal, stickyToolbar, selections } = this.props;
+    const { orderedGroups, openModal, closeModal, stickyToolbar, selections, movePolls } = this.props;
 
     
     return (
@@ -56,6 +59,10 @@ class GroupsIndex extends React.Component {
             toggleVisible={this.toggleMoveDrawer} 
             groups={orderedGroups}
             selections={selections}
+            movePolls={movePolls}
+            openModal={openModal}
+            closeModal={closeModal}
+            stickyToolbar={stickyToolbar}
           /> 
 
           <div className='groups-index'>

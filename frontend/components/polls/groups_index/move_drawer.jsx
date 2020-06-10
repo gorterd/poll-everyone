@@ -1,5 +1,6 @@
 import React from 'react';
 import GroupSearch from '../../shared/group_search';
+import { closeModal } from '../../../actions/ui_actions';
 
 class MoveDrawer extends React.Component {
   constructor(props) {
@@ -18,8 +19,19 @@ class MoveDrawer extends React.Component {
   }
 
   movePolls(){
-    const groupId = this.state.group ? this.state.group.id : 'No group';
-    console.log(`Move ${this.props.selections.pollIds.join(', ')} to group ${groupId}`)
+    const { groups, selections, movePolls, openModal, closeModal, stickyToolbar, toggleVisible } = this.props;
+    const groupId = this.state.group ? this.state.group.id : groups.find( g => g.ord === 0 ).id;
+    const pollIds = selections.pollIds;
+    const sendMoveRequest = () => movePolls(pollIds, groupId).then( () => {
+      closeModal();
+      toggleVisible();
+      this.setState({ group: undefined });
+    });
+    openModal({
+      type: 'confirm-move',
+      data: { sendMoveRequest, numPolls: pollIds.length },
+      offset: stickyToolbar
+    });
   }
 
   render() {
@@ -27,7 +39,8 @@ class MoveDrawer extends React.Component {
     const { group } = this.state;
 
     const numSelections = selections.pollIds.length;
-    const buttonText = `Apply to ${numSelections} activit${ numSelections === 1 ? 'y' : 'ies' }`;
+    const buttonText = `Apply to ${numSelections} poll${ numSelections === 1 ? '' : 's' }`;
+    const disabled = !(group || selections.pollIds.length);
 
     return (
       <div className='move-drawer-anchor'>
@@ -46,7 +59,7 @@ class MoveDrawer extends React.Component {
             </div>
 
             <div className='move-buttons'>
-              <button className='button-blue' onClick={this.movePolls} disabled={!group}>{buttonText}</button>
+              <button className='button-blue' onClick={this.movePolls} disabled={disabled}>{buttonText}</button>
               <button className='button-transparent' onClick={toggleVisible}>Cancel</button>
             </div>
           </div>

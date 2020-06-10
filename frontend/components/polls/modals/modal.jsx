@@ -5,7 +5,7 @@ import { AnimatedModal } from '../../../util/component/animation_util';
 import NewPoll from './new_poll/new_poll';
 import NewGroupModal from './groups/new_group';
 import EditGroupModal from './groups/rename_group';
-
+import ConfirmMoveModal from './confirm_move';
 export const defaultEnterAnimation = {
   animationName: 'fade-in',
   animationDuration: '400ms',
@@ -24,6 +24,7 @@ const ModalComponent = ({ modal, closeModal }) => {
   const NEW_POLL = 'new-poll';
   const NEW_GROUP = 'new-group';
   const EDIT_GROUP = 'edit-group';
+  const CONFIRM_MOVE = 'confirm-move';
 
   const defaultBackgroundClass = 'standard-modal-background';
   const defaultModalClass = 'modal';
@@ -55,6 +56,11 @@ const ModalComponent = ({ modal, closeModal }) => {
     modalClass: 'edit-group-modal',
     component: EditGroupModal 
   });
+
+  const confirmMoveProps = Object.assign({}, DEFAULTS, { 
+    modalClass: 'confirm-move-modal',
+    component: ConfirmMoveModal 
+  });
   
   if (!modal.exiting) {
     switch (modal.type) {
@@ -67,6 +73,9 @@ const ModalComponent = ({ modal, closeModal }) => {
       case EDIT_GROUP:
         editGroupProps.renderCondition = true;
         break;
+      case CONFIRM_MOVE:
+        confirmMoveProps.renderCondition = true;
+        break;
       default:
         break;
     }
@@ -77,6 +86,7 @@ const ModalComponent = ({ modal, closeModal }) => {
       <AnimatedModal {...newPollProps} />
       <AnimatedModal {...newGroupProps} />
       <AnimatedModal {...editGroupProps} />
+      <AnimatedModal {...confirmMoveProps} />
     </>
   )
 }
