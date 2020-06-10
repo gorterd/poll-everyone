@@ -4,7 +4,7 @@ import Navbar from '../navbar'
 
 const HomeNavbar = ({currentUser, login, logout, history}) => {
   
-  const DEMO_USERNAME = 'trumanburbank123';
+  const DEMO_USERNAME = 'Simulation3845';
   const DEMO_PASSWORD = 'its_all_a_simulation';
 
   const _loginDemoUser = () => {

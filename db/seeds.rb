@@ -8,6 +8,11 @@
 
 require 'faker'
 
+AnswerOption.destroy_all
+Poll.destroy_all
+Group.destroy_all
+User.destroy_all
+
 easy = User.create!(
   first_name: "easy",
   last_name: "peasy",
