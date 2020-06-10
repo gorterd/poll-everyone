@@ -11,7 +11,7 @@ class AnswerOption < ApplicationRecord
   private
 
   def ensure_ord
-    self.ord = self.poll.next_ord
+    self.ord ||= self.poll.next_ord
   end
 
 end

@@ -53,6 +53,7 @@ class LargeInput extends React.Component {
             onFocus={this.handleFocus}
             onBlur={this.handleLeave}
             type={type}
+            value={value}
             {...rest}
           />
           <div className="small-input-label-container">

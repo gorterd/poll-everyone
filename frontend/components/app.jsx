@@ -8,6 +8,8 @@ import AppNavbarContainer from './nav/navbar/app_navbar/app_navbar_container';
 
 import HomeSplash from './nav/home_splash';
 
+import EditPoll from './polls/poll/edit_poll';
+
 import LoginFormContainer from './session/login/login_container';
 import SignupSplash from './session/signup/signup_splash';
 import SignupFormContainer from './session/signup/signup_container';
@@ -28,8 +30,12 @@ const App = () => {
           <Navbar relativeRootPath={'/'} additionalClasses='nav-sticky' links={[]} tools={[]}/>
         </Switch>
 
-        <Route path={['/polls', '/polls/new']}>
+        <Route exact path={['/polls', '/polls/new']}>
           <GroupsIndexContainer />
+        </Route>
+
+        <Route path='/polls/:pollId/edit'>
+          <EditPoll />
         </Route>
 
         <Route exact path='/'>

@@ -17,8 +17,41 @@ export const receivePoll = data => {
   }
 }
 
+export const fetchPoll = (pollId) => dispatch => {
+  return PollsApiUtil.fetchPoll(pollId)
+    .then(
+      data => {
+        dispatch(receivePoll(data));
+      }, err => {
+        console.log(err.responseJSON);
+      }
+    );
+}
+
 export const createPoll = (pollData, groupId) => dispatch => {
   return PollsApiUtil.createPoll(pollData, groupId)
+    .then(
+      data => {
+        dispatch(receivePoll(data));
+      }, err => {
+        console.log(err.responseJSON);
+      }
+    );
+}
+
+export const updatePoll = (data, pollId) => dispatch => {
+  return PollsApiUtil.updatePoll(data, pollId)
+    .then(
+      data => {
+        dispatch(receivePoll(data));
+      }, err => {
+        console.log(err.responseJSON);
+      }
+    );
+}
+
+export const duplicatePoll = pollId => dispatch => {
+  return PollsApiUtil.duplicatePoll(pollId)
     .then(
       data => {
         dispatch(receivePoll(data));

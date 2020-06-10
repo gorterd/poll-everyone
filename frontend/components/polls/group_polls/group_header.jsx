@@ -11,7 +11,7 @@ const GroupHeader = ({
   const optionalControls = (ord == 0) ? null : (
     <>
       <li><span className="group-polls-link" onClick={rename}>Rename</span></li>
-      <li><span className="group-polls-link" onClick={duplicate}>Duplicate</span></li>
+      {/* <li><span className="group-polls-link" onClick={duplicate}>Duplicate</span></li> */}
     </>
   )
 

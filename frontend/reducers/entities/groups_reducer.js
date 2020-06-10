@@ -5,7 +5,7 @@ import { concatIfNew } from '../../util/general_util';
 export default (state = {}, action) => {
   Object.freeze(state);
 
-  let newGroup;
+  let newGroup, newPollIds;
   switch (action.type) {
     case RECEIVE_GROUPS:
       return Object.assign({}, action.groups );
@@ -15,9 +15,14 @@ export default (state = {}, action) => {
     case RECEIVE_POLL:
       let poll = action.data.poll;
       let group = state[poll.groupId];
-      let newPollIds = concatIfNew(group.pollIds, poll.id);
-      newGroup = Object.assign({}, group, { pollIds: newPollIds })
-      return Object.assign({}, state, { [group.id]: newGroup  });
+      if (group) {
+        newPollIds = concatIfNew(group.pollIds, poll.id);
+        newGroup = Object.assign({}, group, { pollIds: newPollIds })
+      } else {
+        newGroup = { pollIds: [poll.id] };
+      }
+  
+      return Object.assign({}, state, { [poll.groupId]: newGroup  });
     default:
       return state;
   }

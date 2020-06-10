@@ -51,6 +51,19 @@ class Poll < ApplicationRecord
       false
   end
 
+  def self.dup_with_answer_options(poll)
+    poll_params = [:title, :poll_type, :locked, :allow_changes, :allow_anonymous, :num_responses_allowed, :group_id]
+    answer_option_params = [:body, :correct, :ord]
+
+    new_poll = Poll.new poll.attributes.select { |k| poll_params.include?(k.to_sym) }   
+    new_answer_options_attrs = poll.answer_options.map do |option|
+      option.attributes.select { |k| answer_option_params.include?(k.to_sym) } 
+    end
+    
+    new_poll.answer_options.build(new_answer_options_attrs)
+    new_poll
+  end
+
   def ordered_answer_options
     self.answer_options.order(:ord)
   end

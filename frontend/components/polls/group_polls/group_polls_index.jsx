@@ -55,7 +55,8 @@ class GroupPollsIndex extends React.Component {
   }
 
   render() {
-    const { group, selections, receiveGroupSelection, clearGroupSelection, orderedPolls } = this.props;
+    const { group, selections, receiveGroupSelection, 
+      clearGroupSelection, orderedPolls, duplicatePoll } = this.props;
     const { drawerVisible }  = this.state;
 
     const headerProps = {
@@ -76,6 +77,7 @@ class GroupPollsIndex extends React.Component {
               poll={poll} 
               selections={selections} 
               togglePollSelect={this.togglePollSelect}
+              duplicatePoll={duplicatePoll}
             />
           })}
         </ul>

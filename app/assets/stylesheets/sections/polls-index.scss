@@ -107,13 +107,52 @@
     }
 
     .group-header-activities {
-      padding: 0 50px;
       font-weight: 600;
-      color: $royal-blue-hover;
-      text-align: center;
     }
+
   }
 }
+
+.group-header-activities, .poll-row-responses {
+  width: 200px;
+  display: flex;
+  justify-content: center;
+  color: $royal-blue-hover;
+  text-align: center;
+}
+
+
+.poll-list-item {
+  .poll-row-right {
+    display: flex;
+    align-items: center;
+  }
+      
+  .poll-row-controls {
+    display: flex;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 250ms, visibility 250ms;
+    padding-right: 35px;
+    
+  }
+
+  &:hover .poll-row-controls {
+    opacity: 1;
+    visibility: visible;
+    transition: all 50ms;
+  }
+
+  .poll-row-responses {
+    font-weight: 400;
+  }
+
+}
+
+
+
+
+
 
 
 
@@ -155,7 +194,7 @@
     background-color: $lightest-grey;
   }
 
-  .group-polls-link {
+  .group-row-left .group-polls-link {
     padding: 0;
   }
 }

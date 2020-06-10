@@ -5,3 +5,26 @@ export const createPoll = (poll, groupId) => {
     data: { poll }
   });
 }
+
+export const fetchPoll = (pollId) => {
+  return $.ajax({
+    method: 'GET',
+    url: `/api/polls/${pollId}`
+  });
+}
+
+export const updatePoll = (poll, pollId) => {
+  return $.ajax({
+    method: 'PATCH',
+    url: `/api/polls/${pollId}`,
+    data: { poll }
+  });
+}
+
+export const duplicatePoll = pollId => {
+  return $.ajax({
+    method: 'POST',
+    url: `/api/polls/${pollId}/duplicate`,
+    data: { pollId }
+  });
+}
