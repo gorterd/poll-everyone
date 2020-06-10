@@ -40,7 +40,7 @@ class MoveDrawer extends React.Component {
 
     const numSelections = selections.pollIds.length;
     const buttonText = `Apply to ${numSelections} poll${ numSelections === 1 ? '' : 's' }`;
-    const disabled = !(group || selections.pollIds.length);
+    const disabled = !group || selections.pollIds.length === 0;
 
     return (
       <div className='move-drawer-anchor'>
