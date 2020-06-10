@@ -42,7 +42,6 @@ class GroupPollsIndex extends React.Component {
 
   duplicate(e) {
     e.stopPropagation()
-    console.log('Duplicate') 
   }
 
   togglePollSelect(pollId, selected) {

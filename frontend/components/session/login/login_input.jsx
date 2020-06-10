@@ -19,7 +19,6 @@ class LoginInput extends React.Component {
     togglePasswordVisible(){
       const newType = ((this.state.curType === 'text') ? 'password' : 'text'); 
       this.setState({curType: newType});
-      debugger;
     }
 
     render(){

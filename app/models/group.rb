@@ -63,9 +63,7 @@ class Group < ApplicationRecord
   end
 
   def ensure_ord
-    # debugger
     self.ord ||= self.user.next_ord
-    # debugger
   end
 
   def ensure_title

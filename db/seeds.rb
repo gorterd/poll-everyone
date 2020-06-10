@@ -17,9 +17,9 @@ easy = User.create!(
 )
 
 demo = User.create!(
-  first_name: "Truman",
-  last_name: "Burbank",
-  username: "trumanburbank123",
+  first_name: "truman",
+  last_name: "burbank",
+  username: "Simulation3845",
   email: "isThisTheRealLife@isThisJustFantasy.idk",
   password: "its_all_a_simulation"
 )
@@ -38,7 +38,7 @@ user_ids = User.all.pluck(:id)
 user_ids.each do |user_id|
   2.times do 
     Group.create!(
-    title: Faker::Book.title,
+    title: Faker::Dessert.variety,
     user_id: user_id
     )
   end
@@ -49,7 +49,7 @@ group_ids = Group.all.pluck(:id)
 group_ids.each do |group_id|
   3.times do 
     Poll.create!(
-      title: Faker::Lorem.question,
+      title: Faker::TvShows::BojackHorseman.tongue_twister,
       group_id: group_id
     )
   end
@@ -60,7 +60,7 @@ poll_ids = Poll.all.pluck(:id)
 poll_ids.each do |poll_id|
   4.times do 
     AnswerOption.create!(
-      body: Faker::Lorem.sentence,
+      body: Faker::Movies::HitchhikersGuideToTheGalaxy.marvin_quote,
       correct: [true, false].sample,
       poll_id: poll_id
     )
