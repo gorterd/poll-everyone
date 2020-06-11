@@ -60,3 +60,14 @@ export const duplicatePoll = pollId => dispatch => {
       }
     );
 }
+
+export const toggleActive = pollId => dispatch => {
+  return PollsApiUtil.toggleActive(pollId)
+    .then(
+      data => {
+        dispatch(receivePolls(data.polls));
+      }, err => {
+        console.log(err.responseJSON);
+      }
+    );
+}

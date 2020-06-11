@@ -58,7 +58,8 @@ class Api::PollsController < ApplicationController
   def toggle_activation
     if @poll.toggle_active
       broadcast_poll
-      render json: :nothing, status: 200
+      @groups = @poll.user.groups.includes(:polls)
+      render 'api/groups/index'
     else
       render json: ['Could not activate poll'], status: 422
     end

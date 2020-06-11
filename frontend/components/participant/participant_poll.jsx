@@ -66,7 +66,11 @@ class ParticipantPoll extends React.Component {
     const response = JSON.parse(broadcast.data);
     switch (broadcast.type){
       case POLL:
-        this.props.receiveActivePoll(response);
+        if (response.poll.active){
+          this.props.receiveActivePoll(response);
+        } else {
+          this.props.clearActivePoll();
+        }
         break;
       case RESPONSE:
         this.props.receiveResponse(response);

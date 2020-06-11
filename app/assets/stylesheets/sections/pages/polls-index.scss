@@ -180,19 +180,34 @@
     margin: 0 10px;
     display: block;
   }
+}
 
-  .poll-type-icon {
+.poll-list-item {
+
+  .poll-list-item-icon {
     display: flex;
     justify-content: center;
     width: 30px;
     margin: 0;
   }
-}
 
-.poll-list-item {
+  .activate-icon {
+    &:hover {
+      cursor: pointer;
+      color: $forest-green;
+    }
+  }
 
   &:hover {
     background-color: $lightest-grey;
+  }
+
+  &.activated {
+
+    background-color: $soft-green;
+    &:hover {
+      background-color: $soft-green-hover;
+    }
   }
 
   .group-row-left .group-polls-link {
