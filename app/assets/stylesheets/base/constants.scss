@@ -25,7 +25,10 @@ $grey-lighter: #b8b8b8;
 $grey: hsl(0, 0%, 57%);
 $rich-grey: hsl(0, 0%, 45%);
 $dark-grey: #4d4d4d;
-$charcoal: #2E2E2E;
+$darker-grey: hsl(0, 0%, 23%);
+$soft-charcoal: hsl(0, 0%, 20%);
+$charcoal: #2e2e2e;
+$almost-black: hsl(0, 0%, 3%);
 
 $royal-blue: #007acc;
 $royal-blue-hover: #0068ad;
@@ -49,7 +52,7 @@ $robin-blue: #e5f3fb;
 
 $gradient: linear-gradient(90deg, $royal-blue, $dark-royal);
 $gradient-disabled: linear-gradient(90deg, $royal-blue-disabled, #659fc5);
-$gradient-black: linear-gradient(90deg, $charcoal, black);
+$gradient-black: linear-gradient(135deg, $soft-charcoal, $almost-black);
 
 // mixins and extensions
 
