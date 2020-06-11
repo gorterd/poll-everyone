@@ -185,6 +185,8 @@
 .poll-list-item {
 
   .poll-list-item-icon {
+    color: $dark-grey;
+
     display: flex;
     justify-content: center;
     width: 30px;
@@ -194,7 +196,7 @@
   .activate-icon {
     &:hover {
       cursor: pointer;
-      color: $forest-green;
+      color: $forest-green-hover;
     }
   }
 
@@ -203,10 +205,18 @@
   }
 
   &.activated {
-
     background-color: $soft-green;
     &:hover {
       background-color: $soft-green-hover;
+
+      .activate-icon {
+        color: $forest-green-hover;
+        &:hover { color: $brick-red;}
+      }
+    }
+
+    .activate-icon {
+       color: $forest-green;
     }
   }
 

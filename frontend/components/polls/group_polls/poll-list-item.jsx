@@ -11,13 +11,14 @@ const PollListItem = ({
   }
 
   const activeClass = poll.active ? ' activated' : '';
+  const titleText = poll.title.length > 96 ? (poll.title.slice(0,92) + '. . .') : poll.title
 
   return (
     <li className={'poll-list-item group-polls-row' + activeClass}>
       <div className='group-row-left'>
         <input type="checkbox" onChange={e => togglePollSelect(poll.id, e.target.checked)} checked={checked} />
         <span className='poll-list-item-icon'><i className={POLL_ICONS[poll.pollType]}></i></span>
-        <Link to={`/polls/${poll.id}/edit`} className='group-polls-link'>{poll.title}</Link>
+        <Link to={`/polls/${poll.id}/edit`} className='group-polls-link'>{titleText}</Link>
       </div>
       <div className="poll-row-right">
         <ul className="poll-row-controls">
