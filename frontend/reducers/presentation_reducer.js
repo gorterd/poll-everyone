@@ -15,11 +15,13 @@ export default (state = _nullPresentation, action) => {
   switch (action.type) {
     case RECEIVE_ACTIVE_POLL:
       return {
-        activePollId: action.poll ? action.poll.id : null,
-        participantId: action.participant  
+        activePollId: action.data.poll ? action.data.poll.id : null,
+        participant: action.data.participant  
       };
     case RECEIVE_PARTICIPANT:
-      return Object.assign({}, state, { participant: action.participant } );
+      if (action.data){
+        return Object.assign({}, state, { participant: action.data.participant } );
+      } else { return state; }
     case CLEAR_ACTIVE_POLL:
       return Object.assign({}, state, {activePollId: null})
     case CLEAR_PRESENTATION:

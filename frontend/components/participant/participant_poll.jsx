@@ -27,8 +27,10 @@ class ParticipantPoll extends React.Component {
   componentDidMount() {
     const { currentType, currentId } = this.props.session;
     const username = this.props.match.params.username;
+
     this.props.fetchPresentation( currentType, currentId, username )
       .then( presParticipant => {
+        
         this._subscribe(presParticipant.presenterId, presParticipant.id) 
       });   
   }
@@ -40,14 +42,16 @@ class ParticipantPoll extends React.Component {
     this.subscription = App.cable.subscriptions.create(
       { channel: 'PresentationChannel', presenterId },
       {
-        received: broadcast => this.receiveBroadcast(broadcast),
+        received: broadcast => {
+          this.receiveBroadcast(broadcast)
+        },
 
-        respond: function (answerOptionId) {
+        respond: function(answerOptionId) {
           const response = { answerOptionId, participantId }
           return this.perform("respond", response);
         },
 
-        clear: function () {
+        clear: function() {
           return this.perform("clear", ownResponses[ownResponses.length -1])
         },
 
@@ -59,19 +63,19 @@ class ParticipantPoll extends React.Component {
   }
 
   receiveBroadcast(broadcast){
-    
+    const response = JSON.parse(broadcast.data);
     switch (broadcast.type){
       case POLL:
-        this.receiveActivePoll(broadcast.data);
+        this.props.receiveActivePoll(response);
         break;
       case RESPONSE:
-        this.receiveResponse(broadcast.data);
+        this.props.receiveResponse(response);
         break;
       case CLEAR_RESPONSE:
-        this.clearResponse(broadcast.data);
+        this.props.clearResponse(response);
         break;
       case CLEAR_POLL:
-        this.clearActivePoll();
+        this.props.clearActivePoll();
         break;
       case 'WORD':
         this.setState({ words: this.state.words.concat(broadcast.text)})
@@ -82,31 +86,18 @@ class ParticipantPoll extends React.Component {
   render() {
     const { session, activePoll, ownResponses, activeAnswerOptions } = this.props;
 
+    window.subscription = this.subscription;
     return (
-      <div>
-
-        <input type="text" onBlur={ () => {
-          let word;
-          if (this.subscription) {
-            word = e.target.value;
-            this.subscription.text(word);
-          } else {
-            this.setState({words: this.state.words.concat('BOO')})
-          }}
-          }/>
-
-          <ul>
-            {this.state.words.map( word => <li>{word}</li>)}
-          </ul>
+      <div className='participant-presentation'>
         
-        {/* Active Poll Title: {activePoll ? activePoll.title : null}
+        Active Poll Title: {activePoll ? activePoll.title : null}
 
         Answer Options:
-        {activeAnswerOptions.map( option, idx => {
+        {activeAnswerOptions ? activeAnswerOptions.map( option, idx => {
           return (<li key={idx}>
             Text: {option.body? option.body : null}
           </li>)
-        })} */}
+        }) : null }
       </div>
     )
   }

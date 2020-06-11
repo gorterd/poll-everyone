@@ -64,6 +64,7 @@ Rails.application.routes.draw do
 
       member do
         post 'duplicate'
+        patch 'toggle_activation'
       end
     end
 

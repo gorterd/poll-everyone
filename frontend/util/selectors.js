@@ -39,10 +39,10 @@ const optionResponses = (option, responses) => {
 }
 
 export const participantPollData = state => {
-  const participantId = state.presentation.participant.id;
   const activePoll = findActivePoll(state);
+  if ( !activePoll || !state.presentation.participant ) { return {} }
   
-  if ( !activePoll ) { return {} }
+  const participantId = state.presentation.participant.id;
 
   const ownResponses = state.entities.responses
     .filter( response => response.participantId === participantId)

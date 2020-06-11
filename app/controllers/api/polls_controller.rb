@@ -10,6 +10,11 @@ class Api::PollsController < ApplicationController
     ensure_current_user(@poll.user.id)
   end
 
+  before_action only: [:toggle_activation] do 
+    @poll = Poll.includes(answer_options: :responses).find_by(id: params[:id])
+    # ensure_current_user(@poll.user.id)
+  end
+
   def show
     render :show
   end
@@ -37,11 +42,21 @@ class Api::PollsController < ApplicationController
 
   def duplicate
     @poll = Poll.dup_with_answer_options(@poll)
-
+    
     if @poll.save
       render :show
     else
       render @poll.errors.full_messages, status: 422
+    end
+  end
+
+  def toggle_activation
+    @poll.active = !@poll.active
+    if @poll.save
+      PresentationChannel.broadcast_to(@poll.user, {type: 'POLL', data: json_poll_data})
+      render json: :nothing, status: 200
+    else
+      render json: ['Could not activate poll'], status: 422
     end
   end
 
@@ -53,4 +68,11 @@ class Api::PollsController < ApplicationController
       answer_options_attributes: [:body, :ord, :correct, :id, :_destroy] )
   end
 
+  def json_poll_data
+    ApplicationController.render(
+      :json,
+      partial: 'api/polls/full_data',
+      locals: { poll: @poll }
+    )
+  end
 end

@@ -28,3 +28,12 @@ export const duplicatePoll = pollId => {
     data: { pollId }
   });
 }
+
+export const toggleActivation = pollId =>  {
+  return $.ajax({
+    method: 'PATCH',
+    url: `/api/polls/${pollId}/toggle_activation`,
+  }); 
+}
+
+window.toggleActivation = toggleActivation;

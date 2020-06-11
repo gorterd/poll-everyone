@@ -13,8 +13,8 @@ class PresentationChannel < ApplicationCable::Channel
 
   end
 
-  def text(str)
-    PresentationChannel.broadcast_to(@presenter, type: 'WORD', text: str)
+  def text(msg)
+    PresentationChannel.broadcast_to(@presenter, type: 'WORD', text: msg["message"])
   end
 
 end
