@@ -4,6 +4,7 @@ class Poll < ApplicationRecord
 
   validates :title, :poll_type, :ord, presence: true
   validates :poll_type, inclusion: {in: POLL_TYPES }
+  validate :not_second_active
 
   before_validation :ensure_poll_type, :ensure_ord, on: [:create]
   after_destroy :remove_from_order
@@ -14,7 +15,6 @@ class Poll < ApplicationRecord
   accepts_nested_attributes_for :answer_options, allow_destroy: true
   has_many :correct_answers, -> { where(correct: true) }, foreign_key: :poll, class_name: 'AnswerOption'
   has_many :responses, dependent: :destroy
-  has_one :activator, as: :activatable, class: :User
 
   def self.move_polls(poll_ids, new_group_id)    
     return false unless new_group = Group.find_by(id: new_group_id)
@@ -108,5 +108,10 @@ class Poll < ApplicationRecord
     self.group.remove_poll_from_order(self.id) unless self.destroyed_by_association
   end
 
+  def not_second_active
+    if self.user.active_poll && self.active
+      self.errors[:active] << ' cannot be applied; another poll is active'
+    end
+  end
 end
 

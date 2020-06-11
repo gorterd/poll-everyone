@@ -39,7 +39,7 @@ class Api::UsersController < ApplicationController
       render json: ['Could not find user'], status: 422
     end
   
-    if @poll = @user.activatable
+    if @poll = @user.active_poll
       render :presentation 
     else
       render 'api/participants/participant'

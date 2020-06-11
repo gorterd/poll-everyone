@@ -82,6 +82,10 @@ class User < ApplicationRecord
     @default_group = @default_group || self.groups.find_by(ord: 0)
   end
 
+  def active_poll
+    self.polls.find_by(active: true)
+  end
+
   # auth methods
 
   def reset_session_token!
