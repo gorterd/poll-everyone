@@ -4,6 +4,8 @@ import _throttle from 'lodash.throttle';
 import DropdownWrapper from '../../shared/dropdown';
 import NewPollToolbar from '../modals/new_poll/new_poll_toolbar';
 
+const OFFSET = 78;
+
 class GroupsIndexToolbar extends React.Component {
   constructor(props) {
     super(props)
@@ -19,10 +21,7 @@ class GroupsIndexToolbar extends React.Component {
 
   componentDidMount() {
     this.scrollListener = window.addEventListener('scroll', _throttle(() => { this.handleScroll() },
-      100, { leading: false, trailing: true }));
-    const clientRect = this.el.current.getBoundingClientRect();
-    this.elHeight = clientRect.bottom - clientRect.top;
-    this.elY = (clientRect.top + clientRect.bottom) / 2;
+      20, { leading: false, trailing: true }));
   }
 
   componentWillUnmount(){
@@ -32,7 +31,8 @@ class GroupsIndexToolbar extends React.Component {
   handleScroll(){
     const { stickyToolbar, modalType } = this.props;
     const scrollY = window.scrollY;
-    const nowSticky = this.elY < scrollY;
+    const nowSticky = OFFSET < scrollY;
+    if (window.triggerDebugger) { debugger;}
     if (!stickyToolbar && nowSticky) {
       this.props.setStickyToolbar(56);
     } else if (stickyToolbar && !(nowSticky || modalType)) {

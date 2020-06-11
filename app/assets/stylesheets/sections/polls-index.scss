@@ -1,7 +1,7 @@
 .polls-index {
   display: flex;
   width: 100%;
-  min-height: calc(100vh - 72px);
+  min-height: 100vh;
   background-color: white;
 }
 
@@ -211,7 +211,7 @@
 
   background-color: $lightest-grey;
 
-  transition: height 600ms;
+  transition: height 400ms;
 
   &.open {
     height: 230px;

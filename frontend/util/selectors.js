@@ -18,12 +18,12 @@ export const pollData = (state, pollId) => {
   const { entities: { polls, answerOptions } } = state;
   const poll = polls[pollId];
   if (poll && poll.answerOptionIds){
-    const orderedAnswerOptions = orderedAnswerOptions(poll, answerOptions);
+    const orderedAnswerOptions = getOrderedAnswerOptions(poll, answerOptions);
     return { poll, orderedAnswerOptions }
   } else { return null }
 }
 
-const orderedAnswerOptions = (poll, answerOptions) => {
+const getOrderedAnswerOptions = (poll, answerOptions) => {
   return Object.values(answerOptions)
     .filter(answerOption => poll.answerOptionIds.includes(answerOption.id))
     .sort(ordSort);
@@ -48,7 +48,7 @@ export const participantPollData = state => {
     .filter( response => response.participantId === participantId)
     .sort(dateSort);
 
-  const activeAnswerOptions = orderedAnswerOptions(activePoll, state.entities.answerOptions).map( option => {
+  const activeAnswerOptions = getOrderedAnswerOptions(activePoll, state.entities.answerOptions).map( option => {
     return Object.assign({}, option, { numOwnResponses: optionResponses(option, ownResponses).length })
   });
 

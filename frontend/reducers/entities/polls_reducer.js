@@ -10,10 +10,10 @@ export default (state = {}, action) => {
       return Object.assign({}, action.polls);
     case RECEIVE_POLL:
       newPoll = { [action.data.poll.id]: action.data.poll }
-      return Object.assign( {}, state, poll );
+      return Object.assign( {}, state, newPoll );
     case RECEIVE_ACTIVE_POLL:
       newPoll = { [action.data.poll.id]: action.data.poll }
-      return Object.assign( {}, state, poll );
+      return Object.assign( {}, state, newPoll );
     default:
       return state;
   }

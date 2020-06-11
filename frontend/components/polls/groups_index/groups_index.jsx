@@ -31,7 +31,6 @@ class GroupsIndex extends React.Component {
 
   render() {
     const { orderedGroups, openModal, closeModal, stickyToolbar, selections, movePolls } = this.props;
-
     
     return (
       <section className="polls-index">
