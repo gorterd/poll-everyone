@@ -34,32 +34,3 @@
     margin-right: 8px;
   }
 }
-
-.screenname-bar {
-  height: 40px;
-  background-color: white;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.participant-presentation-container {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-}
-
-.participant-presentation {
-  width: 400px;
-  height: 400px;
-  background: white;
-  display: flex;
-  flex-direction: column;
-
-  input {
-    height: 50px;
-    border: 1px solid $grey;
-  }
-}

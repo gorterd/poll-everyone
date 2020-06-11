@@ -21,13 +21,14 @@ export default (state = {}, action) => {
       newAnswerOption.responseIds = concatIfNew(newAnswerOption.responseIds, action.response.id);
       return Object.assign({}, state, { [newAnswerOption.id] : newAnswerOption } );
     case CLEAR_RESPONSE:
-      newAnswerOption = state[action.response.answerOptionId] ||
+      newAnswerOption = Array.from( state[action.response.answerOptionId] ) ||
         ({ [action.response.answerOptionId]: {} });
 
       const responseIds = newAnswerOption.responseIds;
       if (responseIds) {
-        newAnswerOption.responseIds = Array.from(responseIds)
-          .splice( responseIds.indexOf(action.response.id), 1 );
+        newResponseIds = Array.from(responseIds);
+        newResponseIds.splice( responseIds.indexOf(action.response.id), 1 );
+        newAnswerOption.responseIds = newResponseIds;
       }
       return Object.assign({}, state, { [newAnswerOption.id]: newAnswerOption });
     default:

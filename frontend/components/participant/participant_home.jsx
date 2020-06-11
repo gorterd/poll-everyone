@@ -55,6 +55,7 @@ class ParticipantHome extends React.Component {
                 <span>#/participate/</span>
                 <input
                   autoFocus
+                  autoComplete
                   className='participant-join-input'
                   type="text"
                   onChange={this.handleChange}
@@ -64,7 +65,7 @@ class ParticipantHome extends React.Component {
               </div>
               {errorMsg ? <div className="large-input-error-msg">{errorMsg}</div> : null}
             </div>
-            <button type='submit' className='button-blue' disabled={errorMsg}>Join</button>
+            <button type='submit' className='button-transparent' disabled={errorMsg}>Join</button>
           </form>
         </div>
       </div>

@@ -14,7 +14,7 @@ export default (state = {}, action) => {
       return Object.assign({}, state, response);
     case CLEAR_RESPONSE:
       const newState = Object.assign({}, state);
-      delete newState[response.id];
+      delete newState[action.response.id];
       return newState;
     default:
       return state;

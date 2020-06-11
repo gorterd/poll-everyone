@@ -32,7 +32,7 @@ class GroupsIndexToolbar extends React.Component {
     const { stickyToolbar, modalType } = this.props;
     const scrollY = window.scrollY;
     const nowSticky = OFFSET < scrollY;
-    if (window.triggerDebugger) { debugger;}
+
     if (!stickyToolbar && nowSticky) {
       this.props.setStickyToolbar(56);
     } else if (stickyToolbar && !(nowSticky || modalType)) {
