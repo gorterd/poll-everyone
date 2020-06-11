@@ -18,14 +18,16 @@ const CLEAR_POLL = 'CLEAR_POLL';
 
 class ParticipantPoll extends React.Component {
   constructor(props) {
-    super(props)
+    super(props);
+
+    this.state = { words: []}
     this.receiveBroadcast = this.receiveBroadcast.bind(this);
   };
 
   componentDidMount() {
     const { currentType, currentId } = this.props.session;
     const username = this.props.match.params.username;
-    this.fetchPresentation( currentType, currentId, username )
+    this.props.fetchPresentation( currentType, currentId, username )
       .then( presParticipant => {
         this._subscribe(presParticipant.presenterId, presParticipant.id) 
       });   
@@ -47,6 +49,10 @@ class ParticipantPoll extends React.Component {
 
         clear: function () {
           return this.perform("clear", ownResponses[ownResponses.length -1])
+        },
+
+        text: function(str) {
+          return this.perform("text", str)
         }
       }
     );
@@ -67,6 +73,9 @@ class ParticipantPoll extends React.Component {
       case CLEAR_POLL:
         this.clearActivePoll();
         break;
+      case 'WORD':
+        this.setState({ words: this.state.words.concat(broadcast.text)})
+        break;
     }
   }
 
@@ -75,6 +84,20 @@ class ParticipantPoll extends React.Component {
 
     return (
       <div>
+
+        <input type="text" onBlur={ () => {
+          let word;
+          if (this.subscription) {
+            word = e.target.value;
+            this.subscription.text(word);
+          } else {
+            this.setState({words: this.state.words.concat('BOO')})
+          }}
+          }/>
+
+          <ul>
+            {this.state.words.map( word => <li>{word}</li>)}
+          </ul>
         
         {/* Active Poll Title: {activePoll ? activePoll.title : null}
 

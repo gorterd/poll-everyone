@@ -1,11 +1,11 @@
 import { connect} from 'react-redux';
-import { logout } from '../../../../actions/session_actions';
+import { login, logout } from '../../../../actions/session_actions';
 import HomeNavbar from './home_navbar';
 import { withRouter } from 'react-router-dom';
 
 const mapState = state => {
   return {
-    currentUser: state.session.currentType === 'user' && state.entities.users[state.session.currentId],
+    currentUser: state.session.currentType === 'User' && state.entities.users[state.session.currentId],
   }
 }
 

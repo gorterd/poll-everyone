@@ -30,11 +30,13 @@ class Api::UsersController < ApplicationController
 
   def presentation
     @user = User.find_by(username: params[:username])
+
     @participant = Participant.find_or_create_by(
       participatable_id: params[:id], 
       participatable_type: params[:type], 
       presenter_id: @user.id
     )
+
     unless @user && @participant
       render json: ['Could not find user'], status: 422
     end
@@ -42,7 +44,7 @@ class Api::UsersController < ApplicationController
     if @poll = @user.active_poll
       render :presentation 
     else
-      render 'api/participants/participant'
+      render 'api/participants/show'
     end
   end
 

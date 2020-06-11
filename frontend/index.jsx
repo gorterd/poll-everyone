@@ -16,13 +16,13 @@ const loadStore = () => {
         users: { [window.currentUser.id]: window.currentUser }
       },
       session: {
-        currentType: 'user',
+        currentType: 'User',
         currentId: window.currentUser.id
       }
     } : 
     {
       session: {
-        currentType: 'unregisteredParticipant',
+        currentType: 'UnregisteredParticipant',
         currentId: window.currentParticipantId
       }
     }

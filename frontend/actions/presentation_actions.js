@@ -1,5 +1,5 @@
 import * as PollActions from './poll_actions'
-import { fetchPresentation } from '../util/api/presentation_api_util'
+import * as PresentationApiUtil from '../util/api/presentation_api_util'
 
 export const RECEIVE_PARTICIPANT = 'RECEIVE_PARTICIPANT'
 export const RECEIVE_ACTIVE_POLL = 'RECEIVE_ACTIVE_POLL'
@@ -49,7 +49,7 @@ export const clearResponse = response => {
 }
 
 export const fetchPresentation = (type, id, username) => dispatch => {
-  return fetchPresentation(type, id, username)
+  return PresentationApiUtil.fetchPresentation(type, id, username)
     .then( data => {
       const { participant, ...rest } = data;
       dispatch(receiveParticipant(participant));
@@ -57,5 +57,5 @@ export const fetchPresentation = (type, id, username) => dispatch => {
         dispatch(receiveActivePoll(rest));
       }
       return data.participant;
-    }, err => console.log(err.responseJSON()));
+    }, err => console.log(err.responseJSON));
 }

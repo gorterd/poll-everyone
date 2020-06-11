@@ -10,7 +10,7 @@ export default (state = _nullSession, action) => {
   switch (action.type) {
     case RECEIVE_CURRENT_USER:
       return {
-        currentType: 'user',
+        currentType: 'User',
         currentId: action.user.id,
       };
     case REMOVE_CURRENT_USER:

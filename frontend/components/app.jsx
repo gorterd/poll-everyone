@@ -26,13 +26,15 @@ const App = () => {
     <>     
       <section className='content'>
         <Switch>
-          <Route path='/participate/:username'>
-            <ParticipantPoll />
-          </Route>
+
           <Route exact path='/'><HomeNavbarContainer /></Route>
           <ProtectedRoute path={['/polls', '/account', '/reports']}><AppNavbarContainer /></ProtectedRoute>
           <Navbar relativeRootPath={'/'} additionalClasses='nav-sticky' links={[]} tools={[]}/>
         </Switch>
+
+        <Route path='/participate/:username'>
+          <ParticipantPoll />
+        </Route>
 
         <Route exact path={['/polls', '/polls/new']}>
           <GroupsIndexContainer />
