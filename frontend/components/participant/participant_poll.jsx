@@ -88,20 +88,25 @@ class ParticipantPoll extends React.Component {
   }
 
   render() {
-    const { session, activePoll, ownResponses, activeAnswerOptions } = this.props;
+    const { session, activePoll, ownResponses, activeAnswerOptions, participant } = this.props;
 
     window.subscription = this.subscription;
     return (
-      <div className='participant-presentation'>
-        
-        Active Poll Title: {activePoll ? activePoll.title : null}
+      <div className='participant-poll-container'>
+        <div className='screenname-bar'>
+          Responding { participant.screenName ? <>as <span>{'hello'}</span></> : 'anonymously' }
+        </div>
+        <div className='participant-poll'>
+          
+          Active Poll Title: {activePoll ? activePoll.title : null}
 
-        Answer Options:
-        {activeAnswerOptions ? activeAnswerOptions.map( (option, idx) => {
-          return (<li key={idx}>
-            Text: {option.body? option.body : null}
-          </li>)
-        }) : null }
+          Answer Options:
+          {activeAnswerOptions ? activeAnswerOptions.map( (option, idx) => {
+            return (<li key={idx}>
+              Text: {option.body? option.body : null}
+            </li>)
+          }) : null }
+        </div>
       </div>
     )
   }
@@ -111,6 +116,7 @@ const mapState = state => {
   const { activePoll, ownResponses, activeAnswerOptions } = participantPollData(state);
   return {
     session: state.session,
+    participant: state.presentation.participant,
     activePoll, ownResponses, activeAnswerOptions
   }
 }

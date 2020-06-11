@@ -44,9 +44,12 @@ $brick-red: #a33529;
 $brick-red-hover: #8b2d23;
 $brick-red-disabled: #c1908b;
 $dark-brick: #6c1c13;
+
 $robin-blue: #e5f3fb;
 
 $gradient: linear-gradient(90deg, $royal-blue, $dark-royal);
+$gradient-disabled: linear-gradient(90deg, $royal-blue-disabled, #659fc5);
+$gradient-black: linear-gradient(90deg, $charcoal, black);
 
 // mixins and extensions
 

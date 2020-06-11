@@ -4,7 +4,12 @@ import { connect } from 'react-redux';
 const ConfirmMoveModal = ({ closeModal, modalData: { sendMoveRequest, numPolls } }) => {
 
   const word = numPolls === 1 ? 'poll' : 'polls';
-  const subText = `You selected ${numPolls} ${word}. Click 'Apply' to move the selected ${word}.`;
+  const subText =  (
+    <>
+      {`You selected ${numPolls} ${word}.`}
+      <br />
+      {`Click 'Apply' to move the selected ${word}.`}
+    </> )
 
   return (
     <>

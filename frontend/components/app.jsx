@@ -17,49 +17,49 @@ import SignupFormContainer from './session/signup/signup_container';
 import GroupsIndexContainer from './polls/groups_index/groups_index_container';
 import { AuthRoute, ProtectedRoute } from '../util/component/routes_util';
 import { Modal } from './polls/modals/modal';
-import ParticipantPoll from './participant/participant_poll';
-
+import ParticipantApp from './participant/participant_app';
 
 
 const App = () => {
   return (
     <>     
-      <section className='content'>
-        <Switch>
-
-          <Route exact path='/'><HomeNavbarContainer /></Route>
-          <ProtectedRoute path={['/polls', '/account', '/reports']}><AppNavbarContainer /></ProtectedRoute>
-          <Navbar relativeRootPath={'/'} additionalClasses='nav-sticky' links={[]} tools={[]}/>
-        </Switch>
-
-        <Route path='/participate/:username'>
-          <ParticipantPoll />
+      <Switch>
+        <Route path='/participate'>
+          <ParticipantApp />
         </Route>
+        <section className='content'>          
+          <Switch>
 
-        <Route exact path={['/polls', '/polls/new']}>
-          <GroupsIndexContainer />
-        </Route>
+            <Route exact path='/'><HomeNavbarContainer /></Route>
+            <ProtectedRoute path={['/polls', '/account', '/reports']}><AppNavbarContainer /></ProtectedRoute>
+            <Navbar relativeRootPath={'/'} additionalClasses='nav-sticky' links={[]} tools={[]}/>
+          </Switch>
 
-        <Route path='/polls/:pollId/edit'>
-          <EditPoll />
-        </Route>
+          <Route exact path={['/polls', '/polls/new']}>
+            <GroupsIndexContainer />
+          </Route>
 
-        <Route exact path='/'>
-          <HomeSplash />
-        </Route>
+          <Route path='/polls/:pollId/edit'>
+            <EditPoll />
+          </Route>
 
-        <AuthRoute path='/login'>
-          <LoginFormContainer/>
-        </AuthRoute>
+          <Route exact path='/'>
+            <HomeSplash />
+          </Route>
 
-        <AuthRoute path='/signup/splash'>
-          <SignupSplash />
-        </AuthRoute>
+          <AuthRoute path='/login'>
+            <LoginFormContainer/>
+          </AuthRoute>
 
-        <AuthRoute path='/signup/create'>
-          <SignupFormContainer />
-        </AuthRoute>
-      </section>
+          <AuthRoute path='/signup/splash'>
+            <SignupSplash />
+          </AuthRoute>
+
+          <AuthRoute path='/signup/create'>
+            <SignupFormContainer />
+          </AuthRoute>
+        </section>
+      </Switch>
 
       <Route exact path={['/', '/polls', '/account']}>
         <Footer />

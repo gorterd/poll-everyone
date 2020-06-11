@@ -5,7 +5,7 @@ const Logo = ({relativeRootPath, onClick}) => {
 
   const logo = 
     <>
-      <img src={window.logoURL} alt='Poll Everyone logo' />
+      <img src={window.logoURL} alt='Logo' />
       <span> Poll Everyone</span>
     </>
 
