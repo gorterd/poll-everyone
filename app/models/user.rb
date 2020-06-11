@@ -15,9 +15,9 @@ class User < ApplicationRecord
   attr_reader :password
   
   has_many :groups, inverse_of: :user, autosave: true, dependent: :destroy
-
   has_many :polls, through: :groups
-
+  has_many :participants, as: :participatable, dependent: :destroy
+  has_many :responses, through: :participants, source: :responses
   # class methods
 
   def self.username_or_email_exists?(username_or_email)

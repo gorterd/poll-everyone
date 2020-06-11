@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_06_09_182636) do
+ActiveRecord::Schema.define(version: 2020_06_11_023253) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -35,6 +35,17 @@ ActiveRecord::Schema.define(version: 2020_06_09_182636) do
     t.index ["user_id"], name: "index_groups_on_user_id"
   end
 
+  create_table "participants", force: :cascade do |t|
+    t.string "screen_name"
+    t.integer "presenter_id", null: false
+    t.string "participatable_type", null: false
+    t.bigint "participatable_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["participatable_type", "participatable_id"], name: "index_participants_on_participatable_type_and_participatable_id"
+    t.index ["presenter_id"], name: "index_participants_on_presenter_id"
+  end
+
   create_table "polls", force: :cascade do |t|
     t.string "title", null: false
     t.string "poll_type", null: false
@@ -47,7 +58,27 @@ ActiveRecord::Schema.define(version: 2020_06_09_182636) do
     t.datetime "updated_at", null: false
     t.integer "ord", null: false
     t.integer "answer_options_count"
+    t.boolean "active", default: false, null: false
     t.index ["group_id"], name: "index_polls_on_group_id"
+  end
+
+  create_table "responses", force: :cascade do |t|
+    t.string "body", null: false
+    t.integer "participant_id", null: false
+    t.integer "poll_id", null: false
+    t.integer "answer_option_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["answer_option_id"], name: "index_responses_on_answer_option_id"
+    t.index ["participant_id"], name: "index_responses_on_participant_id"
+    t.index ["poll_id"], name: "index_responses_on_poll_id"
+  end
+
+  create_table "unregistered_participants", force: :cascade do |t|
+    t.string "participant_session_token", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["participant_session_token"], name: "index_unregistered_participants_on_participant_session_token"
   end
 
   create_table "users", force: :cascade do |t|
@@ -55,15 +86,11 @@ ActiveRecord::Schema.define(version: 2020_06_09_182636) do
     t.string "email", null: false
     t.string "password_digest", null: false
     t.string "session_token", null: false
-    t.string "activatable_type"
-    t.bigint "activatable_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "first_name", null: false
     t.string "last_name", null: false
     t.integer "groups_count"
-    t.index ["activatable_id", "activatable_type"], name: "index_users_on_activatable_id_and_activatable_type", unique: true
-    t.index ["activatable_type", "activatable_id"], name: "index_users_on_activatable_type_and_activatable_id"
     t.index ["session_token"], name: "index_users_on_session_token", unique: true
     t.index ["username"], name: "index_users_on_username", unique: true
   end

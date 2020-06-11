@@ -7,15 +7,11 @@ document.addEventListener('DOMContentLoaded', () => {
   const root = document.getElementById('root');
   const store = loadStore();
   ReactDOM.render(<Root store={store}/>, root);
-
-
-  window.getState = store.getState;
-  window.dispatch = store.dispatch;
 })
 
 const loadStore = () => {
-  if (window.currentUser){
-    const preloadedState = {
+  const preloadedState = (window.currentUser) ? 
+    {
       entities: {
         users: { [window.currentUser.id]: window.currentUser }
       },
@@ -23,27 +19,17 @@ const loadStore = () => {
         currentType: 'user',
         currentId: window.currentUser.id
       }
+    } : 
+    {
+      session: {
+        currentType: 'unregisteredParticipant',
+        currentId: window.currentParticipantId
+      }
     }
 
-    document.getElementById('boostrap-script').remove();
-    delete window.currentUser;
-    return configureStore(preloadedState);
-  } else { return configureStore() }
+  document.getElementById('boostrap-script').remove();
+  delete window.currentUser;
+  delete window.currentParticipantId;
+  return configureStore(preloadedState);
 }
 
-
-import { 
-  signup,
-  login,
-  logout,
-  updateUser,
-  checkIfUserExists
-} from "./actions/session_actions";
-
-Object.assign(window, {
-  signup,
-  login,
-  logout,
-  updateUser,
-  checkIfUserExists
-})

@@ -1,11 +1,15 @@
 class ApplicationController < ActionController::Base
 
-  helper_method :current_user, :logged_in?
+  helper_method :current_user, :current_user, :logged_in?
 
   # before_action :make_keys_snake_case
 
   def current_user
     @current_user ||= User.find_by(session_token: session[:session_token])
+  end
+
+  def current_participant
+    @current_participant ||= ( current_user || anonymous )
   end
 
   def login!(user)
@@ -49,4 +53,20 @@ class ApplicationController < ActionController::Base
   def render_not_authorized
     render json: ['Not authorized to make this request.'], status: 401
   end
+
+  private
+
+  def anonymous
+    anon = UnregisteredParticipant.find_by( participant_session_token: cookies[:participant_session_token] )
+    unless anon
+      anon = UnregisteredParticipant.create()
+      cookies[:participant_session_token] = { 
+        value: anon.participant_session_token, 
+        expires: 1.year 
+      }
+    end
+
+    anon
+  end
+
 end

@@ -6,5 +6,9 @@ export const mergeArrays = (array_1, array_2) => {
 }
 
 export const concatIfNew = (array, el) => {
-  return array.includes(el) ? array : array.concat(el);
+  if (array) {
+    return array.includes(el) ? array : array.concat(el);
+  } else {
+    return [el]
+  }
 }

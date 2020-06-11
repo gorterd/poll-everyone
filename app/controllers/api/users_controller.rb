@@ -28,6 +28,24 @@ class Api::UsersController < ApplicationController
     update_and_render(@user, user_params)
   end
 
+  def presentation
+    @user = User.find_by(username: params[:username])
+    @participant = Participant.find_or_create_by(
+      participatable_id: params[:id], 
+      participatable_type: params[:type], 
+      presenter_id: @user.id
+    )
+    unless @user && @participant
+      render json: ['Could not find user'], status: 422
+    end
+  
+    if @poll = @user.activatable
+      render :presentation 
+    else
+      render 'api/participants/participant'
+    end
+  end
+
   private
 
   def user_params

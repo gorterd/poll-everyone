@@ -37,6 +37,10 @@ Rails.application.routes.draw do
   namespace :api, defaults: {format: :json} do
     resources :users, only: [:show, :create, :update] do
       resources :groups, only: [:index, :create]
+
+      collection do
+        get 'presentation'
+      end
     end
     
     resource :session, only: [:create, :destroy]

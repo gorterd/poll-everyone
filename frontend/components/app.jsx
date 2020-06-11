@@ -17,6 +17,7 @@ import SignupFormContainer from './session/signup/signup_container';
 import GroupsIndexContainer from './polls/groups_index/groups_index_container';
 import { AuthRoute, ProtectedRoute } from '../util/component/routes_util';
 import { Modal } from './polls/modals/modal';
+import ParticipantPoll from './participant/participant_poll';
 
 
 
@@ -25,6 +26,9 @@ const App = () => {
     <>     
       <section className='content'>
         <Switch>
+          <Route path='/participate/:username'>
+            <ParticipantPoll />
+          </Route>
           <Route exact path='/'><HomeNavbarContainer /></Route>
           <ProtectedRoute path={['/polls', '/account', '/reports']}><AppNavbarContainer /></ProtectedRoute>
           <Navbar relativeRootPath={'/'} additionalClasses='nav-sticky' links={[]} tools={[]}/>
