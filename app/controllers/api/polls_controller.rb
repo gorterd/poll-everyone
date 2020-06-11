@@ -5,14 +5,14 @@ class Api::PollsController < ApplicationController
     ensure_current_user(@group.user.id)
   end
 
-  before_action only: [:show, :update, :destroy, :duplicate] do 
+  before_action only: [:show, :destroy, :duplicate] do 
     @poll = Poll.find_by(id: params[:id])
     ensure_current_user(@poll.user.id)
   end
 
-  before_action only: [:toggle_activation] do 
+  before_action only: [:update, :toggle_activation] do 
     @poll = Poll.includes(answer_options: :responses).find_by(id: params[:id])
-    # ensure_current_user(@poll.user.id)
+    ensure_current_user(@poll.user.id)
   end
 
   def show
@@ -32,7 +32,12 @@ class Api::PollsController < ApplicationController
   end
   
   def update
-    update_and_render(@poll, poll_params)
+    if @poll.update(poll_params)
+      broadcast_poll
+      render :show
+    else 
+      render json: @poll.errors.full_messages, status: 422
+    end
   end
 
   def destroy
@@ -51,9 +56,8 @@ class Api::PollsController < ApplicationController
   end
 
   def toggle_activation
-    @poll.active = !@poll.active
-    if @poll.save
-      PresentationChannel.broadcast_to(@poll.user, {type: 'POLL', data: json_poll_data})
+    if @poll.toggle_active
+      broadcast_poll
       render json: :nothing, status: 200
     else
       render json: ['Could not activate poll'], status: 422
@@ -66,6 +70,10 @@ class Api::PollsController < ApplicationController
     snake_params(:poll)
       .permit( :title, :poll_type, :locked, :allow_changes, :allow_anonymous, :num_responses_allowed,
       answer_options_attributes: [:body, :ord, :correct, :id, :_destroy] )
+  end
+
+  def broadcast_poll
+    PresentationChannel.broadcast_to(@poll.user, {type: 'POLL', data: json_poll_data})
   end
 
   def json_poll_data

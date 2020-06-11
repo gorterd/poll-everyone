@@ -38,15 +38,23 @@ const optionResponses = (option, responses) => {
   return responses.filter(response => option.responseIds.includes(response.id));
 }
 
+const getOwnResponses = state => {
+  const participant = state.presentation.participant;
+  if ( !participant || !participant.id) { return [] }
+  
+  const participantId = participant.id;
+  const ownResponses = Object.values(state.entities.responses)
+    .filter(response => response.participantId === participantId)
+    .sort(dateSort);
+
+  return ownResponses;
+}
+
 export const participantPollData = state => {
   const activePoll = findActivePoll(state);
-  if ( !activePoll || !state.presentation.participant ) { return {} }
+  if ( !activePoll ) { return {} }
   
-  const participantId = state.presentation.participant.id;
-
-  const ownResponses = state.entities.responses
-    .filter( response => response.participantId === participantId)
-    .sort(dateSort);
+  const ownResponses  = getOwnResponses(state);
 
   const activeAnswerOptions = getOrderedAnswerOptions(activePoll, state.entities.answerOptions).map( option => {
     return Object.assign({}, option, { numOwnResponses: optionResponses(option, ownResponses).length })
@@ -54,3 +62,6 @@ export const participantPollData = state => {
 
   return { activePoll, ownResponses, activeAnswerOptions };
 }
+
+
+window.participantPollData = participantPollData;

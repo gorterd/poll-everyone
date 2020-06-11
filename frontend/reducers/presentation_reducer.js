@@ -16,12 +16,10 @@ export default (state = _nullPresentation, action) => {
     case RECEIVE_ACTIVE_POLL:
       return {
         activePollId: action.data.poll ? action.data.poll.id : null,
-        participant: action.data.participant  
+        participant: action.data.participant || state.participant
       };
     case RECEIVE_PARTICIPANT:
-      if (action.data){
-        return Object.assign({}, state, { participant: action.data.participant } );
-      } else { return state; }
+      return Object.assign({}, state, { participant: action.participant } );
     case CLEAR_ACTIVE_POLL:
       return Object.assign({}, state, {activePollId: null})
     case CLEAR_PRESENTATION:

@@ -66,6 +66,22 @@ class Poll < ApplicationRecord
     new_poll
   end
 
+  #instance methods
+
+  def toggle_active
+    Poll.transaction do
+      if prev_active = self.user.active_poll
+        prev_active.update(active: false) unless self === prev_active
+      end
+
+      self.update(active: !self.active)
+    end
+
+    self
+    rescue
+      nil
+  end
+
   def ordered_answer_options
     self.answer_options.order(:ord)
   end
@@ -109,8 +125,10 @@ class Poll < ApplicationRecord
   end
 
   def not_second_active
-    if self.user.active_poll && self.active
-      self.errors[:active] << ' cannot be applied; another poll is active'
+    if self.active && prev_active = self.user.active_poll
+      unless self === prev_active
+        self.errors[:active] << ' cannot be applied; another poll is active'
+      end
     end
   end
 end

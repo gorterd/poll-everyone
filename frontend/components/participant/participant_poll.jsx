@@ -93,7 +93,7 @@ class ParticipantPoll extends React.Component {
         Active Poll Title: {activePoll ? activePoll.title : null}
 
         Answer Options:
-        {activeAnswerOptions ? activeAnswerOptions.map( option, idx => {
+        {activeAnswerOptions ? activeAnswerOptions.map( (option, idx) => {
           return (<li key={idx}>
             Text: {option.body? option.body : null}
           </li>)
