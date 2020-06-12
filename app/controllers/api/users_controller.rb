@@ -40,6 +40,8 @@ class Api::UsersController < ApplicationController
     unless @user && @participant
       render json: ['Could not find user'], status: 422
     end
+
+    @participant.touch
   
     if @poll = @user.active_poll
       render :presentation 

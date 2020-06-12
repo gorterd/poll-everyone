@@ -7,6 +7,8 @@ export const CLEAR_ACTIVE_POLL = 'CLEAR_ACTIVE_POLL'
 export const RECEIVE_RESPONSE = 'RECEIVE_RESPONSE'
 export const CLEAR_RESPONSE = 'CLEAR_RESPONSE'
 export const CLEAR_PRESENTATION = 'CLEAR_PRESENTATION'
+export const RECEIVE_RECENT_PRESENTATIONS = 'RECEIVE_RECENT_PRESENTATIONS'
+
 
 const receiveParticipant = participant => {
   return {
@@ -48,6 +50,13 @@ export const clearResponse = response => {
   }
 }
 
+export const receiveRecentPresentations = recents => {
+  return {
+    type: RECEIVE_RECENT_PRESENTATIONS,
+    recents
+  }
+}
+
 export const fetchPresentation = (type, id, username) => dispatch => {
   return PresentationApiUtil.fetchPresentation(type, id, username)
     .then( data => {
@@ -57,5 +66,12 @@ export const fetchPresentation = (type, id, username) => dispatch => {
         dispatch(receiveActivePoll(rest));
       }
       return data.participant;
+    }, err => console.log(err.responseJSON));
+}
+
+export const fetchRecentPresentations = (type, id) => dispatch => {
+  return PresentationApiUtil.fetchRecentPresentations(type, id)
+    .then(data => {
+      dispatch(receiveRecentPresentations(data.recents));
     }, err => console.log(err.responseJSON));
 }

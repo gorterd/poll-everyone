@@ -1,7 +1,8 @@
 import React from 'react';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { checkIfUserExists, resetSessionErrors } from "../../actions/session_actions";
+import { fetchRecentPresentations } from '../../actions/presentation_actions';
 
 
 class ParticipantHome extends React.Component {
@@ -16,7 +17,9 @@ class ParticipantHome extends React.Component {
   };
 
   componentDidMount(){
-    this.props.resetSessionErrors();
+    const { currentType, currentId, resetSessionErrors, fetchRecentPresentations } = this.props;
+    resetSessionErrors();
+    fetchRecentPresentations(currentType, currentId);
   }
 
   handleChange(e){
@@ -55,7 +58,6 @@ class ParticipantHome extends React.Component {
                 <span>#/participate/</span>
                 <input
                   autoFocus
-                  autoComplete
                   className='participant-join-input'
                   type="text"
                   onChange={this.handleChange}
@@ -68,6 +70,15 @@ class ParticipantHome extends React.Component {
             <button type='submit' className='button-blue' disabled={errorMsg}>Join</button>
           </form>
         </div>
+        { this.props.recents.length ? <h3 className='recents-header'>Recent presentations</h3> : null}
+        <div className='recent-presentations'>
+          {this.props.recents.map( (username, idx) => {
+            return <Link key={idx} to={`/participate/${username}`}>
+              <span>#/participate/</span><span>{username}</span>
+            </Link>
+          })}
+
+        </div>
       </div>
     )
   }
@@ -76,7 +87,9 @@ class ParticipantHome extends React.Component {
 const mapState = state => {
   return {
     sessionErrors: state.errors.session,
-    sessionIsLoading: state.ui.sessionLoading,
+    currentType: state.session.currentType,
+    currentId: state.session.currentId,
+    recents: state.presentation.recents || []    
   }
 }
 
@@ -84,6 +97,7 @@ const mapDispatch = dispatch => {
   return {
     resetSessionErrors: () => dispatch(resetSessionErrors()),
     checkIfUserExists: usernameOrEmail => dispatch(checkIfUserExists(usernameOrEmail)),
+    fetchRecentPresentations: (type, id) => dispatch(fetchRecentPresentations(type, id))
   }
 }
 

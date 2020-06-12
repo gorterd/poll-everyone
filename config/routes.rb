@@ -69,6 +69,8 @@ Rails.application.routes.draw do
     end
 
     resources :answer_options, only: [:update, :destroy]
+
+    get 'participants/recents', to: 'participants#recents'
   end
 
 

@@ -96,3 +96,31 @@
 
 
 }
+
+.recents-header {
+  font-size: $fontsize-h4;
+  font-weight: 700;
+  color: white;
+  margin-top: 30px;
+}
+
+.recent-presentations {
+  background-color: rgba(0, 0, 0, 0.6);
+  border-radius: 5px;
+  width: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-top: 10px;
+
+  >* {
+    margin: 15px;
+    :first-child {
+      color: $light-grey;
+    }
+    :last-child {
+      color: white;
+      font-weight: 700;
+    }
+  }
+}
