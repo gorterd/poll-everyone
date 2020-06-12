@@ -15,9 +15,11 @@ export const concatIfNew = (array, el) => {
 
 export const twoTierMerge = (object_1, object_2) => {
   let clone = {};
-  Object.keys(object_1).concat(Object.keys(object_2)).forEach( key => 
-    ( clone[key] = Object.assign({}, object_1[key], object_2[key] ) )
-  )
+  
+  Object.keys(object_1).concat(Object.keys(object_2)).forEach( key => (
+    clone[key] = Object.assign( {}, object_1[key], object_2[key] ) 
+  )); 
+
   return clone;
 }
 

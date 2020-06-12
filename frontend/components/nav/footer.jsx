@@ -27,11 +27,11 @@ const Footer = () => {
       "RSpec",
     ],
     
-    "Knowledge": [
-      "Data Structures",
-      "RESTful Design",
-      "TDD",
-    ],
+    // "Knowledge": [
+    //   "Data Structures",
+    //   "RESTful Design",
+    //   "TDD",
+    // ],
     
     // "Skills & Traits": [
     //   "Attention to Detail",

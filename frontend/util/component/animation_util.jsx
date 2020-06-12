@@ -7,29 +7,31 @@ class AnimatedElement extends React.Component {
   }
   
   componentDidUpdate(prevProps){
-    if (this.props.exiting && !prevProps.exiting ){
-      if (this.props.exitAnimation) {
+    const { exiting, entering, exitAnimation } = this.props;
+
+    if ( exiting && !prevProps.exiting ){
+      if ( exitAnimation ) {
         window.setTimeout( () => {
-          this.setState({rendered: false});
-        }, parseInt(this.props.exitAnimation.animationDuration) - 20);
+          this.setState( {rendered: false} );
+        }, parseInt(exitAnimation.animationDuration) - 20);
       } else {
-        this.setState({rendered: false})
-      }
-    } else if (this.props.entering && !prevProps.entering ) {
+        this.setState( {rendered: false} );
+      };
+    } else if ( entering && !prevProps.entering ) {
       this.setState({rendered: true})
-    }
+    };
   }
   
   render(){
-    const {component, enterAnimation, exitAnimation, entering, exiting } = this.props;
+    const { component, entering, exiting, enterAnimation, exitAnimation } = this.props;
     
-    let style = {}
+    let style = {};
     if (entering) { Object.assign(style, enterAnimation) }
     if (exiting) { Object.assign(style, exitAnimation) }
     
     return ( 
       <div style={style}>
-        { this.state.rendered ? component : null}
+        { this.state.rendered ? component : null }
       </div>
     )
   }
