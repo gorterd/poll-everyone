@@ -13,6 +13,14 @@ export const fetchPoll = (pollId) => {
   });
 }
 
+export const fetchFullPoll = (pollId) => {
+  return $.ajax({
+    method: 'GET',
+    url: `/api/polls/${pollId}`,
+    data: { fullData: true }
+  });
+}
+
 export const updatePoll = (poll, pollId) => {
   return $.ajax({
     method: 'PATCH',

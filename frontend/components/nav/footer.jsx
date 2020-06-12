@@ -33,11 +33,11 @@ const Footer = () => {
       "TDD",
     ],
     
-    "Skills & Traits": [
-      "Attention to Detail",
-      "Resourcefulness",
-      "Curiosity",
-    ]
+    // "Skills & Traits": [
+    //   "Attention to Detail",
+    //   "Resourcefulness",
+    //   "Curiosity",
+    // ]
   };
 
   let linkLists = [];

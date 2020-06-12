@@ -2,6 +2,7 @@ import * as PollsApiUtil from '../util/api/polls_api_util';
 
 export const RECEIVE_POLLS = 'RECEIVE_POLLS';
 export const RECEIVE_POLL = 'RECEIVE_POLL';
+export const RECEIVE_FULL_POLL = 'RECEIVE_FULL_POLL';
 
 export const receivePolls = polls => {
   return {
@@ -17,11 +18,30 @@ export const receivePoll = data => {
   }
 }
 
+export const receiveFullPoll = data => {
+  return {
+    type: RECEIVE_FULL_POLL,
+    data
+  }
+}
+
 export const fetchPoll = (pollId) => dispatch => {
   return PollsApiUtil.fetchPoll(pollId)
     .then(
       data => {
         dispatch(receivePoll(data));
+      }, err => {
+        console.log(err.responseJSON);
+      }
+    );
+}
+
+export const fetchFullPoll = (pollId) => dispatch => {
+  return PollsApiUtil.fetchFullPoll(pollId)
+    .then(
+      data => {
+        dispatch(receiveFullPoll(data));
+        return data.poll;
       }, err => {
         console.log(err.responseJSON);
       }

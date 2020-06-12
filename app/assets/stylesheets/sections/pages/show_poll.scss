@@ -1,0 +1,50 @@
+.show-poll-container {
+  $offset: 72px;
+  @include fullpage($offset);
+  background: white;
+
+  display: flex;
+  align-items: stretch;
+}
+
+.show-poll-left {
+  overflow: scroll;
+  flex: 1;
+  background: $medium-grey;
+  display: flex;
+  flex-direction: column;
+  padding: 32px;
+
+  // .graph-container {
+
+  // }
+
+  // .graph {
+
+  // }
+}
+
+.show-poll-right {
+  background-color: white;
+  width: 400px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+
+  .show-poll-executive-commands {
+    width: 100%;
+    height: 50px;
+    display: flex;
+
+    > * {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .button-transparent {
+      border-top: 1px solid $light-grey;
+    }
+  }
+}

@@ -1,6 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import App from './app';
+import { Switch, Route } from 'react-router-dom';
+import ParticipantApp from './participant/participant_app';
 
 class AppContainer extends React.Component {
   
@@ -25,7 +27,12 @@ class AppContainer extends React.Component {
 
     return (
       <section className={'app' + (klass || '')} style={style}>
-        <App />
+        <Switch>
+          <Route path='/participate'>
+            <ParticipantApp />
+          </Route>
+          <App />
+        </Switch>
       </section>
     );
   }

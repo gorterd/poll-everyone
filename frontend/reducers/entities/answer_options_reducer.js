@@ -1,4 +1,4 @@
-import { RECEIVE_POLL } from '../../actions/poll_actions';
+import { RECEIVE_POLL, RECEIVE_FULL_POLL } from '../../actions/poll_actions';
 import {
   RECEIVE_ACTIVE_POLL,
   RECEIVE_RESPONSE,
@@ -11,8 +11,10 @@ export default (state = {}, action) => {
   let oldAnswerOption, newAnswerOption;
   switch (action.type) {
     case RECEIVE_POLL:
-      return Object.assign({}, action.data.answerOptions );
+      return Object.assign({}, state, action.data.answerOptions );
     case RECEIVE_ACTIVE_POLL:
+      return Object.assign({}, state, action.data.answerOptions );
+    case RECEIVE_FULL_POLL:
       return Object.assign({}, state, action.data.answerOptions );
     case RECEIVE_RESPONSE:
       newAnswerOption = state[action.response.answerOptionId] ||

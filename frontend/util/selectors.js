@@ -63,5 +63,20 @@ export const participantPollData = state => {
   return { activePoll, ownResponses, activeAnswerOptions };
 }
 
+export const presenterPollData = (state, pollId) => {
+  const { entities: { polls, answerOptions, responses } } = state;
+  const poll = polls[pollId];
 
-window.participantPollData = participantPollData;
+  let fullAnswerOptions;
+  if (poll && poll.answerOptionIds) {
+    let orderedAnswerOptions = getOrderedAnswerOptions(poll, answerOptions);
+
+    fullAnswerOptions = orderedAnswerOptions.map(option => {
+      return Object.assign({}, option, { 
+        responses: optionResponses(option, Object.values(responses)) });
+      });
+  };
+
+  return { poll, fullAnswerOptions };
+}
+

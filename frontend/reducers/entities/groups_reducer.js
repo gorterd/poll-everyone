@@ -20,8 +20,7 @@ export default (state = {}, action) => {
         newGroup = Object.assign({}, group, { pollIds: newPollIds })
       } else {
         newGroup = { pollIds: [poll.id] };
-      }
-  
+      } 
       return Object.assign({}, state, { [poll.groupId]: newGroup  });
     default:
       return state;

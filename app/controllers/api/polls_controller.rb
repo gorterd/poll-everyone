@@ -5,7 +5,7 @@ class Api::PollsController < ApplicationController
     ensure_current_user(@group.user.id)
   end
 
-  before_action only: [:show, :destroy, :duplicate] do 
+  before_action only: [:destroy, :duplicate] do 
     @poll = Poll.find_by(id: params[:id])
     ensure_current_user(@poll.user.id)
   end
@@ -16,7 +16,37 @@ class Api::PollsController < ApplicationController
   end
 
   def show
-    render :show
+    if snake_params[:full_data]
+      @poll = Poll.includes(answer_options: :responses).find_by(id: params[:id])
+      ensure_current_user(@poll.user.id)
+      render partial: 'api/polls/full_data.json.jbuilder', locals: { poll: @poll }
+    else
+      @poll = Poll.find_by(id: params[:id])
+      ensure_current_user(@poll.user.id)
+      render :show
+    end
+  end
+
+  def presentation
+    @user = User.find_by(username: params[:username])
+
+    @participant = Participant.find_or_create_by(
+      participatable_id: params[:id], 
+      participatable_type: params[:type], 
+      presenter_id: @user.id
+    )
+
+    unless @user && @participant
+      render json: ['Could not find user'], status: 422
+    end
+
+    @participant.touch
+  
+    if @poll = @user.active_poll
+      render :presentation 
+    else
+      render 'api/participants/show'
+    end
   end
 
   def create

@@ -77,6 +77,13 @@ class ParticipantPoll extends React.Component {
     }
   }
 
+  componentWillUnmount() {
+    if (this.state.subscription) {
+      this.state.subscription.unsubscribe();
+    }
+  }
+
+
   receiveBroadcast(broadcast){
     const response = JSON.parse(broadcast.data);
     switch (broadcast.type){
