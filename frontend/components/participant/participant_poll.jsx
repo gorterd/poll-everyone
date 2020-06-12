@@ -21,6 +21,8 @@ class ParticipantPoll extends React.Component {
     super(props);
 
     this.state = { subscription: null }
+    this.animate = false;
+
     this.receiveBroadcast = this.receiveBroadcast.bind(this);
     this.clickAnswerOption = this.clickAnswerOption.bind(this);
     this.clearLastResponse = this.clearLastResponse.bind(this);
@@ -62,8 +64,17 @@ class ParticipantPoll extends React.Component {
         }
       }
     );
+    
+    this.setState({subscription}, () => this.animate = true )
+  }
 
-    this.setState({subscription})
+  componentDidUpdate(prevProps, prevState){
+    const { activePoll } = this.props;
+    const { subscription } = this.state;
+    if ((activePoll && subscription) && !(prevProps.activePoll && prevState.subscription) ){
+      this.animate = false;
+      window.setTimeout ( () => (this.animate = true), 150);
+    }
   }
 
   receiveBroadcast(broadcast){
@@ -119,7 +130,7 @@ class ParticipantPoll extends React.Component {
       const { title, numResponsesAllowed } = activePoll;
       const responsesRemaining = numResponsesAllowed - ownResponses.length;
       const disabledAnswer = responsesRemaining < 1;
-      const disabledClear = responsesRemaining === numResponsesAllowed;
+      const disabledClear = (ownResponses.length === 0);
       const subText = this._getSubText(responsesRemaining, numResponsesAllowed);
 
       const options = activeAnswerOptions.map( option => (
@@ -130,7 +141,10 @@ class ParticipantPoll extends React.Component {
                 this.clickAnswerOption(option.id);
               }
             }}
-            className='answer-option-button'
+            className={'answer-option-button' 
+              + (option.numOwnResponses ? ' answered' : '')
+              + ( this.animate ? ' animate' : '')
+            }
             disabled={disabledAnswer}
           >
             <span className='num-responses'>{option.numOwnResponses}</span>
@@ -147,7 +161,7 @@ class ParticipantPoll extends React.Component {
             {options}
           </ul>
           <button 
-            className='button-blue' 
+            className='button-clear' 
             disabled={disabledClear}
             onClick={this.clearLastResponse}
           >Clear last response</button>

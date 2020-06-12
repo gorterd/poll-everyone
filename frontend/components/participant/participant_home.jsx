@@ -65,7 +65,7 @@ class ParticipantHome extends React.Component {
               </div>
               {errorMsg ? <div className="large-input-error-msg">{errorMsg}</div> : null}
             </div>
-            <button type='submit' className='button-transparent' disabled={errorMsg}>Join</button>
+            <button type='submit' className='button-blue' disabled={errorMsg}>Join</button>
           </form>
         </div>
       </div>
