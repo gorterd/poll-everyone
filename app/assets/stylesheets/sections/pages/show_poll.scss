@@ -10,18 +10,11 @@
 .show-poll-left {
   overflow: scroll;
   flex: 1;
-  background: $medium-grey;
   display: flex;
   flex-direction: column;
   padding: 32px;
+  background-color: $light-grey;
 
-  // .graph-container {
-
-  // }
-
-  // .graph {
-
-  // }
 }
 
 .show-poll-right {

@@ -68,6 +68,10 @@ class Poll < ApplicationRecord
 
   #instance methods
 
+  def count_responses
+    self.responses.count
+  end
+
   def toggle_active
     Poll.transaction do
       if prev_active = self.user.active_poll

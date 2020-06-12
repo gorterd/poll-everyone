@@ -128,7 +128,9 @@ class EditPoll extends React.Component {
 
     const formData = Object.assign({}, this.state.formData, { answerOptionsAttributes });
 
-    this.props.updatePoll(formData, this.props.pollId).then( () => this.props.history.push('/polls'));
+    this.props.updatePoll(formData, this.props.pollId).then( () => {
+      this.props.history.goBack();
+    });
   }
 
   validateSubmit() {

@@ -1,6 +1,6 @@
 import React from 'react';
 import { presenterPollData } from '../../../util/selectors';
-import { updatePoll, fetchFullPoll, toggleActive } from '../../../actions/poll_actions'
+import { fetchFullPoll, toggleActive } from '../../../actions/poll_actions'
 import { connect } from 'react-redux';
 import { withRouter, Link } from 'react-router-dom';
 import { 
@@ -9,7 +9,14 @@ import {
   receiveResponse, 
   clearResponse } 
 from '../../../actions/presentation_actions';
-import { batchDestroy } from '../../../actions/group_actions';
+import { standardGraph } from '../../../util/data_formats_util';
+import { 
+  BarChart, 
+  XAxis, 
+  YAxis, 
+  Bar, 
+  LabelList,
+} from 'recharts'
 
 const POLL = 'POLL';
 const RESPONSE = 'RESPONSE';
@@ -87,30 +94,29 @@ class PresentPoll extends React.Component {
 
   render() {
 
-    const { subscription } = this.state;
-    const { pollId, poll, history, fullAnswerOptions } = this.props;
+    const { pollId, poll, history, formattedData } = this.props;
 
-    // if (poll) { debugger;}
-    const renderedContent = (poll) ? (
-        <div className='unformatted-data'>
-          <h3>{poll.title}</h3>
-          <ul>
-            { fullAnswerOptions ? fullAnswerOptions.map(option => (
-              <li key={option.id}>
-                <span className='num-responses'>{option.responses.length}</span>
-                <span className='answer-body'>{option.body}</span>
-              </li>
-            )) : null }
-          </ul>
-        </div>
-      ) : null;
+    const graph = formattedData ? (
+      <BarChart width={700} height={560} data={formattedData} layout="vertical" margin={{left: 150}}>
+        <XAxis type="number" hide={true}/>
+        <YAxis dataKey="key" tick={false} type="category" axisLine={{ strokeWidth: 3, stroke: "#6b99c7"}} />
+        <Bar dataKey="percent" fill="#6b99c7" >
+          <LabelList dataKey="percentString" position="insideRight" formatter={ v => v==='0%' ? '' : v}
+            style={{ fontSize: 45,  fill: "#ffffff"}}/>
+          <LabelList dataKey="key" position="left" 
+            style={{ fontSize: 45, fontWeight: 700 }}
+          />
+        </Bar>
+      </BarChart>
+    ) : <div className='empty-graph'></div>
 
+    
     return (
       <section className='show-poll-container'>
         <div className='show-poll-left'>
           <div className='graph-container'>
             <div className='graph'>
-              {renderedContent}
+              {graph}
             </div>
           </div>
         </div>
@@ -139,10 +145,11 @@ class PresentPoll extends React.Component {
 const mapState = (state, ownProps) => {
   const pollId = ownProps.match.params.pollId;
   const { poll, fullAnswerOptions } = presenterPollData(state, pollId);
-  
+  const formattedData = standardGraph(fullAnswerOptions);
+
   return {
     currentId: state.session.currentId,
-    pollId, poll, fullAnswerOptions
+    pollId, poll, fullAnswerOptions, formattedData
   }
 }
 

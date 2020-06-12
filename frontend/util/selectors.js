@@ -35,7 +35,7 @@ const findActivePoll = state => {
 }
 
 const optionResponses = (option, responses) => {
-  return responses.filter(response => option.responseIds.includes(response.id));
+  return option.responseIds ? (responses.filter(response => option.responseIds.includes(response.id))) : null;
 }
 
 const getOwnResponses = state => {

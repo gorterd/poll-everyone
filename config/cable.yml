@@ -6,5 +6,4 @@ test:
 
 production:
   adapter: redis
-  url: <%= ENV.fetch("REDIS_URL") { "redis://localhost:6379/1" } %>
-  channel_prefix: poll-everyone_production
+  url: redis://redistogo:8eb9cdb432a89e3dcb683ecf4bea4d0c@pike.redistogo.com:9640/

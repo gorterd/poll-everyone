@@ -128,7 +128,6 @@ class ParticipantPoll extends React.Component {
 
   render() {
     const { activePoll, ownResponses, activeAnswerOptions, participant } = this.props;
-    const { subscription } = this.state;
     const username = this.props.match.params.username;
 
     let renderedContent;

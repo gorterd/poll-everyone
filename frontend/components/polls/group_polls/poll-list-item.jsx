@@ -12,6 +12,8 @@ const PollListItem = ({
 
   const activeClass = poll.active ? ' activated' : '';
   const titleText = poll.title.length > 96 ? (poll.title.slice(0,92) + '. . .') : poll.title
+  const numResponsesText = poll.numResponses ? `${poll.numResponses} response${poll.numResponses > 1 ? 's' : ''}` 
+    : 'No responses';
 
   return (
     <li className={'poll-list-item group-polls-row' + activeClass}>
@@ -28,7 +30,7 @@ const PollListItem = ({
         <span className='activate-icon poll-list-item-icon' onClick={() => toggleActive(poll.id)}>
           <i className="fas fa-broadcast-tower"></i>
         </span>
-        <span className="poll-row-responses">No responses</span>
+        <span className="poll-row-responses">{numResponsesText}</span>
       </div>
     </li>
   )
