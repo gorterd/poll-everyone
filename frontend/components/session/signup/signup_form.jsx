@@ -52,6 +52,7 @@ class SignupForm extends React.Component {
     }
   }
 
+  //GH
   handleInput(field) {
     return e => {
       const value = (field === 'terms') ? e.target.checked : e.target.value;

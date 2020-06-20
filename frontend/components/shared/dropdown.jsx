@@ -15,6 +15,7 @@ class DropdownWrapper extends React.Component {
     this.disableUnfocus = true;
   }
 
+  //GH
   clearDropdown() {
     this.disableUnfocus = false;
     window.setTimeout(() => {
