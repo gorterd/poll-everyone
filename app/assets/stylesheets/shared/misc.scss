@@ -38,3 +38,9 @@ h3 {
   min-height: 0;
 }
 
+@mixin flex-center(){
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+

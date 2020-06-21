@@ -19,6 +19,8 @@ import GroupsIndexContainer from './polls/groups_index/groups_index_container';
 import { AuthRoute, ProtectedRoute } from '../util/component/routes_util';
 import { Modal } from './polls/modals/modal';
 
+import ReportsIndex from './reports/reports_index'
+
 
 const App = () => {
   return (
@@ -31,17 +33,21 @@ const App = () => {
           <Navbar relativeRootPath={'/'} additionalClasses='nav-sticky' links={[]} tools={[]}/>
         </Switch>
 
-        <Route exact path={['/polls', '/polls/new']}>
+        <ProtectedRoute exact path='/polls'>
           <GroupsIndexContainer />
-        </Route>
+        </ProtectedRoute>
 
-        <Route path='/polls/:pollId/edit'>
+        <ProtectedRoute path='/polls/:pollId/edit'>
           <EditPoll />
-        </Route>
+        </ProtectedRoute>
 
-        <Route path='/polls/:pollId/show'>
+        <ProtectedRoute path='/polls/:pollId/show'>
           <PresentPoll />
-        </Route>
+        </ProtectedRoute>
+
+        <ProtectedRoute exact path='/reports'>
+          <ReportsIndex />
+        </ProtectedRoute>
 
         <Route exact path='/'>
           <HomeSplash />

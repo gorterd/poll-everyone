@@ -13,6 +13,10 @@
     align-items: center;
     background-color: $light-grey;
   }
+
+  form {
+    position: relative;
+  }
 }
 
 .group-search-input {
@@ -49,9 +53,23 @@
     padding: 0 10px;
     color: $charcoal;
 
-    &:hover {
+    &:hover, &.focused {
       background-color: $light-grey;
       cursor: pointer;
     }
+  }
+}
+
+.clear-group-search {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-40%);
+  font-size: 1.4rem;
+  color: $soft-grey;
+
+  &:hover {
+    cursor: pointer;
+    color: $brick-red-hover;
   }
 }

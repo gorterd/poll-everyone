@@ -26,7 +26,7 @@ const SignupSplash = () => {
       <div className="signup-div-right">
         <div className="signup-div-text">
           <h1>Participate in a presentation</h1>
-          <a className="button button-blue">I'm a participant</a>
+          <Link to='/participate' className="button button-blue">I'm a participant</Link>
         </div>
       </div>
     </section>

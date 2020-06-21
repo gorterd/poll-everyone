@@ -11,12 +11,11 @@ const AppNavbarDropdown = ({currentUser, logout, history}) => {
 
   const Button = () => <span className='nav-tool'>
     {currentUser.username} 
-    <span>  &#x2699;</span>
+    <span>⚙</span>
   </span>
 
   const Dropdown = () => (
     <ul className='navbar-dropdown'>
-      <li className="dropdown-li"><Link className="dropdown-item" to="/account">My settings</Link></li>
       <li className="dropdown-li"><span className="dropdown-item" onClick={handleLogout}>Log out</span></li>
     </ul>
   )

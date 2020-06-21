@@ -21,7 +21,7 @@ class GroupsIndexToolbar extends React.Component {
 
   componentDidMount() {
     this.scrollListener = window.addEventListener('scroll', _throttle(() => { this.handleScroll() },
-      20, { leading: false, trailing: true }));
+      16));
   }
 
   componentWillUnmount(){
