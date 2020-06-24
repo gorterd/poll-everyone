@@ -45,10 +45,6 @@ const App = () => {
           <PresentPoll />
         </ProtectedRoute>
 
-        <ProtectedRoute exact path='/reports'>
-          <ReportsIndex />
-        </ProtectedRoute>
-
         <Route exact path='/'>
           <HomeSplash />
         </Route>

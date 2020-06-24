@@ -6,7 +6,6 @@ import AppNavbarDropdown from './app_navbar_dropdown';
 const AppNavbar = ({modalType, stickyToolbar, closeModal, ...rest}) => {
   const links = [
     <NavLink activeClassName="navbar-active" to='/polls'>Polls</NavLink>,
-    <NavLink activeClassName="navbar-active" to='/reports'>Reports</NavLink>
   ];
 
   const tools = [<AppNavbarDropdown {...rest} />];
