@@ -23,6 +23,8 @@ class GroupSearch extends React.Component {
     this.leaveInput = this.leaveInput.bind(this);
     this.toggleDrawer = this.toggleDrawer.bind(this);
     this.unfocus = this.unfocus.bind(this);
+    this.focusInput = this.focusInput.bind(this);
+    this.clearSearch = this.clearSearch.bind(this);
   };
 
   clickGroup(group) {
@@ -117,6 +119,19 @@ class GroupSearch extends React.Component {
     this.setState({ groupsOpen: !this.state.groupsOpen })
   }
 
+  focusInput(e){
+    this.disableUnfocus = true;
+    this.inputFocused = true;
+    this.searchHandler(e);
+  }
+
+  clearSearch(){
+    this.search.focus();
+    this.disableUnfocus = true;
+    this.inputFocused = true;
+    this.setState({ searching: true, query: '', matchingGroups: [], focusIndex: null })
+  }
+
   unfocus(){
     this.disableUnfocus = false;
     window.setTimeout( () => {
@@ -174,19 +189,12 @@ class GroupSearch extends React.Component {
             tabIndex='1'
             onChange={this.searchHandler}
             onBlur={this.leaveInput}
-            onFocus={ e => {
-              this.disableUnfocus = true;
-              this.inputFocused = true;
-              this.searchHandler(e);
-            }}
+            onFocus={this.focusInput}
             onKeyDown={this.handleKeyDown}
           />
-          <span className='clear-group-search' onClick={(e) =>{
-            this.search.focus();
-            this.disableUnfocus = true;
-            this.inputFocused = true;
-            this.setState({searching: true, query: '', matchingGroups: [], focusIndex: null})
-          }}><i className="fas fa-times"></i></span>
+          <span className='clear-group-search' onClick={this.clearSearch}>
+            <i className="fas fa-times"></i>
+          </span>
         </form>
 
         <button onClick={this.toggleDrawer} className='button-grey'>
