@@ -6,11 +6,12 @@ class GroupSearch extends React.Component {
 
     this.state = {
       query: '',
-      groupsOpen: false,
       matchingGroups: [],
       searching: false,
+      groupsOpen: false,
       focusIndex: null
     }
+
     this.disableUnfocus = false;
     this.inputFocused = false;
     this.groupListItems = [];
@@ -56,6 +57,7 @@ class GroupSearch extends React.Component {
     
     if ( groupsOpen ) {
       let newFocusIndex = focusIndex;
+      let listItem;
       switch (e.key) {
         case 'ArrowDown':
           e.preventDefault();
@@ -64,17 +66,24 @@ class GroupSearch extends React.Component {
           } else if (focusIndex === null){
             newFocusIndex = 0;
           }
-          console.log(`Key down! index: ${newFocusIndex}`)
-          this.groupListItems[newFocusIndex].scrollIntoView(false);
+          listItem = this.groupListItems[newFocusIndex];
+          this._scrollIntoView(listItem, false);
           break;
         case 'ArrowUp':
           e.preventDefault();
           if (focusIndex !== null & focusIndex > 0) {
             newFocusIndex = focusIndex - 1;
-          } 
-          console.log(`Key up! index: ${newFocusIndex}`)
-          this.groupListItems[newFocusIndex].scrollIntoView();
+          }
+          listItem = this.groupListItems[newFocusIndex];
+          this._scrollIntoView(listItem);
           break;
+        case 'Tab':
+          const { focusOnTab } = this.props;
+          if(focusOnTab){
+            e.preventDefault();
+            focusOnTab.disabled = false;
+            focusOnTab.focus();
+          }
       }
       this.setState({ focusIndex: newFocusIndex });
     }
@@ -84,15 +93,12 @@ class GroupSearch extends React.Component {
   leaveInput(e) {
     const { focusIndex, matchingGroups } = this.state;
     const drawerGroups = matchingGroups.length ? matchingGroups : this.props.groups;
-    console.log('leave input');
     this.inputFocused = false;
     let query = e.target.value;
    
     let focusedGroup = drawerGroups[focusIndex];
 
     window.setTimeout ( () => {
-      console.log('leaving input')
-      // debugger;
       if (!this.disableUnfocus){
         if (focusedGroup){
           this.submitGroup(focusedGroup.title);
@@ -107,21 +113,34 @@ class GroupSearch extends React.Component {
   }
 
   toggleDrawer() {
-    console.log('toggle drawer')
     this.disableUnfocus = true;
     this.setState({ groupsOpen: !this.state.groupsOpen })
   }
 
   unfocus(){
-    console.log('unfocus')
     this.disableUnfocus = false;
     window.setTimeout( () => {
       if (!this.disableUnfocus && !this.inputFocused) {
-        console.log('unfocusing')
         this.setState({ groupsOpen: false, matchingGroups: [], focusIndex: null,  });
       }
       this.disableUnfocus = false;
     }, 50);
+  }
+
+  _scrollIntoView(listItem, up = true){
+    const list = listItem.parentElement;
+    const itemTop = listItem.offsetTop;
+    const itemBottom = itemTop + listItem.offsetHeight;
+
+    if (up && (list.scrollTop > itemTop)){
+      list.scrollTop = itemTop;
+    } else if ( !up ){
+      if (window.innerHeight < list.getBoundingClientRect().bottom){
+        listItem.scrollIntoView(false);
+      } else if (itemBottom > list.scrollTop + list.offsetHeight) {
+        list.scrollTop = itemBottom - list.offsetHeight;
+      }
+    }
   }
 
   render() {

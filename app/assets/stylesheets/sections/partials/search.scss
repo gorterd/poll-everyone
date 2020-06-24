@@ -65,11 +65,11 @@
   right: 15px;
   top: 50%;
   transform: translateY(-40%);
-  font-size: 1.4rem;
-  color: $soft-grey;
+  font-size: 1.2rem;
+  color: $light-grey;
 
   &:hover {
     cursor: pointer;
-    color: $brick-red-hover;
+    color: $brick-red;
   }
 }

@@ -55,12 +55,23 @@ class MoveDrawer extends React.Component {
                 setGroup={this.setGroup}
                 groups={groups}
                 placeholderText='Search group name'
+                focusOnTab={ numSelections ? this.moveButton : this.cancelButton }
               />
             </div>
 
             <div className='move-buttons'>
-              <button className='button-blue' onClick={this.movePolls} disabled={disabled}>{buttonText}</button>
-              <button className='button-transparent' onClick={toggleVisible}>Cancel</button>
+              <button 
+                className='button-blue' 
+                onClick={this.movePolls} 
+                ref={e => this.moveButton = e }
+                disabled={disabled}
+                >{buttonText}</button>
+
+              <button 
+                className='button-transparent' 
+                onClick={toggleVisible}
+                ref={e => this.cancelButton = e }
+              >Cancel</button>
             </div>
           </div>
         </div>

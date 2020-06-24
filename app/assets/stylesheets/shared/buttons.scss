@@ -11,7 +11,7 @@ button {
   background-color: $bkgnd-color;
   color: $txt-color;
 
-  &:hover {
+  &:hover, &:focus {
     background-color: $hover-color;
   }
 }
