@@ -115,3 +115,4 @@ class Api::PollsController < ApplicationController
     )
   end
 end
+
