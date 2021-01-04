@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { presenterPollData } from '../../../util/curried_selectors';
 import { fetchFullPoll, toggleActive } from '../../../actions/poll_actions'
 import { useDispatch, useSelector } from 'react-redux';
@@ -17,6 +17,7 @@ import {
   YAxis, 
   Bar, 
   LabelList,
+  ResponsiveContainer
 } from 'recharts';
 import { usePrevious } from '../../../util/custom_hooks';
 
@@ -28,6 +29,8 @@ export default function PresentPoll() {
   const prevFormattedData = usePrevious(formattedData);
   const history = useHistory();
   const dispatch = useDispatch();
+  const graphContainer = useRef();
+  const [graphDimensions, setGraphDimensions ] = useState(null);
 
   useEffect( () => {
     dispatch(fetchFullPoll(pollId)).then(poll => {
@@ -36,6 +39,15 @@ export default function PresentPoll() {
     
     return () => subscription?.unsubscribe();
   }, []);
+
+  useEffect( () => {
+    const { width, height } = graphContainer.getClientBoundingRec();
+    setGraphDimensions({ height, width });
+
+    
+
+    return 
+  })
 
   let subscription = null;
 
@@ -71,9 +83,6 @@ export default function PresentPoll() {
   }
 
   function generateGraph(){
-    const { formattedData } = this.props;
-    const { graphWidth, graphHeight } = this.state;
-
     const largeFont = 45;
     const defaultMargin = 150;
     const yAxisLine = {
@@ -86,13 +95,55 @@ export default function PresentPoll() {
       return maxBody.length > answerData.body.length ? maxBody : answerData.body;
     }, 0);
 
-    const leftFontSize = true ? largeFont : largeFont - (maxSize * 0.5);
-    const leftMargin = maxBody.length > 30 ? defaultMargin : defaultMargin + maxSize * 3;
+    const leftFontSize = largeFont;
+    const leftMargin = maxBody.length > 30 ? defaultMargin : defaultMargin;
 
     const keyRender = (props) => {
-      const { x, y, height, width, value } = props;
+      const { x, y, height, width } = props;
+      const [ key, body, percent ] = JSON.parse(props.payload.value);
 
-      const hasRect = Boolean(width);
+      console.log(props);
+      return (
+        <g>
+          <text
+            style={{ fontSize: largeFont, fontWeight: 700 }}
+            textAnchor="end"
+            dy="0.31em"
+
+            height={props.height}
+            width={props.width}
+            x={props.x}
+            y={props.y}
+          >
+            {body}
+          </text>
+          {percent && <rect
+            x={x + 10} y={y - 25}
+            width="2em"
+            height={50}
+            fill={"#b5cce3"}
+          >
+          </rect>}
+          <text
+            style={{ fontSize: largeFont, fontWeight: 700 }}
+            textAnchor="start"
+            x={x + 12} y={y}
+            dy="0.31em"
+            width="1em"
+            className="recharts-text recharts-label"
+            height={0.6 * height}
+          >
+            {key}
+          </text>
+        </g>
+
+      )
+    }
+    const barKeyRender = (props) => {
+      if (!props.width) return;
+
+      const { x, y, height, value } = props;
+
       console.log(props);
       return (
         <g>
@@ -100,13 +151,13 @@ export default function PresentPoll() {
             x={x + 10} y={y + 0.2 * height}
             width="2em"
             height={0.6 * height}
-            fill={hasRect ? "#b5cce3" : "rgba(0,0,0,0)"}
+            fill={"#b5cce3"}
           >
           </rect>
           <text
             style={{ fontSize: largeFont, fontWeight: 700 }}
             textAnchor="start"
-            x={x + 12} y={y + height / 2}
+            x={x + 12} y={y + height/2}
             dy="0.31em"
             width="1em"
             className="recharts-text recharts-label"
@@ -120,29 +171,18 @@ export default function PresentPoll() {
     }
 
     const bodyRender = (props) => {
-      const { x, y, height, width, value } = props;
-
-      const hasRect = Boolean(width);
+      const [key, body] = JSON.parse(props.payload.value);
       console.log(props);
       return (
         <g>
-          <rect
-            x={x + 10} y={y + 0.2 * height}
-            width="2em"
-            height={0.6 * height}
-            fill={hasRect ? "#b5cce3" : "rgba(0,0,0,0)"}
-          >
-          </rect>
           <text
-            style={{ fontSize: largeFont, fontWeight: 700 }}
-            textAnchor="start"
-            x={x + 12} y={y + height / 2}
-            dy="0.31em"
-            width="1em"
-            className="recharts-text recharts-label"
-            height={0.6 * height}
+            textAnchor={props.textAnchor}
+            height={props.height}
+            width={props.width}
+            x={props.x}
+            y={props.y}
           >
-            {value}
+            {props.payload.value}
           </text>
         </g>
 
@@ -151,62 +191,87 @@ export default function PresentPoll() {
 
     return (
       <ResponsiveContainer width="100%" height="100%">
-        <BarChart data={formattedData} layout="vertical" margin={{ left: leftMargin }}>
+        <BarChart 
+          data={formattedData} 
+          layout="vertical" 
+          margin={{ left: leftMargin }}
+        >
           <XAxis type="number" hide={true} />
-          <YAxis tick={false} type="category" axisLine={yAxisLine} />
-          <Bar dataKey="percent" fill={barFill} >
-            <LabelList dataKey="percentString" position="insideRight" formatter={v => v === '0%' ? '' : v}
-              style={{ fontSize: largeFont, fill: "#ffffff" }} />
+
+          <Bar 
+            dataKey="percent" 
+            fill={barFill} 
+            isAnimationActive={!isEqual(prevFormattedData, formattedData)}
+          >
+            <LabelList 
+              dataKey="percentString" 
+              position="insideRight" 
+              formatter={v => v === '0%' ? '' : v}
+              style={{ fontSize: largeFont, fill: "#ffffff" }} 
+            />
             {/* <LabelList dataKey="key" position="insideLeft"
               style={{ fontSize: largeFont, fontWeight: 700 }}
             /> */}
-            <LabelList dataKey="key" content={keyRender} />
-            <LabelList dataKey="body" position="left"
-              style={{ fontSize: leftFontSize, fontWeight: 700 }}
-            />
+            {/* <LabelList dataKey="key" content={barKeyRender} /> */}
           </Bar>
+            {/* <LabelList 
+              dataKey="body" 
+              position="left"
+              style={{ fontSize: leftFontSize, fontWeight: 700 }}
+            /> */}
+          <YAxis
+            dataKey="label"
+            tickLine={false}
+            type="category"
+            axisLine={yAxisLine}
+            position="insideLeft"
+            // tick={{ style: { fontSize: 45, fontWeight: 700, fill: 'black' } }}
+            tick={keyRender}
+          />
         </BarChart>
       </ResponsiveContainer>
     );
   }
 
-  const graph = formattedData ? (
-    <BarChart 
-      data={formattedData} 
-      layout="vertical" 
-      margin={{ left: 150 }}
-      width={700} 
-      height={560} 
-    >
-      <XAxis type="number" hide={true} />
-      <YAxis 
-        dataKey="key" 
-        tickLine={false} 
-        type="category" 
-        axisLine={{ strokeWidth: 3, stroke: "#6b99c7" }} 
-        tick={{ style: { fontSize: 45, fontWeight: 700 } }}
-      />
-      <Bar 
-        dataKey="percent" 
-        fill="#6b99c7"  
-        isAnimationActive={!isEqual(prevFormattedData, formattedData)}
-      >
-        <LabelList 
-          dataKey="percentString" 
-          position="insideRight" 
-          style={{ fontSize: 45, fill: "#ffffff" }} 
-          formatter={v => v === '0%' ? '' : v} 
-        />
-      </Bar>
-    </BarChart>
-  ) : <div className='empty-graph'></div>
+  const graph = formattedData ? generateGraph()
+  // (
+  //   <BarChart 
+  //     data={formattedData} 
+  //     layout="vertical" 
+  //     margin={{ left: 150 }}
+  //     width={700} 
+  //     height={560} 
+  //   >
+  //     <XAxis type="number" hide={true} />
+  //     <YAxis 
+  //       dataKey="key" 
+  //       tickLine={false} 
+  //       type="category" 
+  //       axisLine={{ strokeWidth: 3, stroke: "#6b99c7" }} 
+        // tick={{ style: { fontSize: 45, fontWeight: 700 } }}
+  //     />
+  //     <Bar 
+  //       dataKey="percent" 
+  //       fill="#6b99c7"  
+  //       isAnimationActive={!isEqual(prevFormattedData, formattedData)}
+  //     >
+  //       <LabelList 
+  //         dataKey="percentString" 
+  //         position="insideRight" 
+  //         style={{ fontSize: 45, fill: "#ffffff" }} 
+  //         formatter={v => v === '0%' ? '' : v} 
+  //       />
+  //     </Bar>
+  //   </BarChart>
+  // ) 
+  : <div className='empty-graph'></div>
 
   const toggleActiveText = poll?.active ? 'Deactivate' : 'Activate';
 
   return (
     <section className='show-poll-container'>
       <div className='show-poll-left'>
-        <div className='graph-container'>
+        <div className='graph-container' ref={graphContainer}>
           <div className='graph'>
             {graph}
           </div>

@@ -7,7 +7,9 @@ export const standardGraph = (options, settings = {}) => {
     const {ord, body, correct } = option;
     const key = String.fromCharCode(parseInt(ord) + 65);
     const percent = Math.round(100 * (option.responses.length / numResponses));
-    const percentString = `${percent}%`
-    return { key, body, correct, percent, percentString, zero: 0 }
+    const percentString = `${percent}%`;
+    const label = JSON.stringify([key, body, percent]);
+    // return { key, body, correct, percent, percentString, zero: 0 }
+    return { label, key, body, correct, percent, percentString }
   })
 }
