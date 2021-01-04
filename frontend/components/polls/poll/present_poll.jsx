@@ -17,7 +17,6 @@ import {
   YAxis, 
   Bar, 
   LabelList,
-  Label
 } from 'recharts';
 import { usePrevious } from '../../../util/custom_hooks';
 
