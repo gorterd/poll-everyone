@@ -1,5 +1,5 @@
 import React from 'react';
-import _throttle from 'lodash.throttle';
+import { throttle } from 'lodash';
 
 import DropdownWrapper from '../../shared/dropdown';
 import NewPollToolbar from '../modals/new_poll/new_poll_toolbar';
@@ -20,7 +20,7 @@ class GroupsIndexToolbar extends React.Component {
   };
 
   componentDidMount() {
-    this.scrollListener = window.addEventListener('scroll', _throttle(() => { this.handleScroll() },
+    this.scrollListener = window.addEventListener('scroll', throttle(() => { this.handleScroll() },
       16));
   }
 

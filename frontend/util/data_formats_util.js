@@ -8,6 +8,6 @@ export const standardGraph = (options, settings = {}) => {
     const key = String.fromCharCode(parseInt(ord) + 65);
     const percent = Math.round(100 * (option.responses.length / numResponses));
     const percentString = `${percent}%`
-    return { key, body, correct, percent, percentString }
+    return { key, body, correct, percent, percentString, zero: 0 }
   })
 }
