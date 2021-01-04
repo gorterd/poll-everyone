@@ -7,6 +7,7 @@ import {
   YAxis, 
   Bar, 
   LabelList,
+  ResponsiveContainer,
 } from 'recharts';
 import _debounce from 'lodash.debounce';
  
@@ -37,12 +38,9 @@ class PresentPoll extends React.Component {
     this._subscribe = this._subscribe.bind(this)
     this.receiveBroadcast = this.receiveBroadcast.bind(this)
     this.toggleActivation = this.toggleActivation.bind(this)
-    this.resetGraphDimensions = this.resetGraphDimensions.bind(this)
   }
 
   componentDidMount() {
-    this.resizeListener = window.addEventListener('resize', _debounce(this.resetGraphDimensions, 100));
-    this.resetGraphDimensions();
 
     const { pollId, currentId } = this.props;
 
@@ -56,7 +54,6 @@ class PresentPoll extends React.Component {
   }
 
   componentWillUnmount() {
-    window.removeEventListener('resize', this.resizeListener);
     if (this.state.subscription) {
       this.state.subscription.unsubscribe();
     }
@@ -117,7 +114,7 @@ class PresentPoll extends React.Component {
       return maxBody.length > answerData.body.length ? maxBody : answerData.body;
     }, 0);
 
-    const leftFontSize = showKeys ? largeFont : largeFont - (maxSize * 0.5);
+    const leftFontSize = true ? largeFont : largeFont - (maxSize * 0.5);
     const leftMargin = maxBody.length > 30 ? defaultMargin : defaultMargin + maxSize * 3; 
 
     const keyRender = (props) => {
@@ -181,35 +178,24 @@ class PresentPoll extends React.Component {
     }
 
     return (
-      <BarChart width={graphWidth} height={graphHeight} data={formattedData} layout="vertical" margin={{ left: leftMargin }}>
-        <XAxis type="number" hide={true} />
-        <YAxis  tick={false} type="category" axisLine={yAxisLine} />
-        <Bar dataKey="percent" fill={barFill} >
-          <LabelList dataKey="percentString" position="insideRight" formatter={ v => v === '0%' ? '' : v }
-            style={{ fontSize: largeFont, fill: "#ffffff" }} />
-          {/* <LabelList dataKey="key" position="insideLeft"
-            style={{ fontSize: largeFont, fontWeight: 700 }}
-          /> */}
-          <LabelList dataKey="key" content={keyRender}/>
-          <LabelList dataKey="body" position="left"
-            style={{ fontSize: leftFontSize, fontWeight: 700 }}
-          />
-        </Bar>
-      </BarChart>
+      <ResponsiveContainer width="100%" height="100%">
+        <BarChart data={formattedData} layout="vertical" margin={{ left: leftMargin }}>
+          <XAxis type="number" hide={true} />
+          <YAxis  tick={false} type="category" axisLine={yAxisLine} />
+          <Bar dataKey="percent" fill={barFill} >
+            <LabelList dataKey="percentString" position="insideRight" formatter={ v => v === '0%' ? '' : v }
+              style={{ fontSize: largeFont, fill: "#ffffff" }} />
+            {/* <LabelList dataKey="key" position="insideLeft"
+              style={{ fontSize: largeFont, fontWeight: 700 }}
+            /> */}
+            <LabelList dataKey="key" content={keyRender}/>
+            <LabelList dataKey="body" position="left"
+              style={{ fontSize: leftFontSize, fontWeight: 700 }}
+            />
+          </Bar>
+        </BarChart>
+      </ResponsiveContainer>
     );
-  }
-
-  resetGraphDimensions(){
-    const graphWidth = this.graphDiv.getBoundingClientRect().width;
-    const graphHeight = this.graphDiv.getBoundingClientRect().height;
-    this.setState({ graphWidth, graphHeight });
-  }
-
-  _calculateFontSize(h,w,text){
-    // height calculated by distance between items (height / num items)
-    // create div with specified width
-    // init fontsize
-    // 
   }
 
   render() {
