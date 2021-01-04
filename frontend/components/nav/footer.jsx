@@ -73,7 +73,9 @@ const Footer = () => {
           </div>
           <div className='footer-social-right'>
             <span className="icon icon-std icon-grey">
-              <a href="https://github.com/gorterd"><i className="fab fa-github"></i></a>
+              <a href="https://github.com/gorterd">
+                <i className="fab fa-github"></i>
+              </a>
             </span>
             <span className="icon icon-std icon-grey">
               <a href="https://www.linkedin.com/in/daniel-gorter-87549277"><i className="fab fa-linkedin"></i></a>
