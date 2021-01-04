@@ -70,6 +70,106 @@ export default function PresentPoll() {
     });
   }
 
+  function generateGraph(){
+    const { formattedData } = this.props;
+    const { graphWidth, graphHeight } = this.state;
+
+    const largeFont = 45;
+    const defaultMargin = 150;
+    const yAxisLine = {
+      strokeWidth: 3,
+      stroke: "#6b99c7"
+    };
+    const barFill = "#6b99c7";
+
+    const maxBody = formattedData.reduce((maxBody, answerData) => {
+      return maxBody.length > answerData.body.length ? maxBody : answerData.body;
+    }, 0);
+
+    const leftFontSize = true ? largeFont : largeFont - (maxSize * 0.5);
+    const leftMargin = maxBody.length > 30 ? defaultMargin : defaultMargin + maxSize * 3;
+
+    const keyRender = (props) => {
+      const { x, y, height, width, value } = props;
+
+      const hasRect = Boolean(width);
+      console.log(props);
+      return (
+        <g>
+          <rect
+            x={x + 10} y={y + 0.2 * height}
+            width="2em"
+            height={0.6 * height}
+            fill={hasRect ? "#b5cce3" : "rgba(0,0,0,0)"}
+          >
+          </rect>
+          <text
+            style={{ fontSize: largeFont, fontWeight: 700 }}
+            textAnchor="start"
+            x={x + 12} y={y + height / 2}
+            dy="0.31em"
+            width="1em"
+            className="recharts-text recharts-label"
+            height={0.6 * height}
+          >
+            {value}
+          </text>
+        </g>
+
+      )
+    }
+
+    const bodyRender = (props) => {
+      const { x, y, height, width, value } = props;
+
+      const hasRect = Boolean(width);
+      console.log(props);
+      return (
+        <g>
+          <rect
+            x={x + 10} y={y + 0.2 * height}
+            width="2em"
+            height={0.6 * height}
+            fill={hasRect ? "#b5cce3" : "rgba(0,0,0,0)"}
+          >
+          </rect>
+          <text
+            style={{ fontSize: largeFont, fontWeight: 700 }}
+            textAnchor="start"
+            x={x + 12} y={y + height / 2}
+            dy="0.31em"
+            width="1em"
+            className="recharts-text recharts-label"
+            height={0.6 * height}
+          >
+            {value}
+          </text>
+        </g>
+
+      )
+    }
+
+    return (
+      <ResponsiveContainer width="100%" height="100%">
+        <BarChart data={formattedData} layout="vertical" margin={{ left: leftMargin }}>
+          <XAxis type="number" hide={true} />
+          <YAxis tick={false} type="category" axisLine={yAxisLine} />
+          <Bar dataKey="percent" fill={barFill} >
+            <LabelList dataKey="percentString" position="insideRight" formatter={v => v === '0%' ? '' : v}
+              style={{ fontSize: largeFont, fill: "#ffffff" }} />
+            {/* <LabelList dataKey="key" position="insideLeft"
+              style={{ fontSize: largeFont, fontWeight: 700 }}
+            /> */}
+            <LabelList dataKey="key" content={keyRender} />
+            <LabelList dataKey="body" position="left"
+              style={{ fontSize: leftFontSize, fontWeight: 700 }}
+            />
+          </Bar>
+        </BarChart>
+      </ResponsiveContainer>
+    );
+  }
+
   const graph = formattedData ? (
     <BarChart 
       data={formattedData} 
