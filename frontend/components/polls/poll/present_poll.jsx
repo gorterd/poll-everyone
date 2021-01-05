@@ -4,7 +4,7 @@ import { fetchFullPoll, toggleActive } from '../../../actions/poll_actions'
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useHistory, useParams } from 'react-router-dom';
 import { standardGraph } from '../../../util/data_formats_util';
-import { isEqual } from 'lodash';
+import { isEqual, debounce } from 'lodash';
 import { 
   receiveActivePoll, 
   clearActivePoll, 
@@ -16,10 +16,10 @@ import {
   XAxis, 
   YAxis, 
   Bar, 
-  LabelList,
-  ResponsiveContainer
+  LabelList
 } from 'recharts';
 import { usePrevious } from '../../../util/custom_hooks';
+import PresentationGraph from './presentation_graph';
 
 export default function PresentPoll() {
   const { pollId } = useParams();
@@ -30,7 +30,7 @@ export default function PresentPoll() {
   const history = useHistory();
   const dispatch = useDispatch();
   const graphContainer = useRef();
-  const [graphDimensions, setGraphDimensions ] = useState(null);
+  const [graphDimensions, setGraphDimensions ] = useState({width: 100, height: 200});
 
   useEffect( () => {
     dispatch(fetchFullPoll(pollId)).then(poll => {
@@ -41,15 +41,25 @@ export default function PresentPoll() {
   }, []);
 
   useEffect( () => {
-    const { width, height } = graphContainer.getClientBoundingRec();
-    setGraphDimensions({ height, width });
+    updateGraphDimensions();
 
-    
+    const resizeListener = window.addEventListener(
+      'resize', 
+      debounce(updateGraphDimensions, 100)
+    );
 
-    return 
-  })
+    return () => window.removeEventListener('resize', resizeListener);
+  }, []);
 
   let subscription = null;
+
+  function updateGraphDimensions() {
+    console.log('graph container: ', graphContainer.current)
+    window.gc = graphContainer.current;
+    const { width, height } = graphContainer.current.getBoundingClientRect();
+    console.log('dimensions to update: ', width, height);
+    setGraphDimensions({ height, width });
+  }
 
   function subscribe() {
     subscription = App.cable.subscriptions.create(
@@ -82,158 +92,110 @@ export default function PresentPoll() {
     });
   }
 
-  function generateGraph(){
-    const largeFont = 45;
-    const defaultMargin = 150;
-    const yAxisLine = {
-      strokeWidth: 3,
-      stroke: "#6b99c7"
-    };
-    const barFill = "#6b99c7";
+  // function generateGraph(){
+  //   const largeFont = 45;
+  //   const defaultMargin = 150;
+  //   const yAxisLine = {
+  //     strokeWidth: 3,
+  //     stroke: "#6b99c7"
+  //   };
+  //   const barFill = "#6b99c7";
+  //   const { height: graphHeight, width: graphWidth } = graphDimensions;
+  //   console.log('graph height / width in generate graph', graphHeight, graphWidth)
 
-    const maxBody = formattedData.reduce((maxBody, answerData) => {
-      return maxBody.length > answerData.body.length ? maxBody : answerData.body;
-    }, 0);
+  //   const maxBody = formattedData.reduce((maxBody, answerData) => {
+  //     return maxBody.length > answerData.body.length ? maxBody : answerData.body;
+  //   }, 0);
 
-    const leftFontSize = largeFont;
-    const leftMargin = maxBody.length > 30 ? defaultMargin : defaultMargin;
+  //   const leftFontSize = largeFont;
+  //   const leftMargin = maxBody.length > 30 ? defaultMargin : defaultMargin;
 
-    const keyRender = (props) => {
-      const { x, y, height, width } = props;
-      const [ key, body, percent ] = JSON.parse(props.payload.value);
+  //   const keyRender = (props) => {
+  //     const { x, y, height, payload } = props;
+  //     const [ key, body, percent ] = JSON.parse(payload.value);
 
-      console.log(props);
-      return (
-        <g>
-          <text
-            style={{ fontSize: largeFont, fontWeight: 700 }}
-            textAnchor="end"
-            dy="0.31em"
+  //     // console.log(props);
+  //     return (
+  //       <g>
+  //         <text
+  //           style={{ fontSize: largeFont, fontWeight: 700 }}
+  //           textAnchor="end"
+  //           dy="0.31em"
+  //           x={x}
+  //           y={y}
+  //         >
+  //           {body}
+  //         </text>
 
-            height={props.height}
-            width={props.width}
-            x={props.x}
-            y={props.y}
-          >
-            {body}
-          </text>
-          {percent && <rect
-            x={x + 10} y={y - 25}
-            width="2em"
-            height={50}
-            fill={"#b5cce3"}
-          >
-          </rect>}
-          <text
-            style={{ fontSize: largeFont, fontWeight: 700 }}
-            textAnchor="start"
-            x={x + 12} y={y}
-            dy="0.31em"
-            width="1em"
-            className="recharts-text recharts-label"
-            height={0.6 * height}
-          >
-            {key}
-          </text>
-        </g>
+  //         { percent 
+  //         ? <rect
+  //             x={x + 10} y={y - 25}
+  //             width="2em"
+  //             height={50}
+  //             fill={"#b5cce3"}
+  //           ></rect> 
+  //         : null }
 
-      )
-    }
-    const barKeyRender = (props) => {
-      if (!props.width) return;
+  //         <text
+  //           style={{ fontSize: largeFont, fontWeight: 700 }}
+  //           textAnchor="start"
+  //           x={x + 12} y={y}
+  //           dy="0.31em"
+  //           width="1em"
+  //           className="recharts-text recharts-label"
+  //           height={0.6 * height}
+  //         >
+  //           {key}
+  //         </text>
+  //       </g>
+  //     )
+  //   }
 
-      const { x, y, height, value } = props;
+  //   return (
+  //     <BarChart 
+  //       data={formattedData} 
+  //       layout="vertical" 
+  //       margin={{ left: leftMargin }}
+  //       height={graphHeight}
+  //       width={graphWidth}
+  //     >
+  //       <XAxis type="number" hide={true} />
 
-      console.log(props);
-      return (
-        <g>
-          <rect
-            x={x + 10} y={y + 0.2 * height}
-            width="2em"
-            height={0.6 * height}
-            fill={"#b5cce3"}
-          >
-          </rect>
-          <text
-            style={{ fontSize: largeFont, fontWeight: 700 }}
-            textAnchor="start"
-            x={x + 12} y={y + height/2}
-            dy="0.31em"
-            width="1em"
-            className="recharts-text recharts-label"
-            height={0.6 * height}
-          >
-            {value}
-          </text>
-        </g>
+  //       <Bar 
+  //         dataKey="percent" 
+  //         fill={barFill} 
+  //         isAnimationActive={!isEqual(prevFormattedData, formattedData)}
+  //       >
+  //         <LabelList 
+  //           dataKey="percentString" 
+  //           position="insideRight" 
+  //           formatter={v => v === '0%' ? '' : v}
+  //           style={{ fontSize: largeFont, fill: "#ffffff" }} 
+  //         />
+  //         {/* <LabelList dataKey="key" position="insideLeft"
+  //           style={{ fontSize: largeFont, fontWeight: 700 }}
+  //         /> */}
+  //         {/* <LabelList dataKey="key" content={barKeyRender} /> */}
+  //       </Bar>
+  //         {/* <LabelList 
+  //           dataKey="body" 
+  //           position="left"
+  //           style={{ fontSize: leftFontSize, fontWeight: 700 }}
+  //         /> */}
+  //       <YAxis
+  //         dataKey="label"
+  //         tickLine={false}
+  //         type="category"
+  //         axisLine={yAxisLine}
+  //         position="insideLeft"
+  //         // tick={{ style: { fontSize: 45, fontWeight: 700, fill: 'black' } }}
+  //         tick={keyRender}
+  //       />
+  //     </BarChart>
+  //   );
+  // }
 
-      )
-    }
-
-    const bodyRender = (props) => {
-      const [key, body] = JSON.parse(props.payload.value);
-      console.log(props);
-      return (
-        <g>
-          <text
-            textAnchor={props.textAnchor}
-            height={props.height}
-            width={props.width}
-            x={props.x}
-            y={props.y}
-          >
-            {props.payload.value}
-          </text>
-        </g>
-
-      )
-    }
-
-    return (
-      <ResponsiveContainer width="100%" height="100%">
-        <BarChart 
-          data={formattedData} 
-          layout="vertical" 
-          margin={{ left: leftMargin }}
-        >
-          <XAxis type="number" hide={true} />
-
-          <Bar 
-            dataKey="percent" 
-            fill={barFill} 
-            isAnimationActive={!isEqual(prevFormattedData, formattedData)}
-          >
-            <LabelList 
-              dataKey="percentString" 
-              position="insideRight" 
-              formatter={v => v === '0%' ? '' : v}
-              style={{ fontSize: largeFont, fill: "#ffffff" }} 
-            />
-            {/* <LabelList dataKey="key" position="insideLeft"
-              style={{ fontSize: largeFont, fontWeight: 700 }}
-            /> */}
-            {/* <LabelList dataKey="key" content={barKeyRender} /> */}
-          </Bar>
-            {/* <LabelList 
-              dataKey="body" 
-              position="left"
-              style={{ fontSize: leftFontSize, fontWeight: 700 }}
-            /> */}
-          <YAxis
-            dataKey="label"
-            tickLine={false}
-            type="category"
-            axisLine={yAxisLine}
-            position="insideLeft"
-            // tick={{ style: { fontSize: 45, fontWeight: 700, fill: 'black' } }}
-            tick={keyRender}
-          />
-        </BarChart>
-      </ResponsiveContainer>
-    );
-  }
-
-  const graph = formattedData ? generateGraph()
+  // const graph = formattedData ? generateGraph()
   // (
   //   <BarChart 
   //     data={formattedData} 
@@ -264,16 +226,23 @@ export default function PresentPoll() {
   //     </Bar>
   //   </BarChart>
   // ) 
-  : <div className='empty-graph'></div>
+  // : <div className='empty-graph'></div>
 
   const toggleActiveText = poll?.active ? 'Deactivate' : 'Activate';
+  console.log('formatted data right before render: ', formattedData)
+  // console.log('graph right before render: ', graph)
+
 
   return (
     <section className='show-poll-container'>
       <div className='show-poll-left'>
         <div className='graph-container' ref={graphContainer}>
           <div className='graph'>
-            {graph}
+            <PresentationGraph
+              formattedData={formattedData}
+              graphDimensions={graphDimensions}
+              isAnimationActive={!isEqual(prevFormattedData, formattedData)}
+            />
           </div>
         </div>
       </div>
