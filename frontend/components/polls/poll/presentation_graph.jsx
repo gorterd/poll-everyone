@@ -26,18 +26,24 @@ export default function PresentationGraph({ formattedData, graphDimensions, isAn
 
   const yAxisLine = { strokeWidth: 3, stroke: "#6b99c7" };
   const barFill = "#6b99c7";
-
   const fontFamily = "sans-serif";
+
   const ctx = document.createElement('canvas').getContext('2d'); 
-
-  let fontSize = largeBodyFont, lineHeight, maxLines, lines;
-  while (fontSize--) {
-    ctx.font = `${fontSize}px ${fontFamily}`;
-    lineHeight = fontSize * 1.15;
-    maxLines = Math.floor(maxLabelHeight / lineHeight);
-
-    lines = generateLines(maxBody);
-    if (lines?.length <= maxLines) break;
+  const { fontSize, lineHeight } = setFontSizeAndLineHeight();
+  
+  function setFontSizeAndLineHeight(){
+    let fontSize = largeBodyFont, lineHeight;
+    
+    while (fontSize--) {
+      ctx.font = `${fontSize}px ${fontFamily}`;
+      lineHeight = fontSize * 1.15;
+      
+      let maxLines = Math.floor(maxLabelHeight / lineHeight);
+      let lines = generateLines(maxBody);
+      if (lines?.length <= maxLines) break;
+    }
+    
+    return { fontSize, lineHeight }
   }
 
   function generateLines(text) {
