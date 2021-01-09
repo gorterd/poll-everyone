@@ -1,82 +1,67 @@
-import React from 'react';
+import React, { useState, useRef } from 'react';
 import GroupSearch from '../../shared/group_search';
-import { closeModal } from '../../../actions/ui_actions';
 
-class MoveDrawer extends React.Component {
-  constructor(props) {
-    super(props)
+export default function MoveDrawer({ groups, selections, visible, movePolls, openModal, closeModal, stickyToolbar, toggleVisible }) {
+  const [ group, setGroup ] = useState(undefined);
+  const moveButton = useRef();
+  const cancelButton = useRef();
 
-    this.state = {
-      group: undefined,
-    }
-    
-    this.setGroup = this.setGroup.bind(this);
-    this.movePolls = this.movePolls.bind(this);
-  };
+  const pollIds = selections.pollIds;
+  const numPolls = pollIds.length;
 
-  setGroup(group){
-    this.setState({ group });
-  }
-
-  movePolls(){
-    const { groups, selections, movePolls, openModal, closeModal, stickyToolbar, toggleVisible } = this.props;
-    const groupId = this.state.group ? this.state.group.id : groups.find( g => g.ord === 0 ).id;
-    const pollIds = selections.pollIds;
+  function handleMove(){
+    const groupId = group?.id || groups.find(group => group.ord === 0 ).id;
     const sendMoveRequest = () => movePolls(pollIds, groupId).then( () => {
       closeModal();
       toggleVisible();
-      this.setState({ group: undefined });
+      setGroup(undefined);
     });
     openModal({
       type: 'confirm-move',
-      data: { sendMoveRequest, numPolls: pollIds.length },
+      data: { sendMoveRequest, numPolls },
       offset: stickyToolbar
     });
   }
 
-  render() {
-    const { groups, selections, visible, toggleVisible } = this.props;
-    const { group } = this.state;
+  const buttonText = `Apply to ${numPolls} poll${numPolls === 1 ? '' : 's'}`;
+  const disabled = !group || numPolls === 0;
 
-    const numSelections = selections.pollIds.length;
-    const buttonText = `Apply to ${numSelections} poll${ numSelections === 1 ? '' : 's' }`;
-    const disabled = !group || selections.pollIds.length === 0;
+  return (
+    <div className='move-drawer-anchor'>
+      <div className={'move-drawer-container' + ( visible ? ' open' : '')}>
+        <div className='move-drawer-wrapper'>
+          <h1>Move</h1>
 
-    return (
-      <div className='move-drawer-anchor'>
-        <div className={'move-drawer-container' + ( visible ? ' open' : '')}>
-          <div className='move-drawer-wrapper'>
-            <h1>Move</h1>
+          <div className='move-drawer-search-container'>
+            <span>To another group: </span>
+            <GroupSearch
+              setGroup={setGroup}
+              groups={groups}
+              placeholderText='Search group name'
+              focusOnTab={ disabled ? cancelButton.current : moveButton.current }
+            />
+          </div>
 
-            <div className='move-drawer-search-container'>
-              <span>To another group: </span>
-              <GroupSearch
-                setGroup={this.setGroup}
-                groups={groups}
-                placeholderText='Search group name'
-                focusOnTab={ numSelections ? this.moveButton : this.cancelButton }
-              />
-            </div>
+          <div className='move-buttons'>
+            <button 
+              className='button-blue' 
+              onClick={handleMove} 
+              ref={moveButton}
+              disabled={disabled}
+            >
+              {buttonText}
+            </button>
 
-            <div className='move-buttons'>
-              <button 
-                className='button-blue' 
-                onClick={this.movePolls} 
-                ref={e => this.moveButton = e }
-                disabled={disabled}
-                >{buttonText}</button>
-
-              <button 
-                className='button-transparent' 
-                onClick={toggleVisible}
-                ref={e => this.cancelButton = e }
-              >Cancel</button>
-            </div>
+            <button 
+              className='button-transparent' 
+              onClick={toggleVisible}
+              ref={cancelButton}
+            >
+              Cancel
+            </button>
           </div>
         </div>
       </div>
-    )
-  }
+    </div>
+  )
 };
-
-export default MoveDrawer;

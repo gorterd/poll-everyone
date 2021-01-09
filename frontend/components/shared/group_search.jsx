@@ -178,6 +178,7 @@ export default function GroupSearch({ setGroup, focusOnTab, groups, placeholderT
       <button className='button-grey' onClick={toggleDrawer}>
         <i className={`fas fa-chevron-${drawerOpen ? 'up' : 'down'}`}></i>
       </button>
+
       {drawerOpen && <ul className='group-search-list'>
         {drawerGroups.map((group, idx) => (
           <li 
@@ -192,5 +193,4 @@ export default function GroupSearch({ setGroup, focusOnTab, groups, placeholderT
       </ul>}
     </div>
   )
-
 };

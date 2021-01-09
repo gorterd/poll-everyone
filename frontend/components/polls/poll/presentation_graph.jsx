@@ -21,6 +21,7 @@ export default function PresentationGraph({ formattedData, graphDimensions, isAn
   const maxBody = formattedData.reduce((maxBody, answerData) => {
     return maxBody.length > answerData.body.length ? maxBody : answerData.body;
   }, 0);
+  
   const marginPercentage = .25 + Math.min((maxBody.length / 30) * .15, .15);
   const leftMargin = graphWidth * marginPercentage;
 
