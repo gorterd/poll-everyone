@@ -51,7 +51,6 @@ class MoveDrawer extends React.Component {
             <div className='move-drawer-search-container'>
               <span>To another group: </span>
               <GroupSearch
-                activeGroup={group}
                 setGroup={this.setGroup}
                 groups={groups}
                 placeholderText='Search group name'

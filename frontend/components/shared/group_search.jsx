@@ -1,4 +1,6 @@
 import React, { useEffect, useReducer, useRef } from 'react';
+import { useDropdown } from '../../util/custom_hooks';
+import { clamp } from '../../util/general_util';
 
 const CLOSE_SEARCH = 'CLOSE_SEARCH';
 const UPDATE_SEARCH = 'UPDATE_SEARCH';
@@ -6,35 +8,29 @@ const KEY_MOVE = 'KEY_MOVE';
 const TOGGLE_DRAWER = 'TOGGLE_DRAWER';
 const SELECT_GROUP = 'SELECT_GROUP';
 
-function clamp(val, min, max) {
-  if (val < min) return min;
-  if (val > max) return max;
-  return val;
-}
-
 export default function GroupSearch({ setGroup, focusOnTab, groups, placeholderText }) {
   function reducer(state, action) {
     switch (action.type) {
       case SELECT_GROUP:
         return {
           ...state,
-          groupsOpen: false,
+          searchText: action.searchText,
+          drawerOpen: false,
           focusIndex: null,
-          searchText: action.searchText
         }; 
       case CLOSE_SEARCH:
         return {
           ...state,
-          groupsOpen: false,
-          focusIndex: null,
           drawerGroups: Array.from(groups),
+          drawerOpen: false,
+          focusIndex: null,
         };
       case UPDATE_SEARCH:
         return {
           ...state,
-          groupsOpen: true,
+          drawerOpen: true,
           focusIndex: null,
-          ...action.payload
+          ...action.payload,
         };
       case KEY_MOVE:
         const { dir, defaultIndex } = action;
@@ -44,11 +40,10 @@ export default function GroupSearch({ setGroup, focusOnTab, groups, placeholderT
           ? defaultIndex
           : clamp((focusIndex + dir), 0, drawerGroups.length - 1);
 
-        const searchText = drawerGroups[newFocusIndex]?.title;
+        const searchText = drawerGroups[newFocusIndex]?.title || '';
         return { ...state, focusIndex: newFocusIndex, searchText };
-
       case TOGGLE_DRAWER:
-        return { ...state, groupsOpen: !state.groupsOpen }
+        return { ...state, drawerOpen: !state.drawerOpen }
       default:
         return new Error("Action type doesn't exist");
     }
@@ -57,14 +52,42 @@ export default function GroupSearch({ setGroup, focusOnTab, groups, placeholderT
   const [state, dispatch] = useReducer(reducer, {
     searchText: '',
     drawerGroups: Array.from(groups),
-    groupsOpen: false,
+    drawerOpen: false,
     focusIndex: null,
   });
 
-  const allowUnfocus = useRef(true);
-  const searchField = useRef();
+  const searchInput = useRef();
   const searchDiv = useRef();
-  const groupListItems = useRef([]);
+  const drawerLis = useRef([]);
+
+  useEffect(() => {
+    const listItem = drawerLis.current[state.focusIndex];
+    if (!listItem) return;
+
+    const list = listItem.parentElement;
+    list.scrollIntoView(true);
+
+    const itemTop = listItem.offsetTop;
+    const itemBottom = itemTop + listItem.offsetHeight;
+
+    if (list.scrollTop > itemTop) {
+      list.scrollTop = itemTop;
+    } else if (itemBottom > (list.scrollTop + list.clientHeight)) {
+      list.scrollTop = itemBottom - list.clientHeight;
+    }
+  }, [state.focusIndex, drawerLis, searchDiv]);
+
+  useEffect(() => {
+    if (searchDiv.current.getBoundingClientRect().top < 0) {
+      searchDiv.current.scrollIntoView(false);
+    } 
+  }, [state.searchText, searchDiv]);
+
+  useEffect(() => {
+    setGroup(groups.find(group => group.title === state.searchText));
+  }, [state.searchText, groups, setGroup])
+
+  useDropdown(searchDiv, () => dispatch({ type: CLOSE_SEARCH }));
 
   function textMatchesGroup(text) {
     return group => new RegExp(`^${text}`, 'i').test(group.title);
@@ -74,45 +97,10 @@ export default function GroupSearch({ setGroup, focusOnTab, groups, placeholderT
     dispatch({ type: SELECT_GROUP, searchText: group.title });
   }
 
-  function submitGroup(title) {
-    const chosenGroup = groups.find(textMatchesGroup(title));
+  function handleSubmit(e) {
+    e.preventDefault();
+    const chosenGroup = groups.find(textMatchesGroup(searchText));
     selectGroup(chosenGroup);
-  }
-
-  function searchHandler(e) {
-    const searchText = e.target.value;
-    const drawerGroups = groups.filter(textMatchesGroup(searchText));
-
-    dispatch({ 
-      type: UPDATE_SEARCH, 
-      payload: { searchText, drawerGroups }
-    });
-  }
-
-  function handleKeyDown(e) {
-    if (!state.groupsOpen) return;
-  
-    switch (e.key) {
-      case 'ArrowDown':
-        e.preventDefault();
-        dispatch({ type: KEY_MOVE, dir: 1, defaultIndex: 0 })
-        break;
-      case 'ArrowUp':
-        e.preventDefault();
-        dispatch({ type: KEY_MOVE, dir: -1, defaultIndex: null })
-        break;
-      case 'Tab':
-        if (focusOnTab) {
-          e.preventDefault();
-          focusOnTab.disabled = false;
-          focusOnTab.focus();
-          dispatch({ type: CLOSE_SEARCH })
-        }
-        break;
-      case 'Escape':
-      case 'Enter':
-        dispatch({ type: CLOSE_SEARCH });
-    }  
   }
 
   function toggleDrawer() {
@@ -121,56 +109,48 @@ export default function GroupSearch({ setGroup, focusOnTab, groups, placeholderT
   }
 
   function clearSearch() {
-    searchField.current.focus();
-    dispatch({ 
-      type: UPDATE_SEARCH, 
+    searchInput.current.focus();
+    dispatch({
+      type: UPDATE_SEARCH,
       payload: { drawerGroups: Array.from(groups), searchText: '' }
     });
   }
 
-  const { focusIndex, groupsOpen, drawerGroups, searchText } = state;
+  function handleSearch(e) {
+    const searchText = e.target.value;
+    const drawerGroups = groups.filter(textMatchesGroup(searchText));
 
-  useEffect(() => {
-    const listItem = groupListItems.current[focusIndex];
-    if (!listItem) return;
-
-    const list = listItem.parentElement;
-    
-    if (searchField.current.getBoundingClientRect().top < 0) {
-      searchField.current.scrollIntoView(true);
-    } else if (list.getBoundingClientRect().bottom > window.innerHeight) {
-      list.scrollIntoView(true);
-    }
-
-    const itemTop = listItem.offsetTop;
-    const itemBottom = itemTop + listItem.offsetHeight;
-
-    if (list.scrollTop > itemTop) {
-      list.scrollTop = itemTop;
-    } else if (itemBottom > (list.scrollTop + list.offsetHeight)) {
-      list.scrollTop = itemBottom - list.offsetHeight;
-    }
-  }, [focusIndex, groupListItems]);
-
-  useEffect(() => {
-    setGroup(groups.find(group => group.title === searchText)?.title);
-  }, [searchText, groups, setGroup])
-
-  useEffect(() => {
-    const clickInListener = searchDiv.current.addEventListener('click', e => {
-      allowUnfocus.current = false;
+    dispatch({
+      type: UPDATE_SEARCH,
+      payload: { searchText, drawerGroups }
     });
+  }
 
-    const clickOutListener = document.addEventListener('click', (e) => {
-      if (allowUnfocus.current) dispatch({ type: CLOSE_SEARCH })
-      allowUnfocus.current = true;
-    });
+  function handleKeyDown(e) {
+    if (!state.drawerOpen) return;
+  
+    switch (e.key) {
+      case 'ArrowDown':
+        e.preventDefault();
+        return dispatch({ type: KEY_MOVE, dir: 1, defaultIndex: 0 });
+      case 'ArrowUp':
+        e.preventDefault();
+        return dispatch({ type: KEY_MOVE, dir: -1, defaultIndex: null });
+      case 'Tab':
+        if (focusOnTab) {
+          e.preventDefault();
+          focusOnTab.disabled = false;
+          focusOnTab.focus();
+          dispatch({ type: CLOSE_SEARCH });
+        }
+        break;
+      case 'Escape':
+      case 'Enter':
+        dispatch({ type: CLOSE_SEARCH });
+    }  
+  }
 
-    return () => {
-      removeEventListener('click', clickOutListener);
-      removeEventListener('click', clickInListener);
-    }
-  }, []);
+  const { focusIndex, drawerOpen, drawerGroups, searchText } = state;
   
   return (
     <div 
@@ -179,42 +159,37 @@ export default function GroupSearch({ setGroup, focusOnTab, groups, placeholderT
       onKeyDown={handleKeyDown}
       ref={searchDiv}
     >
-      <form onSubmit={e => {
-        e.preventDefault();
-        submitGroup(searchText);
-      }}>
+      <form onSubmit={handleSubmit}>
         <input
-          ref={searchField}
           type="text"
           className='group-search-input'
+          tabIndex='1'
           placeholder={placeholderText}
           value={searchText}
-          tabIndex='1'
-          onChange={searchHandler}
-          onFocus={searchHandler}
+          onChange={handleSearch}
+          onFocus={handleSearch}
+          ref={searchInput}
         />
         <span className='clear-group-search' onClick={clearSearch}>
           <i className="fas fa-times"></i>
         </span>
       </form>
 
-      <button onClick={toggleDrawer} className='button-grey'>
-        <i className={`fas fa-chevron-${groupsOpen ? 'up' : 'down'}`}></i></button>
-      <ul className={'group-search-list' + (groupsOpen ? '' : ' hidden')}>
+      <button className='button-grey' onClick={toggleDrawer}>
+        <i className={`fas fa-chevron-${drawerOpen ? 'up' : 'down'}`}></i>
+      </button>
+      {drawerOpen && <ul className='group-search-list'>
         {drawerGroups.map((group, idx) => (
           <li 
             key={group.id}
             className={focusIndex === idx ? 'focused' : ''}
-            onClick={() => {
-              console.log('click handler')
-              selectGroup(group)
-            }}
-            ref={li => groupListItems.current[idx] = li}
+            onClick={() => selectGroup(group)}
+            ref={li => drawerLis.current[idx] = li}
           >
             {group.title}
           </li>
         ))}
-      </ul>
+      </ul>}
     </div>
   )
 
