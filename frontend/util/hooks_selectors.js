@@ -1,18 +1,24 @@
-const ordSort = (a, b) => Math.sign(a.ord - b.ord);
+export const selectedPollsSelector = state => state.selections.polls;
+export const currentUserIdSelector = state => state.session.currentId;
+export const scrollYSelector = state => state.ui.data.scrollY;
+export const stickyToolbarSelector = state => state.ui.stickyToolbar;
+export const modalTypeSelector = state => state.ui.modal.type;
+export const modalExitingSelector = state => state.ui.modal.exiting;
 
-const getOrderedAnswerOptions = (poll, answerOptions) => {
-  return Object.values(answerOptions)
-    .filter(answerOption => poll.answerOptionIds.includes(answerOption.id))
+export const orderedGroupsSelector = state => {
+  return Object.values(state.entities.groups).sort(ordSort);
+}
+
+export const orderedGroupPollsSelector = groupId => state => {
+  const { groups, polls } = state.entities;
+  const group = groups[groupId];
+  const pollIds = group?.pollIds;
+  return pollIds && Object.values(polls)
+    .filter(poll => pollIds.includes(poll.id))
     .sort(ordSort);
 }
 
-const optionResponses = (option, responses) => {
-  return option.responseIds 
-    ? responses.filter(response => option.responseIds.includes(response.id))
-    : null;
-}
-
-export const presenterPollData = pollId => state => {
+export const presenterPollDataSelector = pollId => state => {
   const { entities: { polls, answerOptions, responses } } = state;
   const poll = polls[pollId];
 
@@ -28,4 +34,18 @@ export const presenterPollData = pollId => state => {
   };
 
   return { poll, fullAnswerOptions };
+}
+
+const ordSort = (a, b) => Math.sign(a.ord - b.ord);
+
+const getOrderedAnswerOptions = (poll, answerOptions) => {
+  return Object.values(answerOptions)
+    .filter(answerOption => poll.answerOptionIds.includes(answerOption.id))
+    .sort(ordSort);
+}
+
+const optionResponses = (option, responses) => {
+  return option.responseIds
+    ? responses.filter(response => option.responseIds.includes(response.id))
+    : null;
 }

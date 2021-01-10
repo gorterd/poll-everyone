@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 // from react docs
 export function usePrevious(value) {
@@ -7,6 +7,12 @@ export function usePrevious(value) {
     ref.current = value;
   });
   return ref.current;
+}
+
+export function useToggleState(initVal) {
+  const [ val, setVal ] = useState(initVal);
+  const toggleVal = () => setVal( old => !old );
+  return [ val, toggleVal ];
 }
 
 export function useDropdown(eleRef, unfocusCB) {

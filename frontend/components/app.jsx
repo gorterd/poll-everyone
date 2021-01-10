@@ -15,11 +15,11 @@ import LoginFormContainer from './session/login/login_container';
 import SignupSplash from './session/signup/signup_splash';
 import SignupFormContainer from './session/signup/signup_container';
 
-import GroupsIndexContainer from './polls/groups_index/groups_index_container';
 import { AuthRoute, ProtectedRoute } from '../util/component/routes_util';
 import { Modal } from './polls/modals/modal';
 
 import ReportsIndex from './reports/reports_index'
+import GroupsIndex from './polls/groups_index/groups_index';
 
 
 const App = () => {
@@ -34,7 +34,7 @@ const App = () => {
         </Switch>
 
         <ProtectedRoute exact path='/polls'>
-          <GroupsIndexContainer />
+          <GroupsIndex />
         </ProtectedRoute>
 
         <ProtectedRoute path='/polls/:pollId/edit'>

@@ -1,33 +1,40 @@
 import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { clearGroupSelection, receiveGroupSelection } from '../../../actions/selection_actions/poll_selection_actions';
+import { selectedPollsSelector } from '../../../util/hooks_selectors';
 
-const GroupHeader = ({
-  group, drawerVisible, toggleDrawer, selections, receiveGroupSelection, clearGroupSelection, rename, duplicate, addActivity
-}) => {
-
-  const {id, title, ord, pollIds } = group;
-  const checked = selections.groupIds.includes(id);
+export default function GroupHeader({
+  group,
+  drawerVisible,
+  toggleDrawerVisible,
+  addActivity,
+  rename,
+}) {
+  const dispatch = useDispatch();
+  const { id, title, ord, pollIds } = group;
+  const checked = useSelector(selectedPollsSelector).groupIds.includes(id);
   const pollsCount = pollIds.length;
 
-  const optionalControls = (ord == 0) ? null : (
+  const optionalControls = !!ord && (
     <>
       <li><span className="group-polls-link" onClick={rename}>Rename</span></li>
-      {/* <li><span className="group-polls-link" onClick={duplicate}>Duplicate</span></li> */}
     </>
-  )
+  );
 
+  
 
   const activitiesCount = `${pollsCount} activit${(pollsCount == 1) ? "y" : "ies"}`
 
-  const handleCheckbox = e => {
+  function handleCheckbox(e) {
     if (e.target.checked) {
-      receiveGroupSelection(group);
+      dispatch(receiveGroupSelection(group));
     } else {
-      clearGroupSelection(group);
+      dispatch(clearGroupSelection(group));
     }
   }
 
   return (
-    <div className="group-header group-polls-row" onClick={toggleDrawer}>
+    <div className="group-header group-polls-row" onClick={toggleDrawerVisible}>
 
       <div className="group-row-left">
         <input type="checkbox" onChange={handleCheckbox} onClick={e => e.stopPropagation()} checked={checked}/>
@@ -49,6 +56,3 @@ const GroupHeader = ({
     </div>
   )
 }
-
-export default GroupHeader;
-

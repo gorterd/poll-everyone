@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link, useHistory, useParams } from 'react-router-dom';
 import { isEqual, debounce } from 'lodash';
 
-import { presenterPollData } from '../../../util/hooks_selectors';
+import { presenterPollDataSelector } from '../../../util/hooks_selectors';
 import { standardGraph } from '../../../util/data_formats_util';
 import { usePrevious } from '../../../util/custom_hooks';
 import { fetchFullPoll, toggleActive } from '../../../actions/poll_actions'
@@ -21,7 +21,7 @@ export default function PresentPoll() {
 
   const currentId = useSelector( state => state.session.currentId );
   const { pollId } = useParams();
-  const { poll, fullAnswerOptions } = useSelector(presenterPollData(pollId), isEqual);
+  const { poll, fullAnswerOptions } = useSelector(presenterPollDataSelector(pollId), isEqual);
   const formattedData = standardGraph(fullAnswerOptions);
   const prevFormattedData = usePrevious(formattedData);
 

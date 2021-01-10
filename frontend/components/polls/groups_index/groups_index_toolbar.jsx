@@ -1,118 +1,139 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { throttle } from 'lodash';
 
 import DropdownWrapper from '../../shared/dropdown';
 import NewPollToolbar from '../modals/new_poll/new_poll_toolbar';
 
-const OFFSET = 78;
+import { batchDestroy, movePolls } from "../../../actions/group_actions";
+import { receiveSelections, clearSelections } from '../../../actions/selection_actions/poll_selection_actions'
+import { 
+  openModal, 
+  setStickyToolbar, 
+  clearStickyToolbar 
+} from '../../../actions/ui_actions';
 
-class GroupsIndexToolbar extends React.Component {
-  constructor(props) {
-    super(props)
+import { 
+  modalTypeSelector, 
+  stickyToolbarSelector, 
+  selectedPollsSelector, 
+  orderedGroupsSelector, 
+  modalExitingSelector
+} from '../../../util/hooks_selectors';
 
-    this.state = { sticky: false }
-    this.el = React.createRef();
+export default function GroupsIndexToolbar({ toggleMoveDrawer }) {
+  const [ scrollY, setScrollY ] = useState(null);
+  const dispatch = useDispatch();
+  const groups = useSelector(orderedGroupsSelector)
+  const modalType = useSelector(modalTypeSelector);
+  const modalExiting = useSelector(modalExitingSelector);
+  const stickyToolbar = useSelector(stickyToolbarSelector);
+  const selectedPolls =  useSelector(selectedPollsSelector)
+  const OFFSET = 78;
 
-    this.openNewGroupModal = this.openNewGroupModal.bind(this)
-    this.selectAll = this.selectAll.bind(this)
-    this.ungroup = this.ungroup.bind(this)
-    this.handleScroll = this.handleScroll.bind(this)
-  };
+  const selectedPollIds = selectedPolls.pollIds;
+  const selectedGroupIds = selectedPolls.groupIds;
+  
+  useEffect(() => {
+    const scrollListener = window.addEventListener(
+      'scroll', 
+      throttle(() => setScrollY(window.scrollY), 16)
+    );
 
-  componentDidMount() {
-    this.scrollListener = window.addEventListener('scroll', throttle(() => { this.handleScroll() },
-      16));
-  }
+    return () => window.removeEventListener('scroll', scrollListener);
+  }, []);
 
-  componentWillUnmount(){
-    window.removeEventListener('scroll', this.scrollListener);
-  }
-
-  handleScroll(){
-    const { stickyToolbar, modalType } = this.props;
-    const scrollY = window.scrollY;
+  useEffect(() => {
     const nowSticky = OFFSET < scrollY;
-
     if (!stickyToolbar && nowSticky) {
-      this.props.setStickyToolbar(56);
+      dispatch(setStickyToolbar(56));
     } else if (stickyToolbar && !(nowSticky || modalType)) {
-      this.props.clearStickyToolbar();
+      dispatch(clearStickyToolbar());
     }
-  }
+  }, [stickyToolbar, scrollY]);
 
-  openNewGroupModal() {
-    this.props.openModal({
+  function openNewGroupModal(){
+    dispatch(openModal({
       type: 'new-group',
-      data: this.props.selections,
-      offset: this.props.stickyToolbar
-    })
+      data: selectedPolls,
+      offset: stickyToolbar
+    }));
   }
 
-  selectAll(){
-    const { groups, receiveSelections  } = this.props;
+  function openNewPoll() {
+    dispatch(openModal({
+      type: 'new-poll',
+      data: {},
+      offset: stickyToolbar
+    }));
+  }
+
+  function selectAll(){
     const groupIds = groups.map( group => group.id );
     const pollIds = groups.reduce( (acc, group) => acc.concat(group.pollIds), [] );
-    receiveSelections({ groupIds, pollIds });
+    dispatch(receiveSelections({ groupIds, pollIds }));
   }
 
-  ungroup(){
-    const { groups, selections, movePolls } = this.props;
-    movePolls(selections.pollIds, groups.find( g => g.ord === 0).id);
+  function ungroup(){
+    dispatch(movePolls(
+      selectedPollIds, 
+      groups.find( g => g.ord === 0).id)
+    );
   }
 
-  render() {
-    const { batchDestroy, clearSelections, selections, openModal, 
-      modalType, modalExiting, stickyToolbar, toggleMoveDrawer } = this.props;
-    const { selectAll } = this;
+  const Button = () => <span className='button-grey'><i className="fas fa-check"></i></span>
 
-    const Button = () => <span className='button-grey'><i className="fas fa-check"></i></span>
+  const Dropdown = () => (
+    <ul>
+      <span className='button-white' onClick={selectAll}>All</span>
+      <span 
+        className='button-white' 
+        onClick={ () => dispatch(clearSelections()) }
+      >None</span>
+    </ul>
+  )
 
-    const Dropdown = () => (
-      <ul>
-        <span className='button-white' onClick={selectAll}>All</span>
-        <span className='button-white' onClick={clearSelections}>None</span>
-      </ul>
-    )
+  const noSelection = !(selectedPollIds.length || selectedGroupIds.length); 
+  const showNewPoll = modalType == 'new-poll' && !modalExiting && stickyToolbar;
 
-    const noSelection = !(selections.groupIds.length || selections.pollIds.length); 
+  const createButton = !!stickyToolbar && ( 
+    <div className='polls-sidebar'>
+      <button 
+        className='button-blue' 
+        onClick={openNewPoll}
+      >
+        Create
+      </button>
+    </div>
+  );
 
-    const createButton = stickyToolbar ? 
-      <div className='polls-sidebar'>
-        <button 
-          className='button-blue' 
-          onClick={() => openModal({ 
-            type: 'new-poll', 
-            data: { }, 
-            offset: stickyToolbar 
-          })}
-        >Create</button>
-      </div>
-      : null;
-
-    const toolbar = ((modalType == 'new-poll' && !modalExiting ) && stickyToolbar) ? <NewPollToolbar /> : (
+  const toolbar = showNewPoll 
+    ? <NewPollToolbar /> 
+    : (
       <>
         {createButton}
 
         <DropdownWrapper button={Button} dropdown={Dropdown} containerClass='group-select-dropdown' />
 
-        <button className='button-grey' onClick={this.openNewGroupModal}>New group</button>
-        <button className='button-grey' onClick={this.ungroup} disabled={noSelection}>Ungroup</button>
-        <button className='button-grey' onClick={() => batchDestroy(selections)} disabled={noSelection}>Delete</button>
+        <button className='button-grey' onClick={openNewGroupModal}>New group</button>
+        <button className='button-grey' onClick={ungroup} disabled={noSelection}>Ungroup</button>
+        <button 
+          className='button-grey' 
+          disabled={noSelection}
+          onClick={ () => dispatch(batchDestroy(selectedPolls)) }
+        >
+          Delete
+        </button>
         <button className='button-grey' onClick={toggleMoveDrawer} disabled={noSelection}>Move</button>
       </>
-    )
+    );
 
-    return  (
-      <div 
-        className={'groups-index-toolbar ' + ( stickyToolbar ? 'sticky-toolbar' : '')}
-        ref={this.el}
-      >
-        {toolbar}
-      </div>
-    ) 
-  }
+  let className = 'groups-index-toolbar';
+  if (stickyToolbar) className += ' sticky-toolbar';
+
+  return (
+    <div className={className}>
+      {toolbar}
+    </div>
+  );
 };
-
-
-
-export default GroupsIndexToolbar;

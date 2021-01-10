@@ -1,26 +1,37 @@
+import { useSelector, useDispatch } from 'react-redux';
 import React, { useState, useRef } from 'react';
+
+import { movePolls } from "../../../actions/group_actions";
+import { openModal, closeModal } from '../../../actions/ui_actions';
+import { orderedGroupsSelector, selectedPollsSelector, stickyToolbarSelector } from '../../../util/hooks_selectors';
 import GroupSearch from '../../shared/group_search';
 
-export default function MoveDrawer({ groups, selections, visible, movePolls, openModal, closeModal, stickyToolbar, toggleVisible }) {
+export default function MoveDrawer({ visible, toggleVisible }) {
+  const dispatch = useDispatch();
+  const groups = useSelector(orderedGroupsSelector);
+  const selectedPolls = useSelector(selectedPollsSelector);
+  const stickyToolbar = useSelector(stickyToolbarSelector);
   const [ group, setGroup ] = useState(undefined);
   const moveButton = useRef();
   const cancelButton = useRef();
 
-  const pollIds = selections.pollIds;
+  const pollIds = selectedPolls.pollIds;
   const numPolls = pollIds.length;
 
   function handleMove(){
     const groupId = group?.id || groups.find(group => group.ord === 0 ).id;
-    const sendMoveRequest = () => movePolls(pollIds, groupId).then( () => {
-      closeModal();
-      toggleVisible();
-      setGroup(undefined);
-    });
-    openModal({
+    const sendMoveRequest = () => {
+      return dispatch(movePolls(pollIds, groupId)).then( () => {
+        dispatch(closeModal(400));
+        toggleVisible();
+        setGroup(undefined);
+      });
+    };
+    dispatch(openModal({
       type: 'confirm-move',
       data: { sendMoveRequest, numPolls },
       offset: stickyToolbar
-    });
+    }));
   }
 
   const buttonText = `Apply to ${numPolls} poll${numPolls === 1 ? '' : 's'}`;
