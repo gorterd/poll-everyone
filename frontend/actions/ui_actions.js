@@ -32,18 +32,19 @@ export const setScrollY = scrollY => {
   }
 }
 
-export const setStickyToolbar = height => {
+export const setStickyToolbar = boolean => {
   return {
     type: SET_STICKY_TOOLBAR,
-    height
+    // height
+    boolean
   }
 }
 
-export const clearStickyToolbar = () => {
-  return {
-    type: CLEAR_STICKY_TOOLBAR,
-  }
-}
+// export const clearStickyToolbar = () => {
+//   return {
+//     type: CLEAR_STICKY_TOOLBAR,
+//   }
+// }
 
 export const closeModal = delay => dispatch => {
   dispatch(exitModal());

@@ -5,7 +5,8 @@ import { RECEIVE_MODAL, CLEAR_MODAL, SET_SCROLL_Y, SET_STICKY_TOOLBAR, CLEAR_STI
 const _baseUi = {
   sessionLoading: false,
   groupsLoading: false,
-  stickyToolbar: 0,
+  // stickyToolbar: 0,
+  stickyToolbar: false,
   data: {
     scrollY: 0
   },
@@ -45,9 +46,11 @@ export default (state = _baseUi, action) => {
       newData = Object.assign({}, state.data, { scrollY: action.scrollY });
       return Object.assign({}, state, { data: newData });
     case SET_STICKY_TOOLBAR:
-      return Object.assign({}, state, { stickyToolbar: action.height });
+      // return Object.assign({}, state, { stickyToolbar: action.height });
+      return Object.assign({}, state, { stickyToolbar: action.boolean });
     case CLEAR_STICKY_TOOLBAR:
-      return Object.assign({}, state, { stickyToolbar: 0 });
+      // return Object.assign({}, state, { stickyToolbar: 0 });
+      return Object.assign({}, state, { stickyToolbar: false });
     default:
       return state;
   }

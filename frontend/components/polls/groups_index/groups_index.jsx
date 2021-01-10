@@ -38,17 +38,17 @@ export default function GroupsIndex(props) {
   return (
     <section className="polls-index">
 
-      <aside className='polls-sidebar'>
+      {/* <aside className='polls-sidebar'>
         <button 
           className={'button-blue' + (stickyToolbar ? ' hidden' : '') }
           onClick={openNewPoll}
         >Create</button>
-      </aside>
+      </aside> */}
 
+      <GroupsIndexToolbar 
+        toggleMoveDrawer={toggleMoveDrawer}
+      />
       <section className='groups-index-container'>
-        <GroupsIndexToolbar 
-          toggleMoveDrawer={toggleMoveDrawer}
-        />
 
         <MoveDrawer 
           visible={moveDrawerVisible} 

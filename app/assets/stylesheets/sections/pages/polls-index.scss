@@ -3,6 +3,11 @@
   width: 100%;
   min-height: 100vh;
   background-color: white;
+  // flex: 1;
+  // display: flex;
+  flex-direction: column;
+  // margin: 16px 16px 0 0;
+  position: relative;
 }
 
 .polls-sidebar {
@@ -15,15 +20,27 @@
 }
 
 .groups-index-container {
-  flex: 1;
+  // flex: 1;
   display: flex;
   flex-direction: column;
-  margin: 16px 16px 0 0;
+  // margin: 16px 16px 0 0;
+  margin-left: 225px;
+  // position: relative;
 }
+
 
 .groups-index-toolbar {
   margin-bottom: 14px;
-  
+  position: sticky;
+  top: 0;
+  padding-top: 10px;
+  width: 100%;
+  height: 56px;
+
+    display: flex;
+    align-items: center;
+    z-index: 100;
+
   *[class*="button-"] {
     border: 1px solid $soft-grey;
     &:hover { border-color: $medium-grey;}
@@ -36,20 +53,24 @@
   }
 
   &.sticky-toolbar {
-    position: fixed;
-    top: 0;
-    left: 0;
+    // position: fixed;
+    // top: 0;
+    // left: 0;
     box-shadow: 0 0px 12px 0px #b3b3b3;
     background-color: white;
-    width: 100%;
-    height: 56px;
-    display: flex;
-    align-items: center;
-    z-index: 100;
+    // width: 100%;
+    // height: 56px;
+    // display: flex;
+    // align-items: center;
+    // z-index: 100;
 
     .button-blue { border: none;}
 
   }
+
+  // &.sticky-toolbar-new-poll {
+  //   top: 
+  // }
 }
 
 .groups-index {

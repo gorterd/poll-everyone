@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { throttle } from 'lodash';
 
@@ -22,41 +22,63 @@ import {
 } from '../../../util/hooks_selectors';
 
 export default function GroupsIndexToolbar({ toggleMoveDrawer }) {
-  const [ scrollY, setScrollY ] = useState(null);
+  // const [ sticky, setSticky ] = useState(false);
+  const intersectionDiv = useRef();
   const dispatch = useDispatch();
   const groups = useSelector(orderedGroupsSelector)
   const modalType = useSelector(modalTypeSelector);
   const modalExiting = useSelector(modalExitingSelector);
   const stickyToolbar = useSelector(stickyToolbarSelector);
   const selectedPolls =  useSelector(selectedPollsSelector)
-  const OFFSET = 78;
+  // const OFFSET = 78;
 
   const selectedPollIds = selectedPolls.pollIds;
   const selectedGroupIds = selectedPolls.groupIds;
-  
-  useEffect(() => {
-    const scrollListener = window.addEventListener(
-      'scroll', 
-      throttle(() => setScrollY(window.scrollY), 16)
-    );
-
-    return () => window.removeEventListener('scroll', scrollListener);
-  }, []);
 
   useEffect(() => {
-    const nowSticky = OFFSET < scrollY;
-    if (!stickyToolbar && nowSticky) {
-      dispatch(setStickyToolbar(56));
-    } else if (stickyToolbar && !(nowSticky || modalType)) {
-      dispatch(clearStickyToolbar());
+    if ("IntersectionObserver" in window) {
+      const observer = new IntersectionObserver( event => {
+        // console.log(event)
+        // setSticky(!event[0].isIntersecting)
+        dispatch(setStickyToolbar(!event[0].isIntersecting));
+        // if (event[0].isIntersecting) {
+        // } else {
+        //   dispatch(clearStickyToolbar());
+        // }
+      }, {
+        threshold: 1
+      })
+      
+      observer.observe(intersectionDiv.current);
+
+      return () => observer.unobserve();
     }
-  }, [stickyToolbar, scrollY]);
+  }, [intersectionDiv])
+  
+  // useEffect(() => {
+  //   const scrollListener = window.addEventListener(
+  //     'scroll', 
+  //     throttle(() => setScrollY(window.scrollY), 16)
+  //   );
+
+  //   return () => window.removeEventListener('scroll', scrollListener);
+  // }, []);
+
+  // useEffect(() => {
+  //   const nowSticky = OFFSET < scrollY;
+  //   if (!stickyToolbar && nowSticky) {
+  //     dispatch(setStickyToolbar(56));
+  //   } else if (stickyToolbar && !(nowSticky || modalType)) {
+  //     dispatch(clearStickyToolbar());
+  //   }
+  // }, [stickyToolbar, scrollY]);
 
   function openNewGroupModal(){
     dispatch(openModal({
       type: 'new-group',
       data: selectedPolls,
-      offset: stickyToolbar
+      offset: 0
+      // offset: stickyToolbar
     }));
   }
 
@@ -64,7 +86,8 @@ export default function GroupsIndexToolbar({ toggleMoveDrawer }) {
     dispatch(openModal({
       type: 'new-poll',
       data: {},
-      offset: stickyToolbar
+      offset: 0
+      // offset: stickyToolbar
     }));
   }
 
@@ -94,9 +117,11 @@ export default function GroupsIndexToolbar({ toggleMoveDrawer }) {
   )
 
   const noSelection = !(selectedPollIds.length || selectedGroupIds.length); 
-  const showNewPoll = modalType == 'new-poll' && !modalExiting && stickyToolbar;
-
-  const createButton = !!stickyToolbar && ( 
+  // const showNewPoll = modalType == 'new-poll' && !modalExiting;
+  const showNewPoll = modalType == 'new-poll' && !modalExiting;
+    console.log(modalType, modalExiting, stickyToolbar);
+  // const createButton = !!stickyToolbar && ( 
+  const createButton = ( 
     <div className='polls-sidebar'>
       <button 
         className='button-blue' 
@@ -129,11 +154,13 @@ export default function GroupsIndexToolbar({ toggleMoveDrawer }) {
     );
 
   let className = 'groups-index-toolbar';
-  if (stickyToolbar) className += ' sticky-toolbar';
+  if (stickyToolbar && !showNewPoll) className += ' sticky-toolbar';
+  // if (stickyToolbar && showNewPoll) className += ' sticky-toolbar-new-poll';
 
   return (
-    <div className={className}>
-      {toolbar}
-    </div>
+    <>
+      <div ref={intersectionDiv}></div>
+      <div className={className}>{toolbar}</div>
+    </>
   );
 };

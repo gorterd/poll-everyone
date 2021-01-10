@@ -9,14 +9,14 @@ const AppNavbar = ({modalType, stickyToolbar, closeModal, ...rest}) => {
   ];
 
   const tools = [<AppNavbarDropdown {...rest} />];
-  const sticky = (modalType == 'new-poll' && !Boolean(stickyToolbar));
+  // const sticky = (modalType == 'new-poll' && !Boolean(stickyToolbar));
 
   return (
     <Navbar 
-      additionalClasses={
-        (sticky ? 'nav-sticky' : '')
-        + (stickyToolbar ? 'invisible' : '')
-      }
+      // additionalClasses={
+      //   (sticky ? 'nav-sticky' : '')
+      //   + (stickyToolbar ? 'invisible' : '')
+      // }
       relativeRootPath='/polls'
       onLogoClick={ modalType ? closeModal : null }
       links={links}
