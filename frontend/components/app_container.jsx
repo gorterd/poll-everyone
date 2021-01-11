@@ -17,10 +17,10 @@ class AppContainer extends React.Component {
     const { modal, scrollY, stickyToolbar } = this.props;
     let klass = null;
     let style = null;
-    
     if (modal.type) {
       klass = ' freeze-scroll';
-      style = { top: ((scrollY * -1) + modal.offset ) };
+      // style = { top: ((scrollY * -1) + modal.offset ) };
+      style = { top: ((scrollY * -1) ) };
     } else if ( stickyToolbar ) {
       style = { top: stickyToolbar, position: 'relative' };
     }

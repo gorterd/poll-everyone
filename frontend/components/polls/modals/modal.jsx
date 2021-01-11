@@ -6,6 +6,7 @@ import NewPoll from './new_poll/new_poll';
 import NewGroupModal from './groups/new_group';
 import EditGroupModal from './groups/rename_group';
 import ConfirmMoveModal from './confirm_move';
+
 export const defaultEnterAnimation = {
   animationName: 'fade-in',
   animationDuration: '400ms',
@@ -17,6 +18,7 @@ export const defaultExitAnimation = {
   animationName: 'fade-out',
   animationDuration: '400ms',
   animationIterationCount: 1,
+  animationFillMode: 'forwards'
 }
 
 const ModalComponent = ({ modal, closeModal }) => {
@@ -62,7 +64,8 @@ const ModalComponent = ({ modal, closeModal }) => {
     component: ConfirmMoveModal 
   });
   
-  if (!modal.exiting) {
+  if (!(modal.status === 'exiting')) {
+    console.log('set a render to true');
     switch (modal.type) {
       case NEW_POLL:
         newPollProps.renderCondition = true;
@@ -95,7 +98,7 @@ const mapState = ({ ui: { modal } }) => ({ modal })
 
 const mapDispatch = dispatch => {
   return {
-    closeModal: () => dispatch(closeModal(400))
+    closeModal: () => dispatch(closeModal(401))
   }
 }
 

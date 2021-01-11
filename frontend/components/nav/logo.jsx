@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 
 const Logo = ({relativeRootPath, onClick}) => {
 
@@ -9,11 +9,16 @@ const Logo = ({relativeRootPath, onClick}) => {
       <span> Poll Everyone</span>
     </>
 
-  return onClick ? <button onClick={onClick} className='logo'>{logo}</button> : (
-    <Link to={relativeRootPath} className="logo">
-      {logo}
-    </Link>
-  )
+  if (!onClick) {
+    onClick = () => useHistory().push(relativeRootPath);
+  }
+
+  return <button onClick={onClick} className='logo'>{logo}</button> 
+    // : (
+  //   <Link to={relativeRootPath} className="logo">
+  //     {logo}
+  //   </Link>
+  // )
 }
 
 export default Logo;

@@ -21,8 +21,6 @@ export default function GroupHeader({
     </>
   );
 
-  
-
   const activitiesCount = `${pollsCount} activit${(pollsCount == 1) ? "y" : "ies"}`
 
   function handleCheckbox(e) {

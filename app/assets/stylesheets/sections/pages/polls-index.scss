@@ -30,18 +30,16 @@
 
 
 .groups-index-toolbar {
-  margin-bottom: 14px;
   position: sticky;
   top: 0;
-  padding-top: 10px;
   width: 100%;
-  height: 56px;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  z-index: 1;
+  background-color: white;
 
-    display: flex;
-    align-items: center;
-    z-index: 100;
-
-  *[class*="button-"] {
+  *[class*="button-"]:not(.button-blue) {
     border: 1px solid $soft-grey;
     &:hover { border-color: $medium-grey;}
     &:disabled { border-color: $light-grey }
@@ -53,24 +51,9 @@
   }
 
   &.sticky-toolbar {
-    // position: fixed;
-    // top: 0;
-    // left: 0;
     box-shadow: 0 0px 12px 0px #b3b3b3;
     background-color: white;
-    // width: 100%;
-    // height: 56px;
-    // display: flex;
-    // align-items: center;
-    // z-index: 100;
-
-    .button-blue { border: none;}
-
   }
-
-  // &.sticky-toolbar-new-poll {
-  //   top: 
-  // }
 }
 
 .groups-index {

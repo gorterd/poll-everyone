@@ -22,8 +22,13 @@ export default function GroupsIndex(props) {
     dispatch(fetchGroups(currentId));
   }, []);
 
+  useEffect( () => {
+    if (moveDrawerVisible && stickyToolbar) {
+      scrollTo({ top: 72, behavior: "smooth" });
+    }
+  }, [moveDrawerVisible]);
+
   function toggleMoveDrawer() {
-    if (stickyToolbar) scrollTo({top: 75, behavior: "smooth"});
     setMoveDrawerVisible( oldVal => !oldVal );
   }
 
@@ -34,16 +39,10 @@ export default function GroupsIndex(props) {
       offset: 72
     }));
   }
+
     
   return (
     <section className="polls-index">
-
-      {/* <aside className='polls-sidebar'>
-        <button 
-          className={'button-blue' + (stickyToolbar ? ' hidden' : '') }
-          onClick={openNewPoll}
-        >Create</button>
-      </aside> */}
 
       <GroupsIndexToolbar 
         toggleMoveDrawer={toggleMoveDrawer}

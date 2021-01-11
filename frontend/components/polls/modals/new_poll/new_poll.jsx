@@ -5,7 +5,7 @@ import NewPollToolbar from './new_poll_toolbar';
 import MultipleChoiceForm from './multiple_choice_form';
 import { orderedGroups } from '../../../../util/selectors';
 import { createPoll } from '../../../../actions/poll_actions';
-import { closeModal } from '../../../../actions/ui_actions';
+import { closeModal, exitModal } from '../../../../actions/ui_actions';
 import GroupSearch from '../../../shared/group_search';
 
 const MULTIPLE_CHOICE = 'multiple_choice';
@@ -42,16 +42,16 @@ class NewPollForm extends React.Component {
   };
 
   setGroup(group) {
+    console.log('set group', group)
     this.setState({ group });
   }
-
 
   selectPollOption(option){
     this.setState({activeOption: option})
   }
 
   clearErrors(){
-    this.setState({error: ''})
+    this.setState({error: ''});
   }
 
   createPoll(formData){
@@ -77,7 +77,7 @@ class NewPollForm extends React.Component {
     return (
       <section className='new-poll-container'>
         
-        <NewPollToolbar hideOnSticky={true} />
+        <NewPollToolbar hideOnSticky={false} />
         <div className='new-poll-main'>
           <div className='new-poll-form-container'>
 
@@ -101,7 +101,7 @@ class NewPollForm extends React.Component {
 
             <div className='new-poll-bottom-bar'>
               <GroupSearch
-                activeGroup={group}
+                defaultGroup={this.props.modalData.group?.title}
                 setGroup={this.setGroup}
                 groups={groups}
                 placeholderText='Assign activity to a group'
@@ -124,7 +124,7 @@ const mapState = state => {
 const mapDispatch = dispatch => {
   return {
     createPoll: (poll, groupId) => dispatch(createPoll(poll, groupId)),
-    closeModal: () => dispatch(closeModal(400))
+    closeModal: () => dispatch(exitModal())
   }
 }
 

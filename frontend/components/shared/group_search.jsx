@@ -8,7 +8,7 @@ const KEY_MOVE = 'KEY_MOVE';
 const TOGGLE_DRAWER = 'TOGGLE_DRAWER';
 const SELECT_GROUP = 'SELECT_GROUP';
 
-export default function GroupSearch({ setGroup, focusOnTab, groups, placeholderText }) {
+export default function GroupSearch({ setGroup, focusOnTab, groups, placeholderText, defaultGroup }) {
   function reducer(state, action) {
     switch (action.type) {
       case SELECT_GROUP:
@@ -50,7 +50,7 @@ export default function GroupSearch({ setGroup, focusOnTab, groups, placeholderT
   }
 
   const [state, dispatch] = useReducer(reducer, {
-    searchText: '',
+    searchText: defaultGroup || '',
     drawerGroups: Array.from(groups),
     drawerOpen: false,
     focusIndex: null,

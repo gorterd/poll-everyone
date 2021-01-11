@@ -4,7 +4,6 @@ import { Route, Switch, matchPath } from 'react-router-dom';
 import Navbar from './nav/navbar/navbar';
 import Footer from './nav/footer';
 import HomeNavbarContainer from './nav/navbar/home_navbar/home_navbar_container';
-import AppNavbarContainer from './nav/navbar/app_navbar/app_navbar_container';
 
 import HomeSplash from './nav/home_splash';
 
@@ -20,6 +19,7 @@ import { Modal } from './polls/modals/modal';
 
 import ReportsIndex from './reports/reports_index'
 import GroupsIndex from './polls/groups_index/groups_index';
+import AppNavbar from './nav/navbar/app_navbar/app_navbar';
 
 
 const App = () => {
@@ -29,7 +29,7 @@ const App = () => {
         <Switch>
 
           <Route exact path='/'><HomeNavbarContainer /></Route>
-          <ProtectedRoute path={['/polls', '/account', '/reports']}><AppNavbarContainer /></ProtectedRoute>
+          <ProtectedRoute path={['/polls', '/account', '/reports']}><AppNavbar /></ProtectedRoute>
           <Navbar relativeRootPath={'/'} additionalClasses='nav-sticky' links={[]} tools={[]}/>
         </Switch>
 

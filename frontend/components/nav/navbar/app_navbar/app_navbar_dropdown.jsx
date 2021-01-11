@@ -1,11 +1,17 @@
 import React from 'react';
-import { Link, withRouter } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link, useHistory, withRouter } from 'react-router-dom';
+import { logout } from '../../../../actions/session_actions';
+import { currentUserSelector } from '../../../../util/hooks_selectors';
 import DropdownWrapper from '../../../shared/dropdown';
 
-const AppNavbarDropdown = ({currentUser, logout, history}) => {
+export default function AppNavbarDropdown () {
+  const history = useHistory();
+  const dispatch = useDispatch();
+  const currentUser = useSelector(currentUserSelector);
 
   const handleLogout = () => {
-    logout();
+    dispatch(logout());
     history.push('/');
   }
 
@@ -27,4 +33,3 @@ const AppNavbarDropdown = ({currentUser, logout, history}) => {
   />
 }
 
-export default withRouter(AppNavbarDropdown);

@@ -4,6 +4,8 @@ export const scrollYSelector = state => state.ui.data.scrollY;
 export const stickyToolbarSelector = state => state.ui.stickyToolbar;
 export const modalTypeSelector = state => state.ui.modal.type;
 export const modalExitingSelector = state => state.ui.modal.exiting;
+export const currentUserSelector = state => 
+  state.entities.users[state.session.currentId];
 
 export const orderedGroupsSelector = state => {
   return Object.values(state.entities.groups).sort(ordSort);

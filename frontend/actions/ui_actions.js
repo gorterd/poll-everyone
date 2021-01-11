@@ -1,6 +1,7 @@
 export const RECEIVE_MODAL = 'RECEIVE_MODAL'
 export const CLEAR_MODAL = 'CLEAR_MODAL'
 export const EXIT_MODAL = 'EXIT_MODAL'
+export const CLEAR_STATUS = 'CLEAR_STATUS'
 export const SET_SCROLL_Y = 'SET_SCROLL_Y'
 export const SET_STICKY_TOOLBAR = 'SET_STICKY_TOOLBAR'
 export const CLEAR_STICKY_TOOLBAR = 'CLEAR_STICKY_TOOLBAR'
@@ -13,13 +14,18 @@ export const openModal = modal => {
   }
 }
 
-const exitModal = () => {
+export const clearStatus = () => {
+  return {
+    type: CLEAR_STATUS
+  }
+}
+
+export const exitModal = () => {
   return {
     type: EXIT_MODAL
   }
 }
-
-const clearModal = () => {
+export const clearModal = () => {
   return {
     type: CLEAR_MODAL
   }
@@ -35,22 +41,7 @@ export const setScrollY = scrollY => {
 export const setStickyToolbar = boolean => {
   return {
     type: SET_STICKY_TOOLBAR,
-    // height
     boolean
   }
 }
-
-// export const clearStickyToolbar = () => {
-//   return {
-//     type: CLEAR_STICKY_TOOLBAR,
-//   }
-// }
-
-export const closeModal = delay => dispatch => {
-  dispatch(exitModal());
-  window.setTimeout( () => {
-    dispatch(clearModal());
-  }, parseInt(delay));
-} 
-
 

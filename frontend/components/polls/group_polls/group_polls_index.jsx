@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { clearPollSelection, receivePollSelection } from '../../../actions/selection_actions/poll_selection_actions';
 import { openModal } from '../../../actions/ui_actions';

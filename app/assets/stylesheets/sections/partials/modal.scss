@@ -1,6 +1,6 @@
 .freeze-scroll {
   position: fixed;
-  overflow: hidden;
+  // overflow: hidden;
   width: 100%;
 }
 
@@ -12,7 +12,7 @@ $new-poll-offset: 72px;
   justify-content: center;
   align-items: center;
   background-color: rgba(0, 0, 0, 0.4);
-  z-index: 100;
+  z-index: 2;
 }
 
 .standard-modal-background {

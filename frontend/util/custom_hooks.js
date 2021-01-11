@@ -29,8 +29,68 @@ export function useDropdown(eleRef, unfocusCB) {
     });
 
     return () => {
+      unfocus = false;
       removeEventListener('click', clickOutListener);
       removeEventListener('click', clickInListener);
     }
   }, []);
+}
+
+export function useAnimation ({
+  renderCondition, 
+  enterAnimation, 
+  exitAnimation,
+  afterEnter = () => {},
+  afterExit = () => {},
+}) {
+  if (typeof renderCondition === 'undefined') {
+    throw new Error('Must provide a renderCondition')
+  } 
+
+  const enterDuration = enterAnimation?.animationDuration;
+  const exitDuration = exitAnimation?.animationDuration;
+
+  if (enterAnimation && !enterDuration) {
+    throw new Error('enterAnimation must have animationDuration')
+  }
+
+  if (exitAnimation && !exitDuration) {
+    throw new Error('exitAnimation must have animationDuration')
+  }
+
+  enterAnimation = enterAnimation || { animationDuration: 0 };
+  exitAnimation = exitAnimation || { animationDuration: 0 };
+
+  const [ renderState, setRenderState ] = useState(renderCondition);
+  const [ style, setStyle ] = useState({});
+  const [ key, setKey ] = useState(0);
+  const timeout = useRef();
+
+  useEffect(() => {
+    if (!timeout.current){
+      if (renderCondition) {
+        setStyle(enterAnimation);
+        setRenderState(true);
+
+        timeout.current = window.setTimeout(() => {
+          afterEnter();
+          timeout.current = null;
+        }, parseInt(enterDuration));
+      } 
+      else {
+        setKey(old => old + 1);
+        setStyle(exitAnimation);
+
+        timeout.current = window.setTimeout(() => {
+          afterExit();
+          setRenderState(false);
+          timeout.current = null;
+        }, parseInt(exitDuration)); 
+      }
+    }
+  }, [renderCondition]);
+
+  useEffect(() => () => clearTimeout(timeout.current), []);
+
+  return [ renderState, style, key ];
 }
