@@ -19,19 +19,19 @@ export function useDropdown(eleRef, unfocusCB) {
   useEffect(() => {
     let unfocus = true;
 
-    const clickInListener = eleRef.current.addEventListener('click', () => {
-      unfocus = false;
-    });
-
-    const clickOutListener = document.addEventListener('click', () => {
+    const onEleClick = () => (unfocus = false);
+    const onDocumentClick = () => {
       if (unfocus) unfocusCB();
       unfocus = true;
-    });
+    }
+
+    eleRef.current.addEventListener('click', onEleClick);
+    document.addEventListener('click', onDocumentClick);
 
     return () => {
       unfocus = false;
-      removeEventListener('click', clickOutListener);
-      removeEventListener('click', clickInListener);
+      eleRef?.current?.removeEventListener('click', onEleClick);
+      document.removeEventListener('click', onDocumentClick);
     }
   }, []);
 }

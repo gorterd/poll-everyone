@@ -1,7 +1,7 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
-import { closeModal } from '../../../../actions/ui_actions';
+import { exitModal } from '../../../../actions/ui_actions';
 import { modalTypeSelector } from '../../../../util/hooks_selectors';
 import Navbar from '../navbar';
 import AppNavbarDropdown from './app_navbar_dropdown';
@@ -10,6 +10,7 @@ export default function AppNavbar () {
   const links = [
     <NavLink activeClassName="navbar-active" to='/polls'>Polls</NavLink>,
   ];
+  const dispatch = useDispatch();
 
   const tools = [<AppNavbarDropdown />];
 
@@ -19,7 +20,7 @@ export default function AppNavbar () {
     <Navbar 
       additionalClasses=''
       relativeRootPath='/polls'
-      onLogoClick={modalType ? () => useDispatch()(closeModal()) : null }
+      onLogoClick={modalType ? (() => dispatch(exitModal())) : null }
       links={links}
       tools={tools}
     ></Navbar>

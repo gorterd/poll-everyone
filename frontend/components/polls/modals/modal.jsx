@@ -65,7 +65,6 @@ const ModalComponent = ({ modal, closeModal }) => {
   });
   
   if (!(modal.status === 'exiting')) {
-    console.log('set a render to true');
     switch (modal.type) {
       case NEW_POLL:
         newPollProps.renderCondition = true;

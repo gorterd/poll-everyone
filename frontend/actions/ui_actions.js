@@ -4,7 +4,6 @@ export const EXIT_MODAL = 'EXIT_MODAL'
 export const CLEAR_STATUS = 'CLEAR_STATUS'
 export const SET_SCROLL_Y = 'SET_SCROLL_Y'
 export const SET_STICKY_TOOLBAR = 'SET_STICKY_TOOLBAR'
-export const CLEAR_STICKY_TOOLBAR = 'CLEAR_STICKY_TOOLBAR'
 
 export const openModal = modal => {
   return {

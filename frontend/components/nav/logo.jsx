@@ -3,6 +3,8 @@ import { Link, useHistory } from 'react-router-dom';
 
 const Logo = ({relativeRootPath, onClick}) => {
 
+  const history = useHistory();
+
   const logo = 
     <>
       <img src={window.logoURL} alt='Logo' />
@@ -10,7 +12,7 @@ const Logo = ({relativeRootPath, onClick}) => {
     </>
 
   if (!onClick) {
-    onClick = () => useHistory().push(relativeRootPath);
+    onClick = () => history.push(relativeRootPath);
   }
 
   return <button onClick={onClick} className='logo'>{logo}</button> 

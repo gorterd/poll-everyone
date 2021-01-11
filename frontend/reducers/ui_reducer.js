@@ -42,7 +42,7 @@ export default (state = _baseUi, action) => {
       newModal = Object.assign({}, state.modal, { status: null });
       return Object.assign({}, state, { modal: newModal});
     case EXIT_MODAL:
-      if (state.modal.status) return state;
+      if (state.modal.status || !state.modal.type) return state;
 
       newModal = Object.assign({}, state.modal, { status: 'exiting' });
       return Object.assign({}, state, { modal: newModal });

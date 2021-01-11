@@ -36,7 +36,7 @@ export default function GroupsIndexToolbar({ toggleMoveDrawer }) {
       
       observer.observe(intersectionDiv.current);
 
-      return () => observer.unobserve();
+      return () => observer.unobserve(intersectionDiv.current);
     }
   }, [intersectionDiv])
 

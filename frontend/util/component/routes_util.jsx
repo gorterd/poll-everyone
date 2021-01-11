@@ -2,7 +2,7 @@ import { connect } from 'react-redux'
 import React from 'react'
 import { Redirect, Route, withRouter } from 'react-router-dom'
 
-import { closeModal } from '../../actions/ui_actions'
+import { exitModal } from '../../actions/ui_actions'
 
 const Auth = ({ Component, exact, path, loggedIn }) => {
   return (
@@ -30,8 +30,8 @@ export const ProtectedRoute = connect(mapStateToRoutes, null)(Protected);
 
 const mapDispatchToMiddleware = dispatch => {
   return {
-    closeModal: () => {
-      dispatch(closeModal(0))
+    exitModal: () => {
+      dispatch(exitModal())
     }
   }
 }
@@ -41,7 +41,7 @@ class RouteMiddlewareComponent extends React.Component {
   componentDidUpdate(prevProps) {
     if (prevProps.location.pathname !== this.props.location.pathname) {
       window.scrollTo(0, 0);
-      this.props.closeModal();
+      this.props.exitModal();
     }
   }
 

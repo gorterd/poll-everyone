@@ -35,13 +35,14 @@ class LargeInput extends React.Component {
       animationDuration: "200ms",
       animationIterationCount: 1,
       animationTimingFunction: "ease-out",
+      animationFillMode: "forwards",
     };
 
     const downAndOut = {
       animationName: "slide-down-and-out",
       animationDuration: "200ms",
       animationIterationCount: 1,
-      animationTimingFunction: "ease-in",
+      animationFillMode: "forwards",
     };
 
     return (

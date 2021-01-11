@@ -42,7 +42,6 @@ class NewPollForm extends React.Component {
   };
 
   setGroup(group) {
-    console.log('set group', group)
     this.setState({ group });
   }
 
