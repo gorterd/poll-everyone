@@ -2,8 +2,7 @@ export const selectedPollsSelector = state => state.selections.polls;
 export const currentUserIdSelector = state => state.session.currentId;
 export const scrollYSelector = state => state.ui.data.scrollY;
 export const stickyToolbarSelector = state => state.ui.stickyToolbar;
-export const modalTypeSelector = state => state.ui.modal.type;
-export const modalExitingSelector = state => state.ui.modal.exiting;
+export const modalSelector = state => state.ui.modal;
 export const currentUserSelector = state => 
   state.entities.users[state.session.currentId];
 

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchGroups } from '../../../actions/group_actions';
-import { openModal } from '../../../actions/ui_actions';
 import GroupsIndexToolbar from './groups_index_toolbar';
 import MoveDrawer from './move_drawer';
 import GroupPollsIndex from '../group_polls/group_polls_index';
@@ -31,15 +30,6 @@ export default function GroupsIndex(props) {
   function toggleMoveDrawer() {
     setMoveDrawerVisible( oldVal => !oldVal );
   }
-
-  function openNewPoll() {
-    dispatch(openModal({
-      type: 'new-poll',
-      data: {},
-      offset: 72
-    }));
-  }
-
     
   return (
     <section className="polls-index">

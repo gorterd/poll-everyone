@@ -1,11 +1,11 @@
 import React from 'react';
-import { connect} from 'react-redux';
-import { closeModal } from '../../../actions/ui_actions';
+import { useSelector} from 'react-redux';
 import { AnimatedModal } from '../../../util/component/animation_util';
 import NewPoll from './new_poll/new_poll';
 import NewGroupModal from './groups/new_group';
 import EditGroupModal from './groups/rename_group';
 import ConfirmMoveModal from './confirm_move';
+import { modalSelector } from '../../../util/hooks_selectors';
 
 export const defaultEnterAnimation = {
   animationName: 'fade-in',
@@ -21,7 +21,8 @@ export const defaultExitAnimation = {
   animationFillMode: 'forwards'
 }
 
-const ModalComponent = ({ modal, closeModal }) => {
+export function Modal () {
+  const modal = useSelector(modalSelector);
 
   const NEW_POLL = 'new-poll';
   const NEW_GROUP = 'new-group';
@@ -33,19 +34,21 @@ const ModalComponent = ({ modal, closeModal }) => {
 
   const DEFAULTS = {
     modalData: modal.data,
-    closeModal: closeModal,
-    enterAnimation: defaultEnterAnimation,
-    exitAnimation: defaultExitAnimation,
+    modalClass: defaultModalClass,
     backgroundClass: defaultBackgroundClass,
     backgroundStyle: null,
-    modalClass: defaultModalClass,
-    renderCondition: false
+    renderCondition: false,
+    enterAnimation: defaultEnterAnimation,
+    exitAnimation: defaultExitAnimation,
   }
 
   const newPollProps = Object.assign({}, DEFAULTS, { 
     modalClass: 'new-poll-modal',
     backgroundClass: 'new-poll-modal-background',
-    backgroundStyle: { height: `calc(100vh - ${modal.offset}px)` },
+    backgroundStyle: { 
+      height: `calc(100vh - ${modal.offset}px)`,
+      zIndex: 1,
+    },
     component: NewPoll
   });
 
@@ -92,14 +95,3 @@ const ModalComponent = ({ modal, closeModal }) => {
     </>
   )
 }
-
-const mapState = ({ ui: { modal } }) => ({ modal })
-
-const mapDispatch = dispatch => {
-  return {
-    closeModal: () => dispatch(closeModal(401))
-  }
-}
-
-export const Modal = connect(mapState, mapDispatch)(ModalComponent);
-

@@ -2,7 +2,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import React, { useState, useRef } from 'react';
 
 import { movePolls } from "../../../actions/group_actions";
-import { openModal, closeModal } from '../../../actions/ui_actions';
+import { openModal, exitModal } from '../../../actions/ui_actions';
 import { orderedGroupsSelector, selectedPollsSelector, stickyToolbarSelector } from '../../../util/hooks_selectors';
 import GroupSearch from '../../shared/group_search';
 
@@ -22,7 +22,7 @@ export default function MoveDrawer({ visible, toggleVisible }) {
     const groupId = group?.id || groups.find(group => group.ord === 0 ).id;
     const sendMoveRequest = () => {
       return dispatch(movePolls(pollIds, groupId)).then( () => {
-        dispatch(closeModal(400));
+        dispatch(exitModal());
         toggleVisible();
         setGroup(undefined);
       });
@@ -30,7 +30,7 @@ export default function MoveDrawer({ visible, toggleVisible }) {
     dispatch(openModal({
       type: 'confirm-move',
       data: { sendMoveRequest, numPolls },
-      offset: stickyToolbar
+      offset: stickyToolbar ? 70 : 0,
     }));
   }
 

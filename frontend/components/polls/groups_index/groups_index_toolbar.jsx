@@ -44,7 +44,7 @@ export default function GroupsIndexToolbar({ toggleMoveDrawer }) {
     dispatch(openModal({
       type: 'new-group',
       data: selectedPolls,
-      offset: 0
+      offset: stickyToolbar ? 70 : 0,
     }));
   }
 
