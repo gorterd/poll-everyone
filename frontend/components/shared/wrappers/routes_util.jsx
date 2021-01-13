@@ -2,7 +2,7 @@ import { connect } from 'react-redux'
 import React from 'react'
 import { Redirect, Route, withRouter } from 'react-router-dom'
 
-import { exitModal } from '../../actions/ui_actions'
+import { exitModal } from '../../../store/actions/ui_actions'
 
 const Auth = ({ Component, exact, path, loggedIn }) => {
   return (

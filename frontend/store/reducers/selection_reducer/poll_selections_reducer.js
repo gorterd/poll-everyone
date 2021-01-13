@@ -2,7 +2,7 @@ import {
   CLEAR_SELECTIONS, CLEAR_GROUP_SELECTION, RECEIVE_GROUP_SELECTION, RECEIVE_SELECTIONS, RECEIVE_POLL_SELECTION, CLEAR_POLL_SELECTION 
 } from '../../actions/selection_actions/poll_selection_actions';
 
-import { mergeArrays } from '../../util/general_util'
+import { mergeArrays } from '../../../util/general_util'
 
 const _nullSelection = {
   groupIds: [],

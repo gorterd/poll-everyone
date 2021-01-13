@@ -1,12 +1,12 @@
 import React from 'react';
 import Logo from '../logo';
 
-const Navbar = ({relativeRootPath, additionalClasses, onLogoClick,  links, tools}) => {
+const Navbar = ({ additionalClasses, links, tools, logoProps = {} }) => {
 
   return (
     <nav className={'nav ' + additionalClasses}>
       <ul className="nav-links">
-        <li><Logo relativeRootPath={relativeRootPath} onClick={onLogoClick} /></li>
+        <li><Logo { ...logoProps } /></li>
           
         {links.map( (link, i) => <li key={i}>{link}</li>)}
       </ul>

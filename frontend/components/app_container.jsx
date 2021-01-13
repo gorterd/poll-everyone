@@ -1,32 +1,29 @@
-import React from 'react';
-import { connect } from 'react-redux';
-import App from './app';
-import { Switch, Route } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { HashRouter, Route, Switch } from 'react-router-dom';
+
+import { RouteMiddleware } from './shared/wrappers/routes_util'
+import { modalSelector, uiSelector } from '../util/hooks_selectors';
 import ParticipantApp from './participant/participant_app';
+import App from './app';
 
-class AppContainer extends React.Component {
-  
-  componentDidUpdate(prevProps){
-    const { modal, scrollY } = this.props;
-    if ( prevProps.modal.type && !modal.type ){
-      window.scrollTo(0, scrollY);
-    } 
-  }
 
-  render() {
-    const { modal, scrollY, stickyToolbar } = this.props;
-    let klass = null;
-    let style = null;
-    if (modal.type) {
-      klass = ' freeze-scroll';
-      // style = { top: ((scrollY * -1) + modal.offset ) };
-      style = { top: ((scrollY * -1) ) };
-    } else if ( stickyToolbar ) {
-      style = { top: stickyToolbar, position: 'relative' };
-    }
+export default function AppContainer() {
+  const { scrollY } = useSelector(uiSelector);
+  const modal = useSelector(modalSelector);
 
-    return (
-      <section className={'app' + (klass || '')} style={style}>
+  useEffect(() => {
+    console.log(modal)
+    if (!modal.type) window.scrollTo(0, scrollY);
+  }, [modal]);
+
+  return (
+    <HashRouter>
+      <Route><RouteMiddleware /></Route>
+      <section
+        className={'app' + (modal.type ? ' freeze-scroll' : '')}
+        style={modal.type ? { top: (scrollY * -1) } : null}
+      >
         <Switch>
           <Route path='/participate'>
             <ParticipantApp />
@@ -34,16 +31,6 @@ class AppContainer extends React.Component {
           <App />
         </Switch>
       </section>
-    );
-  }
-};
-
-const mapState = ({ 
-  ui: { 
-    modal,
-    stickyToolbar, 
-    data: { scrollY } 
-  } }) => ({ modal, scrollY, stickyToolbar });
-
-export default connect(mapState)(AppContainer);
-
+    </HashRouter>
+  );
+}

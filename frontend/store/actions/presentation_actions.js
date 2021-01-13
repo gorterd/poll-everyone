@@ -1,5 +1,4 @@
-import * as PollActions from './poll_actions'
-import * as PresentationApiUtil from '../util/api/presentation_api_util'
+import * as PresentationApiUtil from '../../util/api/presentation_api_util'
 
 export const RECEIVE_PARTICIPANT = 'RECEIVE_PARTICIPANT'
 export const RECEIVE_ACTIVE_POLL = 'RECEIVE_ACTIVE_POLL'

@@ -1,36 +1,26 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { useSelector } from 'react-redux';
+import { modalDataSelector } from '../../../util/hooks_selectors';
+import SmallModal from './small_modal';
 
-const ConfirmMoveModal = ({ closeModal, modalData: { sendMoveRequest, numPolls } }) => {
+export default function ConfirmMoveModal() {
+  const { sendMoveRequest, numPolls } = useSelector(modalDataSelector);
 
   const word = numPolls === 1 ? 'poll' : 'polls';
-  const subText =  (
+  const subtext =  (
     <>
       {`You selected ${numPolls} ${word}.`}
       <br />
       {`Click 'Apply' to move the selected ${word}.`}
-    </> )
-
-  return (
-    <>
-      <h3>Confirm move</h3>
-      <p>{subText}</p>
-
-      <div className='buttons'>
-        <button className='button-transparent' onClick={closeModal}>Cancel</button>
-        <button className='button-blue' onClick={sendMoveRequest}>Apply</button>
-      </div>
     </>
-  )
-}
+  );
 
-
-const mapState = state => {
-  return {
-    modalData: state.ui.modal.data
+  const modalProps = {
+    header: 'Confirm move',
+    submissionText: 'Apply',
+    submissionHandler: sendMoveRequest,
+    subtext,
   }
+
+  return <SmallModal {...modalProps} />
 }
-
-
-export default connect(mapState)(ConfirmMoveModal);
-

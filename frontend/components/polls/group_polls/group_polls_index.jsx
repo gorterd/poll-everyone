@@ -1,7 +1,7 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { clearPollSelection, receivePollSelection } from '../../../actions/selection_actions/poll_selection_actions';
-import { openModal } from '../../../actions/ui_actions';
+import { clearPollSelection, receivePollSelection } from '../../../store/actions/selection_actions/poll_selection_actions';
+import { openModal } from '../../../store/actions/ui_actions';
 import { useToggleState } from '../../../util/custom_hooks';
 import { orderedGroupPollsSelector, stickyToolbarSelector } from '../../../util/hooks_selectors';
 import GroupHeader from './group_header';

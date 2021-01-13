@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { closeModal, exitModal } from '../../../../actions/ui_actions';
-import { defaultExitAnimation } from '../modal'
+import { closeModal, exitModal } from '../../../../store/actions/ui_actions';
+import { defaultExitAnimation } from '../../../shared/modal'
 
 const NewPollToolbar = ({closeModal, hideOnSticky, stickyToolbar }) => {
   const klass = 'new-poll-toolbar' 

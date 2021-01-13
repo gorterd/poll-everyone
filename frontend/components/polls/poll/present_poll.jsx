@@ -6,13 +6,13 @@ import { isEqual, debounce } from 'lodash';
 import { presenterPollDataSelector } from '../../../util/hooks_selectors';
 import { standardGraph } from '../../../util/data_formats_util';
 import { usePrevious } from '../../../util/custom_hooks';
-import { fetchFullPoll, toggleActive } from '../../../actions/poll_actions'
+import { fetchFullPoll, toggleActive } from '../../../store/actions/poll_actions'
 import { 
   receiveActivePoll, 
   clearActivePoll, 
   receiveResponse, 
   clearResponse 
-} from '../../../actions/presentation_actions';
+} from '../../../store/actions/presentation_actions';
 import PresentationGraph from './presentation_graph';
 
 export default function PresentPoll() {

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Animated } from '../../util/component/animation_util';
+import { Animated } from './wrappers/animation_util';
 
 class LargeInput extends React.Component {
 

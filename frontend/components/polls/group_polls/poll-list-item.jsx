@@ -1,7 +1,7 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { duplicatePoll, toggleActive } from '../../../actions/poll_actions';
+import { duplicatePoll, toggleActive } from '../../../store/actions/poll_actions';
 import { selectedPollsSelector } from '../../../util/hooks_selectors';
 
 export default function PollListItem({ poll, togglePollSelect }) {

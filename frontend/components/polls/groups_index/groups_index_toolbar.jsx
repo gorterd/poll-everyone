@@ -1,14 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import DropdownWrapper from '../../shared/dropdown';
+import DropdownWrapper from '../../shared/wrappers/dropdown';
 
-import { batchDestroy, movePolls } from "../../../actions/group_actions";
-import { receiveSelections, clearSelections } from '../../../actions/selection_actions/poll_selection_actions'
+import { batchDestroy, movePolls } from "../../../store/actions/group_actions";
+import { receiveSelections, clearSelections } from '../../../store/actions/selection_actions/poll_selection_actions'
 import { 
   openModal, 
   setStickyToolbar, 
-} from '../../../actions/ui_actions';
+} from '../../../store/actions/ui_actions';
 
 import { 
   stickyToolbarSelector, 

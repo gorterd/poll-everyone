@@ -58,7 +58,7 @@ const Footer = () => {
     <section className='footer'>
       <div className='footer-pane'>
         <div className='footer-pane-container'>
-          <Logo relativeRootPath='/'/>
+          <Logo />
           <div className='footer-links-container'>
             {linkLists}
           </div>
@@ -67,9 +67,6 @@ const Footer = () => {
       <div className='footer-social-pane'>
         <div className='footer-social-container'>
           <div className='footer-social-left'>
-            {/* {['Status', 'Cookies', 'Terms', 'Privacy'].map( (link, i) => (
-              <a key={i} className="footer-social-link">{link}</a>
-            ))} */}
           </div>
           <div className='footer-social-right'>
             <span className="icon icon-std icon-grey">

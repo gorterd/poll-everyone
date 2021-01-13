@@ -1,16 +1,16 @@
-import * as GroupsApiUtil from '../util/api/groups_api_util';
+import * as GroupsApiUtil from '../../util/api/groups_api_util';
 import * as PollActions from './poll_actions'
 import { clearSelections } from './selection_actions/poll_selection_actions';
 
 export const RECEIVE_GROUPS = 'RECEIVE_GROUPS';
 export const RECEIVE_GROUP = 'RECEIVE_GROUP';
 
-export const GROUPS_ARE_LOADING = 'GROUPS_ARE_LOADING';
+export const GROUPS_LOADING = 'GROUPS_LOADING';
 export const RESET_GROUPS_LOADING = 'RESET_GROUPS_LOADING';
 
 const groupsAreLoading = () => {
   return {
-    type: GROUPS_ARE_LOADING
+    type: GROUPS_LOADING
   }
 }
 

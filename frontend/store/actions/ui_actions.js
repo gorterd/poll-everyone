@@ -1,7 +1,7 @@
 export const RECEIVE_MODAL = 'RECEIVE_MODAL'
 export const CLEAR_MODAL = 'CLEAR_MODAL'
 export const EXIT_MODAL = 'EXIT_MODAL'
-export const CLEAR_STATUS = 'CLEAR_STATUS'
+export const CLEAR_MODAL_STATUS = 'CLEAR_MODAL_STATUS'
 export const SET_SCROLL_Y = 'SET_SCROLL_Y'
 export const SET_STICKY_TOOLBAR = 'SET_STICKY_TOOLBAR'
 
@@ -15,7 +15,7 @@ export const openModal = modal => {
 
 export const clearStatus = () => {
   return {
-    type: CLEAR_STATUS
+    type: CLEAR_MODAL_STATUS
   }
 }
 

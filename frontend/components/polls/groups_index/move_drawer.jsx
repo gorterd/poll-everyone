@@ -1,8 +1,8 @@
 import { useSelector, useDispatch } from 'react-redux';
 import React, { useState, useRef } from 'react';
 
-import { movePolls } from "../../../actions/group_actions";
-import { openModal, exitModal } from '../../../actions/ui_actions';
+import { movePolls } from "../../../store/actions/group_actions";
+import { openModal, exitModal } from '../../../store/actions/ui_actions';
 import { orderedGroupsSelector, selectedPollsSelector, stickyToolbarSelector } from '../../../util/hooks_selectors';
 import GroupSearch from '../../shared/group_search';
 

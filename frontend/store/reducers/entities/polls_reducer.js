@@ -1,6 +1,6 @@
 import { RECEIVE_POLLS, RECEIVE_POLL, RECEIVE_FULL_POLL } from '../../actions/poll_actions';
 import { RECEIVE_ACTIVE_POLL } from '../../actions/presentation_actions';
-import { twoTierMerge } from '../../util/general_util';
+import { twoTierMerge } from '../../../util/general_util';
 
 export default (state = {}, action) => {
   Object.freeze(state);

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchGroups } from '../../../actions/group_actions';
+import { fetchGroups } from '../../../store/actions/group_actions';
 import GroupsIndexToolbar from './groups_index_toolbar';
 import MoveDrawer from './move_drawer';
 import GroupPollsIndex from '../group_polls/group_polls_index';

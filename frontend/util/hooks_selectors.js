@@ -1,10 +1,15 @@
-export const selectedPollsSelector = state => state.selections.polls;
 export const currentUserIdSelector = state => state.session.currentId;
-export const scrollYSelector = state => state.ui.data.scrollY;
-export const stickyToolbarSelector = state => state.ui.stickyToolbar;
-export const modalSelector = state => state.ui.modal;
 export const currentUserSelector = state => 
-  state.entities.users[state.session.currentId];
+state.entities.users[state.session.currentId];
+
+export const uiSelector = state => state.ui;
+export const scrollYSelector = state => state.ui.scrollY;
+export const stickyToolbarSelector = state => state.ui.stickyToolbar;
+
+export const modalSelector = state => state.modal;
+export const modalDataSelector = state => state.modal.data;
+
+export const selectedPollsSelector = state => state.selections.polls;
 
 export const orderedGroupsSelector = state => {
   return Object.values(state.entities.groups).sort(ordSort);

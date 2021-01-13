@@ -1,7 +1,7 @@
 import React from 'react';
 import LargeInput from '../../../components/shared/large-animated-input';
 import { pollData } from '../../../util/selectors';
-import { updatePoll, fetchPoll } from '../../../actions/poll_actions'
+import { updatePoll, fetchPoll } from '../../../store/actions/poll_actions'
 import { connect} from 'react-redux';
 import { withRouter } from 'react-router-dom';
 

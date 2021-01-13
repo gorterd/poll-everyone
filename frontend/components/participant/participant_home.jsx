@@ -1,8 +1,8 @@
 import React from 'react';
 import { withRouter, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { checkIfUserExists, resetSessionErrors } from "../../actions/session_actions";
-import { fetchRecentPresentations } from '../../actions/presentation_actions';
+import { checkIfUserExists, resetSessionErrors } from "../../store/actions/session_actions";
+import { fetchRecentPresentations } from '../../store/actions/presentation_actions';
 
 
 class ParticipantHome extends React.Component {

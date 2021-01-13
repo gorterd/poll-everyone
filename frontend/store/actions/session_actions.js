@@ -1,10 +1,10 @@
-import * as SessionApiUtil from '../util/api/session_api_util';
+import * as SessionApiUtil from '../../util/api/session_api_util';
 
 export const RECEIVE_CURRENT_USER = 'RECEIVE_CURRENT_USER';
 export const REMOVE_CURRENT_USER = 'REMOVE_CURRENT_USER';
 export const RECEIVE_SESSION_ERRORS = 'RECEIVE_SESSION_ERRORS';
 export const RESET_SESSION_ERRORS = 'RESET_SESSION_ERRORS';
-export const SESSION_IS_LOADING = 'SESSION_IS_LOADING';
+export const SESSION_LOADING = 'SESSION_LOADING';
 export const RESET_SESSION_LOADING = 'RESET_SESSION_LOADING';
 
 const receiveCurrentUser = user => {
@@ -36,7 +36,7 @@ export const resetSessionErrors = () => {
 
 const sessionIsLoading = () => {
   return {
-    type: SESSION_IS_LOADING
+    type: SESSION_LOADING
   }
 }
 

@@ -1,6 +1,6 @@
 import { RECEIVE_GROUPS, RECEIVE_GROUP } from '../../actions/group_actions';
-import { RECEIVE_POLL, RECEIVE_POLLS } from '../../actions/poll_actions';
-import { concatIfNew } from '../../util/general_util';
+import { RECEIVE_POLL } from '../../actions/poll_actions';
+import { concatIfNew } from '../../../util/general_util';
 
 export default (state = {}, action) => {
   Object.freeze(state);

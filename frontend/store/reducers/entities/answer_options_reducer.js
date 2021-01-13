@@ -4,7 +4,7 @@ import {
   RECEIVE_RESPONSE,
   CLEAR_RESPONSE
 } from '../../actions/presentation_actions';
-import { concatIfNew } from '../../util/general_util';
+import { concatIfNew } from '../../../util/general_util';
 
 export default (state = {}, action) => {
   Object.freeze(state);

@@ -4,8 +4,8 @@ import { withRouter } from 'react-router-dom';
 import NewPollToolbar from './new_poll_toolbar';
 import MultipleChoiceForm from './multiple_choice_form';
 import { orderedGroups } from '../../../../util/selectors';
-import { createPoll } from '../../../../actions/poll_actions';
-import { closeModal, exitModal } from '../../../../actions/ui_actions';
+import { createPoll } from '../../../../store/actions/poll_actions';
+import { closeModal, exitModal } from '../../../../store/actions/ui_actions';
 import GroupSearch from '../../../shared/group_search';
 
 const MULTIPLE_CHOICE = 'multiple_choice';
@@ -116,7 +116,7 @@ class NewPollForm extends React.Component {
 const mapState = state => {
   return {
     groups: orderedGroups(state),
-    modalType: state.ui.modal.type
+    modalType: state.modal.type
   }
 }
 

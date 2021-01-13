@@ -6,7 +6,7 @@ import {
   clearActivePoll,
   receiveResponse,
   clearResponse
-} from '../../actions/presentation_actions';
+} from '../../store/actions/presentation_actions';
 
 import { withRouter } from 'react-router-dom';
 import { participantPollData } from '../../util/selectors';

@@ -1,26 +1,14 @@
 import React from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
-const Logo = ({relativeRootPath, onClick}) => {
-
+export default function Logo ({path, onClick}) {
   const history = useHistory();
+  if (!onClick) onClick = () => history.push(path || '/');
 
-  const logo = 
-    <>
+  return (
+    <button onClick={onClick} className='logo'>
       <img src={window.logoURL} alt='Logo' />
-      <span> Poll Everyone</span>
-    </>
-
-  if (!onClick) {
-    onClick = () => history.push(relativeRootPath);
-  }
-
-  return <button onClick={onClick} className='logo'>{logo}</button> 
-    // : (
-  //   <Link to={relativeRootPath} className="logo">
-  //     {logo}
-  //   </Link>
-  // )
+      <span>Poll Everyone</span>
+    </button>
+  );
 }
-
-export default Logo;

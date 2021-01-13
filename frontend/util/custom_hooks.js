@@ -15,6 +15,18 @@ export function useToggleState(initVal) {
   return [ val, toggleVal ];
 }
 
+export function useTextInput(defaultVal) {
+  const [value, setValue] = useState(defaultVal);
+
+  const inputProps = {
+    type: 'text',
+    onChange: event => setValue(event.target.value),
+    value,
+  }
+
+  return [value, inputProps];
+}
+
 export function useDropdown(eleRef, unfocusCB) {
   useEffect(() => {
     let unfocus = true;
