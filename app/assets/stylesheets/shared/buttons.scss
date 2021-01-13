@@ -41,7 +41,7 @@ button {
 .button-blue-alt {
   @include button(white, $royal-blue-hover, $royal-blue);
   border: 1px solid $royal-blue;
-  &:hover { color: white; border-color: $royal-blue-hover;}
+  &:hover, &:focus { color: white; border-color: $royal-blue-hover;}
 }
 
 .button-red {
