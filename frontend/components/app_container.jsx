@@ -10,19 +10,18 @@ import App from './app';
 
 export default function AppContainer() {
   const { scrollY } = useSelector(uiSelector);
-  const modal = useSelector(modalSelector);
+  const { type: modalType } = useSelector(modalSelector);
 
   useEffect(() => {
-    console.log(modal)
-    if (!modal.type) window.scrollTo(0, scrollY);
-  }, [modal]);
+    if (!modalType) window.scrollTo(0, scrollY);
+  }, [modalType]);
 
   return (
     <HashRouter>
       <Route><RouteMiddleware /></Route>
       <section
-        className={'app' + (modal.type ? ' freeze-scroll' : '')}
-        style={modal.type ? { top: (scrollY * -1) } : null}
+        className={'app' + (modalType ? ' freeze-scroll' : '')}
+        style={modalType ? { top: (scrollY * -1) } : null}
       >
         <Switch>
           <Route path='/participate'>

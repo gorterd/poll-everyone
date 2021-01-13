@@ -13,7 +13,6 @@ export default function NewGroupModal () {
 
   function submissionHandler(dispatch) {
     const data = { group: { title }, pollIds };
-    console.log(data);
     return dispatch(createGroup(data, currentId))
       .then( () => dispatch(clearSelections()));      
   }
