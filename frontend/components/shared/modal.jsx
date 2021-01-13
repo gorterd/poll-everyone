@@ -9,14 +9,14 @@ import { modalSelector } from '../../util/hooks_selectors';
 
 export const defaultEnterAnimation = {
   animationName: 'fade-in',
-  animationDuration: '400ms',
+  animationDuration: '200ms',
   animationIterationCount: 1,
   animationFillMode: 'forwards'
 }
 
 export const defaultExitAnimation = {
   animationName: 'fade-out',
-  animationDuration: '400ms',
+  animationDuration: '200ms',
   animationIterationCount: 1,
   animationFillMode: 'forwards'
 }

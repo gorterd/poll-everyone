@@ -1,6 +1,6 @@
 import { SESSION_LOADING, RESET_SESSION_LOADING } from '../actions/session_actions';
 import { GROUPS_LOADING, RESET_GROUPS_LOADING } from '../actions/group_actions';
-import { SET_SCROLL_Y, SET_STICKY_TOOLBAR } from '../actions/ui_actions';
+import { RECEIVE_MODAL, SET_SCROLL_Y, SET_STICKY_TOOLBAR } from '../actions/ui_actions';
 
 const BASE_UI = {
   sessionLoading: false,
@@ -25,6 +25,8 @@ export default (state = BASE_UI, action) => {
       return { ...state, scrollY: action.scrollY };
     case SET_STICKY_TOOLBAR:
       return { ...state, stickyToolbar: action.boolean };
+    case RECEIVE_MODAL:
+      return { ...state, scrollY: window.scrollY };
     default:
       return state;
   }

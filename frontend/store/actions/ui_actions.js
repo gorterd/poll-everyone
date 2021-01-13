@@ -8,7 +8,6 @@ export const SET_STICKY_TOOLBAR = 'SET_STICKY_TOOLBAR'
 export const openModal = modal => {
   return {
     type: RECEIVE_MODAL,
-    data: { scrollY: window.scrollY },
     modal
   }
 }
