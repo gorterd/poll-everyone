@@ -1,5 +1,7 @@
+import ajax from './ajax';
+
 export const createPoll = (poll, groupId) => {
-  return $.ajax({
+  return ajax({
     method: 'POST',
     url: `/api/groups/${groupId}/polls`,
     data: { poll }
@@ -7,14 +9,14 @@ export const createPoll = (poll, groupId) => {
 }
 
 export const fetchPoll = (pollId) => {
-  return $.ajax({
+  return ajax({
     method: 'GET',
     url: `/api/polls/${pollId}`
   });
 }
 
 export const fetchFullPoll = (pollId) => {
-  return $.ajax({
+  return ajax({
     method: 'GET',
     url: `/api/polls/${pollId}`,
     data: { fullData: true }
@@ -22,7 +24,7 @@ export const fetchFullPoll = (pollId) => {
 }
 
 export const updatePoll = (poll, pollId) => {
-  return $.ajax({
+  return ajax({
     method: 'PATCH',
     url: `/api/polls/${pollId}`,
     data: { poll }
@@ -30,7 +32,7 @@ export const updatePoll = (poll, pollId) => {
 }
 
 export const duplicatePoll = pollId => {
-  return $.ajax({
+  return ajax({
     method: 'POST',
     url: `/api/polls/${pollId}/duplicate`,
     data: { pollId }
@@ -38,7 +40,7 @@ export const duplicatePoll = pollId => {
 }
 
 export const toggleActive = pollId =>  {
-  return $.ajax({
+  return ajax({
     method: 'PATCH',
     url: `/api/polls/${pollId}/toggle_activation`,
   }); 

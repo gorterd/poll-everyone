@@ -17,7 +17,7 @@ export default function AppContainer() {
   }, [modalType]);
 
   return (
-    <HashRouter>
+    <>
       <Route><RouteMiddleware /></Route>
       <section
         className={'app' + (modalType ? ' freeze-scroll' : '')}
@@ -30,6 +30,6 @@ export default function AppContainer() {
           <App />
         </Switch>
       </section>
-    </HashRouter>
+    </>
   );
 }

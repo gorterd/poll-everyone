@@ -11,6 +11,7 @@ import {
 import { withRouter } from 'react-router-dom';
 import { participantPollData } from '../../util/selectors';
 import AttributedImage from '../shared/attributed_image';
+import cableConsumer from '../../channels/consumer';
 
 const POLL = 'POLL';
 const RESPONSE = 'RESPONSE';
@@ -43,7 +44,7 @@ class ParticipantPoll extends React.Component {
   _subscribe(presenterId, participantId) {
     const { ownResponses } = this.props;
 
-    const subscription = App.cable.subscriptions.create(
+    const subscription = cableConsumer.subscriptions.create(
       { channel: 'PresentationChannel', presenterId },
       {
         received: broadcast => {

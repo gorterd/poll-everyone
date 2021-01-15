@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link, useHistory, useParams } from 'react-router-dom';
 import { isEqual, debounce } from 'lodash';
 
+import cableConsumer from '../../../channels/consumer';
 import { presenterPollDataSelector } from '../../../util/hooks_selectors';
 import { standardGraph } from '../../../util/data_formats_util';
 import { usePrevious } from '../../../util/custom_hooks';
@@ -14,6 +15,7 @@ import {
   clearResponse 
 } from '../../../store/actions/presentation_actions';
 import PresentationGraph from './presentation_graph';
+
 
 export default function PresentPoll() {
   const history = useHistory();
@@ -56,7 +58,7 @@ export default function PresentPoll() {
   }
 
   function subscribe() {
-    subscription = App.cable.subscriptions.create(
+    subscription = cableConsumer.subscriptions.create(
       { channel: 'PresentationChannel', presenterId: currentId },
       { received: broadcast => receiveBroadcast(broadcast) }
     );
@@ -164,7 +166,7 @@ export function RightSidebarControls({ children }) {
   }
 
   function subscribe() {
-    subscription = App.cable.subscriptions.create(
+    subscription = cableConsumer.subscriptions.create(
       { channel: 'PresentationChannel', presenterId: currentId },
       { received: broadcast => receiveBroadcast(broadcast) }
     );
