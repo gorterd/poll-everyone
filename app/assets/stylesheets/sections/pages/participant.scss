@@ -11,10 +11,11 @@
 .participant-navbar {
   height: 55px;
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
   width: 100%;
   background-color: $darker-grey;
+  position: relative;
 
   .participant-nav-link {
     display: flex;
@@ -25,6 +26,12 @@
 
     &.participant-nav-link-active {
       color: white;
+    }
+    
+    &.participant-nav-link-left {
+      position: absolute;
+      left: 10px;
+      font-size: $fontsize-strong;
     }
   }
 

@@ -8,6 +8,9 @@ const ParticipantApp = () => {
   return (
     <section className='participant-app'>
       <nav className='participant-navbar'>
+        <Link exact to='/' className='participant-nav-link participant-nav-link-left'>
+          <span>Back to Main App</span> 
+        </Link>
         <NavLink exact to='/participate' activeClassName='participant-nav-link-active' className='participant-nav-link'>
           <img src={logoImg} alt='Logo' />
           <span>Home</span> 

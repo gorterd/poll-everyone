@@ -29,10 +29,14 @@ export default function HomeNavbar() {
       <button className="nav-tool" onClick={() => dispatch(logout())}>Log out</button>
     ] 
     : [
-      <button className="button button-white" onClick={_loginDemoUser}>Demo</button>,
+      <button className="button button-white" onClick={_loginDemoUser}>Demo Login</button>,
       <Link className="button button-white" to='/signup/splash'>Sign up</Link>,
       <Link className="nav-tool" to='/login'>Log in</Link>
     ]
+
+  tools.unshift(
+    <Link className="button button-white" to='/participate'>Participate</Link>
+  );
 
   return ( 
     <Navbar 

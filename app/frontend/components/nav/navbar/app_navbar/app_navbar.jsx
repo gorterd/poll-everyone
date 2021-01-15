@@ -13,7 +13,7 @@ export default function AppNavbar () {
 
   const logoProps = modal.type
     ? { onClick: () => dispatch(exitModal()) }
-    : { path: '/polls' }
+    : { }
   const tools = [<AppNavbarDropdown />];
   const links = [
     <NavLink activeClassName="navbar-active" to='/polls'>Polls</NavLink>,

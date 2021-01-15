@@ -45,7 +45,6 @@ class LargeInput extends React.Component {
       animationFillMode: "forwards",
     };
 
-    console.log(value, noLabel)
     return (
       <div className={`large-input-container ${klass} ${(erroredOut ? "input-error" : "")}`}>
         <div className={"large-input-wrapper" + (activated ? " activated" : "")}>
