@@ -35,8 +35,10 @@ export default function GroupsIndexToolbar({ toggleMoveDrawer }) {
       })
       
       observer.observe(intersectionDiv.current);
-
-      return () => observer.unobserve(intersectionDiv.current);
+      
+      return () => {
+        if (intersectionDiv.current) observer.unobserve(intersectionDiv.current);
+      }
     }
   }, [intersectionDiv])
 

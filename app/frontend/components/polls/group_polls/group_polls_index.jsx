@@ -54,7 +54,7 @@ export default function GroupPollsIndex ({ group }) {
       <GroupHeader {...headerProps} />
       { drawerVisible && (
         <ul className="group-polls-index">
-          { orderedPolls.map( poll => {
+          { orderedPolls?.map( poll => {
             return <PollListItem 
               key={poll.id} 
               poll={poll} 

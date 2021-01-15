@@ -52,6 +52,8 @@ export function useAnimation ({
   renderCondition, 
   enterAnimation, 
   exitAnimation,
+  interruptAnimation = false,
+  noFirstAnimation = false,
   afterEnter = () => {},
   afterExit = () => {},
 }) {
@@ -77,21 +79,29 @@ export function useAnimation ({
   const [ style, setStyle ] = useState({});
   const [ key, setKey ] = useState(0);
   const timeout = useRef();
+  const firstRender = useRef(noFirstAnimation);
 
   useEffect(() => {
-    if (!timeout.current){
+    if (interruptAnimation) {
+      clearTimeout(timeout.current);
+      timeout.current = null;
+    }
+
+    if (!timeout.current) {
       if (renderCondition) {
-        setStyle(enterAnimation);
+        if (!firstRender.current) setStyle(enterAnimation);
         setRenderState(true);
 
-        timeout.current = window.setTimeout(() => {
+        if (!firstRender.current) timeout.current = window.setTimeout(() => {
           afterEnter();
           timeout.current = null;
         }, parseInt(enterDuration));
+
+        firstRender.current = false;
       } 
       else {
         setKey(old => old + 1);
-        setStyle(exitAnimation);
+        if (!firstRender.current) setStyle(exitAnimation);
 
         timeout.current = window.setTimeout(() => {
           afterExit();
@@ -99,7 +109,7 @@ export function useAnimation ({
           timeout.current = null;
         }, parseInt(exitDuration)); 
       }
-    }
+    }    
   }, [renderCondition]);
 
   useEffect(() => () => clearTimeout(timeout.current), []);

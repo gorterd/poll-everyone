@@ -1,14 +1,20 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import Navbar from '../navbar'
+import { Link, useHistory } from 'react-router-dom';
+import Navbar from './navbar'
+import { login, logout } from '../../../store/actions/session_actions';
+import { useDispatch, useSelector } from 'react-redux';
+import { loggedInSelector } from '../../../util/hooks_selectors';
 
-const HomeNavbar = ({currentUser, login, logout, history}) => {
+export default function HomeNavbar() {
+  const dispatch = useDispatch();
+  const loggedIn = useSelector(loggedInSelector);
+  const history = useHistory();
 
   const _loginDemoUser = () => {
-    login({
+    dispatch(login({
       usernameOrEmail: 'Simulation3845',
       password: 'its_all_a_simulation'
-    }).then( () => history.push('/polls'));
+    })).then( () => history.push('/polls'));
   }
   
   const links = [
@@ -17,10 +23,10 @@ const HomeNavbar = ({currentUser, login, logout, history}) => {
     // <a className="nav-link" href="#">My website</a>,
   ];
 
-  const tools = currentUser
+  const tools = loggedIn
     ? [
       <Link className="button button-white" to='/polls'>My polls</Link>,
-      <button className="nav-tool" onClick={logout}>Log out</button>
+      <button className="nav-tool" onClick={() => dispatch(logout())}>Log out</button>
     ] 
     : [
       <button className="button button-white" onClick={_loginDemoUser}>Demo</button>,
@@ -36,5 +42,3 @@ const HomeNavbar = ({currentUser, login, logout, history}) => {
     />
   );
 }
-
-export default HomeNavbar;

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   BarChart,
   XAxis,
@@ -124,7 +124,10 @@ export default function PresentationGraph({ formattedData, graphDimensions, isAn
     )
   }
 
-  return (
+  const [show, setShow] = useState(false);
+  setTimeout(() => setShow(true), 10);
+
+  return show && ( 
     <BarChart
       data={formattedData}
       layout="vertical"

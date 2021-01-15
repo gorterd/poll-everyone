@@ -22,7 +22,7 @@ class LargeInput extends React.Component {
 
   render() {
 
-    const { errorMsg, type, text, value, errorConditions, klass,
+    const { errorMsg, type, text, value, errorConditions, klass, noLabel = false,
       leftSide: LeftSide, leftSideProps, rightSide: RightSide, rightSideProps, ...rest } = this.props;
 
     const activated = Boolean(value || this.state.focus);
@@ -45,6 +45,7 @@ class LargeInput extends React.Component {
       animationFillMode: "forwards",
     };
 
+    console.log(value, noLabel)
     return (
       <div className={`large-input-container ${klass} ${(erroredOut ? "input-error" : "")}`}>
         <div className={"large-input-wrapper" + (activated ? " activated" : "")}>
@@ -58,19 +59,23 @@ class LargeInput extends React.Component {
             {...rest}
           />
           <div className="small-input-label-container">
-            <Animated
+            {!noLabel && <Animated
               renderCondition={activated}
               enterAnimation={upAndIn}
               exitAnimation={downAndOut}
+              interruptAnimation={true}
+              noFirstAnimation={Boolean(value)}
             ><div className="small-input-label">{text}</div>
-            </Animated>
+            </Animated>}
           </div>
           <div className="placeholder-input-label-container">
-            <Animated
+            {!noLabel && <Animated
               renderCondition={!activated}
               enterAnimation={upAndIn}
+              interruptAnimation={true}
+              noFirstAnimation={!Boolean(value)}
             ><div className="placeholder-input-label">{text}</div>
-            </Animated>
+            </Animated>}
           </div>
           { RightSide ? <RightSide {...rightSideProps} /> : null }
         </div>

@@ -27,7 +27,8 @@ class EditPoll extends React.Component {
           { correct: false, body: '' },
         ]
       },
-      error:  ''
+      error:  '',
+      noLabel: true
     }
 
     this.deleted = [];
@@ -57,7 +58,7 @@ class EditPoll extends React.Component {
         )
       }
 
-      this.setState({formData});
+      this.setState({formData, noLabel: false});
     });
   }
 
@@ -200,6 +201,7 @@ class EditPoll extends React.Component {
             text='Title'
             value={title}
             onChange={this.handleTitle}
+            noLabel={this.state.noLabel}
           />
 
           {answerOptionsAttributes.map((option, idx) => (
@@ -215,6 +217,7 @@ class EditPoll extends React.Component {
               leftSideProps={{ selected: option.correct, idx }}
               rightSide={RightSide}
               rightSideProps={{ idx }}
+              noLabel={this.state.noLabel}
             />
           ))}
 

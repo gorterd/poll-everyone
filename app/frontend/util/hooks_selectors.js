@@ -1,6 +1,9 @@
 export const currentUserIdSelector = state => state.session.currentId;
 export const currentUserSelector = state => 
-state.entities.users[state.session.currentId];
+  state.entities.users[state.session.currentId];
+export const loggedInSelector = state => 
+  state.session.currentType === 'User' 
+  && state.entities.users[state.session.currentId];
 
 export const uiSelector = state => state.ui;
 export const scrollYSelector = state => state.ui.scrollY;

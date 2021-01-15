@@ -6,18 +6,14 @@ import { useAnimation } from '../../../util/custom_hooks';
 export function Animated ({
   children,
   className,
-  renderCondition,
-  enterAnimation,
-  exitAnimation
+  ...animationProps
 }) {
   const [renderState, animationStyle, key] = useAnimation({
-    renderCondition,
-    enterAnimation,
-    exitAnimation
+    ...animationProps
   });
 
   return renderState && (
-    <div style={animationStyle} className={className}>
+    <div key={key} style={animationStyle} className={className}>
       {children}
     </div>
   );
