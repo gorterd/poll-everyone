@@ -11,6 +11,7 @@ import {
 import { withRouter } from 'react-router-dom';
 import { participantPollData } from '../../util/selectors';
 import AttributedImage from '../shared/attributed_image';
+import participantWaitingImg from '../../images/splash/participant-waiting.png'
 import cableConsumer from '../../channels/consumer';
 
 const POLL = 'POLL';
@@ -179,7 +180,7 @@ class ParticipantPoll extends React.Component {
         <div className='participant-waiting'>
           <AttributedImage
             id="participant-waiting-img"
-            src={window.participantWaitingURL}
+            src={participantWaitingImg}
             alt={"preparing presentation"}
             iconClass="icon-light"
           >

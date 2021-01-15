@@ -1,5 +1,5 @@
 import React from 'react';
-import LargeInput from '../../../components/shared/large-animated-input';
+import LargeInput from '../../shared/large-animated-input';
 import { pollData } from '../../../util/selectors';
 import { updatePoll, fetchPoll } from '../../../store/actions/poll_actions'
 import { connect} from 'react-redux';

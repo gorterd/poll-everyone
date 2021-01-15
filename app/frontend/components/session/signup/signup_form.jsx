@@ -2,6 +2,7 @@ import React from 'react';
 import { validEmail, validName, validPassword } from "../../../util/validation_util";
 import SignupInput from './signup_input';
 import AttributedImage from '../../shared/attributed_image';
+import signupSplashImg from '../../../images/splash/signup-splash-02.png'
 
 class SignupForm extends React.Component {
   constructor(props) {
@@ -168,7 +169,7 @@ class SignupForm extends React.Component {
         <div className="signup-div-right">
           <AttributedImage
             id="signup-form-img"
-            src={window.signupSplash02URL}
+            src={signupSplashImg}
             alt={"Person Looking at Charts"}
             imgClass="signup-splash-img"
             iconClass="icon-dark"

@@ -4,16 +4,13 @@
     <title>PollEveryone</title>
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
-    <%= favicon_link_tag image_url('nav/logo.png') %>
+    <%= favicon_link_tag image_url('logo.png') %>
 
     <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,400;0,600;0,700;0,900;1,400&display=swap" rel="stylesheet">
     <script src="https://kit.fontawesome.com/24cc9dca36.js" crossorigin="anonymous"></script>
-    <%= render "shared/asset_migration" %>
-    <%= render "shared/user_bootstrap" %>
     
     <%= stylesheet_link_tag    'application', media: 'all' %>
-    <%#= javascript_include_tag 'application' %>
-    <%= javascript_pack_tag 'index' %>
+    <%= javascript_pack_tag 'application' %>
   </head>
 
   <body>

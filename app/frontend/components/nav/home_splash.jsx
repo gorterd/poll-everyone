@@ -1,6 +1,7 @@
 import React from 'react';
 import AttributedImage from '../shared/attributed_image';
 import { Link } from 'react-router-dom';
+import homeSplashImg from '../../images/splash/home-splash-01.png';
 
 const HomeSplash = () => {
   return (
@@ -13,7 +14,7 @@ const HomeSplash = () => {
         </div>
         <div className="first-pane-sub first-pane-image">
           <AttributedImage 
-            src={window.homeSplash01URL} 
+            src={homeSplashImg} 
             alt={"Woman Conducting a Survey"} 
             imgClass="home-splash-img"
             iconClass="icon-grey"

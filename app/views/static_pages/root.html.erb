@@ -1,1 +1,4 @@
-<main id='root'>Poll Everyone</main>
+<%= react_component(
+  'root', 
+  { preloadedState: render('static_pages/preloaded_state.json.jbuilder') }
+) %>

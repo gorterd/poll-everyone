@@ -1,5 +1,6 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
+import logoImg from '../../images/nav/logo.png';
 
 export default function Logo ({path, onClick}) {
   const history = useHistory();
@@ -7,7 +8,7 @@ export default function Logo ({path, onClick}) {
 
   return (
     <button onClick={onClick} className='logo'>
-      <img src={window.logoURL} alt='Logo' />
+      <img src={logoImg} alt='Logo' />
       <span>Poll Everyone</span>
     </button>
   );

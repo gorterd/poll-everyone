@@ -7,6 +7,7 @@ import { orderedGroups } from '../../../../util/selectors';
 import { createPoll } from '../../../../store/actions/poll_actions';
 import { closeModal, exitModal } from '../../../../store/actions/ui_actions';
 import GroupSearch from '../../../shared/group_search';
+import multipleChoiceOptionImg from '../../../../images/icons/multiple-choice-option.png'
 
 const MULTIPLE_CHOICE = 'multiple_choice';
 
@@ -85,7 +86,7 @@ class NewPollForm extends React.Component {
                 className={'new-poll-option' + (activeOption === MULTIPLE_CHOICE ? ' active-option' : '')}
                 onClick={() => this.selectPollOption(MULTIPLE_CHOICE)}
               >
-                <img src={window.multipleChoiceOptionURL} alt='multiple-choice' />
+                <img src={multipleChoiceOptionImg} alt='multiple-choice' />
                 <span>Multiple choice</span>
               </li>
             </ul>

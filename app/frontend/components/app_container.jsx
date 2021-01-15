@@ -7,7 +7,6 @@ import { modalSelector, uiSelector } from '../util/hooks_selectors';
 import ParticipantApp from './participant/participant_app';
 import App from './app';
 
-
 export default function AppContainer() {
   const { scrollY } = useSelector(uiSelector);
   const { type: modalType } = useSelector(modalSelector);

@@ -3,7 +3,7 @@ import { withRouter, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { checkIfUserExists, resetSessionErrors } from "../../store/actions/session_actions";
 import { fetchRecentPresentations } from '../../store/actions/presentation_actions';
-
+import logoAltImg from '../../images/nav/logo-alt.png';
 
 class ParticipantHome extends React.Component {
   constructor(props) {
@@ -47,7 +47,7 @@ class ParticipantHome extends React.Component {
     return (
       <div className='participant-home'>
         <div className='participant-home-logo'>
-          <img src={window.logoAltURL} alt='Logo' />
+          <img src={logoAltImg} alt='Logo' />
           <span> Poll Everyone</span>
         </div>
         <div className='participant-join-form-container'>
