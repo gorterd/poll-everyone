@@ -51,7 +51,7 @@ export default function GroupsIndexToolbar({ toggleMoveDrawer }) {
   }
 
   function openNewPoll() {
-    if (!stickyToolbar) scrollTo(0, 0);
+    if (!stickyToolbar) window.scrollTo(0, 0);
     dispatch(openModal({
       type: 'new-poll',
       data: {},

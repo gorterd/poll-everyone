@@ -1,11 +1,13 @@
 import React from 'react';
 import { useSelector} from 'react-redux';
-import { AnimatedModal } from './wrappers/animation_util';
 import NewPoll from '../polls/modals/new_poll/new_poll';
 import NewGroupModal from '../polls/modals/new_group';
 import EditGroupModal from '../polls/modals/rename_group';
 import ConfirmMoveModal from '../polls/modals/confirm_move';
 import { modalSelector } from '../../util/hooks_selectors';
+import { useDispatch } from 'react-redux';
+import { clearModal, clearStatus, exitModal } from '../../store/actions/ui_actions';
+import { useAnimation } from '../../util/custom_hooks';
 
 export const defaultEnterAnimation = {
   animationName: 'fade-in',
@@ -66,7 +68,7 @@ export function Modal () {
     modalClass: 'confirm-move-modal',
     component: ConfirmMoveModal 
   });
-  
+
   if (!(modal.status === 'exiting')) {
     switch (modal.type) {
       case NEW_POLL:
@@ -94,4 +96,40 @@ export function Modal () {
       <AnimatedModal {...confirmMoveProps} />
     </>
   )
+}
+
+function AnimatedModal({
+  component: Component,
+  modalData, modalClass,
+  backgroundStyle, backgroundClass,
+  renderCondition,
+  enterAnimation,
+  exitAnimation
+}) {
+
+  const dispatch = useDispatch();
+
+  const [renderState, animationStyle, key] = useAnimation({
+    renderCondition,
+    enterAnimation,
+    exitAnimation,
+    afterEnter: () => dispatch(clearStatus()),
+    afterExit: () => dispatch(clearModal()),
+  });
+
+  const style = { ...backgroundStyle, ...animationStyle };
+  const closeModal = () => dispatch(exitModal())
+
+  return renderState && (
+    <section
+      className={backgroundClass}
+      onClick={closeModal}
+      style={style}
+      key={key}
+    >
+      <div className={modalClass} onClick={e => e.stopPropagation()}>
+        <Component modalData={modalData} closeModal={closeModal} />
+      </div>
+    </section>
+  );
 }

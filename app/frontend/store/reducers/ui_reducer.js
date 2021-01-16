@@ -1,12 +1,19 @@
 import { SESSION_LOADING, RESET_SESSION_LOADING } from '../actions/session_actions';
 import { GROUPS_LOADING, RESET_GROUPS_LOADING } from '../actions/group_actions';
-import { RECEIVE_MODAL, SET_SCROLL_Y, SET_STICKY_TOOLBAR } from '../actions/ui_actions';
+import { 
+  RECEIVE_MODAL, 
+  SET_SCROLL_Y, 
+  SET_STICKY_TOOLBAR,
+  SET_DROPDOWN,
+  CLEAR_DROPDOWN,
+} from '../actions/ui_actions';
 
 const BASE_UI = {
   sessionLoading: false,
   groupsLoading: false,
   stickyToolbar: false,
-  scrollY: 0
+  activeDropdownId: null,
+  scrollY: 0,
 }
 
 export default (state = BASE_UI, action) => {
@@ -27,6 +34,10 @@ export default (state = BASE_UI, action) => {
       return { ...state, stickyToolbar: action.boolean };
     case RECEIVE_MODAL:
       return { ...state, scrollY: window.scrollY };
+    case CLEAR_DROPDOWN:
+      return { ...state, activeDropdownId: null };
+    case SET_DROPDOWN:
+      return { ...state, activeDropdownId: action.activeDropdownId };
     default:
       return state;
   }

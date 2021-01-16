@@ -1,6 +1,7 @@
 import React from 'react';
 import { Animated } from './wrappers/animation_util';
 
+
 class LargeInput extends React.Component {
 
   constructor(props) {

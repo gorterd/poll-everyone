@@ -125,7 +125,7 @@ export default function PresentationGraph({ formattedData, graphDimensions, isAn
   }
 
   const [show, setShow] = useState(false);
-  setTimeout(() => setShow(true), 10);
+  window.setTimeout(() => setShow(true), 10);
 
   return show && ( 
     <BarChart

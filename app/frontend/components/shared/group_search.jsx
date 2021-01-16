@@ -5,7 +5,7 @@ import { clamp } from '../../util/general_util';
 const CLOSE_SEARCH = 'CLOSE_SEARCH';
 const UPDATE_SEARCH = 'UPDATE_SEARCH';
 const KEY_MOVE = 'KEY_MOVE';
-const TOGGLE_DRAWER = 'TOGGLE_DRAWER';
+const SET_DRAWER_GROUPS = 'SET_DRAWER_GROUPS';
 const SELECT_GROUP = 'SELECT_GROUP';
 
 export default function GroupSearch({ setGroup, focusOnTab, groups, placeholderText, defaultGroup }) {
@@ -15,20 +15,17 @@ export default function GroupSearch({ setGroup, focusOnTab, groups, placeholderT
         return {
           ...state,
           searchText: action.searchText,
-          drawerOpen: false,
           focusIndex: null,
         }; 
       case CLOSE_SEARCH:
         return {
           ...state,
           drawerGroups: Array.from(groups),
-          drawerOpen: false,
           focusIndex: null,
         };
       case UPDATE_SEARCH:
         return {
           ...state,
-          drawerOpen: true,
           focusIndex: null,
           ...action.payload,
         };
@@ -42,8 +39,8 @@ export default function GroupSearch({ setGroup, focusOnTab, groups, placeholderT
 
         const searchText = drawerGroups[newFocusIndex]?.title || '';
         return { ...state, focusIndex: newFocusIndex, searchText };
-      case TOGGLE_DRAWER:
-        return { ...state, drawerOpen: !state.drawerOpen }
+      case SET_DRAWER_GROUPS:
+        return { ...state, drawerGroups: action.groups };
       default:
         return new Error("Action type doesn't exist");
     }
@@ -51,14 +48,18 @@ export default function GroupSearch({ setGroup, focusOnTab, groups, placeholderT
 
   const [state, dispatch] = useReducer(reducer, {
     searchText: defaultGroup || '',
-    drawerGroups: Array.from(groups),
-    drawerOpen: false,
+    drawerGroups: [],
     focusIndex: null,
   });
 
   const searchInput = useRef();
   const searchDiv = useRef();
   const drawerLis = useRef([]);
+
+  useEffect(() => dispatch({
+    type: SET_DRAWER_GROUPS,
+    groups
+  }), [groups]);
 
   useEffect(() => {
     const listItem = drawerLis.current[state.focusIndex];
@@ -87,13 +88,20 @@ export default function GroupSearch({ setGroup, focusOnTab, groups, placeholderT
     setGroup(groups.find(group => group.title === state.searchText));
   }, [state.searchText, groups, setGroup])
 
-  useDropdown(searchDiv, () => dispatch({ type: CLOSE_SEARCH }));
+  const { 
+    dropdownShowing,
+    toggleDropdown, 
+    keepDropdown, 
+    showDropdown, 
+    hideDropdown 
+  } = useDropdown(); // NEW
 
   function textMatchesGroup(text) {
     return group => new RegExp(`^${text}`, 'i').test(group.title);
   }
 
   function selectGroup(group) {
+    hideDropdown(); // NEW
     dispatch({ type: SELECT_GROUP, searchText: group.title });
   }
 
@@ -103,13 +111,9 @@ export default function GroupSearch({ setGroup, focusOnTab, groups, placeholderT
     selectGroup(chosenGroup);
   }
 
-  function toggleDrawer() {
-    searchDiv.current.focus();
-    dispatch({ type: TOGGLE_DRAWER });
-  }
-
   function clearSearch() {
     searchInput.current.focus();
+    showDropdown(); // NEW
     dispatch({
       type: UPDATE_SEARCH,
       payload: { drawerGroups: Array.from(groups), searchText: '' }
@@ -119,7 +123,7 @@ export default function GroupSearch({ setGroup, focusOnTab, groups, placeholderT
   function handleSearch(e) {
     const searchText = e.target.value;
     const drawerGroups = groups.filter(textMatchesGroup(searchText));
-
+    showDropdown(); // NEW
     dispatch({
       type: UPDATE_SEARCH,
       payload: { searchText, drawerGroups }
@@ -127,8 +131,8 @@ export default function GroupSearch({ setGroup, focusOnTab, groups, placeholderT
   }
 
   function handleKeyDown(e) {
-    if (!state.drawerOpen) return;
-  
+    if (!dropdownShowing) return; // NEW
+
     switch (e.key) {
       case 'ArrowDown':
         e.preventDefault();
@@ -141,11 +145,13 @@ export default function GroupSearch({ setGroup, focusOnTab, groups, placeholderT
           e.preventDefault();
           focusOnTab.disabled = false;
           focusOnTab.focus();
+          hideDropdown(); // NEW
           dispatch({ type: CLOSE_SEARCH });
         }
         break;
       case 'Escape':
       case 'Enter':
+        hideDropdown(); // NEW
         dispatch({ type: CLOSE_SEARCH });
     }  
   }
@@ -157,6 +163,7 @@ export default function GroupSearch({ setGroup, focusOnTab, groups, placeholderT
       className='group-search-container' 
       tabIndex='0' 
       onKeyDown={handleKeyDown}
+      onClick={keepDropdown}
       ref={searchDiv}
     >
       <form onSubmit={handleSubmit}>
@@ -175,11 +182,14 @@ export default function GroupSearch({ setGroup, focusOnTab, groups, placeholderT
         </span>
       </form>
 
-      <button className='button-grey' onClick={toggleDrawer}>
-        <i className={`fas fa-chevron-${drawerOpen ? 'up' : 'down'}`}></i>
+      <button 
+        className='button-grey' 
+        onClick={toggleDropdown}
+      >
+        <i className={`fas fa-chevron-${dropdownShowing ? 'up' : 'down'}`}></i>
       </button>
 
-      {drawerOpen && <ul className='group-search-list'>
+      {dropdownShowing && <ul className='group-search-list'>
         {drawerGroups.map((group, idx) => (
           <li 
             key={group.id}

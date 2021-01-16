@@ -10,7 +10,7 @@ import {
   stickyToolbarSelector 
 } from '../../../util/hooks_selectors';
 
-export default function GroupsIndex(props) {
+export default function GroupsIndex() {
   const dispatch = useDispatch();
   const [ moveDrawerVisible, setMoveDrawerVisible ] = useState(false);
   const groups = useSelector(orderedGroupsSelector)
@@ -23,7 +23,7 @@ export default function GroupsIndex(props) {
 
   useEffect( () => {
     if (moveDrawerVisible && stickyToolbar) {
-      scrollTo({ top: 72, behavior: "smooth" });
+      window.scrollTo({ top: 60, behavior: "smooth" });
     }
   }, [moveDrawerVisible]);
 

@@ -1,5 +1,6 @@
 .dropdown-container {
   position: relative;
+  cursor: pointer;
 }
 
 .dropdown {
@@ -23,11 +24,11 @@
       display: flex; 
       flex-direction: column;
       *[class*="button-"] {
-        width: 100%;
         color: $royal-blue-hover;
         min-width: 80px;
         text-align: left;
         margin-bottom: 2px;
+        margin-right: 0;
         &:last-child { margin-bottom: 0;}
         &:hover {
           background-color: $robin-blue;

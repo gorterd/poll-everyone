@@ -4,6 +4,8 @@ export const EXIT_MODAL = 'EXIT_MODAL'
 export const CLEAR_MODAL_STATUS = 'CLEAR_MODAL_STATUS'
 export const SET_SCROLL_Y = 'SET_SCROLL_Y'
 export const SET_STICKY_TOOLBAR = 'SET_STICKY_TOOLBAR'
+export const SET_DROPDOWN = 'SET_DROPDOWN'
+export const CLEAR_DROPDOWN = 'CLEAR_DROPDOWN'
 
 export const openModal = modal => {
   return {
@@ -43,3 +45,11 @@ export const setStickyToolbar = boolean => {
   }
 }
 
+export const setDropdown = activeDropdownId => ({
+  type: SET_DROPDOWN,
+  activeDropdownId
+});
+
+export const clearDropdown = () => ({
+  type: CLEAR_DROPDOWN,
+});

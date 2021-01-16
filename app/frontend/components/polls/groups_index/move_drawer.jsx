@@ -27,6 +27,7 @@ export default function MoveDrawer({ visible, toggleVisible }) {
         setGroup(undefined);
       });
     };
+    
     dispatch(openModal({
       type: 'confirm-move',
       data: { sendMoveRequest, numPolls },

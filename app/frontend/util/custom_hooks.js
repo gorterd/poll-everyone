@@ -1,4 +1,6 @@
 import { useEffect, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { clearDropdown, setDropdown } from "../store/actions/ui_actions";
 
 // from react docs
 export function usePrevious(value) {
@@ -27,25 +29,24 @@ export function useTextInput(defaultVal) {
   return [value, inputProps];
 }
 
-export function useDropdown(eleRef, unfocusCB) {
-  useEffect(() => {
-    let unfocus = true;
+export function useDropdown() {
+  const dispatch = useDispatch();
+  const dropdownId = useRef(Math.random());
+  const activeDropdownId = useSelector(state => state.ui.activeDropdownId); 
+  const dropdownShowing = (dropdownId.current === activeDropdownId);
+  
+  const showDropdown = () => dispatch(setDropdown(dropdownId.current));
+  const hideDropdown = () => dispatch(clearDropdown());  
+  const toggleDropdown = () => dropdownShowing ? hideDropdown() : showDropdown();
+  const keepDropdown = e => e.stopPropagation();
 
-    const onEleClick = () => (unfocus = false);
-    const onDocumentClick = () => {
-      if (unfocus) unfocusCB();
-      unfocus = true;
-    }
-
-    eleRef.current.addEventListener('click', onEleClick);
-    document.addEventListener('click', onDocumentClick);
-
-    return () => {
-      unfocus = false;
-      eleRef?.current?.removeEventListener('click', onEleClick);
-      document.removeEventListener('click', onDocumentClick);
-    }
-  }, []);
+  return { 
+    dropdownShowing,
+    toggleDropdown,
+    keepDropdown,
+    showDropdown,
+    hideDropdown,
+  };
 }
 
 export function useAnimation ({

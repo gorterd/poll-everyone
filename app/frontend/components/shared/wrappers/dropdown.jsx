@@ -1,42 +1,35 @@
 import React from 'react';
+import { useDropdown } from '../../../util/custom_hooks';
 
-class DropdownWrapper extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = { drop: false }
-    this.disableUnfocus = false;
+export default function DropdownWrapper({
+  button: Button,
+  dropdown: Dropdown,
+  buttonProps,
+  dropdownProps,
+  containerClass
+}) {
 
-    this.clickHandler = this.clickHandler.bind(this);
-    this.clearDropdown = this.clearDropdown.bind(this);
-  };
+  const {
+    dropdownShowing,
+    hideDropdown,
+    toggleDropdown
+  } = useDropdown();
 
-  clickHandler() {
-    this.setState({ drop: !this.state.drop });
-    this.disableUnfocus = true;
+  const handleClick = e => {
+    e.stopPropagation();
+    toggleDropdown();
   }
 
-  //GH
-  clearDropdown() {
-    this.disableUnfocus = false;
-    window.setTimeout(() => {
-      if (!this.disableUnfocus) { this.setState({ drop: false }) };
-      this.disableUnfocus = false;
-    }, 10);
-  }
-
-  render() {
-    const { button: Button, dropdown: Dropdown, buttonProps, dropdownProps, containerClass } = this.props;
-
-    return (
-      <button className={"dropdown-container " + containerClass} onBlur={this.clearDropdown}>
-        <div onClick={this.clickHandler} className='dropdown-button'> <Button {...buttonProps} /> </div>
-        <div 
-          className={"dropdown " + (this.state.drop ? "" : "hidden")}
-          onClick={this.clearDropdown}
-        > <Dropdown  {...dropdownProps}/> </div>
-      </button>
-    )
-  }
-};
-
-export default DropdownWrapper;
+  return (
+    <div className={"dropdown-container " + containerClass}>
+      <div onClick={handleClick} className='dropdown-button'> 
+        <Button {...buttonProps} />
+      </div>
+      { dropdownShowing && (
+        <div className="dropdown" onClick={hideDropdown}> 
+          <Dropdown  {...dropdownProps}/> 
+        </div>
+      )}
+    </div>
+  )
+}
