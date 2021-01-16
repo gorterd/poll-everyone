@@ -20,7 +20,6 @@ import AppNavbar from './nav/navbar/app_navbar/app_navbar';
 import { Auth, Protected } from './shared/wrappers/routes_util';
 import { Modal } from './shared/modal';
 import ReportsIndex from './reports/reports_index'
-import { useClearDropdown } from '../util/custom_hooks';
 
 export default function App() {
   const { scrollY } = useSelector(uiSelector);
@@ -51,15 +50,11 @@ export default function App() {
           <section className='content'>
             <Switch>
               <Route exact path='/'>
-                <Auth>
-                  <HomeNavbar />
-                </Auth>
+                <HomeNavbar />
               </Route>
 
               <Route path={['/polls', '/account', '/reports']}>
-                <Protected>
-                  <AppNavbar />
-                </Protected>
+                <AppNavbar />
               </Route>
 
               <Navbar additionalClasses='nav-sticky' links={[]} tools={[]} />
