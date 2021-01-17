@@ -1,9 +1,11 @@
-process.env.NODE_ENV = process.env.NODE_ENV || 'development'
-
-const environment = require('./environment')
 const path = require('path');
-
-const custom = {
+module.exports = {
+  context: __dirname,
+  entry: __dirname + '/app/frontend/packs/application.js',
+  output: {
+    path: path.resolve(__dirname, 'public', 'packs_two'),
+    filename: 'bundle.js'
+  },
   module: {
     rules: [
       {
@@ -16,7 +18,16 @@ const custom = {
             // presets: ['@babel/env', '@babel/react']
           },
         },
-      }
+        
+      },
+      {
+        test: /\.(png|jpe?g|gif)$/i,
+        use: [
+          {
+            loader: 'file-loader',
+          },
+        ],
+      },
     ]
   },
   devtool: 'source-map',
@@ -24,7 +35,3 @@ const custom = {
     extensions: [".js", ".jsx", "*"]
   }
 };
-
-environment.config.merge(custom);
-
-module.exports = environment.toWebpackConfig();

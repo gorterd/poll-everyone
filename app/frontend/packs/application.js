@@ -1,6 +1,6 @@
-const componentRequireContext = require.context("components", true);
-const ReactRailsUJS = require("react_ujs");
-ReactRailsUJS.useContext(componentRequireContext);
+// const componentRequireContext = require.context("components", true);
+// const ReactRailsUJS = require("react_ujs");
+// ReactRailsUJS.useContext(componentRequireContext);
 
 import React from 'react'
 import ReactDOM from 'react-dom'
