@@ -1,5 +1,6 @@
 import React from 'react';
 import LargeInput from '../../../shared/large-animated-input';
+import { classNames } from '../../../../util/general_util';
 
 class MultipleChoiceForm extends React.Component {
   constructor(props){
@@ -34,6 +35,7 @@ class MultipleChoiceForm extends React.Component {
   }
 
   toggleCorrect(idx) {
+    
     const answerOptionsAttributes = Array.from(this.state.answerOptionsAttributes);
     answerOptionsAttributes[idx] =
       Object.assign({}, answerOptionsAttributes[idx], 
@@ -70,21 +72,24 @@ class MultipleChoiceForm extends React.Component {
     this.titleError = (error === errorKeys.TITLE_BLANK) ? errorMsg : '';
     this.answerError = (error === errorKeys.ANSWER_OPTIONS_BLANK) ? errorMsg : '';
 
-    const CorrectButton = ({selected, idx}) => (
+    const CorrectButton = ({selected, idx, className}) => (
       <span 
-        className={'correct-button button' + (selected ? ' selected' : '')}
+        {...classNames('button correct-button', className, [selected, 'selected'])}
         onClick={ () => this.toggleCorrect(idx)}
-        >
+      >
         <i className="fas fa-check"></i>
       </span>
     )
 
-    const TrashButton = ({ idx }) => (
-      <span className='trash-button button' onClick={() => this.deleteAnswerOption(idx)} >
+    const TrashButton = ({ idx, className }) => (
+      <span 
+        {...classNames('trash-button button', className)}
+        onClick={() => this.deleteAnswerOption(idx)} 
+      >
         <i className="far fa-trash-alt"></i>
       </span>
     )
-
+      
     return (
       <form onSubmit={this.handleSubmit} className='new-poll-form multiple-choice-form'>
         <span>Ask a question and let participants choose from a list of answers.</span>

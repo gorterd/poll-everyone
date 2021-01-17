@@ -4,8 +4,6 @@ import {
   RECEIVE_MODAL, 
   SET_SCROLL_Y, 
   SET_STICKY_TOOLBAR,
-  SET_DROPDOWN,
-  CLEAR_DROPDOWN,
 } from '../actions/ui_actions';
 
 const BASE_UI = {
@@ -34,10 +32,6 @@ export default (state = BASE_UI, action) => {
       return { ...state, stickyToolbar: action.boolean };
     case RECEIVE_MODAL:
       return { ...state, scrollY: window.scrollY };
-    case CLEAR_DROPDOWN:
-      return { ...state, activeDropdownId: null };
-    case SET_DROPDOWN:
-      return { ...state, activeDropdownId: action.activeDropdownId };
     default:
       return state;
   }

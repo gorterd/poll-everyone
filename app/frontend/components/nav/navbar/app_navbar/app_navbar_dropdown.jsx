@@ -6,13 +6,11 @@ import { currentUserSelector } from '../../../../util/hooks_selectors';
 import DropdownWrapper from '../../../shared/wrappers/dropdown';
 
 export default function AppNavbarDropdown () {
-  const history = useHistory();
   const dispatch = useDispatch();
   const currentUser = useSelector(currentUserSelector);
 
   const handleLogout = () => {
     dispatch(logout());
-    history.push('/');
   }
 
   const Button = () => <span className='nav-tool'>

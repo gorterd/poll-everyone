@@ -44,12 +44,3 @@ export const setStickyToolbar = boolean => {
     boolean
   }
 }
-
-export const setDropdown = activeDropdownId => ({
-  type: SET_DROPDOWN,
-  activeDropdownId
-});
-
-export const clearDropdown = () => ({
-  type: CLEAR_DROPDOWN,
-});

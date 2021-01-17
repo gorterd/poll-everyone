@@ -116,7 +116,7 @@
     }
 
     .small-input-label-container, .placeholder-input-label-container {
-      left: 60px;
+      left: calc(52px + 15px);
     
     }
     .button {
@@ -125,13 +125,12 @@
       align-items: center;
       height: 100%;
       width: 52px;
+      flex-shrink: 0;
 
       &:hover { cursor: pointer;}
     }
 
     .correct-button {
-      height: 100%;
-      width: 52px;
       color: $soft-grey;
       border-right: 1px solid $medium-grey;
 

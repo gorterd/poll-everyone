@@ -88,13 +88,15 @@ export default function GroupSearch({ setGroup, focusOnTab, groups, placeholderT
     setGroup(groups.find(group => group.title === state.searchText));
   }, [state.searchText, groups, setGroup])
 
-  const { 
+  const [
     dropdownShowing,
-    toggleDropdown, 
-    keepDropdown, 
-    showDropdown, 
-    hideDropdown 
-  } = useDropdown(); // NEW
+    {
+      toggleDropdown, 
+      keepDropdown, 
+      showDropdown, 
+      hideDropdown 
+    }
+  ] = useDropdown(); // NEW
 
   function textMatchesGroup(text) {
     return group => new RegExp(`^${text}`, 'i').test(group.title);
@@ -156,7 +158,7 @@ export default function GroupSearch({ setGroup, focusOnTab, groups, placeholderT
     }  
   }
 
-  const { focusIndex, drawerOpen, drawerGroups, searchText } = state;
+  const { focusIndex, drawerGroups, searchText } = state;
   
   return (
     <div 

@@ -90,6 +90,7 @@ export const login = user => dispatch => {
       }, err => {
         dispatch(receiveSessionErrors(err.responseJSON));
         dispatch(resetSessionLoading());
+        return Promise.reject();
       }
     );
 }
@@ -110,6 +111,7 @@ export const checkIfUserExists = usernameOrEmail => dispatch => {
       }, err => {
         dispatch(receiveSessionErrors(err.responseJSON));
         dispatch(resetSessionLoading());
+        return Promise.reject();
       }
     );
 }

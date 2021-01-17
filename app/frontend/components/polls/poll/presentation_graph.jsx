@@ -7,8 +7,9 @@ import {
   LabelList
 } from 'recharts';
 
-export default function PresentationGraph({ formattedData, graphDimensions, isAnimationActive }) {  
-  if (!formattedData) return null;
+export default function PresentationGraph({ formattedData, graphDimensions, isAnimationActive }) { 
+  let graphContainerReady = graphDimensions.width && graphDimensions.height; 
+  if (!formattedData || !graphContainerReady) return null;
 
   const graphWidth = Math.min(graphDimensions.width, graphDimensions.height * 3);
   const graphHeight = Math.min(graphDimensions.height, graphDimensions.width * formattedData.length / 4 );
@@ -124,10 +125,7 @@ export default function PresentationGraph({ formattedData, graphDimensions, isAn
     )
   }
 
-  const [show, setShow] = useState(false);
-  window.setTimeout(() => setShow(true), 10);
-
-  return show && ( 
+  return ( 
     <BarChart
       data={formattedData}
       layout="vertical"

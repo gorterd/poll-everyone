@@ -50,10 +50,6 @@ GEM
     archive-zip (0.12.0)
       io-like (~> 0.3.0)
     arel (9.0.0)
-    babel-source (5.8.35)
-    babel-transpiler (0.7.0)
-      babel-source (>= 4.0, < 6)
-      execjs (~> 2.0)
     bcrypt (3.1.15)
     better_errors (2.7.1)
       coderay (>= 1.0.0)
@@ -87,7 +83,6 @@ GEM
       execjs
     coffee-script-source (1.12.2)
     concurrent-ruby (1.1.7)
-    connection_pool (2.2.3)
     crass (1.0.6)
     debug_inspector (0.0.3)
     equatable (0.6.1)
@@ -178,12 +173,6 @@ GEM
     rb-fsevent (0.10.4)
     rb-inotify (0.10.1)
       ffi (~> 1.0)
-    react-rails (2.6.1)
-      babel-transpiler (>= 0.7.0)
-      connection_pool
-      execjs
-      railties (>= 3.2)
-      tilt
     redis (4.2.1)
     regexp_parser (1.7.1)
     ruby_dep (1.5.0)
@@ -272,7 +261,6 @@ DEPENDENCIES
   pry-rails
   puma (~> 3.11)
   rails (~> 5.2.4, >= 5.2.4.3)
-  react-rails
   redis (~> 4.0)
   sass-rails (~> 5.0)
   selenium-webdriver

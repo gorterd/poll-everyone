@@ -28,7 +28,7 @@ class EditPoll extends React.Component {
         ]
       },
       error:  '',
-      noLabel: true
+      waitingForValue: true
     }
 
     this.deleted = [];
@@ -58,7 +58,7 @@ class EditPoll extends React.Component {
         )
       }
 
-      this.setState({formData, noLabel: false});
+      this.setState({formData, waitingForValue: false});
     });
   }
 
@@ -173,17 +173,17 @@ class EditPoll extends React.Component {
     this.titleError = (error === errorKeys.TITLE_BLANK) ? errorMessages[error] : '';
     this.answerError = (error === errorKeys.ANSWER_OPTIONS_BLANK) ? errorMessages[error] : '';
 
-    const CorrectButton = ({ selected, idx }) => (
+    const CorrectButton = ({ selected, idx, className }) => (
       <span
-        className={'correct-button button' + (selected ? ' selected' : '')}
+        className={`${className} correct-button button` + (selected ? ' selected' : '')}
         onClick={() => this.toggleCorrect(idx)}
       >
         <i className="fas fa-check"></i>
       </span>
     )
 
-    const RightSide = ({ idx }) => (
-      <div className='edit-poll-input-right-side'>
+    const RightSide = ({ idx, className }) => (
+      <div className={`${className} edit-poll-input-right-side`}>
         <span className='trash-button button' onClick={() => this.deleteAnswerOption(idx)} >
           <i className="far fa-trash-alt"></i>
         </span>
@@ -201,7 +201,7 @@ class EditPoll extends React.Component {
             text='Title'
             value={title}
             onChange={this.handleTitle}
-            noLabel={this.state.noLabel}
+            waitingForValue={this.state.waitingForValue}
           />
 
           {answerOptionsAttributes.map((option, idx) => (
@@ -217,7 +217,7 @@ class EditPoll extends React.Component {
               leftSideProps={{ selected: option.correct, idx }}
               rightSide={RightSide}
               rightSideProps={{ idx }}
-              noLabel={this.state.noLabel}
+              waitingForValue={this.state.waitingForValue}
             />
           ))}
 

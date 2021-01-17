@@ -1,14 +1,17 @@
 import React from 'react';
-import { withRouter, Route, Link, NavLink } from 'react-router-dom'
+import { Route, Link, NavLink } from 'react-router-dom'
 import ParticipantPoll from './participant_poll';
 import ParticipantHome from './participant_home';
 import logoImg from '../../images/nav/logo.png';
+
+window.here = 'HERE!'
+console.log(window.here)
 
 const ParticipantApp = () => {
   return (
     <section className='participant-app'>
       <nav className='participant-navbar'>
-        <Link exact to='/' className='participant-nav-link participant-nav-link-left'>
+        <Link to='/' className='participant-nav-link participant-nav-link-left'>
           <span>Back to Main App</span> 
         </Link>
         <NavLink exact to='/participate' activeClassName='participant-nav-link-active' className='participant-nav-link'>
@@ -26,4 +29,4 @@ const ParticipantApp = () => {
   )
 }
 
-export default withRouter(ParticipantApp);
+export default ParticipantApp;

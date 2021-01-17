@@ -29,4 +29,27 @@ export function clamp(val, min, max) {
   return val;
 }
 
+export function classNames(...args) {
+  const klassNames = args
+    .map( arg => {
+      if (arg instanceof Array) {
+        return arg[0] ? arg[1] : null;
+      } else {
+        return arg;
+      }
+    })
+    .filter(arg => arg !== null)
+    .join(' ');
+
+  return { className: klassNames };
+}
+
+export function mergeIdIntoState(state, entityId, idArrayName, idToAdd) {
+  const entity = state[entityId]
+  if (!entity) return state;
+
+  const newIds = concatIfNew(entity[idArrayName], idToAdd);
+  const newEntity = { ...entity, [idArrayName]: newIds };
+  return { ...state, [entityId]: newEntity };
+}
 

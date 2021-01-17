@@ -29,24 +29,42 @@ export function useTextInput(defaultVal) {
   return [value, inputProps];
 }
 
-export function useDropdown() {
-  const dispatch = useDispatch();
-  const dropdownId = useRef(Math.random());
-  const activeDropdownId = useSelector(state => state.ui.activeDropdownId); 
-  const dropdownShowing = (dropdownId.current === activeDropdownId);
+export function useDropdown(stopProp = true, documentClickCb = () => {}) {
+  const [ dropdownVisible, setDropdownVisible ] = useState(false);
   
-  const showDropdown = () => dispatch(setDropdown(dropdownId.current));
-  const hideDropdown = () => dispatch(clearDropdown());  
-  const toggleDropdown = () => dropdownShowing ? hideDropdown() : showDropdown();
-  const keepDropdown = e => e.stopPropagation();
+  const keepDropdown = e => e?.stopPropagation();
+  const hideDropdown = () => setDropdownVisible(false); 
 
-  return { 
-    dropdownShowing,
-    toggleDropdown,
-    keepDropdown,
-    showDropdown,
-    hideDropdown,
+  const showDropdown = (e) => {
+    if (stopProp) e?.stopPropagation();
+    setDropdownVisible(true)
   };
+
+  const toggleDropdown = (e) => {
+    if (stopProp) e?.stopPropagation();
+    setDropdownVisible(old => !old);
+  }; 
+
+  useEffect(() => {
+    if (dropdownVisible) {
+      const listener = document.addEventListener('click', () => {
+        hideDropdown();
+        documentClickCb();
+      })
+
+      return () => document.removeEventListener('click', listener);
+    }
+  }, [dropdownVisible]);
+
+  return [
+    dropdownVisible,
+    {
+      showDropdown,
+      hideDropdown,
+      keepDropdown,
+      toggleDropdown,
+    }
+  ];
 }
 
 export function useAnimation ({

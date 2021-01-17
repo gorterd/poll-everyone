@@ -24,13 +24,15 @@ class LoginInput extends React.Component {
     render(){
       const { type, completed, ...rest } = this.props;
 
-      const inputProps = {
-        errorConditions: !completed,
-        klass: 'login-input-container',
-      }
-
-      return <LargeInput {...inputProps} {...rest} type={this.state.curType} 
-        rightSide={PasswordButton} rightSideProps={ { type: type, clickHandler: this.togglePasswordVisible} }/>
+      return (
+        <LargeInput 
+          klass='login-input-container' 
+          type={this.state.curType} 
+          rightSide={PasswordButton} 
+          rightSideProps={ { type: type, clickHandler: this.togglePasswordVisible} }
+          {...rest} 
+        />
+      );
     }
 }
 

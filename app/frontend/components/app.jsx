@@ -3,8 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Route, Switch, useLocation } from 'react-router-dom';
 
 import { modalSelector, uiSelector } from '../util/hooks_selectors';
-import ParticipantApp from './participant/participant_app';
-import { clearDropdown, exitModal } from '../store/actions/ui_actions';
+import { exitModal } from '../store/actions/ui_actions';
 
 import Navbar from './nav/navbar/navbar';
 import Footer from './nav/footer';
@@ -20,6 +19,19 @@ import AppNavbar from './nav/navbar/app_navbar/app_navbar';
 import { Auth, Protected } from './shared/wrappers/routes_util';
 import { Modal } from './shared/modal';
 import ReportsIndex from './reports/reports_index'
+
+console.log(window.here)
+
+const ParticipantApp = React.lazy(
+  () => {
+    return import(
+    /* webpackChunkName: "participant" */
+    /* webpackMode: "lazy" */
+      './participant/participant_app')
+  }
+);
+
+
 
 export default function App() {
   const { scrollY } = useSelector(uiSelector);
@@ -40,74 +52,75 @@ export default function App() {
     <section
       className={'app' + (modalType ? ' freeze-scroll' : '')}
       style={modalType ? { top: (scrollY * -1) } : null}
-      onClick={() => dispatch(clearDropdown())}
     >
-      <Switch>
-        <Route path='/participate'>
-          <ParticipantApp />
-        </Route>
-        <>
-          <section className='content'>
-            <Switch>
+      <React.Suspense fallback={null}>
+        <Switch>
+          <Route path='/participate' component={ParticipantApp} />
+          <>
+            <section className='content'>
+              <Switch>
+                <Route exact path='/'>
+                  <HomeNavbar />
+                </Route>
+
+                <Route path={['/polls', '/account', '/reports']}>
+                  <Protected>
+                    <AppNavbar />
+                  </Protected>
+                </Route>
+
+                <Navbar additionalClasses='nav-sticky' links={[]} tools={[]} />
+              </Switch>
+
+              <Route exact path='/polls'>
+                <Protected>
+                  <GroupsIndex />
+                </Protected>
+              </Route>
+
+              <Route path='/polls/:pollId/edit'>
+                <Protected>
+                  <EditPoll />
+                </Protected>
+              </Route>
+
+              <Route path='/polls/:pollId/show'>
+                <Protected>
+                  <PresentPoll />
+                </Protected>
+              </Route>
+
               <Route exact path='/'>
-                <HomeNavbar />
+                <HomeSplash />
               </Route>
 
-              <Route path={['/polls', '/account', '/reports']}>
-                <AppNavbar />
+              <Route path='/login'>
+                <Auth>
+                  <LoginFormContainer />
+                </Auth>
               </Route>
 
-              <Navbar additionalClasses='nav-sticky' links={[]} tools={[]} />
-            </Switch>
+              <Route path='/signup/splash'>
+                <Auth>
+                  <SignupSplash />
+                </Auth>
+              </Route>
 
-            <Route exact path='/polls'>
-              <Protected>
-                <GroupsIndex />
-              </Protected>
+              <Route path='/signup/create'>
+                <Auth>
+                  <SignupFormContainer />
+                </Auth>
+              </Route>
+            </section>
+
+            <Route exact path={['/', '/polls', '/account']}>
+              <Footer />
             </Route>
 
-            <Route path='/polls/:pollId/edit'>
-              <Protected>
-                <EditPoll />
-              </Protected>
-            </Route>
-
-            <Route path='/polls/:pollId/show'>
-              <Protected>
-                <PresentPoll />
-              </Protected>
-            </Route>
-
-            <Route exact path='/'>
-              <HomeSplash />
-            </Route>
-
-            <Route path='/login'>
-              <Auth>
-                <LoginFormContainer />
-              </Auth>
-            </Route>
-
-            <Route path='/signup/splash'>
-              <Auth>
-                <SignupSplash />
-              </Auth>
-            </Route>
-
-            <Route path='/signup/create'>
-              <Auth>
-                <SignupFormContainer />
-              </Auth>
-            </Route>
-          </section>
-
-          <Route exact path={['/', '/polls', '/account']}>
-            <Footer />
-          </Route>
-
-          <Modal />
-        </>
-      </Switch>
+            <Modal />
+          </>
+        </Switch>
+      </React.Suspense>
     </section>
   );
 }

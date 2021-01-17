@@ -54,9 +54,7 @@ class LoginForm extends React.Component {
         <LoginInput
           readOnly 
           tabIndex="-1" 
-          errorMsg={errorMsg}
           text="Email or username"
-          completed={true}
           type="text"
           value={usernameOrEmail}
           onFocus={() => {
