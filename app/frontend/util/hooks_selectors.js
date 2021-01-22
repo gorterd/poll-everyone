@@ -1,3 +1,8 @@
+export const singleValueSelector = propPath => state => {
+  const props = propPath.split(' ');
+  return props.reduce( (prev, next) => prev?.[next], state);
+}
+
 export const currentUserIdSelector = state => state.session.currentId;
 export const currentUserSelector = state => 
   state.entities.users[state.session.currentId];

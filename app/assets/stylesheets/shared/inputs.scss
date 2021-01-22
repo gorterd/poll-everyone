@@ -6,6 +6,7 @@
   }
         
   .large-input-wrapper, .login-input-wrapper {
+    display: flex;
     position: relative;
     height: 54px;
     background-color: white;
@@ -13,12 +14,16 @@
     margin: 2px 0;
   }
     
+  .large-input {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
 
   input {
     display: block;
     width: 100%;
     height: 100%;
-    background: transparent;
     position: relative;
     padding-left: 15px;
     z-index: 1;
@@ -57,17 +62,5 @@
     font-weight: 700;
     color: $dark-brick;
     padding: 5px;
-  }
-     
-}
-
-.placeholder-input-label-container {
-  position: absolute;
-  bottom: 15px;
-
-  .placeholder-input-label {
-    font-style: italic;
-    font-size: $fontsize-strong;
-    color: $grey;  
-  }          
+  }      
 }

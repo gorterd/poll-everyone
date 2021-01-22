@@ -30,7 +30,7 @@ export default function GroupsIndex() {
   function toggleMoveDrawer() {
     setMoveDrawerVisible( oldVal => !oldVal );
   }
-  console.log(groups)
+
   return (
     <section className="polls-index">
 
@@ -46,7 +46,6 @@ export default function GroupsIndex() {
 
         <div className='groups-index'>
           {groups.map( group => {
-            console.log(group.id)
             return <GroupPollsIndex 
               key={group.id} 
               group={group} 

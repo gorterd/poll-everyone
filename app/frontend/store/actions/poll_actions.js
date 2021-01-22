@@ -31,7 +31,7 @@ export const fetchPoll = (pollId) => dispatch => {
       data => {
         dispatch(receivePoll(data));
       }, err => {
-        console.log(err.responseJSON);
+        console.log(err);
       }
     );
 }
@@ -43,7 +43,7 @@ export const fetchFullPoll = (pollId) => dispatch => {
         dispatch(receiveFullPoll(data));
         return data.poll;
       }, err => {
-        console.log(err.responseJSON);
+        console.log(err);
       }
     );
 }
@@ -54,7 +54,7 @@ export const createPoll = (pollData, groupId) => dispatch => {
       data => {
         dispatch(receivePoll(data));
       }, err => {
-        console.log(err.responseJSON);
+        console.log(err);
       }
     );
 }
@@ -65,7 +65,7 @@ export const updatePoll = (data, pollId) => dispatch => {
       data => {
         dispatch(receivePoll(data));
       }, err => {
-        console.log(err.responseJSON);
+        console.log(err);
       }
     );
 }
@@ -76,7 +76,7 @@ export const duplicatePoll = pollId => dispatch => {
       data => {
         dispatch(receivePoll(data));
       }, err => {
-        console.log(err.responseJSON);
+        console.log(err);
       }
     );
 }
@@ -87,7 +87,7 @@ export const toggleActive = pollId => dispatch => {
       data => {
         dispatch(receivePolls(data.polls));
       }, err => {
-        console.log(err.responseJSON);
+        console.log(err);
       }
     );
 }

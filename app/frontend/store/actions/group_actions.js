@@ -61,7 +61,7 @@ export const createGroup = (data, userId) => dispatch => {
         }
         dispatch(resetGroupsLoading());
       }, err => {
-        console.log(err.responseJSON);
+        console.log(err);
       }
     );
 }
@@ -75,7 +75,7 @@ export const updateGroup = (group) => dispatch => {
         dispatch(receiveGroup(group));
         dispatch(resetGroupsLoading());
       }, err => {
-        console.log(err.responseJSON);
+        console.log(err);
       }
     );
 }

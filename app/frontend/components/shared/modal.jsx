@@ -11,14 +11,14 @@ import { useAnimation } from '../../util/custom_hooks';
 
 export const defaultEnterAnimation = {
   animationName: 'fade-in',
-  animationDuration: '200ms',
+  animationDuration: '300ms',
   animationIterationCount: 1,
   animationFillMode: 'forwards'
 }
 
 export const defaultExitAnimation = {
   animationName: 'fade-out',
-  animationDuration: '200ms',
+  animationDuration: '300ms',
   animationIterationCount: 1,
   animationFillMode: 'forwards'
 }

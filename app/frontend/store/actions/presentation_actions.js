@@ -65,12 +65,12 @@ export const fetchPresentation = (type, id, username) => dispatch => {
         dispatch(receiveActivePoll(rest));
       }
       return data.participant;
-    }, err => console.log(err.responseJSON));
+    }, err => console.log(err));
 }
 
 export const fetchRecentPresentations = (type, id) => dispatch => {
   return PresentationApiUtil.fetchRecentPresentations(type, id)
     .then(data => {
       dispatch(receiveRecentPresentations(data.recents));
-    }, err => console.log(err.responseJSON));
+    }, err => console.log(err));
 }

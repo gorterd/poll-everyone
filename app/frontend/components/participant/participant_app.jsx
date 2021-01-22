@@ -4,9 +4,6 @@ import ParticipantPoll from './participant_poll';
 import ParticipantHome from './participant_home';
 import logoImg from '../../images/nav/logo.png';
 
-window.here = 'HERE!'
-console.log(window.here)
-
 const ParticipantApp = () => {
   return (
     <section className='participant-app'>

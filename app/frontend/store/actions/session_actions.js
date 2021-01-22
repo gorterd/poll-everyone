@@ -56,7 +56,7 @@ export const signup = user => dispatch => {
         dispatch(resetSessionLoading());
         dispatch(resetSessionErrors());
       }, err => {
-        dispatch(receiveSessionErrors(err.responseJSON));
+        dispatch(receiveSessionErrors(err));
         dispatch(resetSessionLoading());
       }
     );
@@ -72,7 +72,7 @@ export const updateUser = user => dispatch => {
         dispatch(resetSessionLoading());
         dispatch(resetSessionErrors());
       }, err => {
-        dispatch(receiveSessionErrors(err.responseJSON));
+        dispatch(receiveSessionErrors(err));
         dispatch(resetSessionLoading());
       }
     );
@@ -88,7 +88,7 @@ export const login = user => dispatch => {
         dispatch(resetSessionLoading());
         dispatch(resetSessionErrors());
       }, err => {
-        dispatch(receiveSessionErrors(err.responseJSON));
+        dispatch(receiveSessionErrors(err));
         dispatch(resetSessionLoading());
         return Promise.reject();
       }
@@ -108,10 +108,11 @@ export const checkIfUserExists = usernameOrEmail => dispatch => {
       () => {
         dispatch(resetSessionLoading());
         dispatch(resetSessionErrors());
+        return true;
       }, err => {
-        dispatch(receiveSessionErrors(err.responseJSON));
+        dispatch(receiveSessionErrors(err));
         dispatch(resetSessionLoading());
-        return Promise.reject();
+        return false;
       }
     );
 }

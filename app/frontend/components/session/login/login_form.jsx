@@ -31,7 +31,9 @@ class LoginForm extends React.Component {
   next(e){
     e.preventDefault();
     this.props.checkIfUserExists(this.state.formData.usernameOrEmail)
-      .then( () => this.setState({ fullForm: true}) );
+      .then( (success) => {
+        if (success) this.setState({ fullForm: true});
+      });
   }
   
   handleInput(field){

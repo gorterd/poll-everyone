@@ -24,9 +24,8 @@
     * { outline: none; }
 
     .placeholder-input-label {
-      font-style: normal;;
+      font-style: normal;
       color: $rich-grey;
-      font-size: $fontsize-strong;   
       font-weight: 400; 
     }
 
@@ -34,44 +33,27 @@
       border: none;
       color: $dark-grey;
 
-      input.activated { bottom: 3px; }
+      input.activated { transform: translateY(-3px); }
     }
  
   }
 
   .title-input-container {
-
     margin-bottom: 18px;
 
-    .large-input-wrapper {
-      height: 52px;
-    }
+    .large-input-wrapper { height: 52px; }
 
-    .small-input-label-container {
-      transform: translateY(-2px);
-    }
-
+    .small-input-label-container { transform: translateY(-2px); }
   }
 
   .answer-option-input-container {
     margin-bottom: 12px;
 
-    .large-input-wrapper{
-      display: flex;
-      height: 58px;
-    }
+    .large-input-wrapper { height: 58px; }
 
-    .small-input-label-container, .placeholder-input-label-container {
-      left: calc(52px + 15px);
-    }
+    .small-input-label-container { transform: translateY(-7px); }
 
-    .small-input-label-container {
-      transform: translateY(-7px);
-    }
-
-    .placeholder-input-label-container {
-      transform: translateY(-4px);
-    }
+    .placeholder-input-label-container { transform: translateY(-4px); }
 
     .button {
       display: flex;

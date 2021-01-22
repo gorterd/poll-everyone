@@ -4,11 +4,14 @@ import {
   RECEIVE_MODAL, 
   SET_SCROLL_Y, 
   SET_STICKY_TOOLBAR,
+  COMPONENT_LOADING,
+  COMPONENT_DONE_LOADING
 } from '../actions/ui_actions';
 
 const BASE_UI = {
   sessionLoading: false,
   groupsLoading: false,
+  componentLoading: null,
   stickyToolbar: false,
   activeDropdownId: null,
   scrollY: 0,
@@ -32,6 +35,10 @@ export default (state = BASE_UI, action) => {
       return { ...state, stickyToolbar: action.boolean };
     case RECEIVE_MODAL:
       return { ...state, scrollY: window.scrollY };
+    case COMPONENT_LOADING:
+      return { ...state, componentLoading: action.componentName };
+    case COMPONENT_DONE_LOADING:
+      return { ...state, componentLoading: null };
     default:
       return state;
   }

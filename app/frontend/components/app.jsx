@@ -1,116 +1,86 @@
 import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Route, Switch, useLocation } from 'react-router-dom';
-
-import { modalSelector, uiSelector } from '../util/hooks_selectors';
-import { exitModal } from '../store/actions/ui_actions';
+import { useDispatch } from 'react-redux';
+import { Route, Switch } from 'react-router-dom';
 
 import Navbar from './nav/navbar/navbar';
 import Footer from './nav/footer';
-import HomeNavbar from './nav/navbar/home_navbar';
-import HomeSplash from './nav/home_splash';
 import EditPoll from './polls/poll/edit_poll';
-import PresentPoll from './polls/poll/present_poll';
 import LoginFormContainer from './session/login/login_container';
-import SignupSplash from './session/signup/signup_splash';
-import SignupFormContainer from './session/signup/signup_container';
-import GroupsIndex from './polls/groups_index/groups_index';
-import AppNavbar from './nav/navbar/app_navbar/app_navbar';
-import { Auth, Protected } from './shared/wrappers/routes_util';
+import { AuthRoute, ProtectedRoute } from './shared/wrappers/routes_util';
 import { Modal } from './shared/modal';
 import ReportsIndex from './reports/reports_index'
+import DOMUtilities from './dom_utilities';
+import { useOnFirstRender, useStateValue } from '../util/custom_hooks';
+import { componentDoneLoading, componentLoading } from '../store/actions/ui_actions';
 
-console.log(window.here)
+import { 
+  ParticipantApp,
+  HomeSplash,
+  SignupSplash,
+  SignupFormContainer,
+  GroupsIndex,
+  PresentPoll
+} from './lazy_load_index';
 
-const ParticipantApp = React.lazy(
-  () => {
-    return import(
-    /* webpackChunkName: "participant" */
-    /* webpackMode: "lazy" */
-      './participant/participant_app')
-  }
-);
+const Fallback = ({ componentName }) => {
+  const dispatch = useDispatch();
+  
+  useEffect(() => {
+    dispatch(componentLoading(componentName))
+    return () => dispatch(componentDoneLoading());
+  }, [])
 
-
+  return null;
+};
 
 export default function App() {
-  const { scrollY } = useSelector(uiSelector);
-  const { type: modalType } = useSelector(modalSelector);
-  const curPath = useLocation().pathname;
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    if (!modalType) window.scrollTo(0, scrollY);
-  }, [modalType]);
-
-  useEffect(() => {
-    window.scrollTo(0, 0);
-    dispatch(exitModal());
-  }, [curPath]);
-
+  const scrollY = useStateValue('ui scrollY');
+  const modalType = useStateValue('modal type');
+  
   return (
     <section
       className={'app' + (modalType ? ' freeze-scroll' : '')}
       style={modalType ? { top: (scrollY * -1) } : null}
     >
-      <React.Suspense fallback={null}>
+      <DOMUtilities />
+      <React.Suspense fallback={<Fallback componentName='app'/>}>
         <Switch>
-          <Route path='/participate' component={ParticipantApp} />
+          <Route path='/participate'>
+            <ParticipantApp/>
+          </Route>
           <>
             <section className='content'>
-              <Switch>
+              <Navbar />
+
+              <React.Suspense fallback={<Fallback componentName='content'/>}>
                 <Route exact path='/'>
-                  <HomeNavbar />
+                  <HomeSplash />
                 </Route>
 
-                <Route path={['/polls', '/account', '/reports']}>
-                  <Protected>
-                    <AppNavbar />
-                  </Protected>
-                </Route>
-
-                <Navbar additionalClasses='nav-sticky' links={[]} tools={[]} />
-              </Switch>
-
-              <Route exact path='/polls'>
-                <Protected>
-                  <GroupsIndex />
-                </Protected>
-              </Route>
-
-              <Route path='/polls/:pollId/edit'>
-                <Protected>
-                  <EditPoll />
-                </Protected>
-              </Route>
-
-              <Route path='/polls/:pollId/show'>
-                <Protected>
-                  <PresentPoll />
-                </Protected>
-              </Route>
-
-              <Route exact path='/'>
-                <HomeSplash />
-              </Route>
-
-              <Route path='/login'>
-                <Auth>
+                <AuthRoute path='/login'>
                   <LoginFormContainer />
-                </Auth>
-              </Route>
+                </AuthRoute>
 
-              <Route path='/signup/splash'>
-                <Auth>
+                <AuthRoute path='/signup/splash'>
                   <SignupSplash />
-                </Auth>
-              </Route>
+                </AuthRoute>
 
-              <Route path='/signup/create'>
-                <Auth>
+                <AuthRoute path='/signup/create'>
                   <SignupFormContainer />
-                </Auth>
-              </Route>
+                </AuthRoute>
+
+                <ProtectedRoute exact path='/polls'>
+                  <GroupsIndex />
+                </ProtectedRoute>
+
+                <ProtectedRoute path='/polls/:pollId/edit'>
+                  <EditPoll />
+                </ProtectedRoute>
+
+                <ProtectedRoute path='/polls/:pollId/show'>
+                  <PresentPoll />
+                </ProtectedRoute>
+              </React.Suspense>
             </section>
 
             <Route exact path={['/', '/polls', '/account']}>

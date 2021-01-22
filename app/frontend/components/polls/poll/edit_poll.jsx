@@ -167,7 +167,6 @@ class EditPoll extends React.Component {
   }
 
   render() {
-
     const { error, formData: { title, answerOptionsAttributes } } = this.state;
 
     this.titleError = (error === errorKeys.TITLE_BLANK) ? errorMessages[error] : '';

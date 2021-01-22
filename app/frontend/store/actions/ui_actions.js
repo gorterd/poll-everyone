@@ -6,6 +6,9 @@ export const SET_SCROLL_Y = 'SET_SCROLL_Y'
 export const SET_STICKY_TOOLBAR = 'SET_STICKY_TOOLBAR'
 export const SET_DROPDOWN = 'SET_DROPDOWN'
 export const CLEAR_DROPDOWN = 'CLEAR_DROPDOWN'
+export const COMPONENT_LOADING = 'COMPONENT_LOADING'
+export const COMPONENT_DONE_LOADING = 'COMPONENT_DONE_LOADING'
+
 
 export const openModal = modal => {
   return {
@@ -44,3 +47,12 @@ export const setStickyToolbar = boolean => {
     boolean
   }
 }
+
+export const componentLoading = componentName => ({
+  type: COMPONENT_LOADING,
+  componentName
+})
+
+export const componentDoneLoading = () => ({
+  type: COMPONENT_DONE_LOADING
+})

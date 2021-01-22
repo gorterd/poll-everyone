@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { clearDropdown, setDropdown } from "../store/actions/ui_actions";
+import { useSelector } from "react-redux";
+import { singleValueSelector } from "./hooks_selectors";
 
 // from react docs
 export function usePrevious(value) {
@@ -9,6 +9,60 @@ export function usePrevious(value) {
     ref.current = value;
   });
   return ref.current;
+}
+
+export function useDidUpdate(cb, deps) {
+  const first = useRef(true);
+  useEffect(() => {
+    if (first.current) {
+      first.current = false;
+    } else {
+      return cb();
+    }
+  }, deps)
+}
+
+/* deprecate? 
+    1 off side effects in render should be avoided because 
+    side effects during render should be avoid
+*/ 
+export function useOnFirstRender(cb) {
+  const first = useRef(true);
+  if (first.current) cb();
+
+  useEffect(() => {
+    first.current = false;
+  }, [])
+}
+
+export function useDelayedPrefetch(fetchCb) {
+  const [ START, TIMEOUT, CHECK ] = [ 'START', 'TIMEOUT', 'CHECK' ];
+  const componentLoading = useStateValue('ui componentLoading');
+  const ref = useRef({ status: START, value: null });
+
+  const fetch = () => {
+    fetchCb();
+    ref.current.status = null;
+  }
+
+  useEffect(() => {
+    switch (ref.current.status) {
+      case START:
+        ref.current.status = TIMEOUT;
+        window.setTimeout(() => {
+          if (ref.current.value) {
+            ref.current.status = CHECK;
+          } else {
+            fetch();
+          }
+        }, 100);
+      case TIMEOUT:
+        ref.current.value = componentLoading;
+        break;
+      case CHECK:
+        if (!componentLoading) fetch();
+    }
+  }, [componentLoading]);
 }
 
 export function useToggleState(initVal) {
@@ -28,6 +82,10 @@ export function useTextInput(defaultVal) {
 
   return [value, inputProps];
 }
+
+export function useStateValue(propPath){
+  return useSelector(singleValueSelector(propPath));
+} 
 
 export function useDropdown(stopProp = true, documentClickCb = () => {}) {
   const [ dropdownVisible, setDropdownVisible ] = useState(false);
@@ -95,40 +153,32 @@ export function useAnimation ({
   exitAnimation = exitAnimation || { animationDuration: 0 };
 
   const [ renderState, setRenderState ] = useState(renderCondition);
-  const [ style, setStyle ] = useState({});
+  const [ style, setStyle ] = useState(noFirstAnimation ? {} : enterAnimation);
   const [ key, setKey ] = useState(0);
   const timeout = useRef();
-  const firstRender = useRef(noFirstAnimation);
 
-  useEffect(() => {
-    if (interruptAnimation) {
-      clearTimeout(timeout.current);
-      timeout.current = null;
-    }
+  useDidUpdate(() => {
+    if (timeout.current && !interruptAnimation) return;
+    clearTimeout(timeout.current);
 
-    if (!timeout.current) {
-      if (renderCondition) {
-        if (!firstRender.current) setStyle(enterAnimation);
-        setRenderState(true);
+    if (renderCondition) {
+      setRenderState(true);
+      setStyle(enterAnimation);
 
-        if (!firstRender.current) timeout.current = window.setTimeout(() => {
-          afterEnter();
-          timeout.current = null;
-        }, parseInt(enterDuration));
+      timeout.current = window.setTimeout(() => {
+        afterEnter();
+        timeout.current = null;
+      }, parseInt(enterDuration));
+    } else {
+      setKey(old => old + 1);
+      setStyle(exitAnimation);
 
-        firstRender.current = false;
-      } 
-      else {
-        setKey(old => old + 1);
-        if (!firstRender.current) setStyle(exitAnimation);
-
-        timeout.current = window.setTimeout(() => {
-          afterExit();
-          setRenderState(false);
-          timeout.current = null;
-        }, parseInt(exitDuration)); 
-      }
-    }    
+      timeout.current = window.setTimeout(() => {
+        setRenderState(false);
+        afterExit();
+        timeout.current = null;
+      }, parseInt(exitDuration)); 
+    } 
   }, [renderCondition]);
 
   useEffect(() => () => clearTimeout(timeout.current), []);

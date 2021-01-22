@@ -1,11 +1,10 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useHistory } from 'react-router-dom';
-import { logout } from '../../../../store/actions/session_actions';
-import { currentUserSelector } from '../../../../util/hooks_selectors';
-import DropdownWrapper from '../../../shared/wrappers/dropdown';
+import { logout } from '../../../store/actions/session_actions';
+import { currentUserSelector } from '../../../util/hooks_selectors';
+import DropdownWrapper from '../../shared/wrappers/dropdown';
 
-export default function AppNavbarDropdown () {
+export default function AppNavbarTools () {
   const dispatch = useDispatch();
   const currentUser = useSelector(currentUserSelector);
 
@@ -24,10 +23,14 @@ export default function AppNavbarDropdown () {
     </ul>
   )
 
-  return <DropdownWrapper 
-    containerClass='nav-dropdown-container'
-    button={Button}
-    dropdown={Dropdown}
-  />
+  return (
+    <li>
+      <DropdownWrapper 
+        containerClass='nav-dropdown-container'
+        button={Button}
+        dropdown={Dropdown}
+      />
+    </li>
+  )
 }
 

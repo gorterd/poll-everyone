@@ -52,4 +52,3 @@ export function mergeIdIntoState(state, entityId, idArrayName, idToAdd) {
   const newEntity = { ...entity, [idArrayName]: newIds };
   return { ...state, [entityId]: newEntity };
 }
-

@@ -17,7 +17,7 @@ if (process.env.NODE_ENV !== 'production') {
 export default function configureStore(preloadedState) {
   return createStore(
     rootReducer, 
-    JSON.parse(preloadedState), 
+    preloadedState, 
     applyMiddleware(...middleware)
   );
 }

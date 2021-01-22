@@ -16,6 +16,7 @@ export const fetchPoll = (pollId) => {
 }
 
 export const fetchFullPoll = (pollId) => {
+  
   return ajax({
     method: 'GET',
     url: `/api/polls/${pollId}`,
@@ -45,5 +46,3 @@ export const toggleActive = pollId =>  {
     url: `/api/polls/${pollId}/toggle_activation`,
   }); 
 }
-
-window.toggleActive = toggleActive;

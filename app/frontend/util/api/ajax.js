@@ -1,8 +1,22 @@
-import jQuery from 'jquery';
-import { CSRFProtection } from '@rails/ujs';
-
-jQuery.ajaxPrefilter((options, originalOptions, xhr) => {
-  if (!options.crossDomain) CSRFProtection(xhr);
+const csrfToken = document.querySelector('meta[name=csrf-token').content;
+const headers = new Headers({
+  'X-CSRF-Token': csrfToken,
+  'Content-Type': 'application/json'
 });
 
-export default jQuery.ajax;
+export default async function ajax({ url, method = 'GET',  data }) {
+  const options = { headers, method };
+
+  if (data && method === 'GET') {
+    url += '?' + new URLSearchParams(data).toString();
+  } else if (data) {
+    options.body = JSON.stringify(data);
+  }
+
+  const response = await fetch(url, options);
+  const responseJSON = await response.json();
+  
+  return response.ok
+    ? responseJSON
+    : Promise.reject(responseJSON);
+}

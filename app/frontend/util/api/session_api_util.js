@@ -33,7 +33,8 @@ export const logout = () => {
 
 export const checkIfUserExists = usernameOrEmail => {
   return ajax({
+    method: 'GET',
     url: '/api/session/exists',
-    data: { query: usernameOrEmail }
+    data: { query: usernameOrEmail },
   })
 }

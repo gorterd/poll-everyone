@@ -1,7 +1,11 @@
 import React from 'react';
+import { useStateValue } from '../../util/custom_hooks';
 import Logo from './logo';
 
 const Footer = () => {
+  const componentLoading = useStateValue('ui componentLoading');
+  if (componentLoading) return null;
+
   const FOOTER_LINKS = {
     "Languages": [
       "Ruby",

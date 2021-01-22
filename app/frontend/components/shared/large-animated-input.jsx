@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Animated } from './wrappers/animation_util';
 import { classNames } from '../../util/general_util';
 
-export default function LargeInp ({ 
+export default function LargeInput ({ 
   value,
   text,
   errorMsg,
@@ -17,10 +17,6 @@ export default function LargeInp ({
   const [active, setActive] = useState(false);
   const showPlaceholder = !(active || value);
   const fadeIn = useRef(waitingForValue);
-
-  // useEffect(() => {
-  //   fadeIn.current = false;
-  // }, [waitingForValue])
 
   const handleFocus = () => {
     if (!value) setActive(true);
@@ -54,8 +50,7 @@ export default function LargeInp ({
     enterAnimation,
     exitAnimation
   }
-
-  debugger 
+ 
   return (
     <div {...classNames(
       'large-input-container',
@@ -69,34 +64,36 @@ export default function LargeInp ({
         {!waitingForValue && (
           <>
             {LeftSide && <LeftSide {...leftSideProps} />}
-            <input
-              {...classNames([!showPlaceholder, 'activated'], [fadeIn.current, 'fade-in-short'])}
-              onFocus={handleFocus}
-              onBlur={handleLeave}
-              value={value}
-              {...rest}
-            />
-            <div {...classNames('small-input-label-container', [fadeIn.current, 'fade-in-short'])}>
-              <Animated
-                {...animationProps}
-                renderCondition={!showPlaceholder}
-                noFirstAnimation={Boolean(value)}
-              >
-                <div {...classNames('small-input-label')}>
-                  {text}
-                </div>
-              </Animated>
-            </div>
-            <div {...classNames('placeholder-input-label-container', [fadeIn.current, 'fade-in-short'])}>
-              <Animated
-                {...animationProps}
-                renderCondition={showPlaceholder}
-                noFirstAnimation={!Boolean(value)}
-              >
-                <div {...classNames('placeholder-input-label')}>
-                  {text}
-                </div>
-              </Animated>
+            <div className='large-input'>
+              <input
+                {...classNames([!showPlaceholder, 'activated'], [fadeIn.current, 'fade-in-short'])}
+                onFocus={handleFocus}
+                onBlur={handleLeave}
+                value={value}
+                {...rest}
+              />
+              <div {...classNames('small-input-label-container', [fadeIn.current, 'fade-in-short'])}>
+                <Animated
+                  {...animationProps}
+                  renderCondition={!showPlaceholder}
+                  noFirstAnimation={Boolean(value)}
+                >
+                  <div {...classNames('small-input-label')}>
+                    {text}
+                  </div>
+                </Animated>
+              </div>
+              <div {...classNames('placeholder-input-label-container', [fadeIn.current, 'fade-in-short'])}>
+                <Animated
+                  {...animationProps}
+                  renderCondition={showPlaceholder}
+                  noFirstAnimation={!Boolean(value)}
+                >
+                  <div {...classNames('placeholder-input-label')}>
+                    {text}
+                  </div>
+                </Animated>
+              </div>
             </div>
             {RightSide && <RightSide {...rightSideProps} />}
           </>

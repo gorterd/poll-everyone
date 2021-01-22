@@ -46,13 +46,21 @@ input[type="submit"] {
 
 section.app {
   background: $light-grey;
-  font-family: $sans;
+  // font-family: $sans;
+  font-family: 'Source Sans Pro', 'sans-serif';
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   min-height: 100vh;
 }
 
+// .dynamic-font {
+//   font-family: 'Source Sans Pro';
+// }
+
+.system-font {
+  font-family: sans-serif;
+}
 
 
 
