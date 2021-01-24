@@ -9,8 +9,16 @@ import {
   orderedGroupsSelector, 
   stickyToolbarSelector 
 } from '../../../util/hooks_selectors';
+import { useDelayedPrefetch } from '../../../util/custom_hooks';
+import { fetchEditPoll, fetchHomeSplash, fetchPresentPoll } from '../../lazy_load_index';
 
 export default function GroupsIndex() {
+  useDelayedPrefetch(
+    fetchHomeSplash,
+    fetchEditPoll,
+    fetchPresentPoll
+  );
+
   const dispatch = useDispatch();
   const [ moveDrawerVisible, setMoveDrawerVisible ] = useState(false);
   const groups = useSelector(orderedGroupsSelector)
@@ -23,7 +31,7 @@ export default function GroupsIndex() {
 
   useEffect( () => {
     if (moveDrawerVisible && stickyToolbar) {
-      window.scrollTo({ top: 60, behavior: "smooth" });
+      window.scrollTo({ top: 72, behavior: "smooth" });
     }
   }, [moveDrawerVisible]);
 

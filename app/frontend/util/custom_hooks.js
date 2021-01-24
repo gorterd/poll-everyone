@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useLayoutEffect, useCallback } from "react";
 import { useSelector } from "react-redux";
 import { singleValueSelector } from "./hooks_selectors";
 
@@ -22,26 +22,13 @@ export function useDidUpdate(cb, deps) {
   }, deps)
 }
 
-/* deprecate? 
-    1 off side effects in render should be avoided because 
-    side effects during render should be avoid
-*/ 
-export function useOnFirstRender(cb) {
-  const first = useRef(true);
-  if (first.current) cb();
-
-  useEffect(() => {
-    first.current = false;
-  }, [])
-}
-
-export function useDelayedPrefetch(fetchCb) {
+export function useDelayedPrefetch(...fetchCbs) {
   const [ START, TIMEOUT, CHECK ] = [ 'START', 'TIMEOUT', 'CHECK' ];
   const componentLoading = useStateValue('ui componentLoading');
   const ref = useRef({ status: START, value: null });
 
   const fetch = () => {
-    fetchCb();
+    fetchCbs.forEach( cb => cb());
     ref.current.status = null;
   }
 
@@ -87,42 +74,30 @@ export function useStateValue(propPath){
   return useSelector(singleValueSelector(propPath));
 } 
 
-export function useDropdown(stopProp = true, documentClickCb = () => {}) {
+export function useDropdown(documentClickCb = () => {}) {
   const [ dropdownVisible, setDropdownVisible ] = useState(false);
+  const eventHandlers = {
+    hideDropdown: () => setDropdownVisible(false),
+    showDropdown: () => setDropdownVisible(true),
+    toggleDropdown: () => setDropdownVisible(old => !old),
+  }
   
-  const keepDropdown = e => e?.stopPropagation();
-  const hideDropdown = () => setDropdownVisible(false); 
+  const dropdownRef = useRef();  
+  const listener = useCallback(e => {
+    if (!dropdownRef.current.contains(e.target)) {
+      eventHandlers.hideDropdown();
+      documentClickCb();
+    }
+  }, []); 
 
-  const showDropdown = (e) => {
-    if (stopProp) e?.stopPropagation();
-    setDropdownVisible(true)
-  };
-
-  const toggleDropdown = (e) => {
-    if (stopProp) e?.stopPropagation();
-    setDropdownVisible(old => !old);
-  }; 
-
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (dropdownVisible) {
-      const listener = document.addEventListener('click', () => {
-        hideDropdown();
-        documentClickCb();
-      })
-
-      return () => document.removeEventListener('click', listener);
+      document.addEventListener('click', listener, true);
+      return () => document.removeEventListener('click', listener, true);
     }
   }, [dropdownVisible]);
 
-  return [
-    dropdownVisible,
-    {
-      showDropdown,
-      hideDropdown,
-      keepDropdown,
-      toggleDropdown,
-    }
-  ];
+  return [ dropdownVisible, dropdownRef, eventHandlers ];
 }
 
 export function useAnimation ({

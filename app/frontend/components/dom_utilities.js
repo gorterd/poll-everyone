@@ -16,8 +16,9 @@ export default () => {
   }, [modalType]);
 
   useDidUpdate(() => {
+    window.scrollTo(0, 0);
     dispatch(exitModal());
   }, [curPath]);
-
+  
   return null;
 }

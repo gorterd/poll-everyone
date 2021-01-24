@@ -21,14 +21,10 @@ class EditPoll extends React.Component {
     
     this.state = {
       formData: {
-        title: '',
-        answerOptionsAttributes: [
-          { correct: false, body: '' },
-          { correct: false, body: '' },
-        ]
+        title: ' ',
+        answerOptionsAttributes: []
       },
-      error:  '',
-      waitingForValue: true
+      error:  ''
     }
 
     this.deleted = [];
@@ -58,7 +54,7 @@ class EditPoll extends React.Component {
         )
       }
 
-      this.setState({formData, waitingForValue: false});
+      this.setState({formData});
     });
   }
 
@@ -193,15 +189,14 @@ class EditPoll extends React.Component {
     return (
       <form onSubmit={this.handleSubmit} className='edit-poll-form multiple-choice-form'>
         <div className='edit-poll-form-left'>
-          <LargeInput
+            { this.props.data && <LargeInput
             klass='title-input-container'
             type='text'
             errorMsg={this.titleError}
             text='Title'
             value={title}
             onChange={this.handleTitle}
-            waitingForValue={this.state.waitingForValue}
-          />
+          />}
 
           {answerOptionsAttributes.map((option, idx) => (
             <LargeInput
@@ -216,7 +211,6 @@ class EditPoll extends React.Component {
               leftSideProps={{ selected: option.correct, idx }}
               rightSide={RightSide}
               rightSideProps={{ idx }}
-              waitingForValue={this.state.waitingForValue}
             />
           ))}
 

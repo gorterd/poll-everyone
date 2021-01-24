@@ -53,7 +53,6 @@ export default function GroupSearch({ setGroup, focusOnTab, groups, placeholderT
   });
 
   const searchInput = useRef();
-  const searchDiv = useRef();
   const drawerLis = useRef([]);
 
   useEffect(() => dispatch({
@@ -90,9 +89,9 @@ export default function GroupSearch({ setGroup, focusOnTab, groups, placeholderT
 
   const [
     dropdownShowing,
+    searchDiv,
     {
       toggleDropdown, 
-      keepDropdown, 
       showDropdown, 
       hideDropdown 
     }
@@ -165,7 +164,6 @@ export default function GroupSearch({ setGroup, focusOnTab, groups, placeholderT
       className='group-search-container' 
       tabIndex='0' 
       onKeyDown={handleKeyDown}
-      onClick={keepDropdown}
       ref={searchDiv}
     >
       <form onSubmit={handleSubmit}>

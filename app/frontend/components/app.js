@@ -2,18 +2,18 @@ import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { Route, Switch } from 'react-router-dom';
 
-import Navbar from './nav/navbar/navbar';
-import Footer from './nav/footer';
-import EditPoll from './polls/poll/edit_poll';
-import LoginFormContainer from './session/login/login_container';
 import { AuthRoute, ProtectedRoute } from './shared/wrappers/routes_util';
 import { Modal } from './shared/modal';
 import ReportsIndex from './reports/reports_index'
 import DOMUtilities from './dom_utilities';
-import { useOnFirstRender, useStateValue } from '../util/custom_hooks';
+import { useStateValue } from '../util/custom_hooks';
 import { componentDoneLoading, componentLoading } from '../store/actions/ui_actions';
 
 import { 
+  Navbar,
+  Footer,
+  EditPoll,
+  LoginFormContainer,
   ParticipantApp,
   HomeSplash,
   SignupSplash,

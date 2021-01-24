@@ -2,7 +2,7 @@ import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 import rootReducer from './reducers/root_reducer';
 
-const MUTED_ACTIONS = ['SET_DROPDOWN', 'CLEAR_DROPDOWN', 'SET_STICKY_TOOLBAR'];
+const MUTED_ACTIONS = ['SET_DROPDOWN', 'CLEAR_DROPDOWN'];
 const middleware = [thunk];
 
 if (process.env.NODE_ENV !== 'production') {

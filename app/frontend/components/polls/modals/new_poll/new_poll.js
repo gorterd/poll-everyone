@@ -1,13 +1,11 @@
-import React from 'react';
-import {connect} from 'react-redux';
-import { withRouter } from 'react-router-dom';
-import NewPollToolbar from './new_poll_toolbar';
+import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import MultipleChoiceForm from './multiple_choice_form';
-import { orderedGroups } from '../../../../util/selectors';
 import { createPoll } from '../../../../store/actions/poll_actions';
-import { closeModal, exitModal } from '../../../../store/actions/ui_actions';
+import { exitModal } from '../../../../store/actions/ui_actions';
 import GroupSearch from '../../../shared/group_search';
 import multipleChoiceOptionImg from '../../../../images/icons/multiple-choice-option.png'
+import { orderedGroupsSelector } from '../../../../util/hooks_selectors';
 
 const MULTIPLE_CHOICE = 'multiple_choice';
 
@@ -25,109 +23,75 @@ const errorMessages = {
   ANSWER_OPTIONS_BLANK: 'Please enter at least one response',
 }
 
-const _nullNewPoll = {
-  activeOption: MULTIPLE_CHOICE,
-  group: undefined,
-  error: ''
-}
+export default function NewPollForm({ modalData }) {
+  const dispatch = useDispatch();
+  const groups = useSelector(orderedGroupsSelector);
 
-class NewPollForm extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = Object.assign({}, _nullNewPoll, { group: this.props.modalData.group });
+  const [ activeOption, setActiveOption ] = useState(MULTIPLE_CHOICE);
+  const [ group, setGroup] = useState(modalData.group)
+  const [ error, setError] = useState('');
 
-    this.selectPollOption = this.selectPollOption.bind(this);
-    this.createPoll = this.createPoll.bind(this);
-    this.clearErrors = this.clearErrors.bind(this);
-    this.setGroup = this.setGroup.bind(this);
-  };
-
-  setGroup(group) {
-    this.setState({ group });
-  }
-
-  selectPollOption(option){
-    this.setState({activeOption: option})
-  }
-
-  clearErrors(){
-    this.setState({error: ''});
-  }
-
-  createPoll(formData){
-    if ( !formData.title ) {
-      this.setState({ error: errorKeys.TITLE_BLANK })
-    } else if (formData.answerOptionsAttributes.length === 0 ) {
-      this.setState({ error: errorKeys.ANSWER_OPTIONS_BLANK })
+  function submitPoll(formData) {
+    if (!formData.title) {
+      setError(errorKeys.TITLE_BLANK);
+    } else if (formData.answerOptionsAttributes.length === 0) {
+      setError(errorKeys.ANSWER_OPTIONS_BLANK);
     } else {
       const answerOptionsAttributes = formData.answerOptionsAttributes
-        .map( (option, idx) => (Object.assign(option, { ord: idx })));
-      const data = Object.assign(formData, { pollType: this.state.activeOption, answerOptionsAttributes });
-      const groupId = this.state.group ? this.state.group.id : this.props.groups.find( g => g.ord === 0).id;
-      this.props.createPoll(data, groupId).then( () => this.props.closeModal());
+        .map((option, idx) => (Object.assign(option, { ord: idx })));
+      const data = Object.assign(
+        formData, 
+        { pollType: activeOption, answerOptionsAttributes }
+      );
+      const groupId = group?.id || groups.find(g => g.ord === 0).id;
+      
+      dispatch(createPoll(data, groupId))
+        .then(() => dispatch(exitModal()));
     }
-  }
+  } 
 
-  render() {
-    const { groups } = this.props;
-    const { activeOption, group, error } = this.state;
+  const Form = FORM_COMPONENTS[activeOption];
 
-    const Form = FORM_COMPONENTS[activeOption];
+  return (
+    <section className='new-poll-container'>
+      <div className='new-poll-toolbar'>
+        <button
+          onClick={() => dispatch(exitModal())}
+          className="button-blue"
+        >X</button>
+      </div>
+      
+      <div className='new-poll-main'>
+        <div className='new-poll-form-container'>
 
-    return (
-      <section className='new-poll-container'>
-        
-        <NewPollToolbar hideOnSticky={false} />
-        <div className='new-poll-main'>
-          <div className='new-poll-form-container'>
+          <ul className='new-poll-options'>
+            <li
+              className={'new-poll-option' + (activeOption === MULTIPLE_CHOICE ? ' active-option' : '')}
+              onClick={() => setActiveOption(MULTIPLE_CHOICE)}
+            >
+              <img src={multipleChoiceOptionImg} alt='multiple-choice' />
+              <span>Multiple choice</span>
+            </li>
+          </ul>
 
-            <ul className='new-poll-options'>
-              <li
-                className={'new-poll-option' + (activeOption === MULTIPLE_CHOICE ? ' active-option' : '')}
-                onClick={() => this.selectPollOption(MULTIPLE_CHOICE)}
-              >
-                <img src={multipleChoiceOptionImg} alt='multiple-choice' />
-                <span>Multiple choice</span>
-              </li>
-            </ul>
+          <Form
+            createPoll={submitPoll}
+            clearErrors={() => setError('')}
+            error={error}
+            errorKeys={errorKeys}
+            errorMessages={errorMessages}
+          />
 
-            <Form
-              createPoll={this.createPoll}
-              clearErrors={this.clearErrors}
-              error={error}
-              errorKeys={errorKeys}
-              errorMessages={errorMessages}
+          <div className='new-poll-bottom-bar'>
+            <GroupSearch
+              defaultGroup={modalData.group?.title}
+              setGroup={setGroup}
+              groups={groups}
+              placeholderText='Assign activity to a group'
             />
-
-            <div className='new-poll-bottom-bar'>
-              <GroupSearch
-                defaultGroup={this.props.modalData.group?.title}
-                setGroup={this.setGroup}
-                groups={groups}
-                placeholderText='Assign activity to a group'
-              />
-            </div>
           </div>
         </div>
-      </section>
-    )
-  }
-};
-
-const mapState = state => {
-  return {
-    groups: orderedGroups(state),
-    modalType: state.modal.type
-  }
+      </div>
+    </section>
+  )
 }
-
-const mapDispatch = dispatch => {
-  return {
-    createPoll: (poll, groupId) => dispatch(createPoll(poll, groupId)),
-    closeModal: () => dispatch(exitModal())
-  }
-}
-
-export default withRouter(connect(mapState, mapDispatch)(NewPollForm));
-
-

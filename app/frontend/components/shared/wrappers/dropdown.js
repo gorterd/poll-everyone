@@ -9,13 +9,13 @@ export default function DropdownWrapper({
   containerClass
 }) {
 
-  const [dropdownShowing, {
+  const [dropdownShowing, dropdownRef, {
     toggleDropdown,
     hideDropdown,
   }] = useDropdown();
 
   return (
-    <div className={"dropdown-container " + containerClass}>
+    <div className={"dropdown-container " + containerClass} ref={dropdownRef}>
       <div onClick={toggleDropdown} className='dropdown-button'> 
         <Button {...buttonProps} />
       </div>

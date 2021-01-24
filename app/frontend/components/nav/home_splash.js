@@ -2,11 +2,8 @@ import React from 'react';
 import AttributedImage from '../shared/attributed_image';
 import { Link } from 'react-router-dom';
 import homeSplashImg from '../../images/splash/home-splash-01.png';
-import { fetchParticipantApp } from '../lazy_load_index';
 
-const HomeSplash = () => {
-  fetchParticipantApp();
-  
+const HomeSplash = () => {  
   return (
     <section className='home-splash-container'>
       <div className="home-splash-pane">

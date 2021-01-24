@@ -6,7 +6,7 @@ import { isEqual, debounce } from 'lodash';
 import cableConsumer from '../../../channels/consumer';
 import { presenterPollDataSelector } from '../../../util/hooks_selectors';
 import { standardGraph } from '../../../util/data_formats_util';
-import { usePrevious } from '../../../util/custom_hooks';
+import { useDelayedPrefetch, usePrevious } from '../../../util/custom_hooks';
 import { fetchFullPoll, toggleActive } from '../../../store/actions/poll_actions'
 import { 
   receiveActivePoll, 
@@ -15,9 +15,17 @@ import {
   clearResponse 
 } from '../../../store/actions/presentation_actions';
 import PresentationGraph from './presentation_graph';
+import { fetchEditPoll, fetchFooter, fetchGroupsIndex, fetchHomeSplash } from '../../lazy_load_index';
 
 
 export default function PresentPoll() {
+  useDelayedPrefetch(
+    fetchEditPoll, 
+    fetchGroupsIndex, 
+    fetchHomeSplash, 
+    fetchFooter
+  );
+  
   const history = useHistory();
   const dispatch = useDispatch();
 

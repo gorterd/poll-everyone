@@ -3,8 +3,16 @@ import { Route, Link, NavLink } from 'react-router-dom'
 import ParticipantPoll from './participant_poll';
 import ParticipantHome from './participant_home';
 import logoImg from '../../images/nav/logo.png';
+import { useDelayedPrefetch } from '../../util/custom_hooks';
+import { fetchFooter, fetchHomeSplash, fetchNavbar } from '../lazy_load_index';
 
 const ParticipantApp = () => {
+  useDelayedPrefetch(
+    fetchHomeSplash, 
+    fetchNavbar, 
+    fetchFooter
+  );
+
   return (
     <section className='participant-app'>
       <nav className='participant-navbar'>

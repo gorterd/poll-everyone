@@ -3,7 +3,7 @@ import { Link, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { login, logout } from '../../../store/actions/session_actions';
 import { loggedInSelector } from '../../../util/hooks_selectors';
-import { fetchGroupsIndex, fetchSignupSplash } from '../../lazy_load_index';
+import { fetchGroupsIndex, fetchLoginFormContainer, fetchParticipantApp, fetchSignupSplash } from '../../lazy_load_index';
 import { useDelayedPrefetch } from '../../../util/custom_hooks';
 
 export default function HomeNavTools() {
@@ -11,8 +11,9 @@ export default function HomeNavTools() {
   const loggedIn = useSelector(loggedInSelector);
   const history = useHistory();
 
-  const prefetch = loggedIn ? fetchGroupsIndex : fetchSignupSplash;
-  useDelayedPrefetch(prefetch);
+  const prefetches = [fetchGroupsIndex, fetchParticipantApp];
+  if (loggedIn) prefetches.concat(fetchSignupSplash, fetchLoginFormContainer);
+  useDelayedPrefetch(...prefetches);
 
   const _loginDemoUser = () => {
     dispatch(login({

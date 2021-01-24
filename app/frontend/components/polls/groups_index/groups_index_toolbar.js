@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import DropdownWrapper from '../../shared/wrappers/dropdown';
@@ -25,20 +25,15 @@ export default function GroupsIndexToolbar({ toggleMoveDrawer }) {
 
   const selectedPollIds = selectedPolls.pollIds;
   const selectedGroupIds = selectedPolls.groupIds;
-
-  useEffect(() => {
+  
+  useLayoutEffect(() => {
     if ("IntersectionObserver" in window) {
       const observer = new IntersectionObserver( event => {
         dispatch(setStickyToolbar(!event[0].isIntersecting));
-      }, {
-        threshold: 1
-      })
+      }, { threshold: 1 });
       
       observer.observe(intersectionDiv.current);
-      
-      return () => {
-        if (intersectionDiv.current) observer.unobserve(intersectionDiv.current);
-      }
+      return () => observer.unobserve(intersectionDiv.current);
     }
   }, [intersectionDiv])
 
@@ -86,7 +81,9 @@ export default function GroupsIndexToolbar({ toggleMoveDrawer }) {
 
   const noSelection = !(selectedPollIds.length || selectedGroupIds.length); 
   let className = 'groups-index-toolbar';
-  if (stickyToolbar) className += ' sticky-toolbar';
+  if (stickyToolbar) {
+    className += ' sticky-toolbar'
+  };
   return (
     <>
       <div ref={intersectionDiv}></div>

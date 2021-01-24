@@ -1,4 +1,4 @@
-import { withLazy } from '../util/higher_order_components'
+import { withLazy, withLazyPrefetch } from '../util/higher_order_components'
 
 export const [ParticipantApp, fetchParticipantApp] = withLazy(
   () => import(
@@ -39,5 +39,33 @@ export const [SignupFormContainer, fetchSignupFormContainer] = withLazy(
   () => import(
     /* webpackChunkName: "signup-form" */
     './session/signup/signup_container'
+  )
+);
+
+export const [Navbar, fetchNavbar] = withLazy(
+  () => import(
+    /* webpackChunkName: "navbar" */
+    './nav/navbar/navbar'
+  )
+);
+
+export const [Footer, fetchFooter] = withLazy(
+  () => import(
+    /* webpackChunkName: "footer" */
+    './nav/footer'
+  )
+);
+
+export const [EditPoll, fetchEditPoll] = withLazy(
+  () => import(
+    /* webpackChunkName: "edit-poll" */
+    './polls/poll/edit_poll'
+  )
+);
+
+export const [LoginFormContainer, fetchLoginFormContainer] = withLazy(
+  () => import(
+    /* webpackChunkName: "login-form" */
+    './session/login/login_container'
   )
 );

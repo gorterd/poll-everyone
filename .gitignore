@@ -8,8 +8,6 @@
 node_modules/
 bundle.js
 bundle.js.map
-public/assets
-public/
 
 # Ignore bundler config.
 /.bundle
@@ -36,7 +34,6 @@ public/
 .DS_Store
 
 /public/packs
-/public/packs-test
 /node_modules
 /yarn-error.log
 yarn-debug.log*
