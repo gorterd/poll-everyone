@@ -52,3 +52,35 @@ export function mergeIdIntoState(state, entityId, idArrayName, idToAdd) {
   const newEntity = { ...entity, [idArrayName]: newIds };
   return { ...state, [entityId]: newEntity };
 }
+
+export function smoothScrollToY(y, { 
+  bailOut = 1000, 
+  pause = 0,
+  threshold = 5
+}) {
+  if (Math.abs(window.scrollY - y) < threshold) {
+    window.scrollTo({ top: y });
+    return Promise.resolve();
+  }
+
+  window.scrollTo({ top: y, behavior: 'smooth' });
+
+  return new Promise( (resolve) => { 
+    const asyncActivities = {};
+
+    asyncActivities.timeout = setTimeout(() => {
+      window.removeEventListener('scroll', asyncActivities.listener);
+      resolve(false)
+    }, bailOut);
+
+    asyncActivities.listener = () => {
+      if (window.scrollY === y) {
+        window.clearTimeout(asyncActivities.timeout);
+        window.removeEventListener('scroll', asyncActivities.listener);
+        window.setTimeout(() => resolve(true), pause);
+      };
+    }
+    
+    window.addEventListener('scroll', asyncActivities.listener);
+  });
+}

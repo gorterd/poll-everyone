@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import React, { useLayoutEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import DropdownWrapper from '../../shared/wrappers/dropdown';
@@ -15,6 +15,7 @@ import {
   selectedPollsSelector, 
   orderedGroupsSelector, 
 } from '../../../util/hooks_selectors';
+import { smoothScrollToY } from '../../../util/general_util';
 
 export default function GroupsIndexToolbar({ toggleMoveDrawer }) {
   const intersectionDiv = useRef();
@@ -45,12 +46,12 @@ export default function GroupsIndexToolbar({ toggleMoveDrawer }) {
     }));
   }
 
-  function openNewPoll() {
-    if (!stickyToolbar) window.scrollTo(0, 0);
+  async function openNewPoll() {
+    if (!stickyToolbar) await smoothScrollToY(0, { pause: 75 });
     dispatch(openModal({
       type: 'new-poll',
       data: {},
-      offset: stickyToolbar ? 0 : 72,
+      offset: stickyToolbar ? 0 : 72
     }));
   }
 

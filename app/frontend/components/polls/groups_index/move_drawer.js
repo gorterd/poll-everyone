@@ -1,5 +1,5 @@
 import { useSelector, useDispatch } from 'react-redux';
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 
 import { movePolls } from "../../../store/actions/group_actions";
 import { openModal, exitModal } from '../../../store/actions/ui_actions';
@@ -12,6 +12,7 @@ export default function MoveDrawer({ visible, toggleVisible }) {
   const selectedPolls = useSelector(selectedPollsSelector);
   const stickyToolbar = useSelector(stickyToolbarSelector);
   const [ group, setGroup ] = useState(undefined);
+  const groupSearchKey = useRef(0);
   const moveButton = useRef();
   const cancelButton = useRef();
 
@@ -38,6 +39,10 @@ export default function MoveDrawer({ visible, toggleVisible }) {
   const buttonText = `Apply to ${numPolls} poll${numPolls === 1 ? '' : 's'}`;
   const disabled = !group || numPolls === 0;
 
+  useEffect(() => {
+    if (!visible) groupSearchKey.current += 1;
+  }, [visible])
+
   return (
     <div className='move-drawer-anchor'>
       <div className={'move-drawer-container' + ( visible ? ' open' : '')}>
@@ -47,6 +52,7 @@ export default function MoveDrawer({ visible, toggleVisible }) {
           <div className='move-drawer-search-container'>
             <span>To another group: </span>
             <GroupSearch
+              key={groupSearchKey.current}
               setGroup={setGroup}
               groups={groups}
               placeholderText='Search group name'

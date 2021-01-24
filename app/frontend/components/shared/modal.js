@@ -49,7 +49,7 @@ export function Modal () {
     backgroundClass: 'new-poll-modal-background',
     backgroundStyle: { 
       height: `calc(100vh - ${modal.offset}px)`,
-      zIndex: 1,
+      zIndex: 1
     },
     component: NewPoll
   });

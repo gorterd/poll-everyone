@@ -64,12 +64,10 @@ export default function GroupSearch({ setGroup, focusOnTab, groups, placeholderT
     const listItem = drawerLis.current[state.focusIndex];
     if (!listItem) return;
 
-    const list = listItem.parentElement;
-    list.scrollIntoView(true);
-
     const itemTop = listItem.offsetTop;
-    const itemBottom = itemTop + listItem.offsetHeight;
-
+    const itemBottom = itemTop + listItem.offsetHeight;    
+    const list = listItem.parentElement;
+    
     if (list.scrollTop > itemTop) {
       list.scrollTop = itemTop;
     } else if (itemBottom > (list.scrollTop + list.clientHeight)) {
@@ -77,11 +75,11 @@ export default function GroupSearch({ setGroup, focusOnTab, groups, placeholderT
     }
   }, [state.focusIndex, drawerLis, searchDiv]);
 
-  useEffect(() => {
-    if (searchDiv.current.getBoundingClientRect().top < 0) {
-      searchDiv.current.scrollIntoView(false);
-    } 
-  }, [state.searchText, searchDiv]);
+  // useEffect(() => {
+  //   if (searchDiv.current.getBoundingClientRect().top < 0) {
+  //     searchDiv.current.scrollIntoView({ block: 'start' });
+  //   } 
+  // }, [state.searchText, searchDiv]);
 
   useEffect(() => {
     setGroup(groups.find(group => group.title === state.searchText));

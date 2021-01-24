@@ -5,14 +5,14 @@ import {
   CLEAR_MODAL_STATUS 
 } from '../actions/ui_actions';
 
-const BASE_MODAL = {
+const baseModal = {
   type: "",
   data: {},
   offset: 0,
-  status: null
+  status: null,
 }
 
-export default (state = BASE_MODAL, action) => {
+export default (state = baseModal, action) => {
   Object.freeze(state);
 
   switch (action.type) {
@@ -27,7 +27,7 @@ export default (state = BASE_MODAL, action) => {
         ? state
         : { ...state, status: 'exiting' };
     case CLEAR_MODAL:
-      return BASE_MODAL;
+      return baseModal;
     default:
       return state;
   }
