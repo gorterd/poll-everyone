@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import DropdownWrapper from '../../shared/wrappers/dropdown';
 
-import { batchDestroy, movePolls } from "../../../store/actions/group_actions";
 import { receiveSelections, clearSelections } from '../../../store/actions/selection_actions/poll_selection_actions'
 import { 
   openModal, 
@@ -13,16 +12,20 @@ import {
 import { 
   stickyToolbarSelector, 
   selectedPollsSelector, 
-  orderedGroupsSelector, 
 } from '../../../util/hooks_selectors';
 import { smoothScrollToY } from '../../../util/general_util';
+import { useBatchDestroy, useMovePolls } from '../../../util/api/mutation_hooks';
+import { usePollData } from '../../../util/api/query_hooks';
+import { pollDataOrderedGroupsSelector } from '../../../util/query_selectors';
 
 export default function GroupsIndexToolbar({ toggleMoveDrawer }) {
   const intersectionDiv = useRef();
   const dispatch = useDispatch();
-  const groups = useSelector(orderedGroupsSelector)
   const stickyToolbar = useSelector(stickyToolbarSelector);
-  const selectedPolls =  useSelector(selectedPollsSelector)
+  const selectedPolls =  useSelector(selectedPollsSelector);
+  const { data: groups } = usePollData({ select: pollDataOrderedGroupsSelector});
+  const { mutate: movePolls } = useMovePolls();
+  const { mutate: batchDestroy } = useBatchDestroy();
 
   const selectedPollIds = selectedPolls.pollIds;
   const selectedGroupIds = selectedPolls.groupIds;
@@ -62,10 +65,10 @@ export default function GroupsIndexToolbar({ toggleMoveDrawer }) {
   }
 
   function ungroup(){
-    dispatch(movePolls(
-      selectedPollIds, 
-      groups.find( g => g.ord === 0).id)
-    );
+    movePolls({
+      pollIds: selectedPollIds,
+      groupId: groups.find(g => g.ord === 0).id
+    });
   }
 
   const Button = () => <span className='button-grey'><i className="fas fa-check"></i></span>
@@ -105,7 +108,7 @@ export default function GroupsIndexToolbar({ toggleMoveDrawer }) {
         <button
           className='button-grey'
           disabled={noSelection}
-          onClick={() => dispatch(batchDestroy(selectedPolls))}
+          onClick={() => batchDestroy(selectedPolls)}
         >
           Delete
         </button>

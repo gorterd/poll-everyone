@@ -82,6 +82,7 @@ export default function GroupSearch({ setGroup, focusOnTab, groups, placeholderT
   // }, [state.searchText, searchDiv]);
 
   useEffect(() => {
+    debugger
     setGroup(groups.find(group => group.title === state.searchText));
   }, [state.searchText, groups, setGroup])
 

@@ -3,14 +3,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import { clearPollSelection, receivePollSelection } from '../../../store/actions/selection_actions/poll_selection_actions';
 import { openModal } from '../../../store/actions/ui_actions';
 import { useToggleState } from '../../../util/custom_hooks';
-import { orderedGroupPollsSelector, stickyToolbarSelector } from '../../../util/hooks_selectors';
+import { stickyToolbarSelector } from '../../../util/hooks_selectors';
 import GroupHeader from './group_header';
 import PollListItem from './poll-list-item';
 
-export default function GroupPollsIndex ({ group }) {
+export default function GroupPollsIndex ({ group, polls }) {
   const dispatch = useDispatch();
   const [drawerVisible, toggleDrawerVisible ] = useToggleState(!group.ord);
-  const orderedPolls = useSelector(orderedGroupPollsSelector(group.id));
   const stickyToolbar = useSelector(stickyToolbarSelector);
 
   function addActivity(e) {
@@ -54,7 +53,7 @@ export default function GroupPollsIndex ({ group }) {
       <GroupHeader {...headerProps} />
       { drawerVisible && (
         <ul className="group-polls-index">
-          { orderedPolls?.map( poll => {
+          { polls?.map( poll => {
             return <PollListItem 
               key={poll.id} 
               poll={poll} 

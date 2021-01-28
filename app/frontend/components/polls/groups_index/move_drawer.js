@@ -5,13 +5,17 @@ import { movePolls } from "../../../store/actions/group_actions";
 import { openModal, exitModal } from '../../../store/actions/ui_actions';
 import { orderedGroupsSelector, selectedPollsSelector, stickyToolbarSelector } from '../../../util/hooks_selectors';
 import GroupSearch from '../../shared/group_search';
+import { useMovePolls } from '../../../util/api/mutation_hooks';
+import { usePollData } from '../../../util/api/query_hooks';
+import { pollDataOrderedGroupsSelector } from '../../../util/query_selectors';
 
 export default function MoveDrawer({ visible, toggleVisible }) {
   const dispatch = useDispatch();
-  const groups = useSelector(orderedGroupsSelector);
   const selectedPolls = useSelector(selectedPollsSelector);
   const stickyToolbar = useSelector(stickyToolbarSelector);
   const [ group, setGroup ] = useState(undefined);
+  const { data: groups } = usePollData({ select: pollDataOrderedGroupsSelector });
+  const { mutateAsync: movePolls } = useMovePolls();
   const groupSearchKey = useRef(0);
   const moveButton = useRef();
   const cancelButton = useRef();
@@ -22,7 +26,7 @@ export default function MoveDrawer({ visible, toggleVisible }) {
   function handleMove(){
     const groupId = group?.id || groups.find(group => group.ord === 0 ).id;
     const sendMoveRequest = () => {
-      return dispatch(movePolls(pollIds, groupId)).then( () => {
+      return movePolls({pollIds, groupId}).then( () => {
         dispatch(exitModal());
         toggleVisible();
         setGroup(undefined);

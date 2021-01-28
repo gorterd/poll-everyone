@@ -1,16 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchGroups } from '../../../store/actions/group_actions';
+import { useSelector } from 'react-redux';
 import GroupsIndexToolbar from './groups_index_toolbar';
 import MoveDrawer from './move_drawer';
 import GroupPollsIndex from '../group_polls/group_polls_index';
 import { 
-  currentUserIdSelector, 
-  orderedGroupsSelector, 
   stickyToolbarSelector 
 } from '../../../util/hooks_selectors';
-import { useDelayedPrefetch } from '../../../util/custom_hooks';
+import { useDelayedPrefetch, useToggleState } from '../../../util/custom_hooks';
 import { fetchEditPoll, fetchHomeSplash, fetchPresentPoll } from '../../lazy_load_index';
+import { usePollData } from '../../../util/api/query_hooks';
+import { pollDataSelector } from '../../../util/query_selectors';
 
 export default function GroupsIndex() {
   useDelayedPrefetch(
@@ -19,15 +18,9 @@ export default function GroupsIndex() {
     fetchPresentPoll
   );
 
-  const dispatch = useDispatch();
-  const [ moveDrawerVisible, setMoveDrawerVisible ] = useState(false);
-  const groups = useSelector(orderedGroupsSelector)
+  const [ moveDrawerVisible, toggleMoveDrawerVisible ] = useToggleState(false);
   const stickyToolbar = useSelector(stickyToolbarSelector)
-  const currentId = useSelector(currentUserIdSelector)
-
-  useEffect( () => {
-    dispatch(fetchGroups(currentId));
-  }, []);
+  const { data } = usePollData({ select: pollDataSelector });
 
   useEffect( () => {
     if (moveDrawerVisible && stickyToolbar) {
@@ -35,28 +28,25 @@ export default function GroupsIndex() {
     }
   }, [moveDrawerVisible]);
 
-  function toggleMoveDrawer() {
-    setMoveDrawerVisible( oldVal => !oldVal );
-  }
-
   return (
     <section className="polls-index">
 
       <GroupsIndexToolbar 
-        toggleMoveDrawer={toggleMoveDrawer}
+        toggleMoveDrawer={toggleMoveDrawerVisible}
       />
       <section className='groups-index-container'>
 
         <MoveDrawer 
           visible={moveDrawerVisible} 
-          toggleVisible={toggleMoveDrawer} 
+          toggleVisible={toggleMoveDrawerVisible} 
         /> 
 
         <div className='groups-index'>
-          {groups.map( group => {
+          {data?.map( ({ group, polls }) => {
             return <GroupPollsIndex 
               key={group.id} 
               group={group} 
+              polls={polls}
             />
           })}
         </div>

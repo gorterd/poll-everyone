@@ -1,7 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { createGroup } from '../../../store/actions/group_actions';
-import { clearSelections } from '../../../store/actions/selection_actions/poll_selection_actions';
+import { useCreateGroup } from '../../../util/api/mutation_hooks';
 import { useTextInput } from '../../../util/custom_hooks';
 import { currentUserIdSelector, modalDataSelector } from '../../../util/hooks_selectors';
 import SmallModal from './small_modal';
@@ -10,11 +9,11 @@ export default function NewGroupModal () {
   const [title, inputProps] = useTextInput('');
   const { pollIds } = useSelector(modalDataSelector);
   const currentId = useSelector(currentUserIdSelector);
+  const { mutateAsync: createGroup } = useCreateGroup();
 
-  function submissionHandler(dispatch) {
+  function submissionHandler() {
     const data = { group: { title }, pollIds };
-    return dispatch(createGroup(data, currentId))
-      .then( () => dispatch(clearSelections()));      
+    return createGroup({data, userId: currentId});
   }
 
   const numPolls = pollIds?.length;

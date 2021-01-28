@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { useQueryClient } from 'react-query';
 import MultipleChoiceForm from './multiple_choice_form';
-import { createPoll } from '../../../../store/actions/poll_actions';
 import { exitModal } from '../../../../store/actions/ui_actions';
 import GroupSearch from '../../../shared/group_search';
 import multipleChoiceOptionImg from '../../../../images/icons/multiple-choice-option.png'
-import { orderedGroupsSelector } from '../../../../util/hooks_selectors';
+import { pollDataOrderedGroupsSelector } from '../../../../util/query_selectors';
+import { useCreatePoll } from '../../../../util/api/mutation_hooks';
+import { useCachedPollData } from '../../../../util/api/query_hooks';
 
 const MULTIPLE_CHOICE = 'multiple_choice';
 
@@ -25,7 +27,9 @@ const errorMessages = {
 
 export default function NewPollForm({ modalData }) {
   const dispatch = useDispatch();
-  const groups = useSelector(orderedGroupsSelector);
+  const { mutateAsync: createPoll } = useCreatePoll();
+  const pollData = useCachedPollData();
+  const groups = pollDataOrderedGroupsSelector(pollData);
 
   const [ activeOption, setActiveOption ] = useState(MULTIPLE_CHOICE);
   const [ group, setGroup] = useState(modalData.group)
@@ -43,9 +47,9 @@ export default function NewPollForm({ modalData }) {
         formData, 
         { pollType: activeOption, answerOptionsAttributes }
       );
-      const groupId = group?.id || groups.find(g => g.ord === 0).id;
+      const groupId = group?.id || groups[0].id;
       
-      dispatch(createPoll(data, groupId))
+      createPoll({ poll: data, groupId })
         .then(() => dispatch(exitModal()));
     }
   } 

@@ -1,5 +1,6 @@
 import React from 'react'
 import { render } from 'react-dom'
+
 import Root from '../components/root'
 import configureStore from '../store/configure_store';
 import WebFont from 'webfontloader';

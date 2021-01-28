@@ -2,17 +2,21 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { duplicatePoll, toggleActive } from '../../../store/actions/poll_actions';
+import { useDuplicatePoll, useToggleActive } from '../../../util/api/mutation_hooks';
 import { selectedPollsSelector } from '../../../util/hooks_selectors';
 
 export default function PollListItem({ poll, togglePollSelect }) {
-  const dispatch = useDispatch();
-  const selectedPolls = useSelector(selectedPollsSelector)
   const POLL_ICONS = {
     multiple_choice: 'fas fa-spell-check',
   }
 
-  const checked = useSelector(selectedPollsSelector).pollIds.includes(poll.id);
+  const dispatch = useDispatch();
+  const { mutate: duplicatePoll } = useDuplicatePoll();
+  const { mutate: toggleActive } = useToggleActive();
+  const selectedPolls = useSelector(selectedPollsSelector)
+  const checked = selectedPolls.pollIds.includes(poll.id);
   const activeClass = poll.active ? ' activated' : '';
+
   const titleText = poll.title.length > 96 
     ? (poll.title.slice(0,92) + '. . .') 
     : poll.title;
@@ -21,8 +25,10 @@ export default function PollListItem({ poll, togglePollSelect }) {
     : 'No responses';
 
   const handleCheck = e => togglePollSelect(poll.id, e.target.checked);
-  const duplicate = () => dispatch(duplicatePoll(poll.id));
-  const toggle = () => dispatch(toggleActive(poll.id));
+  const duplicate = () => duplicatePoll(poll.id);
+  const toggle = () => toggleActive(poll.id);
+  // const duplicate = () => dispatch(duplicatePoll(poll.id));
+  // const toggle = () => dispatch(toggleActive(poll.id));
 
   return (
     <li className={'poll-list-item group-polls-row' + activeClass}>

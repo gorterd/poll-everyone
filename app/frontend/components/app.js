@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { Route, Switch } from 'react-router-dom';
+import { ReactQueryDevtools } from 'react-query/devtools'
 
 import { AuthRoute, ProtectedRoute } from './shared/wrappers/routes_util';
 import { Modal } from './shared/modal';
@@ -91,6 +92,7 @@ export default function App() {
           </>
         </Switch>
       </React.Suspense>
+      <ReactQueryDevtools initialIsOpen={false} />
     </section>
   );
 }

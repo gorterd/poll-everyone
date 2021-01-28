@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { updateGroup } from '../../../store/actions/group_actions';
+import { useUpdateGroup } from '../../../util/api/mutation_hooks';
 import { useTextInput } from '../../../util/custom_hooks';
 import { modalDataSelector } from '../../../util/hooks_selectors';
 import SmallModal from './small_modal';
@@ -8,9 +8,10 @@ import SmallModal from './small_modal';
 export default function RenameGroupModal() {
   const { group } = useSelector(modalDataSelector);
   const [ title, inputProps ] = useTextInput(group?.title);
+  const { mutateAsync: updateGroup } = useUpdateGroup();
 
   function submissionHandler(dispatch) {
-    return dispatch(updateGroup({ ...group, title }));
+    return updateGroup({ ...group, title });
   };
 
   const modalProps = {

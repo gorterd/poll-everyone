@@ -1,7 +1,10 @@
-export function mergeArrays(array_1, array_2) {
+import { merge } from 'lodash';
+window.merge = merge;
+
+export function mergeArrays(array1, array2) {
   const uniques = {};
-  array_1.forEach( el => uniques[el] = true );
-  array_2.forEach( el => uniques[el] = true );
+  array1.forEach( el => uniques[el] = true );
+  array2.forEach( el => uniques[el] = true );
   return Object.keys(uniques);
 }
 
@@ -13,11 +16,11 @@ export function concatIfNew(array, el) {
   }
 }
 
-export function twoTierMerge(object_1, object_2) {
+export function twoTierMerge(object1, object2) {
   const clone = {};
   
-  Object.keys(object_1).concat(Object.keys(object_2)).forEach( key => (
-    clone[key] = Object.assign( {}, object_1[key], object_2[key] ) 
+  Object.keys(object1).concat(Object.keys(object2)).forEach( key => (
+    clone[key] = Object.assign( {}, object1[key], object2[key] ) 
   )); 
 
   return clone;
@@ -84,3 +87,4 @@ export function smoothScrollToY(y, {
     window.addEventListener('scroll', asyncActivities.listener);
   });
 }
+

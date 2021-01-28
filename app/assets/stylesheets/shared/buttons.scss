@@ -3,6 +3,7 @@ button {
 }
 
 @mixin button($bkgnd-color, $hover-color, $txt-color) {
+  display: block;
   font-size: $fontsize-strong;
   font-weight: $fontweight-strong;
   padding: 8px 14px;
@@ -10,6 +11,7 @@ button {
   transition: all 0.2s;
   background-color: $bkgnd-color;
   color: $txt-color;
+  cursor: pointer;
 
   &:hover, &:focus {
     background-color: $hover-color;

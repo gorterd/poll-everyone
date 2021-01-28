@@ -9,6 +9,11 @@
     <script src="https://kit.fontawesome.com/24cc9dca36.js" crossorigin="anonymous"></script>
     
     <%= stylesheet_link_tag    'application', media: 'all' %>
+    
+    <% if Rails.env.development? %>
+      <%= javascript_pack_tag 'dev' %>
+    <% end %> 
+    
     <%= javascript_packs_with_chunks_tag 'application' %>
   </head>
 

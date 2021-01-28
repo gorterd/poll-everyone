@@ -1,3 +1,4 @@
+import { merge } from "lodash";
 import { useEffect, useRef, useState, useLayoutEffect, useCallback } from "react";
 import { useSelector } from "react-redux";
 import { singleValueSelector } from "./hooks_selectors";
@@ -9,6 +10,17 @@ export function usePrevious(value) {
     ref.current = value;
   });
   return ref.current;
+}
+
+export function useOnFirstTrue(fn, bool) {
+  const done = useRef(false);
+  useEffect(() => {
+    if (done.current) return;
+    if (bool) {
+      fn();
+      done.current = true;
+    }
+  }, [bool]);
 }
 
 export function useDidUpdate(cb, deps) {
@@ -50,6 +62,38 @@ export function useDelayedPrefetch(...fetchCbs) {
         if (!componentLoading) fetch();
     }
   }, [componentLoading]);
+}
+
+export function useObjectState(initState) {
+  const [ state, setState ] = useState(initState);
+  
+  const mergeSetState = (newStateOrUpdaterFn, mutate = false) => {
+    switch( typeof newStateOrUpdaterFn ) {
+      case 'function':
+        if (mutate) {
+          return setState( oldState => {
+            const newState = merge({}, oldState);
+            newStateOrUpdaterFn(newState)
+            return newState
+          });
+        } else {
+          return setState(oldState => {
+            const newState = newStateOrUpdaterFn(oldState);
+            return merge({}, oldState, newState);
+          });
+        }
+      case 'object':
+        if (mutate) {
+          return setState(newStateOrUpdaterFn);
+        } else {
+          return setState(oldState => merge({}, oldState, newStateOrUpdaterFn));
+        }
+      default:
+        throw new Error('argument to `mergeSetState` must be object or function')
+    }
+  }
+
+  return [ state, mergeSetState ];
 }
 
 export function useToggleState(initVal) {

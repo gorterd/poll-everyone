@@ -1,259 +1,210 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import LargeInput from '../../shared/large-animated-input';
-import { pollData } from '../../../util/selectors';
-import { updatePoll, fetchPoll } from '../../../store/actions/poll_actions'
-import { connect} from 'react-redux';
-import { withRouter } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
+import { useObjectState, usePrevious } from '../../../util/custom_hooks';
+import { usePoll } from '../../../util/api/query_hooks';
+import { partition } from 'lodash';
+import { useUpdatePoll } from '../../../util/api/mutation_hooks';
+import { orderedAnswerOptionsSelector } from '../../../util/query_selectors';
 
-const errorKeys = {
-  TITLE_BLANK: 'TITLE_BLANK',
-  ANSWER_OPTIONS_BLANK: 'ANSWER_OPTIONS_BLANK',
+const nullError = {
+  field: null,
+  message: '',
 }
 
-const errorMessages = {
-  TITLE_BLANK: 'Please enter a title',
-  ANSWER_OPTIONS_BLANK: 'Please enter at least one response',
+const titleError = {
+  field: 'title',
+  message: 'Please enter a title',
 }
 
-class EditPoll extends React.Component {
-  constructor(props) {
-    super(props)
-    
-    this.state = {
-      formData: {
-        title: ' ',
-        answerOptionsAttributes: []
-      },
-      error:  ''
-    }
+const answerOptionsAttributesError = {
+  field: 'answerOptionsAttributes',
+  message: 'Please enter at least one response',
+}
 
-    this.deleted = [];
+const CorrectButton = ({ selected, idx, toggleCorrect }) => (
+  <span
+    className={`correct-button button` + (selected ? ' selected' : '')}
+    onClick={() => toggleCorrect(idx)}
+  >
+    <i className="fas fa-check"></i>
+  </span>
+)
 
-    this.handleTitle = this.handleTitle.bind(this);
-    this.handleAnswerBody = this.handleAnswerBody.bind(this);
-    this.toggleCorrect = this.toggleCorrect.bind(this);
-    this.deleteAnswerOption = this.deleteAnswerOption.bind(this);
-    this.addOption = this.addOption.bind(this);
-    this.clearErrors = this.clearErrors.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.validateSubmit = this.validateSubmit.bind(this);
-  }
+const TrashButton = ({ idx, deleteAnswerOption }) => (
+  <div className='edit-poll-input-right-side'>
+    <span className='trash-button button' onClick={() => deleteAnswerOption(idx)} >
+      <i className="far fa-trash-alt"></i>
+    </span>
+    <span>{String.fromCharCode(idx + 65)}</span>
+  </div>
+)
 
-  componentDidMount() {
-    this.props.fetchPoll(this.props.pollId).then( () => {
-      const { data: { poll, orderedAnswerOptions } } = this.props;
-      
-      const formData = {
-        title: poll.title,
-        answerOptionsAttributes: orderedAnswerOptions.map( option => (
-          { 
-            correct: option.correct, 
-            body: option.body, 
-            id: option.id 
-          })
-        )
-      }
 
-      this.setState({formData});
-    });
-  }
-
-  handleTitle(e) {
-    if (this.titleError ) { this.clearErrors() }
-    const formData = Object.assign({}, this.state.formData, { title: e.target.value } );
-    this.setState({formData});
-  }
-
-  handleAnswerBody(e, idx) {
-    if ( this.answerError ) { this.clearErrors() }
-
-    const answerOptionsAttributes = Array.from(this.state.formData.answerOptionsAttributes);
-    answerOptionsAttributes[idx] =
-      Object.assign({}, answerOptionsAttributes[idx], { body: e.target.value });
-    
-    this._setAnswerOptionAttributes(answerOptionsAttributes);
-  }
-
-  toggleCorrect(idx) {
-    const answerOptionsAttributes = Array.from(this.state.formData.answerOptionsAttributes);
-
-    answerOptionsAttributes[idx] =
-      Object.assign({}, answerOptionsAttributes[idx],
-        { correct: !answerOptionsAttributes[idx].correct });
-
-    this._setAnswerOptionAttributes(answerOptionsAttributes);
-  }
-
-  deleteAnswerOption(idx) {
-    const deletedOption = this.state.formData.answerOptionsAttributes[idx];
-    if ( deletedOption.id ) { this.deleted.push(deletedOption.id)} 
+export default function EditPoll () {
+  const { mutateAsync: updatePoll } = useUpdatePoll();
+  const history = useHistory();
+  const { pollId } = useParams();
+  const deleted = useRef([]);
+  const [error, setError] = useState(nullError);
+  const [ formData, setFormData] = useObjectState({
+    title: ' ',
+    answerOptionsAttributes: []
+  });
   
-    const answerOptionsAttributes = Array.from(this.state.formData.answerOptionsAttributes);
-    answerOptionsAttributes.splice(idx, 1);
-    
-    this._setAnswerOptionAttributes(answerOptionsAttributes);
-  }
+  const { title, answerOptionsAttributes } = formData;
+  const oldAnswerOptions = usePrevious(answerOptionsAttributes);
+  const [ filledOptions, emptyOptions ] = partition( answerOptionsAttributes, 
+    option => option.body );
 
-  addOption(e) {
-    e.preventDefault();
+  const { isSuccess } = usePoll(pollId, {
+    onSuccess: (data) => {
+      const formAnswerOptions = orderedAnswerOptionsSelector(data.answerOptions)
+        .map(({ correct, body, id }) => ({ correct, body, id }));
 
-    const answerOptionsAttributes =
-      Array.from(this.state.formData.answerOptionsAttributes).concat({ correct: false, body: '' });
+      setFormData({ 
+        title: data.poll.title,
+        answerOptionsAttributes: formAnswerOptions 
+      });
+    }
+  });
 
-    if (answerOptionsAttributes.length === 1) { this.clearErrors() }
-
-    this._setAnswerOptionAttributes(answerOptionsAttributes);
-  }
-
-  clearErrors() {
-    this.setState({ error: '' })
-  }
-
-  handleSubmit(e) {
-    e.preventDefault();
-    if ( !this.validateSubmit() ) { return null }
- 
-    this._withoutBody().forEach( emptyOption => {
-      if (emptyOption.id) {
-        this.deleted.push(emptyOption.id);
+  useEffect(() => {
+    if (error.field === 'answerOptionsAttributes') {
+      const addedOrDeletedFirstOption = (
+        oldAnswerOptions.length === 0 
+        || answerOptionsAttributes.length === 0
+      );
+  
+      if ( addedOrDeletedFirstOption || filledOptions.length > 0 ) {
+        setError(nullError);
       }
-    });
-    
-    const answerOptionsAttributes = Array.from( this._withBody() )
-      .map( (option, idx) => (Object.assign(option, { ord: idx }) ) )
-      .concat(this._getDeletedAttributes());
+    }
 
-    const formData = Object.assign({}, this.state.formData, { answerOptionsAttributes });
+  }, [answerOptionsAttributes]);
 
-    this.props.updatePoll(formData, this.props.pollId).then( () => {
-      this.props.history.goBack();
+  useEffect(() => {
+    if (error.field === 'title') setError(nullError);
+  }, [title]);
+
+  function handleTitle(e) {
+    setFormData({ title: e.target.value });
+  }
+
+  function handleAnswerBody(e, idx) {
+    setFormData({ answerOptionsAttributes: { [idx]: { body: e.target.value }} });
+  }
+
+  function toggleCorrect(idx) {
+    setFormData( oldFormData => {
+      const newCorrect = !oldFormData.answerOptionsAttributes[idx].correct;
+      return { answerOptionsAttributes: { [idx]: { correct: newCorrect } } };
     });
   }
 
-  validateSubmit() {
-    
-    if (!this.state.formData.title) {
-      this.setState({ error: errorKeys.TITLE_BLANK })
-      return false;
-    } else if (this._withBody().length === 0) {
-      this.setState({ error: errorKeys.ANSWER_OPTIONS_BLANK })
-      return false;
-    } else {
-      return true;
+  function deleteAnswerOption(idx) {
+    setFormData(({ answerOptionsAttributes }) => {
+      const deletedId = answerOptionsAttributes[idx].id;
+      if (deletedId) deleted.current.push(deletedId);
+      answerOptionsAttributes.splice(idx, 1);
+    }, true);
+  }
+
+  function addOption() {
+    setFormData(({ answerOptionsAttributes }) => {
+      answerOptionsAttributes.push({ correct: false, body: '', _id: Math.random() });
+    }, true);
+  }
+
+  function handleSubmit(e) {
+    e.preventDefault();
+
+    if ( !title ) {
+      setError(titleError);
+    } else if ( filledOptions.length === 0 ) {
+      setError(answerOptionsAttributesError)
+    } else {      
+      updatePoll(getProcessedUpdateData())
+        .then(() => history.goBack());
     }
   }
 
-  _withBody() {
-    return this.state.formData.answerOptionsAttributes
-      .filter(option => option.body);
+  function getProcessedUpdateData() {
+    emptyOptions.forEach(option => {
+      if (option.id) deleted.current.push(option.id);
+    })
+
+    const processedAnswerOptions = filledOptions
+      .map((option, idx) => ({ ...option, ord: idx }))
+      .concat(deleted.current.map(id => ({ id, '_destroy': 1 })));
+
+    return { 
+      poll: {
+        ...formData,
+        answerOptionsAttributes: processedAnswerOptions
+      },
+      pollId
+    }
   }
 
-  _withoutBody() {
-    return this.state.formData.answerOptionsAttributes
-      .filter(option => !option.body);
-  }
 
-  _getDeletedAttributes(){
-    return this.deleted.map( id => ({ id, '_destroy': 1 }))
-  }
+  return (
+    <form onSubmit={handleSubmit} className='edit-poll-form multiple-choice-form'>
+      <div className='edit-poll-form-left'>
+          { isSuccess && <LargeInput
+          klass='title-input-container'
+          type='text'
+          errorMsg={error.field === 'title' ? error.message : ''}
+          text='Title'
+          value={title}
+          onChange={handleTitle}
+        />}
 
-  _setAnswerOptionAttributes(answerOptionsAttributes) {
-    const formData = Object.assign({}, this.state.formData, { answerOptionsAttributes });
-    this.setState({formData});
-  }
-
-  render() {
-    const { error, formData: { title, answerOptionsAttributes } } = this.state;
-
-    this.titleError = (error === errorKeys.TITLE_BLANK) ? errorMessages[error] : '';
-    this.answerError = (error === errorKeys.ANSWER_OPTIONS_BLANK) ? errorMessages[error] : '';
-
-    const CorrectButton = ({ selected, idx, className }) => (
-      <span
-        className={`${className} correct-button button` + (selected ? ' selected' : '')}
-        onClick={() => this.toggleCorrect(idx)}
-      >
-        <i className="fas fa-check"></i>
-      </span>
-    )
-
-    const RightSide = ({ idx, className }) => (
-      <div className={`${className} edit-poll-input-right-side`}>
-        <span className='trash-button button' onClick={() => this.deleteAnswerOption(idx)} >
-          <i className="far fa-trash-alt"></i>
-        </span>
-        <span>{String.fromCharCode(idx + 65)}</span>
-      </div>
-    )
-
-    return (
-      <form onSubmit={this.handleSubmit} className='edit-poll-form multiple-choice-form'>
-        <div className='edit-poll-form-left'>
-            { this.props.data && <LargeInput
-            klass='title-input-container'
+        {answerOptionsAttributes.map((option, idx) => (
+          <LargeInput
+            key={option.id || option._id}
+            klass='answer-option-input-container'
             type='text'
-            errorMsg={this.titleError}
-            text='Title'
-            value={title}
-            onChange={this.handleTitle}
-          />}
+            errorMsg={
+              error.field === 'answerOptionsAttributes' && !idx 
+                ? error.message 
+                : ''
+            }
+            text='Text'
+            value={option.body}
+            onChange={e => handleAnswerBody(e, idx)}
+            leftSide={CorrectButton}
+            leftSideProps={{ selected: option.correct, idx, toggleCorrect }}
+            rightSide={TrashButton}
+            rightSideProps={{ idx, deleteAnswerOption }}
+          />
+        ))}
 
-          {answerOptionsAttributes.map((option, idx) => (
-            <LargeInput
-              key={idx}
-              klass='answer-option-input-container'
-              type='text'
-              errorMsg={idx ? '' : this.answerError}
-              text='Text'
-              value={option.body}
-              onChange={e => this.handleAnswerBody(e, idx)}
-              leftSide={CorrectButton}
-              leftSideProps={{ selected: option.correct, idx }}
-              rightSide={RightSide}
-              rightSideProps={{ idx }}
-            />
-          ))}
-
-          <div>
-            <button className='button-blue-alt' onClick={this.addOption}>
-              <i className="fas fa-plus"></i><span>Add option</span>
-            </button>
-            {answerOptionsAttributes.length === 0 ? <span>{errorMessages[error]}</span> : null}
-          </div>
+        <div>
+          <span className='button-blue-alt' onClick={addOption}>
+            <i className="fas fa-plus"></i><span>Add option</span>
+          </span>
+          {
+            answerOptionsAttributes.length === 0 
+            && error.field === 'answerOptionsAttributes' 
+              ? <span>{error.message}</span> 
+              : null
+          }
         </div>
-        
+      </div>
 
-        <div className='edit-poll-form-right'>
-          <div className='edit-poll-executive-commands'>
-            <button className='button-blue' type='submit' onClick={this.handleSubmit}>Save</button>
-            <button className='button-transparent' 
-              onClick={ (e) => {
-                e.preventDefault();
-                this.props.history.goBack();
-              }}
-            >Cancel</button>
-          </div>
+      <div className='edit-poll-form-right'>
+        <div className='edit-poll-executive-commands'>
+          <button className='button-blue' type='submit' onClick={handleSubmit}>Save</button>
+          <button className='button-transparent' 
+            onClick={ (e) => {
+              e.preventDefault();
+              history.goBack();
+            }}
+          >Cancel</button>
         </div>
+      </div>
 
-      </form>
-    )
-  }
+    </form>
+  )
 };
-
-const mapState = (state, ownProps) => {
-  const pollId = ownProps.match.params.pollId
-
-  return {
-    data: pollData(state, pollId),
-    pollId
-  }
-}
-
-const mapDispatch = dispatch => {
-  return {
-    updatePoll: (data, pollId) => dispatch(updatePoll(data, pollId)),
-    fetchPoll: (pollId) => dispatch(fetchPoll(pollId))
-  }
-}
-
-export default withRouter(connect(mapState, mapDispatch)(EditPoll));
