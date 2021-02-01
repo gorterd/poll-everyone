@@ -1,6 +1,6 @@
 Object.defineProperty(Object.prototype, '_tap', {
   value: function (cb) {
-    cb(this);
-    return this;
+    cb(this)
+    return this
   }
 })

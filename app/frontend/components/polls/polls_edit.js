@@ -1,32 +1,32 @@
-import React, { useState } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
-import { usePoll } from '../../util/api/query_hooks';
-import { useUpdatePoll } from '../../util/api/mutation_hooks';
-import { orderedAnswerOptionsSelector } from '../../util/query_selectors';
-import MultipleChoiceForm from './forms/multiple_choice';
+import React, { useState } from 'react'
+import { useHistory, useParams } from 'react-router-dom'
+import { usePoll } from '../../util/api/query_hooks'
+import { useUpdatePoll } from '../../util/api/mutation_hooks'
+import { orderedAnswerOptionsSelector } from '../../util/query_selectors'
+import MultipleChoiceForm from './forms/multiple_choice'
 
 export default function EditPoll () {
-  const { mutateAsync: updatePoll } = useUpdatePoll();
-  const history = useHistory();
-  const { pollId } = useParams();
-  const [ initialFormData, setInitialFormData ] = useState();
+  const { mutateAsync: updatePoll } = useUpdatePoll()
+  const history = useHistory()
+  const { pollId } = useParams()
+  const [ initialFormData, setInitialFormData ] = useState()
 
   usePoll(pollId, {
     onSuccess: (data) => {
       const formAnswerOptions = orderedAnswerOptionsSelector(data.answerOptions)
-        .map(({ correct, body, id }) => ({ correct, body, id }));
+        .map(({ correct, body, id }) => ({ correct, body, id }))
 
       setInitialFormData({ 
         title: data.poll.title,
         answerOptionsAttributes: formAnswerOptions 
-      });
+      })
     },
     refetchOnWindowFocus: false,
     refetchOnReconnect: false
-  });
+  })
 
   const submitPoll = poll => updatePoll({poll, pollId})
-    .then(() => history.goBack());
+    .then(() => history.goBack())
   
   return (
     <div className='edit-poll-form multiple-choice-form'>

@@ -1,11 +1,11 @@
-import * as SessionApiUtil from '../../util/api/session_api_util';
+import * as SessionApiUtil from '../../util/api/session_api_util'
 
-export const RECEIVE_CURRENT_USER = 'RECEIVE_CURRENT_USER';
-export const REMOVE_CURRENT_USER = 'REMOVE_CURRENT_USER';
-export const RECEIVE_SESSION_ERRORS = 'RECEIVE_SESSION_ERRORS';
-export const RESET_SESSION_ERRORS = 'RESET_SESSION_ERRORS';
-export const SESSION_LOADING = 'SESSION_LOADING';
-export const RESET_SESSION_LOADING = 'RESET_SESSION_LOADING';
+export const RECEIVE_CURRENT_USER = 'RECEIVE_CURRENT_USER'
+export const REMOVE_CURRENT_USER = 'REMOVE_CURRENT_USER'
+export const RECEIVE_SESSION_ERRORS = 'RECEIVE_SESSION_ERRORS'
+export const RESET_SESSION_ERRORS = 'RESET_SESSION_ERRORS'
+export const SESSION_LOADING = 'SESSION_LOADING'
+export const RESET_SESSION_LOADING = 'RESET_SESSION_LOADING'
 
 export const receiveCurrentUser = user => {
   return {
@@ -47,72 +47,72 @@ const resetSessionLoading = () => {
 }
 
 export const signup = user => dispatch => {
-  dispatch(sessionIsLoading());
+  dispatch(sessionIsLoading())
 
   return SessionApiUtil.signup(user)
     .then( 
       user => {
-        dispatch(receiveCurrentUser(user));
-        dispatch(resetSessionLoading());
-        dispatch(resetSessionErrors());
+        dispatch(receiveCurrentUser(user))
+        dispatch(resetSessionLoading())
+        dispatch(resetSessionErrors())
       }, e => {
-        dispatch(receiveSessionErrors(e));
-        dispatch(resetSessionLoading());
+        dispatch(receiveSessionErrors(e))
+        dispatch(resetSessionLoading())
       }
-    );
+    )
 }
 
 export const updateUser = user => dispatch => {
-  dispatch(sessionIsLoading());
+  dispatch(sessionIsLoading())
 
   return SessionApiUtil.updateUser(user)
     .then( 
       user => {
-        dispatch(receiveCurrentUser(user));
-        dispatch(resetSessionLoading());
-        dispatch(resetSessionErrors());
+        dispatch(receiveCurrentUser(user))
+        dispatch(resetSessionLoading())
+        dispatch(resetSessionErrors())
       }, e => {
-        dispatch(receiveSessionErrors(e));
-        dispatch(resetSessionLoading());
+        dispatch(receiveSessionErrors(e))
+        dispatch(resetSessionLoading())
       }
-    );
+    )
 }
 
 export const login = user => dispatch => {
-  dispatch(sessionIsLoading());
+  dispatch(sessionIsLoading())
 
   return SessionApiUtil.login(user)
     .then( 
       user => {
-        dispatch(receiveCurrentUser(user));
-        dispatch(resetSessionLoading());
-        dispatch(resetSessionErrors());
+        dispatch(receiveCurrentUser(user))
+        dispatch(resetSessionLoading())
+        dispatch(resetSessionErrors())
       }, e => {
-        dispatch(receiveSessionErrors(e));
-        dispatch(resetSessionLoading());
-        return Promise.reject(e);
+        dispatch(receiveSessionErrors(e))
+        dispatch(resetSessionLoading())
+        return Promise.reject(e)
       }
-    );
+    )
 }
 
 export const logout = () => dispatch => {
   return SessionApiUtil.logout()
-    .then( id => dispatch(removeCurrentUser(id)) );
+    .then( id => dispatch(removeCurrentUser(id)) )
 }
 
 export const checkIfUserExists = usernameOrEmail => dispatch => {
-  dispatch(sessionIsLoading());
+  dispatch(sessionIsLoading())
 
   return SessionApiUtil.checkIfUserExists(usernameOrEmail)
     .then( 
       () => {
-        dispatch(resetSessionLoading());
-        dispatch(resetSessionErrors());
-        return true;
+        dispatch(resetSessionLoading())
+        dispatch(resetSessionErrors())
+        return true
       }, e => {
-        dispatch(receiveSessionErrors(e));
-        dispatch(resetSessionLoading());
-        return Promise.reject(e);
+        dispatch(receiveSessionErrors(e))
+        dispatch(resetSessionLoading())
+        return Promise.reject(e)
       }
-    );
+    )
 }

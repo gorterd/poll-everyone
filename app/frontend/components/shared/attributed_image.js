@@ -1,6 +1,6 @@
-import React from 'react';
-import { useDropdown } from '../../util/custom_hooks';
-import { classNames } from '../../util/general_util';
+import React from 'react'
+import { useDropdown } from '../../util/custom_hooks'
+import { classNames } from '../../util/general_util'
 
 export default function AttributedImage ({
   children,
@@ -8,7 +8,7 @@ export default function AttributedImage ({
   iconClass,
   ...rest
 }) {
-  const [ showing, ref, { toggleDropdown }] = useDropdown();
+  const [ showing, ref, { toggleDropdown }] = useDropdown()
 
   return (
     <div className="attributed-image-container">

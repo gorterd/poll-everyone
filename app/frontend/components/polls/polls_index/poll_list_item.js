@@ -1,30 +1,30 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
-import { useDuplicatePoll, useToggleActive } from '../../../util/api/mutation_hooks';
-import { selectedPollsSelector } from '../../../util/hooks_selectors';
+import React from 'react'
+import { useSelector } from 'react-redux'
+import { Link } from 'react-router-dom'
+import { useDuplicatePoll, useToggleActive } from '../../../util/api/mutation_hooks'
+import { selectedPollsSelector } from '../../../util/hooks_selectors'
 
 export default function PollListItem({ poll, togglePollSelect }) {
   const POLL_ICONS = {
     multiple_choice: 'fas fa-spell-check',
   }
 
-  const { mutate: duplicatePoll } = useDuplicatePoll();
-  const { mutate: toggleActive } = useToggleActive();
+  const { mutate: duplicatePoll } = useDuplicatePoll()
+  const { mutate: toggleActive } = useToggleActive()
   const selectedPolls = useSelector(selectedPollsSelector)
-  const checked = selectedPolls.pollIds.includes(poll.id);
-  const activeClass = poll.active ? ' activated' : '';
+  const checked = selectedPolls.pollIds.includes(poll.id)
+  const activeClass = poll.active ? ' activated' : ''
 
   const titleText = poll.title.length > 96 
     ? (poll.title.slice(0,92) + '. . .') 
-    : poll.title;
+    : poll.title
   const numResponsesText = poll.numResponses 
     ? `${poll.numResponses} response${poll.numResponses > 1 ? 's' : ''}` 
-    : 'No responses';
+    : 'No responses'
 
-  const handleCheck = e => togglePollSelect(poll.id, e.target.checked);
-  const duplicate = () => duplicatePoll(poll.id);
-  const toggle = () => toggleActive(poll.id);
+  const handleCheck = e => togglePollSelect(poll.id, e.target.checked)
+  const duplicate = () => duplicatePoll(poll.id)
+  const toggle = () => toggleActive(poll.id)
 
   return (
     <li className={'poll-list-item group-polls-row' + activeClass}>

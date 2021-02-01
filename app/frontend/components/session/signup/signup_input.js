@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'
 import { classNames } from '../../../util/general_util'
 
 const staticProps = {
@@ -72,4 +72,4 @@ const SignupInput = ({
   </div>
 )
 
-export default SignupInput;
+export default SignupInput

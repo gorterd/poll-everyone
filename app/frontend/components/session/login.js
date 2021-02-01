@@ -1,24 +1,24 @@
-import React, { useState } from 'react';
-import { useHistory, Link } from 'react-router-dom';
-import LoginInput from './login/login_input';
-import { useTextInput } from '../../util/custom_hooks';
-import { checkIfUserExists, useLogin } from '../../util/api/mutation_hooks';
-import { useDispatch } from 'react-redux';
-import { receiveCurrentUser } from '../../store/actions/session_actions';
+import React, { useState } from 'react'
+import { useHistory, Link } from 'react-router-dom'
+import LoginInput from './login/login_input'
+import { useTextInput } from '../../util/custom_hooks'
+import { checkIfUserExists, useLogin } from '../../util/api/mutation_hooks'
+import { useDispatch } from 'react-redux'
+import { receiveCurrentUser } from '../../store/actions/session_actions'
 
 export default function Login () {
-  const dispatch = useDispatch();
-  const history = useHistory();
-  const { mutateAsync: login } = useLogin();
-  const [ usernameOrEmail, usernameInputProps ] = useTextInput('');
-  const [ password, passwordInputProps, setPassword ] = useTextInput('');
-  const [ fullForm, setFullForm ] = useState(false);
-  const [ sessionLoading, setSessionLoading ] = useState(false);
-  const [ error, setError ] = useState('');
+  const dispatch = useDispatch()
+  const history = useHistory()
+  const { mutateAsync: login } = useLogin()
+  const [ usernameOrEmail, usernameInputProps ] = useTextInput('')
+  const [ password, passwordInputProps, setPassword ] = useTextInput('')
+  const [ fullForm, setFullForm ] = useState(false)
+  const [ sessionLoading, setSessionLoading ] = useState(false)
+  const [ error, setError ] = useState('')
 
   const formStep = ({ request, success }, e) => {
-    e.preventDefault();
-    setSessionLoading(true);
+    e.preventDefault()
+    setSessionLoading(true)
 
     request()
       .finally(() => setSessionLoading(false))
@@ -28,27 +28,27 @@ export default function Login () {
   const submit = formStep.bind(null, {
     request: () => login({ usernameOrEmail, password }),
     success: (user) => {
-      dispatch(receiveCurrentUser(user));
-      history.push('./polls');
+      dispatch(receiveCurrentUser(user))
+      history.push('./polls')
     }
-  });
+  })
 
   const next = formStep.bind(null, {
     request: () => checkIfUserExists(usernameOrEmail),
     success: () => {
-      setFullForm(true);
-      setError('');
+      setFullForm(true)
+      setError('')
     }
-  });
+  })
 
   const otherUsernameProps = fullForm
     ? {
       readOnly: true,
       tabIndex: '-1',
       onFocus: () => {
-        setError('');
-        setPassword('');
-        setFullForm(false);
+        setError('')
+        setPassword('')
+        setFullForm(false)
       }
     }
     : {

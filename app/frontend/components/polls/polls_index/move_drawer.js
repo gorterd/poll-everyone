@@ -1,49 +1,49 @@
-import { useSelector, useDispatch } from 'react-redux';
-import React, { useState, useRef, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux'
+import React, { useState, useRef, useEffect } from 'react'
 
-import { openModal, exitModal } from '../../../store/actions/ui_actions';
-import { selectedPollsSelector, stickyToolbarSelector } from '../../../util/hooks_selectors';
-import GroupSearch from '../../shared/group_search';
-import { useMovePolls } from '../../../util/api/mutation_hooks';
-import { usePollData } from '../../../util/api/query_hooks';
-import { pollDataOrderedGroupsSelector } from '../../../util/query_selectors';
+import { openModal, exitModal } from '../../../store/actions/ui_actions'
+import { selectedPollsSelector, stickyToolbarSelector } from '../../../util/hooks_selectors'
+import GroupSearch from '../../shared/group_search'
+import { useMovePolls } from '../../../util/api/mutation_hooks'
+import { usePollData } from '../../../util/api/query_hooks'
+import { pollDataOrderedGroupsSelector } from '../../../util/query_selectors'
 
 export default function MoveDrawer({ visible, toggleVisible }) {
-  const dispatch = useDispatch();
-  const selectedPolls = useSelector(selectedPollsSelector);
-  const stickyToolbar = useSelector(stickyToolbarSelector);
-  const [ group, setGroup ] = useState(undefined);
-  const { data: groups } = usePollData({ select: pollDataOrderedGroupsSelector });
-  const { mutateAsync: movePolls } = useMovePolls();
-  const groupSearchKey = useRef(0);
-  const moveButton = useRef();
-  const cancelButton = useRef();
+  const dispatch = useDispatch()
+  const selectedPolls = useSelector(selectedPollsSelector)
+  const stickyToolbar = useSelector(stickyToolbarSelector)
+  const [ group, setGroup ] = useState(undefined)
+  const { data: groups } = usePollData({ select: pollDataOrderedGroupsSelector })
+  const { mutateAsync: movePolls } = useMovePolls()
+  const groupSearchKey = useRef(0)
+  const moveButton = useRef()
+  const cancelButton = useRef()
 
-  const pollIds = selectedPolls.pollIds;
-  const numPolls = pollIds.length;
+  const pollIds = selectedPolls.pollIds
+  const numPolls = pollIds.length
 
   function handleMove(){
-    const groupId = group?.id || groups.find(group => group.ord === 0 ).id;
+    const groupId = group?.id || groups.find(group => group.ord === 0 ).id
     const sendMoveRequest = () => {
       return movePolls({pollIds, groupId}).then( () => {
-        dispatch(exitModal());
-        toggleVisible();
-        setGroup(undefined);
-      });
-    };
+        dispatch(exitModal())
+        toggleVisible()
+        setGroup(undefined)
+      })
+    }
     
     dispatch(openModal({
       type: 'confirm-move',
       data: { sendMoveRequest, numPolls },
       offset: stickyToolbar ? 70 : 0,
-    }));
+    }))
   }
 
-  const buttonText = `Apply to ${numPolls} poll${numPolls === 1 ? '' : 's'}`;
-  const disabled = !group || numPolls === 0;
+  const buttonText = `Apply to ${numPolls} poll${numPolls === 1 ? '' : 's'}`
+  const disabled = !group || numPolls === 0
 
   useEffect(() => {
-    if (!visible) groupSearchKey.current += 1;
+    if (!visible) groupSearchKey.current += 1
   }, [visible])
 
   return (

@@ -1,6 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react';
-import LargeInput from '../../shared/large_input';
-import { useObjectState, usePrevious } from '../../../util/custom_hooks';
+import React, { useEffect, useRef, useState } from 'react'
+import LargeInput from '../../shared/large_input'
+import { useObjectState, usePrevious } from '../../../util/custom_hooks'
 
 const nullError = {
   field: null,
@@ -37,25 +37,25 @@ export default function MultipleChoiceForm ({
   initialFormData,
   render
 }) {
-  const [error, setError] = useState(nullError);
-  const receivedData = useRef(false);
+  const [error, setError] = useState(nullError)
+  const receivedData = useRef(false)
   const [formData, setFormData] = useObjectState({
     title: '',
     answerOptionsAttributes: [
       { correct: false, body: '', _id: Math.random() },
       { correct: false, body: '', _id: Math.random() },
     ]
-  });
+  })
 
-  const { title, answerOptionsAttributes } = formData;
-  const prevTitle = usePrevious(title);
-  const oldAnswerOptions = usePrevious(answerOptionsAttributes);
-  const filledOptions = answerOptionsAttributes.filter(option => option.body);
+  const { title, answerOptionsAttributes } = formData
+  const prevTitle = usePrevious(title)
+  const oldAnswerOptions = usePrevious(answerOptionsAttributes)
+  const filledOptions = answerOptionsAttributes.filter(option => option.body)
 
   useEffect(() => {
     if (initialFormData && !receivedData.current) {
-      receivedData.current = true;
-      setFormData(initialFormData, true);
+      receivedData.current = true
+      setFormData(initialFormData, true)
     }
   }, [initialFormData, setFormData])
 
@@ -64,60 +64,60 @@ export default function MultipleChoiceForm ({
       const addedOrDeletedFirstOption = (
         oldAnswerOptions.length === 0
         || answerOptionsAttributes.length === 0
-      );
+      )
 
       if (addedOrDeletedFirstOption || filledOptions.length > 0) {
-        setError(nullError);
+        setError(nullError)
       }
     }
 
-  }, [answerOptionsAttributes, error, filledOptions, oldAnswerOptions]);
+  }, [answerOptionsAttributes, error, filledOptions, oldAnswerOptions])
 
   useEffect(() => {
-    if (title === prevTitle) return;
-    if (error.field === 'title') setError(nullError);
-  }, [title, prevTitle, error]);
+    if (title === prevTitle) return
+    if (error.field === 'title') setError(nullError)
+  }, [title, prevTitle, error])
 
   const handleTitle = (e) => {
-    setFormData({ title: e.target.value });
+    setFormData({ title: e.target.value })
   }
 
   const handleAnswerBody = (e, idx) => {
-    setFormData({ answerOptionsAttributes: { [idx]: { body: e.target.value } } });
+    setFormData({ answerOptionsAttributes: { [idx]: { body: e.target.value } } })
   }
 
   const toggleCorrect = (idx) => {
     setFormData(oldFormData => {
-      const newCorrect = !oldFormData.answerOptionsAttributes[idx].correct;
-      return { answerOptionsAttributes: { [idx]: { correct: newCorrect } } };
-    });
+      const newCorrect = !oldFormData.answerOptionsAttributes[idx].correct
+      return { answerOptionsAttributes: { [idx]: { correct: newCorrect } } }
+    })
   }
 
   const deleteAnswerOption = (idx) => {
     setFormData(({ answerOptionsAttributes }) => {
-      answerOptionsAttributes.splice(idx, 1);
-    }, true);
+      answerOptionsAttributes.splice(idx, 1)
+    }, true)
   }
 
   const addOption = () => {
     setFormData(({ answerOptionsAttributes }) => {
-      answerOptionsAttributes.push({ correct: false, body: '', _id: Math.random() });
-    }, true);
+      answerOptionsAttributes.push({ correct: false, body: '', _id: Math.random() })
+    }, true)
   }
 
   const handleSubmit = (successCb) => {
     if (!title) {
-      setError(titleError);
+      setError(titleError)
     } else if (filledOptions.length === 0) {
       setError(answerOptionsAttributesError)
     } else {
       const processedAnswerOptions = filledOptions
-        .map((option, idx) => ({ ...option, ord: idx }));
+        .map((option, idx) => ({ ...option, ord: idx }))
 
       successCb({
         ...formData,
         answerOptionsAttributes: processedAnswerOptions
-      });
+      })
     }
   }
 

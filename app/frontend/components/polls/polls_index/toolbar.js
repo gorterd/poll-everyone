@@ -1,44 +1,44 @@
-import React, { useLayoutEffect, useRef } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useLayoutEffect, useRef } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 
-import DropdownWrapper from '../../wrappers/dropdown';
+import DropdownWrapper from '../../wrappers/dropdown'
 
 import { receiveSelections, clearSelections } from '../../../store/actions/selection_actions/poll_selection_actions'
 import { 
   openModal, 
   setStickyToolbar, 
-} from '../../../store/actions/ui_actions';
+} from '../../../store/actions/ui_actions'
 
 import { 
   stickyToolbarSelector, 
   selectedPollsSelector, 
-} from '../../../util/hooks_selectors';
-import { smoothScrollToY } from '../../../util/general_util';
-import { useBatchDestroy, useMovePolls } from '../../../util/api/mutation_hooks';
-import { usePollData } from '../../../util/api/query_hooks';
-import { pollDataOrderedGroupsSelector } from '../../../util/query_selectors';
+} from '../../../util/hooks_selectors'
+import { smoothScrollToY } from '../../../util/general_util'
+import { useBatchDestroy, useMovePolls } from '../../../util/api/mutation_hooks'
+import { usePollData } from '../../../util/api/query_hooks'
+import { pollDataOrderedGroupsSelector } from '../../../util/query_selectors'
 
 export default function GroupsIndexToolbar({ toggleMoveDrawer }) {
-  const intersectionDiv = useRef();
-  const dispatch = useDispatch();
-  const stickyToolbar = useSelector(stickyToolbarSelector);
-  const selectedPolls =  useSelector(selectedPollsSelector);
-  const { data: groups } = usePollData({ select: pollDataOrderedGroupsSelector});
-  const { mutate: movePolls } = useMovePolls();
-  const { mutate: batchDestroy } = useBatchDestroy();
+  const intersectionDiv = useRef()
+  const dispatch = useDispatch()
+  const stickyToolbar = useSelector(stickyToolbarSelector)
+  const selectedPolls =  useSelector(selectedPollsSelector)
+  const { data: groups } = usePollData({ select: pollDataOrderedGroupsSelector})
+  const { mutate: movePolls } = useMovePolls()
+  const { mutate: batchDestroy } = useBatchDestroy()
 
-  const selectedPollIds = selectedPolls.pollIds;
-  const selectedGroupIds = selectedPolls.groupIds;
+  const selectedPollIds = selectedPolls.pollIds
+  const selectedGroupIds = selectedPolls.groupIds
   
   useLayoutEffect(() => {
     if ('IntersectionObserver' in window) {
-      const div = intersectionDiv.current;
+      const div = intersectionDiv.current
       const observer = new IntersectionObserver( event => {
-        dispatch(setStickyToolbar(!event[0].isIntersecting));
-      }, { threshold: 1 });
+        dispatch(setStickyToolbar(!event[0].isIntersecting))
+      }, { threshold: 1 })
       
-      observer.observe(div);
-      return () => observer.unobserve(div);
+      observer.observe(div)
+      return () => observer.unobserve(div)
     }
   }, [intersectionDiv, dispatch])
 
@@ -47,29 +47,29 @@ export default function GroupsIndexToolbar({ toggleMoveDrawer }) {
       type: 'new-group',
       data: selectedPolls,
       offset: stickyToolbar ? 70 : 0,
-    }));
+    }))
   }
 
   async function openNewPoll() {
-    if (!stickyToolbar) await smoothScrollToY(0, { pause: 75 });
+    if (!stickyToolbar) await smoothScrollToY(0, { pause: 75 })
     dispatch(openModal({
       type: 'new-poll',
       data: {},
       offset: stickyToolbar ? 0 : 72
-    }));
+    }))
   }
 
   function selectAll(){
-    const groupIds = groups.map( group => group.id );
-    const pollIds = groups.reduce( (acc, group) => acc.concat(group.pollIds), [] );
-    dispatch(receiveSelections({ groupIds, pollIds }));
+    const groupIds = groups.map( group => group.id )
+    const pollIds = groups.reduce( (acc, group) => acc.concat(group.pollIds), [] )
+    dispatch(receiveSelections({ groupIds, pollIds }))
   }
 
   function ungroup(){
     movePolls({
       pollIds: selectedPollIds,
       groupId: groups.find(g => g.ord === 0).id
-    });
+    })
   }
 
   const Button = () => <span className='button-grey'><i className="fas fa-check"></i></span>
@@ -84,8 +84,8 @@ export default function GroupsIndexToolbar({ toggleMoveDrawer }) {
     </ul>
   )
 
-  const noSelection = !(selectedPollIds.length || selectedGroupIds.length); 
-  let className = 'groups-index-toolbar';
+  const noSelection = !(selectedPollIds.length || selectedGroupIds.length) 
+  let className = 'groups-index-toolbar'
   if (stickyToolbar) {
     className += ' sticky-toolbar'
   }
@@ -116,5 +116,5 @@ export default function GroupsIndexToolbar({ toggleMoveDrawer }) {
         <button className='button-grey' onClick={toggleMoveDrawer} disabled={noSelection}>Move</button>
       </div>
     </>
-  );
+  )
 }

@@ -1,15 +1,15 @@
-import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { logout } from '../../store/actions/session_actions';
-import { currentUserSelector } from '../../util/hooks_selectors';
-import DropdownWrapper from '../wrappers/dropdown';
+import React from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { logout } from '../../store/actions/session_actions'
+import { currentUserSelector } from '../../util/hooks_selectors'
+import DropdownWrapper from '../wrappers/dropdown'
 
 export default function AppNavbarTools () {
-  const dispatch = useDispatch();
-  const currentUser = useSelector(currentUserSelector);
+  const dispatch = useDispatch()
+  const currentUser = useSelector(currentUserSelector)
 
   const handleLogout = () => {
-    dispatch(logout());
+    dispatch(logout())
   }
 
   const Button = () => <span className='nav-tool'>

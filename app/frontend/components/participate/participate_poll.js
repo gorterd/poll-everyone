@@ -1,44 +1,44 @@
-import React from 'react';
-import { connect} from 'react-redux';
+import React from 'react'
+import { connect} from 'react-redux'
 import { 
   fetchPresentation, 
   receiveActivePoll, 
   clearActivePoll,
   receiveResponse,
   clearResponse
-} from '../../store/actions/presentation_actions';
+} from '../../store/actions/presentation_actions'
 
-import { withRouter } from 'react-router-dom';
-import { participantPollData } from '../../util/selectors';
-import AttributedImage from '../shared/attributed_image';
+import { withRouter } from 'react-router-dom'
+import { participantPollData } from '../../util/selectors'
+import AttributedImage from '../shared/attributed_image'
 import participantWaitingImg from '../../images/splash/participant-waiting.png'
-import cableConsumer from '../../channels/consumer';
+import cableConsumer from '../../channels/consumer'
 
-const POLL = 'POLL';
-const RESPONSE = 'RESPONSE';
-const CLEAR_RESPONSE = 'CLEAR_RESPONSE';
+const POLL = 'POLL'
+const RESPONSE = 'RESPONSE'
+const CLEAR_RESPONSE = 'CLEAR_RESPONSE'
 
 class ParticipantPoll extends React.Component {
   constructor(props) {
-    super(props);
+    super(props)
 
     this.state = { subscription: null }
-    this.animate = false;
+    this.animate = false
 
-    this.receiveBroadcast = this.receiveBroadcast.bind(this);
-    this.clickAnswerOption = this.clickAnswerOption.bind(this);
-    this.clearLastResponse = this.clearLastResponse.bind(this);
+    this.receiveBroadcast = this.receiveBroadcast.bind(this)
+    this.clickAnswerOption = this.clickAnswerOption.bind(this)
+    this.clearLastResponse = this.clearLastResponse.bind(this)
   }
 
   componentDidMount() {
-    const { currentType, currentId } = this.props.session;
-    const username = this.props.match.params.username;
-    this.props.clearActivePoll();
+    const { currentType, currentId } = this.props.session
+    const username = this.props.match.params.username
+    this.props.clearActivePoll()
 
     this.props.fetchPresentation( currentType, currentId, username )
       .then( presParticipant => {
         this._subscribe(presParticipant.presenterId, presParticipant.id) 
-      });   
+      })   
   }
 
 
@@ -52,7 +52,7 @@ class ParticipantPoll extends React.Component {
 
         respond: function(answerOptionId) {
           const response = { answerOptionId, participantId }
-          return this.perform('respond', response);
+          return this.perform('respond', response)
         },
 
         clear: function(id) {
@@ -63,88 +63,88 @@ class ParticipantPoll extends React.Component {
           return this.perform('text', str)
         }
       }
-    );
+    )
     
     this.setState({subscription}, () => this.animate = true )
   }
 
   componentDidUpdate(prevProps, prevState){
-    const { activePoll } = this.props;
-    const { subscription } = this.state;
+    const { activePoll } = this.props
+    const { subscription } = this.state
     if ((activePoll && subscription) && !(prevProps.activePoll && prevState.subscription) ){
-      this.animate = false;
-      window.setTimeout ( () => (this.animate = true), 150);
+      this.animate = false
+      window.setTimeout ( () => (this.animate = true), 150)
     }
   }
 
   componentWillUnmount() {
     if (this.state.subscription) {
-      this.state.subscription.unsubscribe();
+      this.state.subscription.unsubscribe()
     }
   }
 
 
   receiveBroadcast(broadcast){
-    const response = JSON.parse(broadcast.data);
+    const response = JSON.parse(broadcast.data)
     switch (broadcast.type){
       case POLL:
         if (response.poll.active){
-          this.props.receiveActivePoll(response);
+          this.props.receiveActivePoll(response)
         } else {
-          this.props.clearActivePoll();
+          this.props.clearActivePoll()
         }
-        break;
+        break
       case RESPONSE:
-        this.props.receiveResponse(response);
-        break;
+        this.props.receiveResponse(response)
+        break
       case CLEAR_RESPONSE:
-        this.props.clearResponse(response);
-        break;
+        this.props.clearResponse(response)
+        break
     }
   }
 
   clickAnswerOption(optionId){
-    this.state.subscription.respond(optionId);
+    this.state.subscription.respond(optionId)
   }
 
   clearLastResponse(){
-    const {ownResponses} = this.props;
-    let lastIdx = ownResponses.length - 1;
+    const {ownResponses} = this.props
+    let lastIdx = ownResponses.length - 1
     if (lastIdx >= 0){
-      this.state.subscription.clear(ownResponses[lastIdx].id);
+      this.state.subscription.clear(ownResponses[lastIdx].id)
     }
   }
 
   _getSubText(responsesRemaining, numResponsesAllowed){
     switch (responsesRemaining) {
       case 0:
-        return 'You have responded the max number of times';
+        return 'You have responded the max number of times'
       case numResponsesAllowed:
-        return `You can respond ${responsesRemaining} times`;
+        return `You can respond ${responsesRemaining} times`
       default:
-        return `You have ${responsesRemaining} response${responsesRemaining > 1 ? 's' : ''} remaining`;
+        return `You have ${responsesRemaining} response${responsesRemaining > 1 ? 's' : ''} remaining`
     }
   }
 
   render() {
-    const { activePoll, ownResponses, activeAnswerOptions, participant } = this.props;
-    const username = this.props.match.params.username;
+    const { activePoll, ownResponses, activeAnswerOptions, participant } = this.props
+    const username = this.props.match.params.username
 
-    let renderedContent;
+    let renderedContent
     if (activePoll && this.state.subscription ){
       
-      const { title, numResponsesAllowed } = activePoll;
-      const responsesRemaining = numResponsesAllowed - ownResponses.length;
-      const disabledAnswer = responsesRemaining < 1;
-      const disabledClear = (ownResponses.length === 0);
-      const subText = this._getSubText(responsesRemaining, numResponsesAllowed);
+      const { title, numResponsesAllowed } = activePoll
+      const responsesRemaining = numResponsesAllowed - ownResponses.length
+      const disabledAnswer = responsesRemaining < 1
+      const disabledClear = (ownResponses.length === 0)
+      const subText = this._getSubText(responsesRemaining, numResponsesAllowed)
 
       const options = activeAnswerOptions.map( option => (
         <li key={option.id}>
           <button 
             onClick={() => {
               if(!disabledAnswer){
-                this.clickAnswerOption(option.id);
+                this.clickAnswerOption(option.id)
               }
             }}
             className={'answer-option-button' 
@@ -157,7 +157,7 @@ class ParticipantPoll extends React.Component {
             <span className='answer-body'>{option.body}</span>
           </button>
         </li>
-      ));
+      ))
       
       renderedContent = (
         <div className='participant-poll'>
@@ -194,7 +194,7 @@ class ParticipantPoll extends React.Component {
         </div>
       )
     } else {
-      renderedContent = null;
+      renderedContent = null
     }
 
     return (
@@ -209,7 +209,7 @@ class ParticipantPoll extends React.Component {
 }
 
 const mapState = state => {
-  const { activePoll, ownResponses, activeAnswerOptions } = participantPollData(state);
+  const { activePoll, ownResponses, activeAnswerOptions } = participantPollData(state)
   return {
     session: state.session,
     participant: state.presentation.participant,
@@ -227,4 +227,4 @@ const mapDispatch = dispatch => {
   }
 }
 
-export default withRouter(connect(mapState, mapDispatch)(ParticipantPoll));
+export default withRouter(connect(mapState, mapDispatch)(ParticipantPoll))

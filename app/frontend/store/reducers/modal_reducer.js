@@ -3,7 +3,7 @@ import {
   CLEAR_MODAL, 
   EXIT_MODAL, 
   CLEAR_MODAL_STATUS 
-} from '../actions/ui_actions';
+} from '../actions/ui_actions'
 
 const baseModal = {
   type: '',
@@ -13,22 +13,22 @@ const baseModal = {
 }
 
 export default (state = baseModal, action) => {
-  Object.freeze(state);
+  Object.freeze(state)
 
   switch (action.type) {
     case RECEIVE_MODAL:
       return state.status 
         ? state
-        : {...state, ...action.modal, status: 'entering' };
+        : {...state, ...action.modal, status: 'entering' }
     case CLEAR_MODAL_STATUS:
-      return { ...state, status: null };
+      return { ...state, status: null }
     case EXIT_MODAL:
       return state.status || !state.type
         ? state
-        : { ...state, status: 'exiting' };
+        : { ...state, status: 'exiting' }
     case CLEAR_MODAL:
-      return baseModal;
+      return baseModal
     default:
-      return state;
+      return state
   }
 }

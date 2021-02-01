@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import LargeInput from '../../shared/large_input';
+import React, { useState } from 'react'
+import LargeInput from '../../shared/large_input'
 
 const PasswordButton = ({ onClick }) => (
   <span className='view-password-button' onClick={onClick}>
@@ -8,7 +8,7 @@ const PasswordButton = ({ onClick }) => (
 )
 
 export default function LoginInput({ type, ...rest }) {
-  const [ curType, setCurType ] = useState(type);
+  const [ curType, setCurType ] = useState(type)
   const toggleType = () => setCurType( 
     curType === 'password' 
       ? 'text'

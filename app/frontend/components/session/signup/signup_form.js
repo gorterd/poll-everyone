@@ -1,7 +1,7 @@
-import React from 'react';
-import { validEmail, validName, validPassword } from '../../../util/validation_util';
-import SignupInput from './signup_input';
-import AttributedImage from '../../shared/attributed_image';
+import React from 'react'
+import { validEmail, validName, validPassword } from '../../../util/validation_util'
+import SignupInput from './signup_input'
+import AttributedImage from '../../shared/attributed_image'
 import signupSplashImg from '../../../images/splash/signup-splash-02.png'
 
 class SignupForm extends React.Component {
@@ -40,14 +40,14 @@ class SignupForm extends React.Component {
   }
 
   componentDidMount() {
-    this.props.resetSessionErrors();
+    this.props.resetSessionErrors()
   }
 
   submit(e) {
-    e.preventDefault();
+    e.preventDefault()
     if (this.validateForm()){
       this.props.signup(this.state.formData)
-        .then(() => this.props.history.push('/polls'));
+        .then(() => this.props.history.push('/polls'))
     } else {
       this.setState({submitDisabled: true})
     }
@@ -56,59 +56,59 @@ class SignupForm extends React.Component {
   //GH
   handleInput(field) {
     return e => {
-      const value = (field === 'terms') ? e.target.checked : e.target.value;
-      const nextFormData = Object.assign({}, this.state.formData, { [field]: value });
+      const value = (field === 'terms') ? e.target.checked : e.target.value
+      const nextFormData = Object.assign({}, this.state.formData, { [field]: value })
       this.setState( state => {
         if ( state.displayError[field] ) { this._validate(field, value) }
-        return { formData: nextFormData };
+        return { formData: nextFormData }
       })
     }
   }
   
   _validate(field, value){
-    const isValid = this.validations[field](value);
+    const isValid = this.validations[field](value)
     
     
     this.setState( state => {
-      const newDisplayError = Object.assign({}, state.displayError, {[field]: !isValid});
-      return {displayError: newDisplayError};
+      const newDisplayError = Object.assign({}, state.displayError, {[field]: !isValid})
+      return {displayError: newDisplayError}
     }, (() => {
-      const {submitDisabled, displayError} = this.state;
+      const {submitDisabled, displayError} = this.state
       if (submitDisabled && !Object.values(displayError).some(bool => bool)) {
         this.setState({ submitDisabled: false })
       }
-    }));
+    }))
 
-    return isValid;
+    return isValid
   }
 
   validateInput(field) {
     return e => {
       const value = (field === 'terms') ? e.target.checked : e.target.value
-      this._validate(field, value);
+      this._validate(field, value)
     }
   }
   
   validateForm() {
-    const { formData } = this.state;
-    let valid = true;
+    const { formData } = this.state
+    let valid = true
 
     
     Object.keys(formData).forEach( field => {
-      if ( !this._validate(field, formData[field]) ){ valid = false; }
-    });
+      if ( !this._validate(field, formData[field]) ){ valid = false }
+    })
     
     if (!valid) {
       this.setState({submitedDisabled: true})
     }
 
-    return valid;
+    return valid
   }
   
   render() {
 
-    const { displayError, formData, submitDisabled } = this.state;
-    const { sessionErrors, sessionIsLoading } = this.props;
+    const { displayError, formData, submitDisabled } = this.state
+    const { sessionErrors, sessionIsLoading } = this.props
 
     const errorMessages = {
       firstName: <p className="error-message">First name can't be blank</p>,
@@ -184,5 +184,5 @@ class SignupForm extends React.Component {
   }
 }
 
-export default SignupForm;
+export default SignupForm
 

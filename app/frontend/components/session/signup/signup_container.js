@@ -1,7 +1,7 @@
-import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
-import { signup, resetSessionErrors } from '../../../store/actions/session_actions';
-import SignupForm from './signup_form';
+import { connect } from 'react-redux'
+import { withRouter } from 'react-router-dom'
+import { signup, resetSessionErrors } from '../../../store/actions/session_actions'
+import SignupForm from './signup_form'
 
 const mapState = state => {
   return {
@@ -17,4 +17,4 @@ const mapDispatch = dispatch => {
   }
 }
 
-export default withRouter(connect(mapState, mapDispatch)(SignupForm));
+export default withRouter(connect(mapState, mapDispatch)(SignupForm))

@@ -1,5 +1,5 @@
-import React from 'react';
-import { useAnimation } from '../../util/custom_hooks';
+import React from 'react'
+import { useAnimation } from '../../util/custom_hooks'
 
 export function Animated ({
   children,
@@ -8,11 +8,11 @@ export function Animated ({
 }) {
   const [renderState, animationStyle, key] = useAnimation({
     ...animationProps
-  });
+  })
 
   return renderState && (
     <div key={key} style={animationStyle} className={className}>
       {children}
     </div>
-  );
+  )
 }

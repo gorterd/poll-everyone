@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import MultipleChoiceForm from './forms/multiple_choice';
-import { exitModal } from '../../store/actions/ui_actions';
-import GroupSearch from '../shared/group_search';
+import React, { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import MultipleChoiceForm from './forms/multiple_choice'
+import { exitModal } from '../../store/actions/ui_actions'
+import GroupSearch from '../shared/group_search'
 import multipleChoiceOptionImg from '../../images/icons/multiple-choice-option.png'
-import { pollDataOrderedGroupsSelector } from '../../util/query_selectors';
-import { useCreatePoll } from '../../util/api/mutation_hooks';
-import { useCachedPollData } from '../../util/api/query_hooks';
+import { pollDataOrderedGroupsSelector } from '../../util/query_selectors'
+import { useCreatePoll } from '../../util/api/mutation_hooks'
+import { useCachedPollData } from '../../util/api/query_hooks'
 import { classNames } from '../../util/general_util'
 
 const forms = {
@@ -14,12 +14,12 @@ const forms = {
 }
 
 export default function NewPollForm({ modalData }) {
-  const dispatch = useDispatch();
-  const { mutateAsync: createPoll } = useCreatePoll();
-  const pollData = useCachedPollData();
-  const groups = pollDataOrderedGroupsSelector(pollData);
+  const dispatch = useDispatch()
+  const { mutateAsync: createPoll } = useCreatePoll()
+  const pollData = useCachedPollData()
+  const groups = pollDataOrderedGroupsSelector(pollData)
 
-  const [ activeOption, setActiveOption ] = useState('multiple_choice');
+  const [ activeOption, setActiveOption ] = useState('multiple_choice')
   const [ group, setGroup] = useState(modalData.group)
 
   const submitPoll = pollData => createPoll({ 
@@ -28,10 +28,10 @@ export default function NewPollForm({ modalData }) {
       pollType: activeOption
     }, 
     groupId: group?.id || groups[0].id
-  }).then(() => dispatch(exitModal()));
+  }).then(() => dispatch(exitModal()))
   
 
-  const Form = forms[activeOption];
+  const Form = forms[activeOption]
   
   return (
     <section className='new-poll-container'>

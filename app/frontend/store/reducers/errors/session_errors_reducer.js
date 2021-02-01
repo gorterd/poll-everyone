@@ -1,12 +1,12 @@
-import { RECEIVE_SESSION_ERRORS, RESET_SESSION_ERRORS } from '../../actions/session_actions';
+import { RECEIVE_SESSION_ERRORS, RESET_SESSION_ERRORS } from '../../actions/session_actions'
 
 export default (state = [], action) => {
   switch (action.type) {
     case RECEIVE_SESSION_ERRORS:
-      return action.errors;
+      return action.errors
     case RESET_SESSION_ERRORS:
-      return [];
+      return []
     default:
-      return state;
+      return state
   }
 }

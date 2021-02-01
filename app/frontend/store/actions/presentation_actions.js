@@ -59,18 +59,18 @@ export const receiveRecentPresentations = recents => {
 export const fetchPresentation = (type, id, username) => dispatch => {
   return PresentationApiUtil.fetchPresentation(type, id, username)
     .then( data => {
-      const { participant, ...rest } = data;
-      dispatch(receiveParticipant(participant));
+      const { participant, ...rest } = data
+      dispatch(receiveParticipant(participant))
       if ( data.poll ) { 
-        dispatch(receiveActivePoll(rest));
+        dispatch(receiveActivePoll(rest))
       }
-      return data.participant;
-    }, err => console.log(err));
+      return data.participant
+    }, err => console.log(err))
 }
 
 export const fetchRecentPresentations = (type, id) => dispatch => {
   return PresentationApiUtil.fetchRecentPresentations(type, id)
     .then(data => {
-      dispatch(receiveRecentPresentations(data.recents));
-    }, err => console.log(err));
+      dispatch(receiveRecentPresentations(data.recents))
+    }, err => console.log(err))
 }

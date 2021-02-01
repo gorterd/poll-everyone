@@ -1,10 +1,10 @@
-import ajax from './ajax';
+import ajax from './ajax'
 
 export const fetchGroups = userId => {
   return ajax({
     method: 'GET',
     url: `/api/users/${userId}/groups`
-  });
+  })
 }
 
 export const createGroup = (data, userId) => {
@@ -12,7 +12,7 @@ export const createGroup = (data, userId) => {
     method: 'POST',
     url: `/api/users/${userId}/groups`,
     data
-  });
+  })
 }
 
 export const updateGroup = (group) => {
@@ -20,7 +20,7 @@ export const updateGroup = (group) => {
     method: 'PATCH',
     url: `/api/groups/${group.id}`,
     data: { group }
-  });
+  })
 }
 
 export const batchDestroy = selections => {
@@ -28,7 +28,7 @@ export const batchDestroy = selections => {
     method: 'DELETE',
     url: '/api/groups/batch_destroy',
     data: selections
-  });
+  })
 }
 
 export const movePolls = (pollIds, groupId) => {
@@ -36,5 +36,5 @@ export const movePolls = (pollIds, groupId) => {
     method: 'PATCH',
     url: `/api/groups/${groupId}/move_polls`,
     data: { pollIds }
-  });
+  })
 }

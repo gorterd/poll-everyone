@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { Animated } from '../wrappers/animated';
-import { classNames } from '../../util/general_util';
+import React, { useState } from 'react'
+import { Animated } from '../wrappers/animated'
+import { classNames } from '../../util/general_util'
 
 export default function LargeInput ({ 
   value,
@@ -13,20 +13,20 @@ export default function LargeInput ({
   rightSideProps,
   ...rest  
 }) {
-  const [active, setActive] = useState(false);
-  const showPlaceholder = !(active || value);
+  const [active, setActive] = useState(false)
+  const showPlaceholder = !(active || value)
 
   const handleFocus = () => {
-    if (!value) setActive(true);
+    if (!value) setActive(true)
   }
 
   const handleLeave = () => {
-    if (!value) setActive(false);
+    if (!value) setActive(false)
   }
 
   const errorEle = errorMsg && (
     <div className="large-input-error-msg">{errorMsg}</div>
-  );
+  )
 
   const enterAnimation = {
     animationName: 'slide-up-and-in',
@@ -34,14 +34,14 @@ export default function LargeInput ({
     animationIterationCount: 1,
     animationTimingFunction: 'ease-out',
     animationFillMode: 'forwards',
-  };
+  }
 
   const exitAnimation = {
     animationName: 'slide-down-and-out',
     animationDuration: '200ms',
     animationIterationCount: 1,
     animationFillMode: 'forwards',
-  };
+  }
 
   const animationProps = {
     interruptAnimation: true,

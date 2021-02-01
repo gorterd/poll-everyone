@@ -1,6 +1,6 @@
-import React from 'react';
-import { useDispatch } from 'react-redux';
-import { exitModal } from '../../../../store/actions/ui_actions';
+import React from 'react'
+import { useDispatch } from 'react-redux'
+import { exitModal } from '../../../../store/actions/ui_actions'
 
 export default function SmallModal({
   header,
@@ -10,9 +10,9 @@ export default function SmallModal({
   submissionText,
   submissionDisabled,
 }) {
-  const dispatch = useDispatch();
-  const closeModal = () => dispatch(exitModal());
-  const onSubmit = () => submissionHandler(dispatch).then(closeModal);
+  const dispatch = useDispatch()
+  const closeModal = () => dispatch(exitModal())
+  const onSubmit = () => submissionHandler(dispatch).then(closeModal)
 
   return (
     <>
@@ -23,7 +23,7 @@ export default function SmallModal({
           autoFocus
           {...inputProps}
           onKeyDown={(e) => {
-            if (e.key === 'Enter') onSubmit();
+            if (e.key === 'Enter') onSubmit()
           }}
         />
       )}
@@ -40,5 +40,5 @@ export default function SmallModal({
         >{submissionText}</button>
       </div>
     </>
-  );
+  )
 }

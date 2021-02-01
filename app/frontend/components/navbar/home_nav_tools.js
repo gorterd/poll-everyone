@@ -1,33 +1,33 @@
-import React, { useCallback } from 'react';
-import { Link, useHistory } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { login, logout } from '../../store/actions/session_actions';
-import { loggedInSelector } from '../../util/hooks_selectors';
-import { fetchGroupsIndex, fetchLogin, fetchParticipantApp, fetchSignupSplash } from '../lazy_load_index';
-import { useDelayedPrefetch } from '../../util/custom_hooks';
+import React, { useCallback } from 'react'
+import { Link, useHistory } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
+import { login, logout } from '../../store/actions/session_actions'
+import { loggedInSelector } from '../../util/hooks_selectors'
+import { fetchGroupsIndex, fetchLogin, fetchParticipantApp, fetchSignupSplash } from '../lazy_load_index'
+import { useDelayedPrefetch } from '../../util/custom_hooks'
 
 export default function HomeNavTools() {
-  const dispatch = useDispatch();
-  const loggedIn = useSelector(loggedInSelector);
-  const history = useHistory();
+  const dispatch = useDispatch()
+  const loggedIn = useSelector(loggedInSelector)
+  const history = useHistory()
 
   const prefetch = useCallback(() => {
-    fetchGroupsIndex();
-    fetchParticipantApp();
+    fetchGroupsIndex()
+    fetchParticipantApp()
 
     if (loggedIn) {
-      fetchSignupSplash();
-      fetchLogin();
+      fetchSignupSplash()
+      fetchLogin()
     }
-  }, [loggedIn]);
+  }, [loggedIn])
 
-  useDelayedPrefetch(prefetch);
+  useDelayedPrefetch(prefetch)
 
   const loginDemoUser = () => {
     dispatch(login({
       usernameOrEmail: 'Simulation3845',
       password: 'its_all_a_simulation'
-    })).then(() => history.push('/polls'));
+    })).then(() => history.push('/polls'))
   }
 
   const tools = loggedIn
@@ -70,5 +70,5 @@ export default function HomeNavTools() {
       </li>
       {tools.map((tool, i) => <li key={i}>{tool}</li>)}
     </>
-  );
+  )
 }

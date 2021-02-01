@@ -1,32 +1,32 @@
-import React from 'react';
-import { NavLink, useRouteMatch } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { exitModal } from '../../store/actions/ui_actions';
-import { loggedInSelector, modalSelector } from '../../util/hooks_selectors';
-import Logo from '../static/logo';
-import AppNavTools from './app_nav_tools';
-import HomeNavTools from './home_nav_tools';
+import React from 'react'
+import { NavLink, useRouteMatch } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
+import { exitModal } from '../../store/actions/ui_actions'
+import { loggedInSelector, modalSelector } from '../../util/hooks_selectors'
+import Logo from '../static/logo'
+import AppNavTools from './app_nav_tools'
+import HomeNavTools from './home_nav_tools'
 
 export default function Navbar () {
-  const dispatch = useDispatch();
-  const homeMatch = useRouteMatch({ path: '/', exact: true });
-  const appMatch = useRouteMatch(['/polls', '/reports']);
-  const loggedIn = useSelector(loggedInSelector);
-  const modal = useSelector(modalSelector);
+  const dispatch = useDispatch()
+  const homeMatch = useRouteMatch({ path: '/', exact: true })
+  const appMatch = useRouteMatch(['/polls', '/reports'])
+  const loggedIn = useSelector(loggedInSelector)
+  const modal = useSelector(modalSelector)
 
-  let NavLinks, NavTools = [null, null];
-  let logoProps = {};
-  let klass = 'nav-sticky';
+  let NavLinks, NavTools = [null, null]
+  let logoProps = {}
+  let klass = 'nav-sticky'
 
   if (appMatch && loggedIn) {
     NavLinks = (
       <li>
         <NavLink activeClassName="navbar-active" to='/polls'>Polls</NavLink>
       </li>
-    );
-    NavTools = <AppNavTools />;
+    )
+    NavTools = <AppNavTools />
 
-    klass = '';
+    klass = ''
     if (modal.type) {
       logoProps = { onClick: () => dispatch(exitModal()) }
     }
@@ -46,8 +46,8 @@ export default function Navbar () {
           >LinkedIn</a>
         </li>
       </>
-    );
-    NavTools = <HomeNavTools />;
+    )
+    NavTools = <HomeNavTools />
   }
 
   return (
@@ -63,5 +63,5 @@ export default function Navbar () {
         </ul>
       </div>
     </nav>
-  );
+  )
 }

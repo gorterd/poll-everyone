@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
-import { validEmail, validName, validPassword } from '../../../util/validation_util';
-import SignupInput from './signup_input';
-import AttributedImage from '../../shared/attributed_image';
+import React, { useState } from 'react'
+import { validEmail, validName, validPassword } from '../../../util/validation_util'
+import SignupInput from './signup_input'
+import AttributedImage from '../../shared/attributed_image'
 import signupSplashImg from '../../../images/splash/signup-splash-02.png'
-import { useObjectState } from '../../../util/custom_hooks';
-import { useSignup } from '../../../util/api/mutation_hooks';
-import { useHistory } from 'react-router-dom';
-import { objMap, hasTruthyValue } from '../../../util/general_util';
+import { useObjectState } from '../../../util/custom_hooks'
+import { useSignup } from '../../../util/api/mutation_hooks'
+import { useHistory } from 'react-router-dom'
+import { objMap, hasTruthyValue } from '../../../util/general_util'
 
 const validations = {
   firstName: validName,
@@ -33,12 +33,12 @@ const nullFormData = {
 }
 
 export default function Signup () {
-  const history = useHistory();
-  const { mutateAsync: signup } = useSignup();
-  const [formData, setFormData] = useObjectState(nullFormData);
-  const [ errors, setErrors ] = useObjectState(nullErrors);
-  const [ backendErrors, setBackendErrors ] = useState([]);
-  const [ sessionLoading, setSessionLoading ] = useState(false);
+  const history = useHistory()
+  const { mutateAsync: signup } = useSignup()
+  const [formData, setFormData] = useObjectState(nullFormData)
+  const [ errors, setErrors ] = useObjectState(nullErrors)
+  const [ backendErrors, setBackendErrors ] = useState([])
+  const [ sessionLoading, setSessionLoading ] = useState(false)
 
   const getEventValue = (field, e) => field === 'terms'
     ? e.target.checked
@@ -47,13 +47,13 @@ export default function Signup () {
   const isValid = (field, value) => validations[field](value) 
 
   const submit = e => {
-    e.preventDefault();
+    e.preventDefault()
     const newErrors = objMap(formData, ([field, val]) => !isValid(field, val))
 
     if (hasTruthyValue(newErrors)) {
-      setErrors(newErrors, true);
+      setErrors(newErrors, true)
     } else {
-      setSessionLoading(true);
+      setSessionLoading(true)
       signup(formData)
         .finally(() => setSessionLoading(false) )
         .then( 
@@ -66,7 +66,7 @@ export default function Signup () {
   const handleChange = field => e => {
     const value = getEventValue(field, e)
 
-    setFormData({ [field]: value });
+    setFormData({ [field]: value })
     setErrors( oldErrors => (
       oldErrors[field] && isValid(field, value)
         ? { [field]: false }

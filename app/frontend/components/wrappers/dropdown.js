@@ -1,5 +1,5 @@
-import React from 'react';
-import { useDropdown } from '../../util/custom_hooks';
+import React from 'react'
+import { useDropdown } from '../../util/custom_hooks'
 
 export default function DropdownWrapper({
   button: Button,
@@ -12,7 +12,7 @@ export default function DropdownWrapper({
   const [dropdownShowing, dropdownRef, {
     toggleDropdown,
     hideDropdown,
-  }] = useDropdown();
+  }] = useDropdown()
 
   return (
     <div className={'dropdown-container ' + containerClass} ref={dropdownRef}>

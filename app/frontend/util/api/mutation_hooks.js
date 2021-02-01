@@ -1,21 +1,21 @@
-import { useMutation, useQueryClient } from 'react-query';
-import { useDispatch } from 'react-redux';
-import { clearSelections } from '../../store/actions/selection_actions/poll_selection_actions';
-import ajax from './ajax';
+import { useMutation, useQueryClient } from 'react-query'
+import { useDispatch } from 'react-redux'
+import { clearSelections } from '../../store/actions/selection_actions/poll_selection_actions'
+import ajax from './ajax'
 
 const useSession = (mutateFn, options = {}) => {
-  const queryClient = useQueryClient();
+  const queryClient = useQueryClient()
 
   return useMutation(mutateFn, {
     ...options,
     onMutate: (...args) => {
-      options.onMutate?.(queryClient, ...args);
+      options.onMutate?.(queryClient, ...args)
     },
     onSuccess: (...args) => {
-      options.onSuccess?.(queryClient, ...args);
+      options.onSuccess?.(queryClient, ...args)
       queryClient.invalidateQueries('currentUser')
     }
-  });
+  })
 }
 
 export const checkIfUserExists = (usernameOrEmail) => (
@@ -35,7 +35,7 @@ export const useLogin = () => {
     })
   ), {
     onSuccess: (queryClient, user) => {
-      queryClient.setQueryData('currentUser', () => user);
+      queryClient.setQueryData('currentUser', () => user)
     }
   })
 }
@@ -49,9 +49,9 @@ export const useSignup = () => {
     })
   ), {
     onSuccess: (queryClient, user) => {
-      queryClient.setQueryData('currentUser', () => user);
+      queryClient.setQueryData('currentUser', () => user)
     }
-  });
+  })
 }
 
 export const useLogout = () => {
@@ -62,24 +62,24 @@ export const useLogout = () => {
     })
   ), {
     onSuccess: (queryClient) => {
-      queryClient.setQueryData('currentUser', () => ({}));
+      queryClient.setQueryData('currentUser', () => ({}))
     }
   })
 }
 
 const useMutatePoll = (mutateFn, options = {}) => {
-  const queryClient = useQueryClient();
+  const queryClient = useQueryClient()
 
   return useMutation(mutateFn, {
     ...options,
     onMutate: (...args) => {
-      options.onMutate?.(queryClient, ...args);
+      options.onMutate?.(queryClient, ...args)
     },
     onSuccess: (...args) => {
-      options.onSuccess?.(queryClient, ...args);
+      options.onSuccess?.(queryClient, ...args)
       queryClient.invalidateQueries('polls')
     }
-  });
+  })
 }
 
 export const useCreatePoll = () => {
@@ -89,7 +89,7 @@ export const useCreatePoll = () => {
       url: `/api/groups/${groupId}/polls`,
       data: { poll }
     })
-  );
+  )
 }
 
 export const useUpdatePoll = () => {
@@ -99,7 +99,7 @@ export const useUpdatePoll = () => {
       url: `/api/polls/${pollId}`,
       data: { poll }
     })
-  );
+  )
 }
 
 export const useDuplicatePoll = () => {
@@ -109,7 +109,7 @@ export const useDuplicatePoll = () => {
       url: `/api/polls/${pollId}/duplicate`,
       data: { pollId }
     })
-  );
+  )
 }
 
 export const useToggleActive = () => {
@@ -122,38 +122,38 @@ export const useToggleActive = () => {
   ), {
     onMutate: (queryClient, pollId) => {
       queryClient.setQueryData(['polls', pollId], oldData => {
-        if (!oldData) return;
-        const { poll } = oldData;
+        if (!oldData) return
+        const { poll } = oldData
         const newPoll = { ...poll, active: !poll.active }
         return { ...oldData, poll: newPoll }
       })
       
       queryClient.setQueryData('polls', oldData => {
-        if (!oldData) return;
-        const { polls } = oldData;
-        const poll = polls[pollId];
+        if (!oldData) return
+        const { polls } = oldData
+        const poll = polls[pollId]
         const newPoll = { ...poll, active: !poll.active }
         return { ...oldData, polls: { ...polls, [pollId]: newPoll } }
       })
     }
-  });
+  })
 }
 
 const useMutateGroup = (mutateFn, options = {}) => {
-  const queryClient = useQueryClient();
-  const dispatch = useDispatch();
+  const queryClient = useQueryClient()
+  const dispatch = useDispatch()
 
   return useMutation(mutateFn, {
     ...options,
     onMutate: () => {
-      options.onMutate?.();
+      options.onMutate?.()
       dispatch(clearSelections())
     },
     onSuccess: () => { 
-      options.onSuccess?.();
+      options.onSuccess?.()
       queryClient.invalidateQueries('polls')
     }
-  });
+  })
 }
 
 export const useCreateGroup = () => {
@@ -163,7 +163,7 @@ export const useCreateGroup = () => {
       url: `/api/users/${userId}/groups`,
       data
     })
-  );
+  )
 }
 
 export const useUpdateGroup = () => {
@@ -173,7 +173,7 @@ export const useUpdateGroup = () => {
       url: `/api/groups/${group.id}`,
       data: { group }
     })
-  );
+  )
 }
 
 export const useBatchDestroy = () => {
@@ -183,7 +183,7 @@ export const useBatchDestroy = () => {
       url: '/api/groups/batch_destroy',
       data: selections
     })
-  );
+  )
 }
 
 export const useMovePolls = () => {
@@ -193,5 +193,5 @@ export const useMovePolls = () => {
       url: `/api/groups/${groupId}/move_polls`,
       data: { pollIds }
     })
-  );
+  )
 }

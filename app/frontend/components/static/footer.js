@@ -1,10 +1,10 @@
-import React from 'react';
-import { useStateValue } from '../../util/custom_hooks';
-import Logo from './logo';
+import React from 'react'
+import { useStateValue } from '../../util/custom_hooks'
+import Logo from './logo'
 
 const Footer = () => {
-  const componentLoading = useStateValue('ui componentLoading');
-  if (componentLoading) return null;
+  const componentLoading = useStateValue('ui componentLoading')
+  if (componentLoading) return null
 
   const FOOTER_LINKS = {
     'Languages': [
@@ -36,9 +36,9 @@ const Footer = () => {
       'RESTful Design',
       'TDD',
     ],
-  };
+  }
 
-  let linkLists = [];
+  let linkLists = []
 
   for (let category in FOOTER_LINKS){
     linkLists.push(
@@ -49,7 +49,7 @@ const Footer = () => {
           <li key={i} className='footer-link'>{link}</li>
         ))}
       </ul>
-    );
+    )
   }
   
   return (
@@ -83,4 +83,4 @@ const Footer = () => {
   )
 }
 
-export default Footer;
+export default Footer

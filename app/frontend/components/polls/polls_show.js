@@ -1,100 +1,100 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Link, useHistory, useParams } from 'react-router-dom';
-import { isEqual, debounce } from 'lodash';
+import React, { useCallback, useEffect, useRef, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { Link, useHistory, useParams } from 'react-router-dom'
+import { isEqual, debounce } from 'lodash'
 
-import cableConsumer from '../../channels/consumer';
-import { presenterPollDataSelector } from '../../util/query_selectors';
-import { standardGraph } from '../../util/data_formats_util';
-import { useDelayedPrefetch, usePrevious } from '../../util/custom_hooks';
+import cableConsumer from '../../channels/consumer'
+import { presenterPollDataSelector } from '../../util/query_selectors'
+import { standardGraph } from '../../util/data_formats_util'
+import { useDelayedPrefetch, usePrevious } from '../../util/custom_hooks'
 import { 
   receiveActivePoll, 
   clearActivePoll, 
   receiveResponse, 
   clearResponse 
-} from '../../store/actions/presentation_actions';
-import PresentationGraph from './polls_show/presentation_graph';
-import { fetchEditPoll, fetchFooter, fetchGroupsIndex, fetchHomeSplash } from '../lazy_load_index';
-import { usePoll } from '../../util/api/query_hooks';
-import { useToggleActive } from '../../util/api/mutation_hooks';
+} from '../../store/actions/presentation_actions'
+import PresentationGraph from './polls_show/presentation_graph'
+import { fetchEditPoll, fetchFooter, fetchGroupsIndex, fetchHomeSplash } from '../lazy_load_index'
+import { usePoll } from '../../util/api/query_hooks'
+import { useToggleActive } from '../../util/api/mutation_hooks'
 
 
 export default function PresentPoll() {
   const prefetch = useCallback(() => {
-    fetchEditPoll(); 
-    fetchGroupsIndex(); 
-    fetchHomeSplash(); 
-    fetchFooter();
-  }, []);
+    fetchEditPoll() 
+    fetchGroupsIndex() 
+    fetchHomeSplash() 
+    fetchFooter()
+  }, [])
 
-  useDelayedPrefetch(prefetch);
+  useDelayedPrefetch(prefetch)
   
-  const history = useHistory();
-  const dispatch = useDispatch();
+  const history = useHistory()
+  const dispatch = useDispatch()
 
-  const currentId = useSelector( state => state.session.currentId );
-  const { pollId } = useParams();
-  const { data } = usePoll(pollId);
-  const { poll, fullAnswerOptions } = presenterPollDataSelector(data);
-  const { mutate: toggleActive } = useToggleActive();
+  const currentId = useSelector( state => state.session.currentId )
+  const { pollId } = useParams()
+  const { data } = usePoll(pollId)
+  const { poll, fullAnswerOptions } = presenterPollDataSelector(data)
+  const { mutate: toggleActive } = useToggleActive()
 
-  const formattedData = standardGraph(fullAnswerOptions);
-  const prevFormattedData = usePrevious(formattedData);
+  const formattedData = standardGraph(fullAnswerOptions)
+  const prevFormattedData = usePrevious(formattedData)
 
-  const graphContainer = useRef(null);
-  const [graphDimensions, setGraphDimensions ] = useState({width: 0, height: 0});
+  const graphContainer = useRef(null)
+  const [graphDimensions, setGraphDimensions ] = useState({width: 0, height: 0})
 
-  const subscription = useRef();
+  const subscription = useRef()
 
   const updateGraphDimensions = () => {
-    if (!graphContainer.current) return;
-    const { width, height } = graphContainer.current.getBoundingClientRect();
-    setGraphDimensions({ height, width });
+    if (!graphContainer.current) return
+    const { width, height } = graphContainer.current.getBoundingClientRect()
+    setGraphDimensions({ height, width })
   }
 
   const receiveBroadcast = useCallback(broadcast => {
-    const response = JSON.parse(broadcast.data);
+    const response = JSON.parse(broadcast.data)
 
     switch (broadcast.type) {
       case 'POLL':
         response.poll.active 
           ? dispatch(receiveActivePoll(response)) 
-          : dispatch(clearActivePoll());
-        break;
+          : dispatch(clearActivePoll())
+        break
       case 'RESPONSE':
-        dispatch(receiveResponse(response));
-        break;
+        dispatch(receiveResponse(response))
+        break
       case 'CLEAR_RESPONSE':
-        dispatch(clearResponse(response));
-        break;
+        dispatch(clearResponse(response))
+        break
     }
-  }, [dispatch]);
+  }, [dispatch])
 
   const subscribe = useCallback(() => {
     subscription.current = cableConsumer.subscriptions.create(
       { channel: 'PresentationChannel', presenterId: currentId },
       { received: broadcast => receiveBroadcast(broadcast) }
-    );
+    )
   }, [currentId, receiveBroadcast])
 
 
   useEffect(() => {
     if (poll?.active) {
-      subscribe();
-      return () => subscription.current?.unsubscribe();
+      subscribe()
+      return () => subscription.current?.unsubscribe()
     }
-  }, [poll?.active, subscribe]);
+  }, [poll?.active, subscribe])
 
   useEffect(() => {
-    updateGraphDimensions();
+    updateGraphDimensions()
 
     const resizeListener = window.addEventListener(
       'resize',
       debounce(updateGraphDimensions, 100)
-    );
+    )
 
-    return () => window.removeEventListener('resize', resizeListener);
-  }, []);
+    return () => window.removeEventListener('resize', resizeListener)
+  }, [])
 
   return (
     <section className='show-poll-container'>
@@ -130,5 +130,5 @@ export default function PresentPoll() {
         </div>
       </div>
     </section>
-  );
+  )
 }

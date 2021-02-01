@@ -1,13 +1,13 @@
-import React, { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import { Route, Switch } from 'react-router-dom';
+import React, { useEffect } from 'react'
+import { useDispatch } from 'react-redux'
+import { Route, Switch } from 'react-router-dom'
 import { ReactQueryDevtools } from 'react-query/devtools'
 
-import { AuthRoute, ProtectedRoute } from './wrappers/routes';
-import { Modal } from './shared/modal';
-import DOMUtilities from './dom_utilities';
-import { useStateValue } from '../util/custom_hooks';
-import { componentDoneLoading, componentLoading } from '../store/actions/ui_actions';
+import { AuthRoute, ProtectedRoute } from './wrappers/routes'
+import { Modal } from './shared/modal'
+import DOMUtilities from './dom_utilities'
+import { useStateValue } from '../util/custom_hooks'
+import { componentDoneLoading, componentLoading } from '../store/actions/ui_actions'
 
 import { 
   Navbar,
@@ -21,22 +21,22 @@ import {
   Signup,
   GroupsIndex,
   PresentPoll
-} from './lazy_load_index';
+} from './lazy_load_index'
 
 const Fallback = ({ componentName }) => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch()
   
   useEffect(() => {
     dispatch(componentLoading(componentName))
-    return () => dispatch(componentDoneLoading());
+    return () => dispatch(componentDoneLoading())
   }, [componentName, dispatch])
 
-  return null;
-};
+  return null
+}
 
 export default function App() {
-  const scrollY = useStateValue('ui scrollY');
-  const modalType = useStateValue('modal type');
+  const scrollY = useStateValue('ui scrollY')
+  const modalType = useStateValue('modal type')
   
   return (
     <section
@@ -94,5 +94,5 @@ export default function App() {
       </React.Suspense>
       <ReactQueryDevtools initialIsOpen={false} />
     </section>
-  );
+  )
 }

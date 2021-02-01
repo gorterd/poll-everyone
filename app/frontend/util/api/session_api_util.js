@@ -1,11 +1,11 @@
-import ajax from './ajax';
+import ajax from './ajax'
 
 export const signup = user => {
   return ajax({
     method: 'POST',
     url: '/api/users',
     data: { user }
-  });
+  })
 }
 
 export const updateUser = user => {
@@ -13,7 +13,7 @@ export const updateUser = user => {
     method: 'PATCH',
     url: `/api/users/${user.id}`,
     data: { user }
-  });
+  })
 }
 
 export const login = user => {
@@ -21,14 +21,14 @@ export const login = user => {
     method: 'POST',
     url: '/api/session',
     data: { user }
-  });
+  })
 }
 
 export const logout = () => {
   return ajax({
     method: 'DELETE',
     url: '/api/session'
-  });
+  })
 }
 
 export const checkIfUserExists = usernameOrEmail => {

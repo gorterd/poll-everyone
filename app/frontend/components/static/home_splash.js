@@ -1,7 +1,7 @@
-import React from 'react';
-import AttributedImage from '../shared/attributed_image';
-import { Link } from 'react-router-dom';
-import homeSplashImg from '../../images/splash/home-splash-01.png';
+import React from 'react'
+import AttributedImage from '../shared/attributed_image'
+import { Link } from 'react-router-dom'
+import homeSplashImg from '../../images/splash/home-splash-01.png'
 
 const HomeSplash = () => {  
   return (
@@ -27,4 +27,4 @@ const HomeSplash = () => {
   )
 }
 
-export default HomeSplash;
+export default HomeSplash

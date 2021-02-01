@@ -1,9 +1,9 @@
-import React from 'react';
-import { withRouter, Link } from 'react-router-dom';
-import { connect } from 'react-redux';
-import { checkIfUserExists, resetSessionErrors } from '../../store/actions/session_actions';
-import { fetchRecentPresentations } from '../../store/actions/presentation_actions';
-import logoAltImg from '../../images/nav/logo-alt.png';
+import React from 'react'
+import { withRouter, Link } from 'react-router-dom'
+import { connect } from 'react-redux'
+import { checkIfUserExists, resetSessionErrors } from '../../store/actions/session_actions'
+import { fetchRecentPresentations } from '../../store/actions/presentation_actions'
+import logoAltImg from '../../images/nav/logo-alt.png'
 
 class ParticipantHome extends React.Component {
   constructor(props) {
@@ -17,31 +17,31 @@ class ParticipantHome extends React.Component {
   }
 
   componentDidMount(){
-    const { currentType, currentId, resetSessionErrors, fetchRecentPresentations } = this.props;
-    resetSessionErrors();
-    fetchRecentPresentations(currentType, currentId);
+    const { currentType, currentId, resetSessionErrors, fetchRecentPresentations } = this.props
+    resetSessionErrors()
+    fetchRecentPresentations(currentType, currentId)
   }
 
   handleChange(e){
-    this.props.resetSessionErrors();
+    this.props.resetSessionErrors()
     this.setState({ username: e.target.value })
   }
 
   handleSubmit(e){
-    e.preventDefault();
+    e.preventDefault()
     this.props.checkIfUserExists(this.state.username).then(() => {
-      this.props.history.push(`/participate/${this.state.username}`);
-    }, e => console.log(e) );
+      this.props.history.push(`/participate/${this.state.username}`)
+    }, e => console.log(e) )
   }
 
   render() {
     const validUsername = /^[a-zA-Z0-9]*$/
     
-    let errorMsg;
+    let errorMsg
     if (!validUsername.test(this.state.username)){
-      errorMsg = 'Username can only include letters or numbers';
+      errorMsg = 'Username can only include letters or numbers'
     } else {
-      errorMsg = this.props.sessionErrors[0] ? 'Presenter not found' : null;
+      errorMsg = this.props.sessionErrors[0] ? 'Presenter not found' : null
     }
 
     return (
@@ -101,4 +101,4 @@ const mapDispatch = dispatch => {
   }
 }
 
-export default withRouter(connect(mapState, mapDispatch)(ParticipantHome));
+export default withRouter(connect(mapState, mapDispatch)(ParticipantHome))
