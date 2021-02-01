@@ -24,7 +24,7 @@ export const [HomeSplash, fetchHomeSplash] = withLazy(
 export const [SignupSplash, fetchSignupSplash] = withLazy(
   () => import(
     /* webpackChunkName: "signup-splash" */
-    './session/signup/signup_splash'
+    './static/signup_splash'
   )
 );
 
@@ -37,8 +37,15 @@ export const [GroupsIndex, fetchGroupsIndex] = withLazy(
 
 export const [SignupFormContainer, fetchSignupFormContainer] = withLazy(
   () => import(
-    /* webpackChunkName: "signup-form" */
+    /* webpackChunkName: "signup-form-container" */
     './session/signup/signup_container'
+  )
+);
+
+export const [Signup, fetchSignup] = withLazy(
+  () => import(
+    /* webpackChunkName: "signup" */
+    './session/signup/new_signup'
   )
 );
 

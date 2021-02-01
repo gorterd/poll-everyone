@@ -1,7 +1,7 @@
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { useLocation } from 'react-router-dom';
-import { useDidUpdate, useStateValue } from '../util/custom_hooks';
+import { useDidUpdate, usePrevious, useStateValue } from '../util/custom_hooks';
 import { exitModal } from '../store/actions/ui_actions';
 
 export default () => {
@@ -10,15 +10,19 @@ export default () => {
   
   const scrollY = useStateValue('ui scrollY');
   const modalType = useStateValue('modal type');
+  const prevModalType = usePrevious(modalType);
 
   useEffect(() => {
-    if (!modalType) window.scrollTo(0, scrollY);
-  }, [modalType]);
+    if (prevModalType && !modalType) window.scrollTo(0, scrollY);
+  }, [modalType, prevModalType, scrollY]);
 
-  useDidUpdate(() => {
+  const onUpdate = useCallback(() => {
+    curPath;
     window.scrollTo(0, 0);
     dispatch(exitModal());
-  }, [curPath]);
+  }, [curPath, dispatch]);
+
+  useDidUpdate(onUpdate);
   
   return null;
 }

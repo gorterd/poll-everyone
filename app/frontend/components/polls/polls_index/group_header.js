@@ -23,13 +23,9 @@ export default function GroupHeader({
 
   const activitiesCount = `${pollsCount} activit${(pollsCount == 1) ? 'y' : 'ies'}`
 
-  function handleCheckbox(e) {
-    if (e.target.checked) {
-      dispatch(receiveGroupSelection(group));
-    } else {
-      dispatch(clearGroupSelection(group));
-    }
-  }
+  const handleCheckbox = e => e.target.checked
+    ? dispatch(receiveGroupSelection(group))
+    : dispatch(clearGroupSelection(group));
 
   return (
     <div className="group-header group-polls-row" onClick={toggleDrawerVisible}>

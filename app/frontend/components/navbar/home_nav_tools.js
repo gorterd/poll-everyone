@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { login, logout } from '../../store/actions/session_actions';
@@ -11,9 +11,17 @@ export default function HomeNavTools() {
   const loggedIn = useSelector(loggedInSelector);
   const history = useHistory();
 
-  const prefetches = [fetchGroupsIndex, fetchParticipantApp];
-  if (loggedIn) prefetches.concat(fetchSignupSplash, fetchLogin);
-  useDelayedPrefetch(...prefetches);
+  const prefetch = useCallback(() => {
+    fetchGroupsIndex();
+    fetchParticipantApp();
+
+    if (loggedIn) {
+      fetchSignupSplash();
+      fetchLogin();
+    }
+  }, [loggedIn]);
+
+  useDelayedPrefetch(prefetch);
 
   const loginDemoUser = () => {
     dispatch(login({

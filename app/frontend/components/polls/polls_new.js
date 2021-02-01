@@ -22,15 +22,14 @@ export default function NewPollForm({ modalData }) {
   const [ activeOption, setActiveOption ] = useState('multiple_choice');
   const [ group, setGroup] = useState(modalData.group)
 
-  function submitPoll(pollData) {      
-    createPoll({ 
-      poll: {
-        ...pollData, 
-        pollType: activeOption
-      }, 
-      groupId: group?.id || groups[0].id
-    }).then(() => dispatch(exitModal()));
-  } 
+  const submitPoll = pollData => createPoll({ 
+    poll: {
+      ...pollData, 
+      pollType: activeOption
+    }, 
+    groupId: group?.id || groups[0].id
+  }).then(() => dispatch(exitModal()));
+  
 
   const Form = forms[activeOption];
   

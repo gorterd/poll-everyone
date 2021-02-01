@@ -17,7 +17,8 @@ import {
   ParticipantApp,
   HomeSplash,
   SignupSplash,
-  SignupFormContainer,
+  // SignupFormContainer,
+  Signup,
   GroupsIndex,
   PresentPoll
 } from './lazy_load_index';
@@ -66,7 +67,7 @@ export default function App() {
                 </AuthRoute>
 
                 <AuthRoute path='/signup/create'>
-                  <SignupFormContainer />
+                  <Signup />
                 </AuthRoute>
 
                 <ProtectedRoute exact path='/polls'>

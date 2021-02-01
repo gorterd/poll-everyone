@@ -9,14 +9,14 @@ const SET_DRAWER_GROUPS = 'SET_DRAWER_GROUPS';
 const SELECT_GROUP = 'SELECT_GROUP';
 
 export default function GroupSearch({ setGroup, focusOnTab, groups, placeholderText, defaultGroup }) {
-  function reducer(state, action) {
+  const [state, dispatch] = useReducer((state, action) => {
     switch (action.type) {
       case SELECT_GROUP:
         return {
           ...state,
           searchText: action.searchText,
           focusIndex: null,
-        }; 
+        };
       case CLOSE_SEARCH:
         return {
           ...state,
@@ -45,40 +45,15 @@ export default function GroupSearch({ setGroup, focusOnTab, groups, placeholderT
       default:
         return new Error('Action type doesn\'t exist');
     }
-  }
-
-  const [state, dispatch] = useReducer(reducer, {
+  }, {
     searchText: defaultGroup || '',
     drawerGroups: [],
     focusIndex: null,
   });
 
+  const { searchText, drawerGroups, focusIndex } = state;
   const searchInput = useRef();
   const drawerLis = useRef([]);
-
-  useEffect(() => dispatch({
-    type: SET_DRAWER_GROUPS,
-    groups
-  }), [groups]);
-
-  useEffect(() => {
-    const listItem = drawerLis.current[state.focusIndex];
-    if (!listItem) return;
-
-    const itemTop = listItem.offsetTop;
-    const itemBottom = itemTop + listItem.offsetHeight;    
-    const list = listItem.parentElement;
-    
-    if (list.scrollTop > itemTop) {
-      list.scrollTop = itemTop;
-    } else if (itemBottom > (list.scrollTop + list.clientHeight)) {
-      list.scrollTop = itemBottom - list.clientHeight;
-    }
-  }, [state.focusIndex, drawerLis, searchDiv]);
-
-  useEffect(() => {
-    setGroup(groups.find(group => group.title === state.searchText));
-  }, [state.searchText, groups, setGroup])
 
   const [
     dropdownShowing,
@@ -88,46 +63,44 @@ export default function GroupSearch({ setGroup, focusOnTab, groups, placeholderT
       showDropdown, 
       hideDropdown 
     }
-  ] = useDropdown(); // NEW
+  ] = useDropdown(); 
 
-  function textMatchesGroup(text) {
-    return group => new RegExp(`^${text}`, 'i').test(group.title);
-  }
+  const textMatchesGroup = text => group => 
+    new RegExp(`^${text}`, 'i').test(group.title);
 
-  function selectGroup(group) {
-    hideDropdown(); // NEW
+  const selectGroup = group => {
+    hideDropdown(); 
     dispatch({ type: SELECT_GROUP, searchText: group.title });
   }
 
-  function handleSubmit(e) {
+  const handleSubmit = e => {
     e.preventDefault();
-    console.log(state.focusIndex)
-    if (state.focusIndex !== null) return;
+    if (focusIndex !== null) return;
     const chosenGroup = groups.find(textMatchesGroup(searchText));
     selectGroup(chosenGroup);
   }
 
-  function clearSearch() {
+  const clearSearch = () => {
     searchInput.current.focus();
-    showDropdown(); // NEW
+    showDropdown(); 
     dispatch({
       type: UPDATE_SEARCH,
       payload: { drawerGroups: Array.from(groups), searchText: '' }
     });
   }
 
-  function handleSearch(e) {
+  const handleSearch = e => {
     const searchText = e.target.value;
     const drawerGroups = groups.filter(textMatchesGroup(searchText));
-    showDropdown(); // NEW
+    showDropdown(); 
     dispatch({
       type: UPDATE_SEARCH,
       payload: { searchText, drawerGroups }
     });
   }
 
-  function handleKeyDown(e) {
-    if (!dropdownShowing) return; // NEW
+  const handleKeyDown = e => {
+    if (!dropdownShowing) return; 
     switch (e.key) {
       case 'ArrowDown':
         e.preventDefault();
@@ -141,16 +114,38 @@ export default function GroupSearch({ setGroup, focusOnTab, groups, placeholderT
           focusOnTab.disabled = false;
           focusOnTab.focus();
         }
-      // eslint-disable-next-line no-fallthrough
+      // fallthrough
       case 'Escape':
       case 'Enter':
         e.stopPropagation();
-        hideDropdown(); // NEW
+        hideDropdown(); 
         dispatch({ type: CLOSE_SEARCH });
     }  
   }
 
-  const { focusIndex, drawerGroups, searchText } = state;
+  useEffect(() => dispatch({
+    type: SET_DRAWER_GROUPS,
+    groups
+  }), [groups]);
+
+  useEffect(() => {
+    const listItem = drawerLis.current[focusIndex];
+    if (!listItem) return;
+
+    const itemTop = listItem.offsetTop;
+    const itemBottom = itemTop + listItem.offsetHeight;
+    const list = listItem.parentElement;
+
+    if (list.scrollTop > itemTop) {
+      list.scrollTop = itemTop;
+    } else if (itemBottom > (list.scrollTop + list.clientHeight)) {
+      list.scrollTop = itemBottom - list.clientHeight;
+    }
+  }, [focusIndex, drawerLis, searchDiv]);
+
+  useEffect(() => {
+    setGroup(groups.find(group => group.title === searchText));
+  }, [searchText, groups, setGroup])
   
   return (
     <div 

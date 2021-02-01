@@ -48,6 +48,7 @@ export default function MultipleChoiceForm ({
   });
 
   const { title, answerOptionsAttributes } = formData;
+  const prevTitle = usePrevious(title);
   const oldAnswerOptions = usePrevious(answerOptionsAttributes);
   const filledOptions = answerOptionsAttributes.filter(option => option.body);
 
@@ -56,7 +57,7 @@ export default function MultipleChoiceForm ({
       receivedData.current = true;
       setFormData(initialFormData, true);
     }
-  }, [initialFormData])
+  }, [initialFormData, setFormData])
 
   useEffect(() => {
     if (error.field === 'answerOptionsAttributes') {
@@ -70,40 +71,41 @@ export default function MultipleChoiceForm ({
       }
     }
 
-  }, [answerOptionsAttributes]);
+  }, [answerOptionsAttributes, error, filledOptions, oldAnswerOptions]);
 
   useEffect(() => {
+    if (title === prevTitle) return;
     if (error.field === 'title') setError(nullError);
-  }, [title]);
+  }, [title, prevTitle, error]);
 
-  function handleTitle(e) {
+  const handleTitle = (e) => {
     setFormData({ title: e.target.value });
   }
 
-  function handleAnswerBody(e, idx) {
+  const handleAnswerBody = (e, idx) => {
     setFormData({ answerOptionsAttributes: { [idx]: { body: e.target.value } } });
   }
 
-  function toggleCorrect(idx) {
+  const toggleCorrect = (idx) => {
     setFormData(oldFormData => {
       const newCorrect = !oldFormData.answerOptionsAttributes[idx].correct;
       return { answerOptionsAttributes: { [idx]: { correct: newCorrect } } };
     });
   }
 
-  function deleteAnswerOption(idx) {
+  const deleteAnswerOption = (idx) => {
     setFormData(({ answerOptionsAttributes }) => {
       answerOptionsAttributes.splice(idx, 1);
     }, true);
   }
 
-  function addOption() {
+  const addOption = () => {
     setFormData(({ answerOptionsAttributes }) => {
       answerOptionsAttributes.push({ correct: false, body: '', _id: Math.random() });
     }, true);
   }
 
-  function handleSubmit(successCb) {
+  const handleSubmit = (successCb) => {
     if (!title) {
       setError(titleError);
     } else if (filledOptions.length === 0) {

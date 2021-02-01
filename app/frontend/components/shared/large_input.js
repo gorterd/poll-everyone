@@ -48,8 +48,6 @@ export default function LargeInput ({
     enterAnimation,
     exitAnimation
   }
-
-  console.log(text, value)
   
   return (
     <div {...classNames(

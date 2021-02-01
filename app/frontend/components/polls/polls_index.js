@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import GroupsIndexToolbar from './polls_index/toolbar';
 import MoveDrawer from './polls_index/move_drawer';
@@ -6,27 +6,30 @@ import GroupPollsIndex from './polls_index/group_polls_list';
 import { 
   stickyToolbarSelector 
 } from '../../util/hooks_selectors';
-import { useDelayedPrefetch, useToggleState } from '../../util/custom_hooks';
+import { useDelayedPrefetch, usePrevious, useToggleState } from '../../util/custom_hooks';
 import { fetchEditPoll, fetchHomeSplash, fetchPresentPoll } from '../lazy_load_index';
 import { usePollData } from '../../util/api/query_hooks';
 import { pollDataSelector } from '../../util/query_selectors';
 
 export default function GroupsIndex() {
-  useDelayedPrefetch(
-    fetchHomeSplash,
-    fetchEditPoll,
-    fetchPresentPoll
-  );
+  const prefetch = useCallback(() => {
+    fetchHomeSplash();
+    fetchEditPoll();
+    fetchPresentPoll();
+  }, []);
+
+  useDelayedPrefetch(prefetch);
 
   const [ moveDrawerVisible, toggleMoveDrawerVisible ] = useToggleState(false);
+  const previousDrawerVisibility = usePrevious(moveDrawerVisible);
   const stickyToolbar = useSelector(stickyToolbarSelector)
   const { data } = usePollData({ select: pollDataSelector });
 
   useEffect( () => {
-    if (moveDrawerVisible && stickyToolbar) {
+    if (moveDrawerVisible && !previousDrawerVisibility && stickyToolbar) {
       window.scrollTo({ top: 72, behavior: 'smooth' });
     }
-  }, [moveDrawerVisible]);
+  }, [moveDrawerVisible, previousDrawerVisibility, stickyToolbar]);
 
   return (
     <section className="polls-index">

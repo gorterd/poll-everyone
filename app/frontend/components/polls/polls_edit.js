@@ -25,10 +25,8 @@ export default function EditPoll () {
     refetchOnReconnect: false
   });
 
-  function submitPoll(poll) {
-    updatePoll({poll, pollId})
-      .then(() => history.goBack());
-  }
+  const submitPoll = poll => updatePoll({poll, pollId})
+    .then(() => history.goBack());
   
   return (
     <div className='edit-poll-form multiple-choice-form'>

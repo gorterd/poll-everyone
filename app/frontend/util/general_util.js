@@ -88,3 +88,12 @@ export function smoothScrollToY(y, {
   });
 }
 
+export function objMap(object, mapFn) {
+  const newEntries = Object.entries(object).map(mapFn);
+  return Object.fromEntries(newEntries);
+}
+
+export const hasTruthyValue = arrayOrObject => 
+  arrayOrObject instanceof Array
+    ? arrayOrObject.some(value => value)
+    : Object.values(arrayOrObject).some(value => value)

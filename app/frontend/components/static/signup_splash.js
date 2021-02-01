@@ -1,7 +1,7 @@
 import React from 'react';
 import {Link} from 'react-router-dom'
-import AttributedImage from '../../shared/attributed_image';
-import signupSplashImg from '../../../images/splash/signup-splash-01.png'
+import AttributedImage from '../shared/attributed_image';
+import signupSplashImg from '../../images/splash/signup-splash-01.png'
 
 const SignupSplash = () => {
   return (

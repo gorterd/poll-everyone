@@ -32,14 +32,15 @@ export default function GroupsIndexToolbar({ toggleMoveDrawer }) {
   
   useLayoutEffect(() => {
     if ('IntersectionObserver' in window) {
+      const div = intersectionDiv.current;
       const observer = new IntersectionObserver( event => {
         dispatch(setStickyToolbar(!event[0].isIntersecting));
       }, { threshold: 1 });
       
-      observer.observe(intersectionDiv.current);
-      return () => observer.unobserve(intersectionDiv.current);
+      observer.observe(div);
+      return () => observer.unobserve(div);
     }
-  }, [intersectionDiv])
+  }, [intersectionDiv, dispatch])
 
   function openNewGroupModal(){
     dispatch(openModal({
