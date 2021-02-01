@@ -63,16 +63,9 @@ export const [EditPoll, fetchEditPoll] = withLazy(
   )
 );
 
-export const [LoginFormContainer, fetchLoginFormContainer] = withLazy(
-  () => import(
-    /* webpackChunkName: "login-form-container" */
-    './session/login/login_container'
-  )
-);
-
 export const [LoginForm, fetchLoginForm] = withLazy(
   () => import(
-    /* webpackChunkName: "login-form" */
-    './session/login/new_login'
+    /* webpackChunkName: "login" */
+    './session/login'
   )
 );

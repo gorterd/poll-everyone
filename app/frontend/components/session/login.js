@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { useHistory, Link } from 'react-router-dom';
-import LoginInput from './login_input';
-import { useTextInput } from '../../../util/custom_hooks';
-import { checkIfUserExists, useLogin } from '../../../util/api/mutation_hooks';
+import LoginInput from './login/login_input';
+import { useTextInput } from '../../util/custom_hooks';
+import { checkIfUserExists, useLogin } from '../../util/api/mutation_hooks';
 import { useDispatch } from 'react-redux';
-import { receiveCurrentUser } from '../../../store/actions/session_actions';
+import { receiveCurrentUser } from '../../store/actions/session_actions';
 
-export default function LoginForm () {
+export default function Login () {
   const dispatch = useDispatch();
   const history = useHistory();
   const { mutateAsync: login } = useLogin();
