@@ -19,7 +19,7 @@ const answerOptionsAttributesError = {
 
 const CorrectButton = ({ selected, idx, toggleCorrect }) => (
   <span
-    className={`correct-button button` + (selected ? ' selected' : '')}
+    className={'correct-button button' + (selected ? ' selected' : '')}
     onClick={() => toggleCorrect(idx)}
   >
     <i className="fas fa-check"></i>
@@ -55,7 +55,7 @@ export default function MultipleChoiceForm ({
     if (initialFormData && !receivedData.current) {
       receivedData.current = true;
       setFormData(initialFormData, true);
-    };
+    }
   }, [initialFormData])
 
   useEffect(() => {

@@ -21,7 +21,7 @@ export default function GroupHeader({
     </>
   );
 
-  const activitiesCount = `${pollsCount} activit${(pollsCount == 1) ? "y" : "ies"}`
+  const activitiesCount = `${pollsCount} activit${(pollsCount == 1) ? 'y' : 'ies'}`
 
   function handleCheckbox(e) {
     if (e.target.checked) {
@@ -37,8 +37,8 @@ export default function GroupHeader({
       <div className="group-row-left">
         <input type="checkbox" onChange={handleCheckbox} onClick={e => e.stopPropagation()} checked={checked}/>
         <span 
-          className={"drawer-chevron " + (drawerVisible ? "open-drawer-chevron" : "")}
-          ><i className="fas fa-chevron-right"></i>
+          className={'drawer-chevron ' + (drawerVisible ? 'open-drawer-chevron' : '')}
+        ><i className="fas fa-chevron-right"></i>
         </span>
         <span className="group-header-title">{title}</span>
       </div>

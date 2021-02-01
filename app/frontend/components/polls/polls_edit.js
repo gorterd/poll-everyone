@@ -68,4 +68,4 @@ export default function EditPoll () {
       />
     </div>
   )
-};
+}

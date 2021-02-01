@@ -1,4 +1,4 @@
-import { withLazy, withLazyPrefetch } from '../util/higher_order_components'
+import { withLazy } from '../util/higher_order_components'
 
 export const [ParticipantApp, fetchParticipantApp] = withLazy(
   () => import(
@@ -63,7 +63,7 @@ export const [EditPoll, fetchEditPoll] = withLazy(
   )
 );
 
-export const [LoginForm, fetchLoginForm] = withLazy(
+export const [Login, fetchLogin] = withLazy(
   () => import(
     /* webpackChunkName: "login" */
     './session/login'

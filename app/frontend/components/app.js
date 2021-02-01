@@ -5,7 +5,6 @@ import { ReactQueryDevtools } from 'react-query/devtools'
 
 import { AuthRoute, ProtectedRoute } from './wrappers/routes';
 import { Modal } from './shared/modal';
-import ReportsIndex from './reports/reports_index'
 import DOMUtilities from './dom_utilities';
 import { useStateValue } from '../util/custom_hooks';
 import { componentDoneLoading, componentLoading } from '../store/actions/ui_actions';
@@ -14,8 +13,7 @@ import {
   Navbar,
   Footer,
   EditPoll,
-  LoginFormContainer,
-  LoginForm,
+  Login,
   ParticipantApp,
   HomeSplash,
   SignupSplash,
@@ -60,8 +58,7 @@ export default function App() {
                 </Route>
 
                 <AuthRoute path='/login'>
-                  <LoginForm />
-                  {/* <LoginFormContainer /> */}
+                  <Login />
                 </AuthRoute>
 
                 <AuthRoute path='/signup/splash'>
