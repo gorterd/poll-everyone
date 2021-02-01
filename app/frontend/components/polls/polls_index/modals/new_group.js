@@ -36,4 +36,4 @@ export default function NewGroupModal () {
   }
 
   return <SmallModal {...modalProps} />
-};
+}

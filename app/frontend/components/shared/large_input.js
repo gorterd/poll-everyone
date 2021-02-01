@@ -29,18 +29,18 @@ export default function LargeInput ({
   );
 
   const enterAnimation = {
-    animationName: "slide-up-and-in",
-    animationDuration: "200ms",
+    animationName: 'slide-up-and-in',
+    animationDuration: '200ms',
     animationIterationCount: 1,
-    animationTimingFunction: "ease-out",
-    animationFillMode: "forwards",
+    animationTimingFunction: 'ease-out',
+    animationFillMode: 'forwards',
   };
 
   const exitAnimation = {
-    animationName: "slide-down-and-out",
-    animationDuration: "200ms",
+    animationName: 'slide-down-and-out',
+    animationDuration: '200ms',
     animationIterationCount: 1,
-    animationFillMode: "forwards",
+    animationFillMode: 'forwards',
   };
 
   const animationProps = {
@@ -85,7 +85,7 @@ export default function LargeInput ({
             <Animated
               {...animationProps}
               renderCondition={showPlaceholder}
-              noFirstAnimation={!Boolean(value)}
+              noFirstAnimation={!value}
             >
               <div {...classNames('placeholder-input-label')}>
                 {text}

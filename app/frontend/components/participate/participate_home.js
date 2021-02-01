@@ -1,7 +1,7 @@
 import React from 'react';
 import { withRouter, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { checkIfUserExists, resetSessionErrors } from "../../store/actions/session_actions";
+import { checkIfUserExists, resetSessionErrors } from '../../store/actions/session_actions';
 import { fetchRecentPresentations } from '../../store/actions/presentation_actions';
 import logoAltImg from '../../images/nav/logo-alt.png';
 
@@ -14,7 +14,7 @@ class ParticipantHome extends React.Component {
 
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
-  };
+  }
 
   componentDidMount(){
     const { currentType, currentId, resetSessionErrors, fetchRecentPresentations } = this.props;
@@ -53,8 +53,8 @@ class ParticipantHome extends React.Component {
         <div className='participant-join-form-container'>
           <h2>Join presentation</h2>
           <form onSubmit={this.handleSubmit}>
-            <div className={`participant-join-input-container ${(errorMsg ? "input-error" : "")}`}>
-              <div className={"participant-join-input-wrapper"}>
+            <div className={`participant-join-input-container ${(errorMsg ? 'input-error' : '')}`}>
+              <div className={'participant-join-input-wrapper'}>
                 <span>#/participate/</span>
                 <input
                   autoFocus
@@ -82,7 +82,7 @@ class ParticipantHome extends React.Component {
       </div>
     )
   }
-};
+}
 
 const mapState = state => {
   return {

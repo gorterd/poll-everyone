@@ -15,7 +15,7 @@ export default function DropdownWrapper({
   }] = useDropdown();
 
   return (
-    <div className={"dropdown-container " + containerClass} ref={dropdownRef}>
+    <div className={'dropdown-container ' + containerClass} ref={dropdownRef}>
       <div onClick={toggleDropdown} className='dropdown-button'> 
         <Button {...buttonProps} />
       </div>

@@ -16,10 +16,10 @@ const SignupSplash = () => {
 
         <AttributedImage
           src={signupSplashImg}
-          alt={"Business Presentation"}
+          alt={'Business Presentation'}
           imgClass="signup-splash-img"
           iconClass="icon-light"
-          >
+        >
           <a href="https://stories.freepik.com/illustration/on-the-office/rafiki">Illustration vector created by stories - stories.freepik.com</a>
         </AttributedImage>
         

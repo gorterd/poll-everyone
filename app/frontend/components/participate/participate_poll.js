@@ -28,7 +28,7 @@ class ParticipantPoll extends React.Component {
     this.receiveBroadcast = this.receiveBroadcast.bind(this);
     this.clickAnswerOption = this.clickAnswerOption.bind(this);
     this.clearLastResponse = this.clearLastResponse.bind(this);
-  };
+  }
 
   componentDidMount() {
     const { currentType, currentId } = this.props.session;
@@ -43,8 +43,6 @@ class ParticipantPoll extends React.Component {
 
 
   _subscribe(presenterId, participantId) {
-    const { ownResponses } = this.props;
-
     const subscription = cableConsumer.subscriptions.create(
       { channel: 'PresentationChannel', presenterId },
       {
@@ -54,15 +52,15 @@ class ParticipantPoll extends React.Component {
 
         respond: function(answerOptionId) {
           const response = { answerOptionId, participantId }
-          return this.perform("respond", response);
+          return this.perform('respond', response);
         },
 
         clear: function(id) {
-          return this.perform("clear", { id })
+          return this.perform('clear', { id })
         },
 
         text: function(str) {
-          return this.perform("text", str)
+          return this.perform('text', str)
         }
       }
     );
@@ -181,7 +179,7 @@ class ParticipantPoll extends React.Component {
           <AttributedImage
             id="participant-waiting-img"
             src={participantWaitingImg}
-            alt={"preparing presentation"}
+            alt={'preparing presentation'}
             iconClass="icon-light"
           >
             <a href="https://stories.freepik.com/illustration/work-time/amico#FF725EFF">Illustration vector created by stories - stories.freepik.com</a>
@@ -208,7 +206,7 @@ class ParticipantPoll extends React.Component {
       </div>
     )
   }
-};
+}
 
 const mapState = state => {
   const { activePoll, ownResponses, activeAnswerOptions } = participantPollData(state);

@@ -8,7 +8,7 @@ import { concatIfNew } from '../../../util/general_util';
 
 export default (state = {}, action) => {
   Object.freeze(state);
-  let oldAnswerOption, newAnswerOption;
+
   switch (action.type) {
     case RECEIVE_POLL:
       return Object.assign({}, state, action.data.answerOptions );
@@ -16,23 +16,25 @@ export default (state = {}, action) => {
       return Object.assign({}, state, action.data.answerOptions );
     case RECEIVE_FULL_POLL:
       return Object.assign({}, state, action.data.answerOptions );
-    case RECEIVE_RESPONSE:
-      newAnswerOption = state[action.response.answerOptionId] ||
+    case RECEIVE_RESPONSE: {
+      const newAnswerOption = state[action.response.answerOptionId] ||
         ({ [action.response.answerOptionId]: {} });
 
       newAnswerOption.responseIds = concatIfNew(newAnswerOption.responseIds, action.response.id);
       return Object.assign({}, state, { [newAnswerOption.id] : newAnswerOption } );
-    case CLEAR_RESPONSE:
-      newAnswerOption = Array.from( state[action.response.answerOptionId] ) ||
+    }
+    case CLEAR_RESPONSE: {
+      const newAnswerOption = Array.from( state[action.response.answerOptionId] ) ||
         ({ [action.response.answerOptionId]: {} });
 
       const responseIds = newAnswerOption.responseIds;
       if (responseIds) {
-        newResponseIds = Array.from(responseIds);
+        let newResponseIds = Array.from(responseIds);
         newResponseIds.splice( responseIds.indexOf(action.response.id), 1 );
         newAnswerOption.responseIds = newResponseIds;
       }
       return Object.assign({}, state, { [newAnswerOption.id]: newAnswerOption });
+    }
     default:
       return state;
   }

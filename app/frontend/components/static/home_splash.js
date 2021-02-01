@@ -15,10 +15,10 @@ const HomeSplash = () => {
         <div className="first-pane-sub first-pane-image">
           <AttributedImage 
             src={homeSplashImg} 
-            alt={"Woman Conducting a Survey"} 
+            alt={'Woman Conducting a Survey'} 
             imgClass="home-splash-img"
             iconClass="icon-grey"
-            >
+          >
             <a href="https://www.freepik.com/free-photos-vectors/illustration">Illustration vector created by stories - www.freepik.com</a>
           </AttributedImage>
         </div>

@@ -1,7 +1,7 @@
 import React from 'react';
 
 const SignupInput = 
-({ type, field, text, formData, handleInput, validateInput, displayError, errorMessages, id }) => {
+({ type, field, text, formData, handleInput, validateInput, displayError, errorMessages }) => {
  
   const error = displayError[field] ? (
     <div className="signup-error">
@@ -14,7 +14,7 @@ const SignupInput =
   return (type === 'checkbox') ? (
     <div className="signup-input-container">
       <input
-        className={"signup-input" + (displayError[field] ? " signup-input-error" : "")}
+        className={'signup-input' + (displayError[field] ? ' signup-input-error' : '')}
         type={type}
         value={formData[field]}
         onChange={handleInput(field)}
@@ -25,7 +25,7 @@ const SignupInput =
   ): (
     <div className="signup-input-container">
       <input
-        className={"signup-input" + (displayError[field] ? " signup-input-error" : "")}
+        className={'signup-input' + (displayError[field] ? ' signup-input-error' : '')}
         type={type}
         placeholder={text}
         value={formData[field]}

@@ -27,44 +27,44 @@ export const checkIfUserExists = (usernameOrEmail) => (
 )
 
 export const useLogin = () => {
-  return useSession( user => 
+  return useSession( user => (
     ajax({
       method: 'POST',
       url: '/api/session',
       data: { user }
-    }), {
-      onSuccess: (queryClient, user) => {
-        queryClient.setQueryData('currentUser', () => user);
-      }
+    })
+  ), {
+    onSuccess: (queryClient, user) => {
+      queryClient.setQueryData('currentUser', () => user);
     }
-  )
+  })
 }
 
 export const useSignup = () => {
-  return useSession( user => 
+  return useSession( user => (
     ajax({
       method: 'POST',
       url: '/api/users',
       data: { user }
-    }), {
-      onSuccess: (queryClient, user) => {
-        queryClient.setQueryData('currentUser', () => user);
-      }
+    })
+  ), {
+    onSuccess: (queryClient, user) => {
+      queryClient.setQueryData('currentUser', () => user);
     }
-  )
+  });
 }
 
 export const useLogout = () => {
-  return useSession( () => 
+  return useSession( () => (
     ajax({
       method: 'DELETE',
       url: '/api/session',
-    }), {
-      onSuccess: (queryClient) => {
-        queryClient.setQueryData('currentUser', () => ({}));
-      }
+    })
+  ), {
+    onSuccess: (queryClient) => {
+      queryClient.setQueryData('currentUser', () => ({}));
     }
-  )
+  })
 }
 
 const useMutatePoll = (mutateFn, options = {}) => {
@@ -114,28 +114,29 @@ export const useDuplicatePoll = () => {
 
 export const useToggleActive = () => {
 
-  return useMutatePoll( pollId => 
+  return useMutatePoll( pollId => (
     ajax({
       method: 'PATCH',
       url: `/api/polls/${pollId}/toggle_activation`,
-    }), {
-      onMutate: (queryClient, pollId) => {
-        queryClient.setQueryData(['polls', pollId], oldData => {
-          if (!oldData) return;
-          const { poll } = oldData;
-          const newPoll = { ...poll, active: !poll.active }
-          return { ...oldData, poll: newPoll }
-        })
-        queryClient.setQueryData('polls', oldData => {
-          if (!oldData) return;
-          const { polls } = oldData;
-          const poll = polls[pollId];
-          const newPoll = { ...poll, active: !poll.active }
-          return { ...oldData, polls: { ...polls, [pollId]: newPoll } }
-        })
-      }
+    })
+  ), {
+    onMutate: (queryClient, pollId) => {
+      queryClient.setQueryData(['polls', pollId], oldData => {
+        if (!oldData) return;
+        const { poll } = oldData;
+        const newPoll = { ...poll, active: !poll.active }
+        return { ...oldData, poll: newPoll }
+      })
+      
+      queryClient.setQueryData('polls', oldData => {
+        if (!oldData) return;
+        const { polls } = oldData;
+        const poll = polls[pollId];
+        const newPoll = { ...poll, active: !poll.active }
+        return { ...oldData, polls: { ...polls, [pollId]: newPoll } }
+      })
     }
-  );
+  });
 }
 
 const useMutateGroup = (mutateFn, options = {}) => {
@@ -179,7 +180,7 @@ export const useBatchDestroy = () => {
   return useMutateGroup( selections => 
     ajax({
       method: 'DELETE',
-      url: `/api/groups/batch_destroy`,
+      url: '/api/groups/batch_destroy',
       data: selections
     })
   );

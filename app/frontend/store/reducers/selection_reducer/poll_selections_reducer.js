@@ -29,7 +29,7 @@ export default (state = _nullSelection, action) => {
       newPollIds = state.pollIds.filter( id => !action.data.pollIds.includes(id) )
       groupIdx = state.groupIds.indexOf(action.data.groupId);
       newGroupIds = Array.from(state.groupIds);
-      if ( groupIdx >= 0 ) { newGroupIds.splice(groupIdx, 1) };
+      if ( groupIdx >= 0 ) { newGroupIds.splice(groupIdx, 1) }
       
       return { groupIds: newGroupIds, pollIds: newPollIds };
 
@@ -40,18 +40,20 @@ export default (state = _nullSelection, action) => {
       newGroupIds = ( 
         action.data.group.pollIds.every( id => newPollIds.includes(id) ) 
         && !state.groupIds.includes(action.data.group.id)
-        ) ? state.groupIds.concat(action.data.group.id) : state.groupIds;
+      ) 
+        ? state.groupIds.concat(action.data.group.id) 
+        : state.groupIds;
 
       return { groupIds: newGroupIds, pollIds: newPollIds };
 
     case CLEAR_POLL_SELECTION:
       pollIdx = state.pollIds.indexOf(action.data.pollId);
       newPollIds = Array.from(state.pollIds);
-      if ( pollIdx >= 0 ) { newPollIds.splice(pollIdx, 1) };
+      if ( pollIdx >= 0 ) { newPollIds.splice(pollIdx, 1) }
 
       groupIdx = state.groupIds.indexOf(action.data.group.id);
       newGroupIds = Array.from(state.groupIds);
-      if (groupIdx >= 0) { newGroupIds.splice(groupIdx, 1) };
+      if (groupIdx >= 0) { newGroupIds.splice(groupIdx, 1) }
       
       return { groupIds: newGroupIds, pollIds: newPollIds };
 

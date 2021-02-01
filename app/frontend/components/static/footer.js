@@ -7,34 +7,34 @@ const Footer = () => {
   if (componentLoading) return null;
 
   const FOOTER_LINKS = {
-    "Languages": [
-      "Ruby",
-      "JavaScript",
-      "Java",
-      "SQL",
-      "HTML",
-      "CSS",
+    'Languages': [
+      'Ruby',
+      'JavaScript',
+      'Java',
+      'SQL',
+      'HTML',
+      'CSS',
     ],
     
-    "Frameworks & Libraries": [
-      "Rails",
-      "React",
-      "Redux",
-      "JQuery",
+    'Frameworks & Libraries': [
+      'Rails',
+      'React',
+      'Redux',
+      'JQuery',
     ],
     
-    "Technologies & Tools": [
-      "Git",
-      "Heroku",
-      "Google Apps Script",
-      "Bash",
-      "RSpec",
+    'Technologies & Tools': [
+      'Git',
+      'Heroku',
+      'Google Apps Script',
+      'Bash',
+      'RSpec',
     ],
     
-    "Knowledge": [
-      "Data Structures",
-      "RESTful Design",
-      "TDD",
+    'Knowledge': [
+      'Data Structures',
+      'RESTful Design',
+      'TDD',
     ],
   };
 

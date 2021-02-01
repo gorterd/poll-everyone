@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   BarChart,
   XAxis,
@@ -26,9 +26,9 @@ export default function PresentationGraph({ formattedData, graphDimensions, isAn
   const marginPercentage = .25 + Math.min((maxBody.length / 30) * .15, .15);
   const leftMargin = graphWidth * marginPercentage;
 
-  const yAxisLine = { strokeWidth: 3, stroke: "#6b99c7" };
-  const barFill = "#6b99c7";
-  const fontFamily = "sans-serif";
+  const yAxisLine = { strokeWidth: 3, stroke: '#6b99c7' };
+  const barFill = '#6b99c7';
+  const fontFamily = 'sans-serif';
 
   const ctx = document.createElement('canvas').getContext('2d'); 
   const { fontSize, lineHeight } = setFontSizeAndLineHeight();
@@ -103,14 +103,15 @@ export default function PresentationGraph({ formattedData, graphDimensions, isAn
         {generateText(lines, props)}
 
         { percent 
-        ? <rect
+          ? <rect
             x={ x + 12 } 
             y={ y - (rectHeight / 2) }
             width={ rectHeight * .87 }
             height={ rectHeight }
-            fill={"#b5cce3"}
-        ></rect>
-        : null }
+            fill={'#b5cce3'}
+          ></rect>
+          : null 
+        }
 
         <text
           x={ x + 14 } 
@@ -144,7 +145,7 @@ export default function PresentationGraph({ formattedData, graphDimensions, isAn
           dataKey="percentString"
           position="insideRight"
           formatter={v => v === '0%' ? '' : v}
-          style={{ fontSize: barFontSize, fill: "#ffffff" }}
+          style={{ fontSize: barFontSize, fill: '#ffffff' }}
         />
       </Bar>
       <YAxis

@@ -1,5 +1,5 @@
 import React from 'react';
-import { validEmail, validName, validPassword } from "../../../util/validation_util";
+import { validEmail, validName, validPassword } from '../../../util/validation_util';
 import SignupInput from './signup_input';
 import AttributedImage from '../../shared/attributed_image';
 import signupSplashImg from '../../../images/splash/signup-splash-02.png'
@@ -37,7 +37,7 @@ class SignupForm extends React.Component {
     this.handleInput = this.handleInput.bind(this)
     this.validateInput = this.validateInput.bind(this)
     this.validateForm = this.validateForm.bind(this)
-  };
+  }
 
   componentDidMount() {
     this.props.resetSessionErrors();
@@ -59,7 +59,7 @@ class SignupForm extends React.Component {
       const value = (field === 'terms') ? e.target.checked : e.target.value;
       const nextFormData = Object.assign({}, this.state.formData, { [field]: value });
       this.setState( state => {
-        if ( state.displayError[field] ) { this._validate(field, value) };
+        if ( state.displayError[field] ) { this._validate(field, value) }
         return { formData: nextFormData };
       })
     }
@@ -69,14 +69,14 @@ class SignupForm extends React.Component {
     const isValid = this.validations[field](value);
     
     
-    this.setState( (state, props) => {
+    this.setState( state => {
       const newDisplayError = Object.assign({}, state.displayError, {[field]: !isValid});
       return {displayError: newDisplayError};
     }, (() => {
       const {submitDisabled, displayError} = this.state;
       if (submitDisabled && !Object.values(displayError).some(bool => bool)) {
-          this.setState({ submitDisabled: false })
-      };
+        this.setState({ submitDisabled: false })
+      }
     }));
 
     return isValid;
@@ -160,7 +160,7 @@ class SignupForm extends React.Component {
                 type='submit' 
                 className="button button-blue"
                 disabled={submitDisabled || sessionIsLoading}
-              >{ sessionIsLoading ? "Signing up..." : "Sign up" }</button>
+              >{ sessionIsLoading ? 'Signing up...' : 'Sign up' }</button>
 
             </form>
 
@@ -170,7 +170,7 @@ class SignupForm extends React.Component {
           <AttributedImage
             id="signup-form-img"
             src={signupSplashImg}
-            alt={"Person Looking at Charts"}
+            alt={'Person Looking at Charts'}
             imgClass="signup-splash-img"
             iconClass="icon-dark"
           >
@@ -182,7 +182,7 @@ class SignupForm extends React.Component {
 
     
   }
-};
+}
 
 export default SignupForm;
 

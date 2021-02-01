@@ -3,12 +3,12 @@ export const pollDataOrderedGroupsSelector = data =>
 
 export const pollDataSelector = data => 
   pollDataOrderedGroupsSelector(data)
-  .map( group => ({
-    group,
-    polls: group.pollIds
-      .map(id => data.polls[id])
-      .sort(ordSort)
-  }));
+    .map( group => ({
+      group,
+      polls: group.pollIds
+        .map(id => data.polls[id])
+        .sort(ordSort)
+    }));
 
 export const presenterPollDataSelector = data => {
   if (!data) return {};
@@ -23,7 +23,7 @@ export const presenterPollDataSelector = data => {
         responses: optionResponses(option, Object.values(responses))
       });
     });
-  };
+  }
 
   return { poll, fullAnswerOptions };
 }
@@ -31,19 +31,6 @@ export const presenterPollDataSelector = data => {
 export const orderedAnswerOptionsSelector = answerOptions => {
   return Object.values(answerOptions).sort(ordSort);
 }
-
-// export const orderedGroupsSelector = groups => {
-//   return Object.values(groups).sort(ordSort);
-// }
-
-// export const orderedGroupPollsSelector = groupId => state => {
-//   const { groups, polls } = state.entities;
-//   const group = groups[groupId];
-//   const pollIds = group?.pollIds;
-//   return pollIds && Object.values(polls)
-//     .filter(poll => pollIds.includes(poll.id))
-//     .sort(ordSort);
-// }
 
 const ordSort = (a, b) => Math.sign(a.ord - b.ord);
 

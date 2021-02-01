@@ -1,7 +1,7 @@
-import { merge } from "lodash";
-import { useEffect, useRef, useState, useLayoutEffect, useCallback } from "react";
-import { useSelector } from "react-redux";
-import { singleValueSelector } from "./hooks_selectors";
+import { merge } from 'lodash';
+import { useEffect, useRef, useState, useLayoutEffect, useCallback } from 'react';
+import { useSelector } from 'react-redux';
+import { singleValueSelector } from './hooks_selectors';
 
 // from react docs
 export function usePrevious(value) {
@@ -55,6 +55,7 @@ export function useDelayedPrefetch(...fetchCbs) {
             fetch();
           }
         }, 100);
+      // eslint-disable-next-line no-fallthrough
       case TIMEOUT:
         ref.current.value = componentLoading;
         break;

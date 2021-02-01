@@ -29,7 +29,7 @@ export default function GroupSearch({ setGroup, focusOnTab, groups, placeholderT
           focusIndex: null,
           ...action.payload,
         };
-      case KEY_MOVE:
+      case KEY_MOVE: {
         const { dir, defaultIndex } = action;
         const { focusIndex, drawerGroups } = state;
 
@@ -39,10 +39,11 @@ export default function GroupSearch({ setGroup, focusOnTab, groups, placeholderT
 
         const searchText = drawerGroups[newFocusIndex]?.title || '';
         return { ...state, focusIndex: newFocusIndex, searchText };
+      }
       case SET_DRAWER_GROUPS:
         return { ...state, drawerGroups: action.groups };
       default:
-        return new Error("Action type doesn't exist");
+        return new Error('Action type doesn\'t exist');
     }
   }
 
@@ -140,6 +141,7 @@ export default function GroupSearch({ setGroup, focusOnTab, groups, placeholderT
           focusOnTab.disabled = false;
           focusOnTab.focus();
         }
+      // eslint-disable-next-line no-fallthrough
       case 'Escape':
       case 'Enter':
         e.stopPropagation();
@@ -194,4 +196,4 @@ export default function GroupSearch({ setGroup, focusOnTab, groups, placeholderT
       </ul>}
     </div>
   )
-};
+}

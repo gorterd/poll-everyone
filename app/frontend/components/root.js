@@ -6,13 +6,14 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 
 const queryClient = new QueryClient();
 
-export default ({ store }) => {
+export default function Root ({ store }) {
   return (
-  <Provider store={store} >
-    <QueryClientProvider client={queryClient}>
-      <HashRouter>
-        <App />
-      </HashRouter>
-    </QueryClientProvider>
-  </Provider>
-)};
+    <Provider store={store} >
+      <QueryClientProvider client={queryClient}>
+        <HashRouter>
+          <App />
+        </HashRouter>
+      </QueryClientProvider>
+    </Provider>
+  )
+}

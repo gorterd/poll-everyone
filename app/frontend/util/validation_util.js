@@ -1,4 +1,4 @@
-const VALID_EMAIL = /^[a-zA-Z0-9_\-\.]+@[a-zA-Z0-9\-]+\.[a-z]{2,}$/
+const VALID_EMAIL = /^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+\.[a-z]{2,}$/
 
 export const validPassword = password => {
   return password.length > 6;

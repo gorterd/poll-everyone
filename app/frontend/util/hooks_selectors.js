@@ -45,7 +45,7 @@ export const presenterPollDataSelector = pollId => state => {
         responses: optionResponses(option, Object.values(responses))
       });
     });
-  };
+  }
 
   return { poll, fullAnswerOptions };
 }

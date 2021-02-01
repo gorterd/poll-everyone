@@ -31,7 +31,7 @@ export default function GroupsIndexToolbar({ toggleMoveDrawer }) {
   const selectedGroupIds = selectedPolls.groupIds;
   
   useLayoutEffect(() => {
-    if ("IntersectionObserver" in window) {
+    if ('IntersectionObserver' in window) {
       const observer = new IntersectionObserver( event => {
         dispatch(setStickyToolbar(!event[0].isIntersecting));
       }, { threshold: 1 });
@@ -87,7 +87,7 @@ export default function GroupsIndexToolbar({ toggleMoveDrawer }) {
   let className = 'groups-index-toolbar';
   if (stickyToolbar) {
     className += ' sticky-toolbar'
-  };
+  }
   return (
     <>
       <div ref={intersectionDiv}></div>
@@ -116,4 +116,4 @@ export default function GroupsIndexToolbar({ toggleMoveDrawer }) {
       </div>
     </>
   );
-};
+}

@@ -26,7 +26,7 @@ export const updateGroup = (group) => {
 export const batchDestroy = selections => {
   return ajax({
     method: 'DELETE',
-    url: `/api/groups/batch_destroy`,
+    url: '/api/groups/batch_destroy',
     data: selections
   });
 }

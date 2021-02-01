@@ -2,7 +2,7 @@ import React from 'react';
 import { useHistory } from 'react-router-dom';
 import logoImgUrl from '../../images/nav/logo.png';
 
-export default ({ path, onClick }) => {
+export default function Logo ({ path, onClick }) {
   const history = useHistory();
   if (!onClick) onClick = () => history.push(path || '/');
 
@@ -12,4 +12,4 @@ export default ({ path, onClick }) => {
       <span>Poll Everyone</span>
     </button>
   );
-};
+}

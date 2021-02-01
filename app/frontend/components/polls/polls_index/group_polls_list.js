@@ -64,4 +64,4 @@ export default function GroupPollsIndex ({ group, polls }) {
       )}
     </div>
   );
-};
+}

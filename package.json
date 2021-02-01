@@ -33,6 +33,7 @@
     "@webpack-cli/serve": "^1.2.0",
     "eslint": "^7.19.0",
     "eslint-plugin-react": "^7.22.0",
+    "eslint-plugin-react-hooks": "^4.2.0",
     "redux-logger": "^3.0.6",
     "webpack-cli": "^4.3.0",
     "webpack-dev-server": "^3.11.2"
@@ -42,7 +43,7 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "postinstall": "bin/webpack",
+    "build": "bin/webpack",
     "webpack": "bin/webpack",
     "start": "bin/webpack-dev-server",
     "server": "bundle exec rails server"

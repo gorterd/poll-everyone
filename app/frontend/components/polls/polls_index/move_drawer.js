@@ -85,4 +85,4 @@ export default function MoveDrawer({ visible, toggleVisible }) {
       </div>
     </div>
   )
-};
+}

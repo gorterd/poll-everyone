@@ -10,9 +10,10 @@ export default (state = {}, action) => {
       return Object.assign({}, action.groups );
     case RECEIVE_GROUP:
       return { ...state, [action.group.id]: action.group };
-    case RECEIVE_POLL:
+    case RECEIVE_POLL: {
       const { id: pollId, groupId } = action.data.poll;
       return mergeIdIntoState(state, groupId, 'pollIds', pollId);
+    }
     default:
       return state;
   }

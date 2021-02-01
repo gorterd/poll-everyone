@@ -81,7 +81,7 @@ export function smoothScrollToY(y, {
         window.clearTimeout(asyncActivities.timeout);
         window.removeEventListener('scroll', asyncActivities.listener);
         window.setTimeout(() => resolve(true), pause);
-      };
+      }
     }
     
     window.addEventListener('scroll', asyncActivities.listener);

@@ -5,7 +5,8 @@ import rootReducer from './reducers/root_reducer';
 const MUTED_ACTIONS = ['SET_DROPDOWN', 'CLEAR_DROPDOWN'];
 const middleware = [thunk];
 
-if (process.env.NODE_ENV !== 'production') {
+if (window.process.env.NODE_ENV !== 'production') {
+  // eslint-disable-next-line no-undef
   const { createLogger } = require('redux-logger');
   const logger = createLogger({
     collapsed: (getState, action, logEntry) => !logEntry.error,

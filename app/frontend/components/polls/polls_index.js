@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import GroupsIndexToolbar from './polls_index/toolbar';
 import MoveDrawer from './polls_index/move_drawer';
@@ -24,7 +24,7 @@ export default function GroupsIndex() {
 
   useEffect( () => {
     if (moveDrawerVisible && stickyToolbar) {
-      window.scrollTo({ top: 72, behavior: "smooth" });
+      window.scrollTo({ top: 72, behavior: 'smooth' });
     }
   }, [moveDrawerVisible]);
 
@@ -53,4 +53,4 @@ export default function GroupsIndex() {
       </section>
     </section>
   );
-};
+}

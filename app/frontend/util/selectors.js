@@ -74,8 +74,8 @@ export const presenterPollData = (state, pollId) => {
     fullAnswerOptions = orderedAnswerOptions.map(option => {
       return Object.assign({}, option, { 
         responses: optionResponses(option, Object.values(responses)) });
-      });
-  };
+    });
+  }
 
   return { poll, fullAnswerOptions };
 }

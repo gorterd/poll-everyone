@@ -6,7 +6,7 @@ import {
 } from '../actions/ui_actions';
 
 const baseModal = {
-  type: "",
+  type: '',
   data: {},
   offset: 0,
   status: null,

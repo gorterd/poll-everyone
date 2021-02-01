@@ -44,7 +44,7 @@ export default function Login () {
   const otherUsernameProps = fullForm
     ? {
       readOnly: true,
-      tabIndex: "-1",
+      tabIndex: '-1',
       onFocus: () => {
         setError('');
         setPassword('');
