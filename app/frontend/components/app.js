@@ -28,7 +28,7 @@ const Fallback = ({ componentName }) => {
   useEffect(() => {
     dispatch(componentLoading(componentName))
     return () => dispatch(componentDoneLoading());
-  }, [])
+  }, [componentName, dispatch])
 
   return null;
 };
