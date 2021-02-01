@@ -1,40 +1,33 @@
 import React from 'react';
+import { useDropdown } from '../../util/custom_hooks';
+import { classNames } from '../../util/general_util';
 
-class AttributedImage extends React.Component {
-  constructor(props) {
-    super(props)
-    
-    this.state = { revealed: false }
-    this.reveal = this.reveal.bind(this)
-    this.hide = this.hide.bind(this)
-  };
+export default function AttributedImage ({
+  children,
+  imgClass,
+  iconClass,
+  ...rest
+}) {
+  const [ showing, ref, { toggleDropdown }] = useDropdown();
 
-  reveal(){
-    this.setState({revealed: !this.state.revealed});
-  }
-  
-  hide(e){
-    window.setTimeout( () => this.setState({revealed: false}), 10);
-  }
-
-  render() {
-    const { children, imgClass, iconClass, ...rest } = this.props;
-
-    return (
-      <div className="attributed-image-container">
-        <img className={"attributed-image " + imgClass} {...rest} />
-        <div className="attribution-container">
-          <button className="attribution-button" tabIndex="0"  onBlur={this.hide} onClick={this.reveal}>
-            <span className={"attribution-icon " + iconClass}><i className="fas fa-at"></i></span>
-          </button>
-          <div  className={"attribution-popup " + (this.state.revealed ? "" : "hidden")}>
-            {children}
-          </div>
+  return (
+    <div className="attributed-image-container">
+      <img {...classNames('attributed-image', imgClass)} {...rest} />
+      <div 
+        className="attribution-container"
+        ref={ref}
+        onClick={toggleDropdown}
+      >
+        <button className="attribution-button" tabIndex="0">
+          <span {...classNames('attribution-icon', iconClass)}>
+            <i className="fas fa-at"></i>
+          </span>
+        </button>
+        <div {...classNames('attribution-popup', [!showing, 'hidden'])}>
+          {children}
         </div>
       </div>
-    )
-  }
+    </div>
+  )
 };
-
-export default AttributedImage;
 

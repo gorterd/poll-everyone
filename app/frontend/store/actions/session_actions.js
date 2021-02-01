@@ -7,7 +7,7 @@ export const RESET_SESSION_ERRORS = 'RESET_SESSION_ERRORS';
 export const SESSION_LOADING = 'SESSION_LOADING';
 export const RESET_SESSION_LOADING = 'RESET_SESSION_LOADING';
 
-const receiveCurrentUser = user => {
+export const receiveCurrentUser = user => {
   return {
     type: RECEIVE_CURRENT_USER,
     user
@@ -55,8 +55,8 @@ export const signup = user => dispatch => {
         dispatch(receiveCurrentUser(user));
         dispatch(resetSessionLoading());
         dispatch(resetSessionErrors());
-      }, err => {
-        dispatch(receiveSessionErrors(err));
+      }, e => {
+        dispatch(receiveSessionErrors(e));
         dispatch(resetSessionLoading());
       }
     );
@@ -71,8 +71,8 @@ export const updateUser = user => dispatch => {
         dispatch(receiveCurrentUser(user));
         dispatch(resetSessionLoading());
         dispatch(resetSessionErrors());
-      }, err => {
-        dispatch(receiveSessionErrors(err));
+      }, e => {
+        dispatch(receiveSessionErrors(e));
         dispatch(resetSessionLoading());
       }
     );
@@ -87,10 +87,10 @@ export const login = user => dispatch => {
         dispatch(receiveCurrentUser(user));
         dispatch(resetSessionLoading());
         dispatch(resetSessionErrors());
-      }, err => {
-        dispatch(receiveSessionErrors(err));
+      }, e => {
+        dispatch(receiveSessionErrors(e));
         dispatch(resetSessionLoading());
-        return Promise.reject();
+        return Promise.reject(e);
       }
     );
 }
@@ -109,10 +109,10 @@ export const checkIfUserExists = usernameOrEmail => dispatch => {
         dispatch(resetSessionLoading());
         dispatch(resetSessionErrors());
         return true;
-      }, err => {
-        dispatch(receiveSessionErrors(err));
+      }, e => {
+        dispatch(receiveSessionErrors(e));
         dispatch(resetSessionLoading());
-        return false;
+        return Promise.reject(e);
       }
     );
 }

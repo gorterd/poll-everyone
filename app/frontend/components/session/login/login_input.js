@@ -1,40 +1,27 @@
-import React from 'react';
-import LargeInput from '../../shared/large-animated-input';
+import React, { useState } from 'react';
+import LargeInput from '../../shared/large_input';
 
-const PasswordButton = ({type, clickHandler}) => {
-  return (type === 'password') ? (
-    <span className='view-password-button' onClick={clickHandler}>
-      <i className="fas fa-eye"></i>
-    </span> ) : null;
+const PasswordButton = ({ onClick }) => (
+  <span className='view-password-button' onClick={onClick}>
+    <i className="fas fa-eye"></i>
+  </span>
+)
+
+export default function LoginInput({ type, ...rest }) {
+  const [ curType, setCurType ] = useState(type);
+  const toggleType = () => setCurType( 
+    curType === 'password' 
+      ? 'text'
+      : 'password'
+  )
+
+  return (
+    <LargeInput
+      klass='login-input-container'
+      type={curType}
+      rightSide={ type === 'password' && PasswordButton }
+      rightSideProps={{ onClick: toggleType }}
+      {...rest}
+    />
+  )
 }
-
-class LoginInput extends React.Component {
-    constructor(props){
-      super(props);
-      this.state = { curType: this.props.type };
-
-      this.togglePasswordVisible = this.togglePasswordVisible.bind(this);
-    }
-
-    togglePasswordVisible(){
-      const newType = ((this.state.curType === 'text') ? 'password' : 'text'); 
-      this.setState({curType: newType});
-    }
-
-    render(){
-      const { type, completed, ...rest } = this.props;
-
-      return (
-        <LargeInput 
-          klass='login-input-container' 
-          type={this.state.curType} 
-          rightSide={PasswordButton} 
-          rightSideProps={ { type: type, clickHandler: this.togglePasswordVisible} }
-          {...rest} 
-        />
-      );
-    }
-}
-
-export default LoginInput;
-

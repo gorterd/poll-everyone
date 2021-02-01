@@ -3,21 +3,21 @@ import { withLazy, withLazyPrefetch } from '../util/higher_order_components'
 export const [ParticipantApp, fetchParticipantApp] = withLazy(
   () => import(
     /* webpackChunkName: "participate" */
-    './participant/participant_app'
+    './participate/participate_app'
   )
 );
 
 export const [PresentPoll, fetchPresentPoll] = withLazy(
   () => import(
     /* webpackChunkName: "present" */
-    './polls/poll/present_poll'
+    './polls/polls_show'
   )
 );
 
 export const [HomeSplash, fetchHomeSplash] = withLazy(
   () => import(
     /* webpackChunkName: "home" */
-    './nav/home_splash'
+    './static/home_splash'
   )
 );
 
@@ -31,7 +31,7 @@ export const [SignupSplash, fetchSignupSplash] = withLazy(
 export const [GroupsIndex, fetchGroupsIndex] = withLazy(
   () => import(
     /* webpackChunkName: "polls" */
-    './polls/groups_index/groups_index'
+    './polls/polls_index'
   )
 );
 
@@ -45,27 +45,34 @@ export const [SignupFormContainer, fetchSignupFormContainer] = withLazy(
 export const [Navbar, fetchNavbar] = withLazy(
   () => import(
     /* webpackChunkName: "navbar" */
-    './nav/navbar/navbar'
+    './navbar/navbar'
   )
 );
 
 export const [Footer, fetchFooter] = withLazy(
   () => import(
     /* webpackChunkName: "footer" */
-    './nav/footer'
+    './static/footer'
   )
 );
 
 export const [EditPoll, fetchEditPoll] = withLazy(
   () => import(
     /* webpackChunkName: "edit-poll" */
-    './polls/poll/edit_poll'
+    './polls/polls_edit'
   )
 );
 
 export const [LoginFormContainer, fetchLoginFormContainer] = withLazy(
   () => import(
-    /* webpackChunkName: "login-form" */
+    /* webpackChunkName: "login-form-container" */
     './session/login/login_container'
+  )
+);
+
+export const [LoginForm, fetchLoginForm] = withLazy(
+  () => import(
+    /* webpackChunkName: "login-form" */
+    './session/login/new_login'
   )
 );

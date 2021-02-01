@@ -41,6 +41,7 @@ Rails.application.routes.draw do
       resources :groups, only: [:index, :create]
 
       collection do
+        get 'current'
         get 'presentation'
       end
     end

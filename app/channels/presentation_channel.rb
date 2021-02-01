@@ -23,7 +23,7 @@ class PresentationChannel < ApplicationCable::Channel
   end
 
   private
-
+  
   def response_json
     ApplicationController.render(
       :json,

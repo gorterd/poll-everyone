@@ -3,6 +3,70 @@ import { useDispatch } from 'react-redux';
 import { clearSelections } from '../../store/actions/selection_actions/poll_selection_actions';
 import ajax from './ajax';
 
+const useSession = (mutateFn, options = {}) => {
+  const queryClient = useQueryClient();
+
+  return useMutation(mutateFn, {
+    ...options,
+    onMutate: (...args) => {
+      options.onMutate?.(queryClient, ...args);
+    },
+    onSuccess: (...args) => {
+      options.onSuccess?.(queryClient, ...args);
+      queryClient.invalidateQueries('currentUser')
+    }
+  });
+}
+
+export const checkIfUserExists = (usernameOrEmail) => (
+  ajax({
+    method: 'GET',
+    url: '/api/session/exists',
+    data: { query: usernameOrEmail },
+  })
+)
+
+export const useLogin = () => {
+  return useSession( user => 
+    ajax({
+      method: 'POST',
+      url: '/api/session',
+      data: { user }
+    }), {
+      onSuccess: (queryClient, user) => {
+        queryClient.setQueryData('currentUser', () => user);
+      }
+    }
+  )
+}
+
+export const useSignup = () => {
+  return useSession( user => 
+    ajax({
+      method: 'POST',
+      url: '/api/users',
+      data: { user }
+    }), {
+      onSuccess: (queryClient, user) => {
+        queryClient.setQueryData('currentUser', () => user);
+      }
+    }
+  )
+}
+
+export const useLogout = () => {
+  return useSession( () => 
+    ajax({
+      method: 'DELETE',
+      url: '/api/session',
+    }), {
+      onSuccess: (queryClient) => {
+        queryClient.setQueryData('currentUser', () => ({}));
+      }
+    }
+  )
+}
+
 const useMutatePoll = (mutateFn, options = {}) => {
   const queryClient = useQueryClient();
 

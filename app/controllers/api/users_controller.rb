@@ -11,6 +11,11 @@ class Api::UsersController < ApplicationController
     render :show
   end
 
+  def current
+    @user = current_user
+    render :show
+  end
+
   def create
     @user = User.new(user_params)
     

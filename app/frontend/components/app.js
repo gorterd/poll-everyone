@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { Route, Switch } from 'react-router-dom';
 import { ReactQueryDevtools } from 'react-query/devtools'
 
-import { AuthRoute, ProtectedRoute } from './shared/wrappers/routes_util';
+import { AuthRoute, ProtectedRoute } from './wrappers/routes';
 import { Modal } from './shared/modal';
 import ReportsIndex from './reports/reports_index'
 import DOMUtilities from './dom_utilities';
@@ -15,6 +15,7 @@ import {
   Footer,
   EditPoll,
   LoginFormContainer,
+  LoginForm,
   ParticipantApp,
   HomeSplash,
   SignupSplash,
@@ -59,7 +60,8 @@ export default function App() {
                 </Route>
 
                 <AuthRoute path='/login'>
-                  <LoginFormContainer />
+                  <LoginForm />
+                  {/* <LoginFormContainer /> */}
                 </AuthRoute>
 
                 <AuthRoute path='/signup/splash'>

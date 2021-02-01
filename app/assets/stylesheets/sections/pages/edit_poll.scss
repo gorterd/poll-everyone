@@ -100,13 +100,13 @@
   .button-blue-alt {
     width: 130px;
     span { margin-left: 6px;}
-  }
-
-  button + span {
+    
+    & + span {
       margin-left: 15px;
       color: $brick-red;
       font-weight: 700;
     }
+  }
 }
 
 .edit-poll-form-right {

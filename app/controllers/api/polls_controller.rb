@@ -62,7 +62,7 @@ class Api::PollsController < ApplicationController
   end
   
   def update
-    if @poll.update(poll_params)
+    if @poll.update_and_replace_options(poll_params)
       broadcast_poll
       render :show
     else 
@@ -100,7 +100,7 @@ class Api::PollsController < ApplicationController
   def poll_params
     snake_params(:poll)
       .permit( :title, :poll_type, :locked, :allow_changes, :allow_anonymous, :num_responses_allowed,
-      answer_options_attributes: [:body, :ord, :correct, :id, :_destroy] )
+      answer_options_attributes: [:body, :ord, :correct, :id] )
   end
 
   def broadcast_poll

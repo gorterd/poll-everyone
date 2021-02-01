@@ -1,9 +1,9 @@
 import React from 'react';
 import { useSelector} from 'react-redux';
-import NewPoll from '../polls/modals/new_poll/new_poll';
-import NewGroupModal from '../polls/modals/new_group';
-import EditGroupModal from '../polls/modals/rename_group';
-import ConfirmMoveModal from '../polls/modals/confirm_move';
+import NewPoll from '../polls/polls_new';
+import NewGroupModal from '../polls/polls_index/modals/new_group';
+import EditGroupModal from '../polls/polls_index/modals/rename_group';
+import ConfirmMoveModal from '../polls/polls_index/modals/confirm_move';
 import { modalSelector } from '../../util/hooks_selectors';
 import { useDispatch } from 'react-redux';
 import { clearModal, clearStatus, exitModal } from '../../store/actions/ui_actions';

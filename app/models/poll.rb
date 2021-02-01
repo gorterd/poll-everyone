@@ -66,7 +66,16 @@ class Poll < ApplicationRecord
     new_poll
   end
 
-  #instance methods
+  def update_and_replace_options(new_attributes)
+    answer_options_attributes = new_attributes[:answer_options_attributes]
+    new_ids = answer_options_attributes.map { |opt| opt[:id] }.compact
+    
+    deleted_ids = answer_option_ids - new_ids
+    deletion_attributes = deleted_ids.map { |id| { _destroy: 1, id: id } }
+    answer_options_attributes.concat(deletion_attributes)
+    
+    update(new_attributes)
+  end
 
   def count_responses
     self.responses.count

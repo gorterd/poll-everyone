@@ -1,18 +1,15 @@
-import { useQuery } from 'react-query';
+import { useQuery, useQueryClient } from 'react-query';
 import { useSelector } from 'react-redux';
 import { currentUserIdSelector } from '../hooks_selectors';
 import ajax from './ajax';
 
-
-export const useCheckIfUserExists = (usernameOrEmail, options = {}) => {
-  return useQuery(['checkUser', usernameOrEmail], () =>
+export const useCurrentUser = (options = {}) => 
+  useQuery('currentUser', () =>
     ajax({
       method: 'GET',
-      url: '/api/session/exists',
-      data: { query: usernameOrEmail },
+      url: '/api/users/current'
     }), options
-  );
-}
+  )
 
 export const usePresentation = (type, id, username, options = {}) => {
   return useQuery(['presentation', { type, id, username }], () => 
@@ -49,7 +46,10 @@ export function usePollData(options = {}) {
   const currentId = useSelector(currentUserIdSelector);
   return useQuery('polls', 
     () => ajax({ url: `/api/users/${currentId}/groups` }),
-    options
+    {
+      initialData: { groups: {}, polls: {} },
+      ...options
+    }
   );
 }
 

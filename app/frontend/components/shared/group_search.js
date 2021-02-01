@@ -75,14 +75,7 @@ export default function GroupSearch({ setGroup, focusOnTab, groups, placeholderT
     }
   }, [state.focusIndex, drawerLis, searchDiv]);
 
-  // useEffect(() => {
-  //   if (searchDiv.current.getBoundingClientRect().top < 0) {
-  //     searchDiv.current.scrollIntoView({ block: 'start' });
-  //   } 
-  // }, [state.searchText, searchDiv]);
-
   useEffect(() => {
-    debugger
     setGroup(groups.find(group => group.title === state.searchText));
   }, [state.searchText, groups, setGroup])
 
@@ -107,6 +100,8 @@ export default function GroupSearch({ setGroup, focusOnTab, groups, placeholderT
 
   function handleSubmit(e) {
     e.preventDefault();
+    console.log(state.focusIndex)
+    if (state.focusIndex !== null) return;
     const chosenGroup = groups.find(textMatchesGroup(searchText));
     selectGroup(chosenGroup);
   }
@@ -132,7 +127,6 @@ export default function GroupSearch({ setGroup, focusOnTab, groups, placeholderT
 
   function handleKeyDown(e) {
     if (!dropdownShowing) return; // NEW
-
     switch (e.key) {
       case 'ArrowDown':
         e.preventDefault();
@@ -145,12 +139,10 @@ export default function GroupSearch({ setGroup, focusOnTab, groups, placeholderT
           e.preventDefault();
           focusOnTab.disabled = false;
           focusOnTab.focus();
-          hideDropdown(); // NEW
-          dispatch({ type: CLOSE_SEARCH });
         }
-        break;
       case 'Escape':
       case 'Enter':
+        e.stopPropagation();
         hideDropdown(); // NEW
         dispatch({ type: CLOSE_SEARCH });
     }  

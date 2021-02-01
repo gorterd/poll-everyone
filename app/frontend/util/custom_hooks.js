@@ -102,16 +102,16 @@ export function useToggleState(initVal) {
   return [ val, toggleVal ];
 }
 
-export function useTextInput(defaultVal) {
+export function useTextInput(defaultVal, props = {}) {
   const [value, setValue] = useState(defaultVal);
 
   const inputProps = {
-    type: 'text',
     onChange: event => setValue(event.target.value),
     value,
+    ...props
   }
 
-  return [value, inputProps];
+  return [value, inputProps, setValue];
 }
 
 export function useStateValue(propPath){
