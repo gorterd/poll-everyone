@@ -62,7 +62,7 @@ class Api::GroupsController < ApplicationController
     poll_ids = snake_params[:poll_ids].map(&:to_i)
 
     if Poll.move_polls(poll_ids, @group.id)
-      @groups = current_user.groups.includes(:polls)
+      @groups = current_user.groups.includes(polls: :responses)
       render :index
     else
       render json: ['Could not move polls'], status: 422
