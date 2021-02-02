@@ -88,10 +88,9 @@ export function smoothScrollToY(y, {
   })
 }
 
-export function objMap(object, mapFn) {
-  const newEntries = Object.entries(object).map(mapFn)
-  return Object.fromEntries(newEntries)
-}
+export const objMap = (object, mapFn) => Object.fromEntries(
+  Object.entries(object).map( ([key, val]) => [key, mapFn([key, val])] )
+)
 
 export const hasTruthyValue = arrayOrObject => 
   arrayOrObject instanceof Array

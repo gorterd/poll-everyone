@@ -45,7 +45,7 @@ export const [SignupFormContainer, fetchSignupFormContainer] = withLazy(
 export const [Signup, fetchSignup] = withLazy(
   () => import(
     /* webpackChunkName: "signup" */
-    './session/signup/new_signup'
+    './session/signup'
   )
 )
 

@@ -1,12 +1,12 @@
 import React, { useState } from 'react'
-import { validEmail, validName, validPassword } from '../../../util/validation_util'
-import SignupInput from './signup_input'
-import AttributedImage from '../../shared/attributed_image'
-import signupSplashImg from '../../../images/splash/signup-splash-02.png'
-import { useObjectState } from '../../../util/custom_hooks'
-import { useSignup } from '../../../util/api/mutation_hooks'
+import { validEmail, validName, validPassword } from '../../util/validation_util'
+import SignupInput from './signup/signup_input'
+import AttributedImage from '../shared/attributed_image'
+import signupSplashImg from '../../images/splash/signup-splash-02.png'
+import { useObjectState } from '../../util/custom_hooks'
+import { useSignup } from '../../util/api/mutation_hooks'
 import { useHistory } from 'react-router-dom'
-import { objMap, hasTruthyValue } from '../../../util/general_util'
+import { objMap, hasTruthyValue } from '../../util/general_util'
 
 const validations = {
   firstName: validName,
