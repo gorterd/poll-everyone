@@ -1,6 +1,6 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
-import { modalDataSelector } from '../../../../util/hooks_selectors'
+import { modalDataSelector } from '../../../../util/redux_selectors'
 import SmallModal from './polls_index_modal'
 
 export default function ConfirmMoveModal() {

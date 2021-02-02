@@ -2,16 +2,17 @@ import React from 'react'
 import { NavLink, useRouteMatch } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { exitModal } from '../../store/actions/ui_actions'
-import { loggedInSelector, modalSelector } from '../../util/hooks_selectors'
+import { modalSelector } from '../../util/redux_selectors'
 import Logo from '../static/logo'
 import AppNavTools from './app_nav_tools'
 import HomeNavTools from './home_nav_tools'
+import { useLoggedIn } from '../../hooks/api/query'
 
 export default function Navbar () {
   const dispatch = useDispatch()
   const homeMatch = useRouteMatch({ path: '/', exact: true })
   const appMatch = useRouteMatch(['/polls', '/reports'])
-  const loggedIn = useSelector(loggedInSelector)
+  const loggedIn = useLoggedIn()
   const modal = useSelector(modalSelector)
 
   let NavLinks, NavTools = [null, null]

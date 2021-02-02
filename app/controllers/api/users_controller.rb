@@ -13,7 +13,11 @@ class Api::UsersController < ApplicationController
 
   def current
     @user = current_user
-    render :show
+    if @user
+      render :show
+    else
+      render json: {}
+    end
   end
 
   def create

@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import LargeInput from '../../shared/large_input'
-import { useObjectState, usePrevious } from '../../../util/custom_hooks'
+import { useObjectState } from '../../../hooks/state'
+import { usePrevious } from '../../../hooks/general'
 
 const nullError = {
   field: null,

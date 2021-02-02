@@ -1,8 +1,8 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
-import { useDuplicatePoll, useToggleActive } from '../../../util/api/mutation_hooks'
-import { selectedPollsSelector } from '../../../util/hooks_selectors'
+import { useDuplicatePoll, useToggleActive } from '../../../hooks/api/mutation'
+import { selectedPollsSelector } from '../../../util/redux_selectors'
 
 export default function PollListItem({ poll, togglePollSelect }) {
   const POLL_ICONS = {

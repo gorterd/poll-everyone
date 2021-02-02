@@ -1,34 +1,32 @@
 import React, { useCallback } from 'react'
 import { Link, useHistory } from 'react-router-dom'
-import { useDispatch, useSelector } from 'react-redux'
-import { login, logout } from '../../store/actions/session_actions'
-import { loggedInSelector } from '../../util/hooks_selectors'
 import { fetchGroupsIndex, fetchLogin, fetchParticipantApp, fetchSignupSplash } from '../lazy_load_index'
-import { useDelayedPrefetch } from '../../util/custom_hooks'
+import { useDelayedPrefetch } from '../../hooks/effect'
+import { useLoggedIn } from '../../hooks/api/query'
+import { useLogin, useLogout } from '../../hooks/api/mutation'
 
 export default function HomeNavTools() {
-  const dispatch = useDispatch()
-  const loggedIn = useSelector(loggedInSelector)
+  const { mutateAsync: login } = useLogin()
+  const { mutate: logout } = useLogout()
+  const loggedIn = useLoggedIn()
   const history = useHistory()
 
   const prefetch = useCallback(() => {
     fetchGroupsIndex()
     fetchParticipantApp()
-
+    
     if (loggedIn) {
       fetchSignupSplash()
       fetchLogin()
     }
   }, [loggedIn])
-
+  
   useDelayedPrefetch(prefetch)
 
-  const loginDemoUser = () => {
-    dispatch(login({
-      usernameOrEmail: 'Simulation3845',
-      password: 'its_all_a_simulation'
-    })).then(() => history.push('/polls'))
-  }
+  const loginDemoUser = () => login({
+    usernameOrEmail: 'Simulation3845',
+    password: 'its_all_a_simulation'
+  }).then(() => history.push('/polls'))
 
   const tools = loggedIn
     ? [
@@ -40,7 +38,7 @@ export default function HomeNavTools() {
       <button 
         key='logout' 
         className="nav-tool" 
-        onClick={() => dispatch(logout())}
+        onClick={logout}
       >Log out</button>
     ]
     : [

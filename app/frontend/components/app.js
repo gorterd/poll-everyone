@@ -6,7 +6,7 @@ import { ReactQueryDevtools } from 'react-query/devtools'
 import { AuthRoute, ProtectedRoute } from './wrappers/routes'
 import { Modal } from './shared/modal'
 import DOMUtilities from './dom_utilities'
-import { useStateValue } from '../util/custom_hooks'
+import { useStateValue } from '../hooks/general'
 import { componentDoneLoading, componentLoading } from '../store/actions/ui_actions'
 
 import { 
@@ -17,7 +17,6 @@ import {
   ParticipantApp,
   HomeSplash,
   SignupSplash,
-  // SignupFormContainer,
   Signup,
   GroupsIndex,
   PresentPoll
@@ -37,7 +36,7 @@ const Fallback = ({ componentName }) => {
 export default function App() {
   const scrollY = useStateValue('ui scrollY')
   const modalType = useStateValue('modal type')
-  
+
   return (
     <section
       className={'app' + (modalType ? ' freeze-scroll' : '')}

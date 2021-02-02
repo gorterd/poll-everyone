@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
-import { usePoll } from '../../util/api/query_hooks'
-import { useUpdatePoll } from '../../util/api/mutation_hooks'
+import { usePoll } from '../../hooks/api/query'
+import { useUpdatePoll } from '../../hooks/api/mutation'
 import { orderedAnswerOptionsSelector } from '../../util/query_selectors'
 import MultipleChoiceForm from './forms/multiple_choice'
 

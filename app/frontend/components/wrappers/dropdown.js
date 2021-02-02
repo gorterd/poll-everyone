@@ -1,5 +1,5 @@
 import React from 'react'
-import { useDropdown } from '../../util/custom_hooks'
+import { useDropdown } from '../../hooks/ui'
 
 export default function DropdownWrapper({
   button: Button,

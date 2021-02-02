@@ -1,5 +1,5 @@
 import React from 'react'
-import { useStateValue } from '../../util/custom_hooks'
+import { useStateValue } from '../../hooks/general'
 import Logo from './logo'
 
 const Footer = () => {

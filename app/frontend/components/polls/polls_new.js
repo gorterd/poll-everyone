@@ -5,8 +5,8 @@ import { exitModal } from '../../store/actions/ui_actions'
 import GroupSearch from '../shared/group_search'
 import multipleChoiceOptionImg from '../../images/icons/multiple-choice-option.png'
 import { pollDataOrderedGroupsSelector } from '../../util/query_selectors'
-import { useCreatePoll } from '../../util/api/mutation_hooks'
-import { useCachedPollData } from '../../util/api/query_hooks'
+import { useCreatePoll } from '../../hooks/api/mutation'
+import { useCachedPollData } from '../../hooks/api/cache'
 import { classNames } from '../../util/general_util'
 
 const forms = {

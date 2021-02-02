@@ -1,10 +1,10 @@
 import React from 'react'
-import { useSelector } from 'react-redux'
 import { Redirect, Route } from 'react-router-dom'
-import { loggedInSelector } from '../../util/hooks_selectors'
+import { useLoggedIn } from '../../hooks/api/query'
 
 export const AuthRoute = ({ children, ...routeProps }) => {
-  const loggedIn = useSelector(loggedInSelector)
+  const loggedIn = useLoggedIn()
+
   return (
     <Route {...routeProps}>
       { loggedIn ? <Redirect to="/polls" /> : children }
@@ -13,7 +13,8 @@ export const AuthRoute = ({ children, ...routeProps }) => {
 }
 
 export const ProtectedRoute = ({ children, ...routeProps }) => {
-  const loggedIn = useSelector(loggedInSelector)
+  const loggedIn = useLoggedIn()
+  console.log(routeProps)
   return (
     <Route {...routeProps}>
       { loggedIn ? children : <Redirect to="/login" /> }

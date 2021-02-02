@@ -1,5 +1,5 @@
 import React, { useEffect, useReducer, useRef } from 'react'
-import { useDropdown } from '../../util/custom_hooks'
+import { useDropdown } from '../../hooks/ui'
 import { clamp } from '../../util/general_util'
 
 const CLOSE_SEARCH = 'CLOSE_SEARCH'

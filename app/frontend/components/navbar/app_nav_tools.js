@@ -1,16 +1,11 @@
 import React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { logout } from '../../store/actions/session_actions'
-import { currentUserSelector } from '../../util/hooks_selectors'
+import { useLogout } from '../../hooks/api/mutation'
+import { useCurrentUser } from '../../hooks/api/query'
 import DropdownWrapper from '../wrappers/dropdown'
 
 export default function AppNavbarTools () {
-  const dispatch = useDispatch()
-  const currentUser = useSelector(currentUserSelector)
-
-  const handleLogout = () => {
-    dispatch(logout())
-  }
+  const { data: currentUser } = useCurrentUser()
+  const { mutate: logout } = useLogout()
 
   const Button = () => <span className='nav-tool'>
     {currentUser.username} 
@@ -19,7 +14,9 @@ export default function AppNavbarTools () {
 
   const Dropdown = () => (
     <ul className='navbar-dropdown'>
-      <li className="dropdown-li"><span className="dropdown-item" onClick={handleLogout}>Log out</span></li>
+      <li className="dropdown-li">
+        <span className="dropdown-item" onClick={logout}>Log out</span>
+      </li>
     </ul>
   )
 

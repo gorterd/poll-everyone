@@ -1,8 +1,6 @@
 class Api::GroupsController < ApplicationController
 
-  before_action only: [:index, :create] do 
-    ensure_current_user(params[:user_id])
-  end
+  before_action :ensure_logged_in, only: [:index, :create]
 
   before_action only: [:update, :destroy, :move_polls] do 
     @group = Group.find_by(id: params[:id])
@@ -10,15 +8,13 @@ class Api::GroupsController < ApplicationController
   end
 
   def index
-    @user = User.find_by(id: params[:user_id])
-
-    @groups = @user.groups.includes(:polls)
+    @groups = current_user.groups.includes(polls: :responses)
     render :index
   end
 
   def create
     @group = Group.new(group_params)
-    @group.user_id = params[:user_id]
+    @group.user = current_user
     poll_ids = snake_params[:poll_ids]
 
     if poll_ids && Group.save_with_polls(@group, poll_ids.map(&:to_i))

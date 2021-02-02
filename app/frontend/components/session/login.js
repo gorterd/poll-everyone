@@ -1,17 +1,14 @@
 import React, { useState } from 'react'
 import { useHistory, Link } from 'react-router-dom'
 import LoginInput from './login/login_input'
-import { useTextInput } from '../../util/custom_hooks'
-import { checkIfUserExists, useLogin } from '../../util/api/mutation_hooks'
-import { useDispatch } from 'react-redux'
-import { receiveCurrentUser } from '../../store/actions/session_actions'
+import { useInputState } from '../../hooks/state'
+import { checkIfUserExists, useLogin } from '../../hooks/api/mutation'
 
 export default function Login () {
-  const dispatch = useDispatch()
   const history = useHistory()
   const { mutateAsync: login } = useLogin()
-  const [ usernameOrEmail, usernameInputProps ] = useTextInput('')
-  const [ password, passwordInputProps, setPassword ] = useTextInput('')
+  const [ usernameOrEmail, usernameInputProps ] = useInputState('')
+  const [ password, passwordInputProps, setPassword ] = useInputState('')
   const [ fullForm, setFullForm ] = useState(false)
   const [ sessionLoading, setSessionLoading ] = useState(false)
   const [ error, setError ] = useState('')
@@ -27,10 +24,7 @@ export default function Login () {
 
   const submit = formStep.bind(null, {
     request: () => login({ usernameOrEmail, password }),
-    success: (user) => {
-      dispatch(receiveCurrentUser(user))
-      history.push('./polls')
-    }
+    success: () => history.push('./polls')
   })
 
   const next = formStep.bind(null, {

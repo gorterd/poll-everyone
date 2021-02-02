@@ -1,5 +1,6 @@
 import React from 'react'
 import { render } from 'react-dom'
+import { QueryClient } from 'react-query'
 
 import Root from '../components/root'
 import configureStore from '../store/configure_store'
@@ -20,13 +21,18 @@ const loadDOM = new Promise( res => {
   document.addEventListener('DOMContentLoaded', res)
 })
 
+const queryClient = new QueryClient()
+
 Promise.all([loadFont, loadDOM]).then( () => {
   const root = document.getElementById('root')
 
-  const preloadedState = JSON.parse(
-    root.getAttribute('data-preloaded-state')
-  )
-  root.removeAttribute('data-preloaded-state')
-  
-  render(<Root store={configureStore(preloadedState)}/>, root)
+  const currentId = root.getAttribute('data-current-id')
+  root.removeAttribute('data-current-id')
+  console.log('current', currentId)
+  queryClient.setQueryData('currentUser', () => (
+    currentId 
+      ? { id: currentId }
+      : { }
+  ))
+  render(<Root store={configureStore()} queryClient={queryClient}/>, root)
 })

@@ -1,4 +1,4 @@
-import ajax from './ajax'
+import ajax from '../ajax'
 
 export const createPoll = (poll, groupId) => {
   return ajax({

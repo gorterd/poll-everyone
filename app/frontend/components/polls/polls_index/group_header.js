@@ -1,7 +1,7 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { clearGroupSelection, receiveGroupSelection } from '../../../store/actions/selection_actions/poll_selection_actions'
-import { selectedPollsSelector } from '../../../util/hooks_selectors'
+import { selectedPollsSelector } from '../../../util/redux_selectors'
 
 export default function GroupHeader({
   group,

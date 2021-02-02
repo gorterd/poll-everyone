@@ -2,10 +2,10 @@ import { useSelector, useDispatch } from 'react-redux'
 import React, { useState, useRef, useEffect } from 'react'
 
 import { openModal, exitModal } from '../../../store/actions/ui_actions'
-import { selectedPollsSelector, stickyToolbarSelector } from '../../../util/hooks_selectors'
+import { selectedPollsSelector, stickyToolbarSelector } from '../../../util/redux_selectors'
 import GroupSearch from '../../shared/group_search'
-import { useMovePolls } from '../../../util/api/mutation_hooks'
-import { usePollData } from '../../../util/api/query_hooks'
+import { useMovePolls } from '../../../hooks/api/mutation'
+import { usePollData } from '../../../hooks/api/query'
 import { pollDataOrderedGroupsSelector } from '../../../util/query_selectors'
 
 export default function MoveDrawer({ visible, toggleVisible }) {

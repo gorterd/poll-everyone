@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from 'react-query'
 import { useDispatch } from 'react-redux'
 import { clearSelections } from '../../store/actions/selection_actions/poll_selection_actions'
-import ajax from './ajax'
+import ajax from '../../util/ajax'
 
 const useSession = (mutateFn, options = {}) => {
   const queryClient = useQueryClient()
@@ -157,10 +157,10 @@ const useMutateGroup = (mutateFn, options = {}) => {
 }
 
 export const useCreateGroup = () => {
-  return useMutateGroup(({ data, userId }) =>
+  return useMutateGroup( data =>
     ajax({
       method: 'POST',
-      url: `/api/users/${userId}/groups`,
+      url: '/api/groups',
       data
     })
   )

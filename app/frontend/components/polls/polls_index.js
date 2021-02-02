@@ -5,10 +5,12 @@ import MoveDrawer from './polls_index/move_drawer'
 import GroupPollsIndex from './polls_index/group_polls_list'
 import { 
   stickyToolbarSelector 
-} from '../../util/hooks_selectors'
-import { useDelayedPrefetch, usePrevious, useToggleState } from '../../util/custom_hooks'
+} from '../../util/redux_selectors'
+import { useDelayedPrefetch } from '../../hooks/effect'
+import { usePrevious } from '../../hooks/general'
+import { useToggleState } from '../../hooks/state'
 import { fetchEditPoll, fetchHomeSplash, fetchPresentPoll } from '../lazy_load_index'
-import { usePollData } from '../../util/api/query_hooks'
+import { usePollData } from '../../hooks/api/query'
 import { pollDataSelector } from '../../util/query_selectors'
 
 export default function GroupsIndex() {

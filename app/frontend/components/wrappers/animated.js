@@ -1,5 +1,5 @@
 import React from 'react'
-import { useAnimation } from '../../util/custom_hooks'
+import { useAnimation } from '../../hooks/ui'
 
 export function Animated ({
   children,

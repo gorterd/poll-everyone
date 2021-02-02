@@ -1,19 +1,18 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
-import { useCreateGroup } from '../../../../util/api/mutation_hooks'
-import { useTextInput } from '../../../../util/custom_hooks'
-import { currentUserIdSelector, modalDataSelector } from '../../../../util/hooks_selectors'
+import { useCreateGroup } from '../../../../hooks/api/mutation'
+import { useInputState } from '../../../../hooks/state'
+import { modalDataSelector } from '../../../../util/redux_selectors'
 import SmallModal from './polls_index_modal'
 
 export default function NewGroupModal () {
-  const [title, inputProps] = useTextInput('')
+  const [title, inputProps] = useInputState('')
   const { pollIds } = useSelector(modalDataSelector)
-  const currentId = useSelector(currentUserIdSelector)
-  const { mutateAsync: createGroup } = useCreateGroup()
+  const { mutate: createGroup } = useCreateGroup()
 
-  function submissionHandler() {
-    const data = { group: { title }, pollIds }
-    return createGroup({data, userId: currentId})
+  const submissionHandler = () => {
+    createGroup({ group: { title }, pollIds })
+    return Promise.resolve()
   }
 
   const numPolls = pollIds?.length

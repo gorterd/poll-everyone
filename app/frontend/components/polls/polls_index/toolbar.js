@@ -12,10 +12,10 @@ import {
 import { 
   stickyToolbarSelector, 
   selectedPollsSelector, 
-} from '../../../util/hooks_selectors'
+} from '../../../util/redux_selectors'
 import { smoothScrollToY } from '../../../util/general_util'
-import { useBatchDestroy, useMovePolls } from '../../../util/api/mutation_hooks'
-import { usePollData } from '../../../util/api/query_hooks'
+import { useBatchDestroy, useMovePolls } from '../../../hooks/api/mutation'
+import { usePollData } from '../../../hooks/api/query'
 import { pollDataOrderedGroupsSelector } from '../../../util/query_selectors'
 
 export default function GroupsIndexToolbar({ toggleMoveDrawer }) {

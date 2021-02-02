@@ -1,4 +1,4 @@
-import { withLazy } from '../util/higher_order_components'
+import { withLazy } from '../util/hoc'
 
 export const [ParticipantApp, fetchParticipantApp] = withLazy(
   () => import(
@@ -32,13 +32,6 @@ export const [GroupsIndex, fetchGroupsIndex] = withLazy(
   () => import(
     /* webpackChunkName: "polls" */
     './polls/polls_index'
-  )
-)
-
-export const [SignupFormContainer, fetchSignupFormContainer] = withLazy(
-  () => import(
-    /* webpackChunkName: "signup-form-container" */
-    './session/signup/signup_container'
   )
 )
 

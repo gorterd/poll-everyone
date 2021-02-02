@@ -1,12 +1,13 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { Link, useHistory, useParams } from 'react-router-dom'
 import { isEqual, debounce } from 'lodash'
 
 import cableConsumer from '../../channels/consumer'
 import { presenterPollDataSelector } from '../../util/query_selectors'
 import { standardGraph } from '../../util/data_formats_util'
-import { useDelayedPrefetch, usePrevious } from '../../util/custom_hooks'
+import { useDelayedPrefetch } from '../../hooks/effect'
+import { usePrevious } from '../../hooks/general'
 import { 
   receiveActivePoll, 
   clearActivePoll, 
@@ -15,9 +16,8 @@ import {
 } from '../../store/actions/presentation_actions'
 import PresentationGraph from './polls_show/presentation_graph'
 import { fetchEditPoll, fetchFooter, fetchGroupsIndex, fetchHomeSplash } from '../lazy_load_index'
-import { usePoll } from '../../util/api/query_hooks'
-import { useToggleActive } from '../../util/api/mutation_hooks'
-
+import { useCurrentUser, usePoll } from '../../hooks/api/query'
+import { useToggleActive } from '../../hooks/api/mutation'
 
 export default function PresentPoll() {
   const prefetch = useCallback(() => {
@@ -32,7 +32,7 @@ export default function PresentPoll() {
   const history = useHistory()
   const dispatch = useDispatch()
 
-  const currentId = useSelector( state => state.session.currentId )
+  const currentId = useCurrentUser().id
   const { pollId } = useParams()
   const { data } = usePoll(pollId)
   const { poll, fullAnswerOptions } = presenterPollDataSelector(data)

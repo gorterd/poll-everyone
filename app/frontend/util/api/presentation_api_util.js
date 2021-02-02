@@ -1,4 +1,4 @@
-import ajax from './ajax'
+import ajax from '../ajax'
 
 export const fetchPresentation = (type, id, username) => {
   return ajax({

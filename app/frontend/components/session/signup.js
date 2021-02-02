@@ -3,8 +3,8 @@ import { validEmail, validName, validPassword } from '../../util/validation_util
 import SignupInput from './signup/signup_input'
 import AttributedImage from '../shared/attributed_image'
 import signupSplashImg from '../../images/splash/signup-splash-02.png'
-import { useObjectState } from '../../util/custom_hooks'
-import { useSignup } from '../../util/api/mutation_hooks'
+import { useObjectState } from '../../hooks/state'
+import { useSignup } from '../../hooks/api/mutation'
 import { useHistory } from 'react-router-dom'
 import { objMap, hasTruthyValue } from '../../util/general_util'
 

@@ -1,4 +1,4 @@
-import ajax from './ajax'
+import ajax from '../ajax'
 
 export const signup = user => {
   return ajax({

@@ -4,10 +4,10 @@ import NewPoll from '../polls/polls_new'
 import NewGroupModal from '../polls/polls_index/modals/new_group'
 import EditGroupModal from '../polls/polls_index/modals/rename_group'
 import ConfirmMoveModal from '../polls/polls_index/modals/confirm_move'
-import { modalSelector } from '../../util/hooks_selectors'
+import { modalSelector } from '../../util/redux_selectors'
 import { useDispatch } from 'react-redux'
 import { clearModal, clearStatus, exitModal } from '../../store/actions/ui_actions'
-import { useAnimation } from '../../util/custom_hooks'
+import { useAnimation } from '../../hooks/ui'
 
 export const defaultEnterAnimation = {
   animationName: 'fade-in',
