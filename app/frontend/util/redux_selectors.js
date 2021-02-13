@@ -6,4 +6,4 @@ export const singleValueSelector = propPath => state => {
 export const stickyToolbarSelector = state => state.ui.stickyToolbar
 export const modalSelector = state => state.modal
 export const modalDataSelector = state => state.modal.data
-export const selectedPollsSelector = state => state.selections.polls
+export const selectedPollsSelector = state => state.selections

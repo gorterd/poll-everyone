@@ -20,10 +20,10 @@ export default (state = nullSelection, action) => {
     case RECEIVE_SELECTIONS:
       return action.data
     case RECEIVE_GROUP_SELECTION: {
-      const newPollIds = merge(state.pollIds, action.data.pollIds)
+      const newPollIds = merge([], state.pollIds, action.data.pollIds)
         .map(id => parseInt(id))
       const newGroupIds = state.groupIds.includes(action.data.groupId)
-        ? state.groupIds
+        ? Array.from(state.groupIds)
         : state.groupIds.concat(action.data.groupId)
 
       return { groupIds: newGroupIds, pollIds: newPollIds }
@@ -40,7 +40,7 @@ export default (state = nullSelection, action) => {
     }
     case RECEIVE_POLL_SELECTION: {
       const newPollIds = state.pollIds.includes(action.data.pollId)
-        ? state.pollIds
+        ? Array.from(state.pollIds)
         : state.pollIds.concat(action.data.pollId)
 
       const newGroupIds = (
@@ -48,7 +48,7 @@ export default (state = nullSelection, action) => {
         && !state.groupIds.includes(action.data.group.id)
       )
         ? state.groupIds.concat(action.data.group.id)
-        : state.groupIds
+        : Array.from(state.groupIds)
 
       return { groupIds: newGroupIds, pollIds: newPollIds }
     }
@@ -64,6 +64,7 @@ export default (state = nullSelection, action) => {
       return { groupIds: newGroupIds, pollIds: newPollIds }
     }
     case CLEAR_SELECTIONS:
+      console.log(nullSelection)
       return nullSelection
     default:
       return state
