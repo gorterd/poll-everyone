@@ -11,7 +11,6 @@ export const pollDataSelector = data =>
     }))
 
 export const presenterPollDataSelector = data => {
-  if (!data) return {}
   const { poll, answerOptions, responses } = data
 
   let fullAnswerOptions
@@ -28,12 +27,29 @@ export const presenterPollDataSelector = data => {
   return { poll, fullAnswerOptions }
 }
 
+export const presentationParticipantSelector = data => {
+  const { participation, poll, answerOptions, responses } = data
+  if (!poll) return { participation }
+
+  const ownResponses = Object.values(responses)
+    .filter(res => res.participationId === participation.id)
+  
+  const orderedAnswerOptions = orderedAnswerOptionsSelector(answerOptions)
+    .map( option => ({ 
+      ...option, 
+      numOwnResponses: ownResponses
+        .filter(res => res.answerOptionId === option.id)
+        .length
+    }))
+
+  return { participation, poll, ownResponses, orderedAnswerOptions }
+}
+
 export const orderedAnswerOptionsSelector = answerOptions => {
   return Object.values(answerOptions).sort(ordSort)
 }
 
 const ordSort = (a, b) => Math.sign(a.ord - b.ord)
-
 
 const optionResponses = (option, responses) => {
   return option.responseIds

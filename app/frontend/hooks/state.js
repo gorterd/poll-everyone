@@ -1,7 +1,6 @@
 import { merge } from 'lodash'
 import { useState, useCallback } from 'react'
 
-
 export function useObjectState(initState) {
   const [state, setState] = useState(initState)
 
@@ -40,15 +39,16 @@ export function useToggleState(initVal) {
   return [val, toggleVal]
 }
 
-export function useInputState(defaultVal, props = {}) {
+export function useInputState(defaultVal = '') {
   const [value, setValue] = useState(defaultVal)
+  const onChange = useCallback(e => setValue(e.target.value), [])
+  const props = { onChange, value }
+  
+  const composeOnChange = useCallback( cb => e => {
+    onChange(e)
+    cb(e)
+  }, [onChange])
 
-  const inputProps = {
-    onChange: event => setValue(event.target.value),
-    value,
-    ...props
-  }
-
-  return [value, inputProps, setValue]
+  return [value, props, { setValue, composeOnChange }]
 }
 

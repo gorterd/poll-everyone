@@ -44,7 +44,7 @@ class ApplicationController < ActionController::Base
   end
 
   def ensure_current_user(id)
-    render_not_authorized unless current_user.id == id.to_i    
+    render_not_authorized unless current_user && current_user.id == id.to_i    
     current_user.id == id.to_i
   end
 

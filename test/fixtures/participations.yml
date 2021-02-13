@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  screen_name: MyString
+  participant_type: MyString
+  participant_id: 1
+  presenter_id: 1
+
+two:
+  screen_name: MyString
+  participant_type: MyString
+  participant_id: 1
+  presenter_id: 1

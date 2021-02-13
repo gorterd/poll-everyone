@@ -6,7 +6,7 @@ import { modalDataSelector } from '../../../../util/redux_selectors'
 import SmallModal from './polls_index_modal'
 
 export default function NewGroupModal () {
-  const [title, inputProps] = useInputState('')
+  const [ title, inputProps ] = useInputState()
   const { pollIds } = useSelector(modalDataSelector)
   const { mutate: createGroup } = useCreateGroup()
 

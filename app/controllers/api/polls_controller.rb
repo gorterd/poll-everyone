@@ -27,37 +27,15 @@ class Api::PollsController < ApplicationController
     end
   end
 
-  def presentation
-    @user = User.find_by(username: params[:username])
-
-    @participant = Participant.find_or_create_by(
-      participatable_id: params[:id], 
-      participatable_type: params[:type], 
-      presenter_id: @user.id
-    )
-
-    unless @user && @participant
-      render json: ['Could not find user'], status: 422
-    end
-
-    @participant.touch
-  
-    if @poll = @user.active_poll
-      render :presentation 
-    else
-      render 'api/participants/show'
-    end
-  end
-
   def create
     @poll = Poll.new(poll_params)
     @poll.group_id = params[:group_id]
     
-
     if @poll.save
       render :show
     else
-      render @poll.errors.full_messages, status: 422
+      debugger
+      render json: @poll.errors.full_messages, status: 422
     end
   end
   
@@ -76,7 +54,7 @@ class Api::PollsController < ApplicationController
   end
 
   def duplicate
-    @poll = Poll.dup_with_answer_options(@poll)
+    @poll = @poll.dup_with_answer_options
     
     if @poll.save
       render :show
@@ -86,13 +64,9 @@ class Api::PollsController < ApplicationController
   end
 
   def toggle_activation
-    if @poll.toggle_active
-      broadcast_poll
-      @groups = @poll.user.groups.includes(:polls)
-      render 'api/groups/index'
-    else
-      render json: ['Could not activate poll'], status: 422
-    end
+    touched_polls = @poll.toggle_active
+    broadcast_poll
+    render json: touched_polls
   end
 
   private
@@ -104,7 +78,9 @@ class Api::PollsController < ApplicationController
   end
 
   def broadcast_poll
-    PresentationChannel.broadcast_to(@poll.user, {type: 'POLL', data: json_poll_data})
+    PresentationChannel.broadcast_to @poll.user, 
+      type: 'POLL', 
+      data: json_poll_data
   end
 
   def json_poll_data

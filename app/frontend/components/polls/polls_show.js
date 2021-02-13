@@ -1,23 +1,23 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
-import { useDispatch } from 'react-redux'
 import { Link, useHistory, useParams } from 'react-router-dom'
 import { isEqual, debounce } from 'lodash'
+import { useQueryClient } from 'react-query'
 
 import cableConsumer from '../../channels/consumer'
 import { presenterPollDataSelector } from '../../util/query_selectors'
-import { standardGraph } from '../../util/data_formats_util'
+import { standardGraph } from '../../util/data_formatting'
 import { useDelayedPrefetch } from '../../hooks/effect'
 import { usePrevious } from '../../hooks/general'
-import { 
-  receiveActivePoll, 
-  clearActivePoll, 
-  receiveResponse, 
-  clearResponse 
-} from '../../store/actions/presentation_actions'
 import PresentationGraph from './polls_show/presentation_graph'
-import { fetchEditPoll, fetchFooter, fetchGroupsIndex, fetchHomeSplash } from '../lazy_load_index'
-import { useCurrentUser, usePoll } from '../../hooks/api/query'
+import { useCurrent, usePoll } from '../../hooks/api/query'
 import { useToggleActive } from '../../hooks/api/mutation'
+import { 
+  fetchEditPoll, 
+  fetchFooter, 
+  fetchGroupsIndex, 
+  fetchHomeSplash 
+} from '../lazy_load_index'
+import Logo from '../static/logo'
 
 export default function PresentPoll() {
   const prefetch = useCallback(() => {
@@ -30,53 +30,40 @@ export default function PresentPoll() {
   useDelayedPrefetch(prefetch)
   
   const history = useHistory()
-  const dispatch = useDispatch()
-
-  const currentId = useCurrentUser().id
+  const { data: { username, id: currentId } } = useCurrent()
   const { pollId } = useParams()
-  const { data } = usePoll(pollId)
-  const { poll, fullAnswerOptions } = presenterPollDataSelector(data)
+  const { data, isSuccess } = usePoll(pollId)
   const { mutate: toggleActive } = useToggleActive()
+  const { poll, fullAnswerOptions } = isSuccess
+    ? presenterPollDataSelector(data)
+    : {}
 
   const formattedData = standardGraph(fullAnswerOptions)
   const prevFormattedData = usePrevious(formattedData)
 
-  const graphContainer = useRef(null)
+  const graphWrapper = useRef(null)
   const [graphDimensions, setGraphDimensions ] = useState({width: 0, height: 0})
 
-  const subscription = useRef()
-
   const updateGraphDimensions = () => {
-    if (!graphContainer.current) return
-    const { width, height } = graphContainer.current.getBoundingClientRect()
+    if (!graphWrapper.current) return
+    const { width, height } = graphWrapper.current.getBoundingClientRect()
     setGraphDimensions({ height, width })
   }
 
-  const receiveBroadcast = useCallback(broadcast => {
-    const response = JSON.parse(broadcast.data)
-
-    switch (broadcast.type) {
-      case 'POLL':
-        response.poll.active 
-          ? dispatch(receiveActivePoll(response)) 
-          : dispatch(clearActivePoll())
-        break
-      case 'RESPONSE':
-        dispatch(receiveResponse(response))
-        break
-      case 'CLEAR_RESPONSE':
-        dispatch(clearResponse(response))
-        break
+  const queryClient = useQueryClient()
+  const receiveBroadcast = useCallback(({ type }) => {
+    if (['RESPONSE', 'CLEAR_RESPONSE'].includes(type)) {
+      queryClient.invalidateQueries(['polls', pollId])
     }
-  }, [dispatch])
+  }, [queryClient, pollId])
 
+  const subscription = useRef()
   const subscribe = useCallback(() => {
     subscription.current = cableConsumer.subscriptions.create(
       { channel: 'PresentationChannel', presenterId: currentId },
       { received: broadcast => receiveBroadcast(broadcast) }
     )
   }, [currentId, receiveBroadcast])
-
 
   useEffect(() => {
     if (poll?.active) {
@@ -96,17 +83,34 @@ export default function PresentPoll() {
     return () => window.removeEventListener('resize', resizeListener)
   }, [])
 
+  const graphReady = formattedData 
+    && Object.values(graphDimensions).every(dim => dim > 0)
+
   return (
     <section className='show-poll-container'>
       <div className='show-poll-left'>
-        <div className='graph-container' ref={graphContainer}>
+        <div className='graph-container'>
+          <h2>
+            { poll?.active 
+              ? 'Respond at '
+              : 'When poll is active, respond at '
+            }
+            <strong>#participate/{username}</strong>
+          </h2>
           <div className='graph'>
-            <PresentationGraph
-              formattedData={formattedData}
-              graphDimensions={graphDimensions}
-              isAnimationActive={!isEqual(prevFormattedData, formattedData)}
-            />
+            <h1>{poll?.title}</h1>
+            <div className='graph-wrapper' ref={graphWrapper}>
+              { graphReady && 
+                <PresentationGraph
+                  formattedData={formattedData}
+                  graphDimensions={graphDimensions}
+                  isAnimationActive={!isEqual(prevFormattedData, formattedData)}
+                  activated={poll.active}
+                />
+              }
+            </div>
           </div>
+          <Logo onClick={() => {}}/>
         </div>
       </div>
 

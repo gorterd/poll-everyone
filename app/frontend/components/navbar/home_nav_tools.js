@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react'
 import { Link, useHistory } from 'react-router-dom'
-import { fetchGroupsIndex, fetchLogin, fetchParticipantApp, fetchSignupSplash } from '../lazy_load_index'
+import { fetchGroupsIndex, fetchLogin, fetchParticipateApp, fetchSignupSplash } from '../lazy_load_index'
 import { useDelayedPrefetch } from '../../hooks/effect'
 import { useLoggedIn } from '../../hooks/api/query'
 import { useLogin, useLogout } from '../../hooks/api/mutation'
@@ -13,7 +13,7 @@ export default function HomeNavTools() {
 
   const prefetch = useCallback(() => {
     fetchGroupsIndex()
-    fetchParticipantApp()
+    fetchParticipateApp()
     
     if (loggedIn) {
       fetchSignupSplash()

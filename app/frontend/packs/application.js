@@ -21,18 +21,31 @@ const loadDOM = new Promise( res => {
   document.addEventListener('DOMContentLoaded', res)
 })
 
-const queryClient = new QueryClient()
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+      refetchOnReconnect: false,
+    }
+  }
+})
+
+const retrieveCurrentAttributes = root => {
+  const id = parseInt(root.getAttribute('data-current-id'))
+  root.removeAttribute('data-current-id')
+  
+  const type = root.getAttribute('data-current-type')
+  root.removeAttribute('data-current-type')
+
+  return { id, type }
+}
 
 Promise.all([loadFont, loadDOM]).then( () => {
   const root = document.getElementById('root')
+  const current = retrieveCurrentAttributes(root)  
 
-  const currentId = root.getAttribute('data-current-id')
-  root.removeAttribute('data-current-id')
-  console.log('current', currentId)
-  queryClient.setQueryData('currentUser', () => (
-    currentId 
-      ? { id: currentId }
-      : { }
-  ))
+  queryClient.setQueryData('current', () => current)
+  queryClient.invalidateQueries('current')
+
   render(<Root store={configureStore()} queryClient={queryClient}/>, root)
 })

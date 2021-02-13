@@ -3,6 +3,7 @@ import { Redirect, Route } from 'react-router-dom'
 import { useLoggedIn } from '../../hooks/api/query'
 
 export const AuthRoute = ({ children, ...routeProps }) => {
+  // const loggedIn = useLoggedIn()
   const loggedIn = useLoggedIn()
 
   return (
@@ -14,7 +15,7 @@ export const AuthRoute = ({ children, ...routeProps }) => {
 
 export const ProtectedRoute = ({ children, ...routeProps }) => {
   const loggedIn = useLoggedIn()
-  console.log(routeProps)
+
   return (
     <Route {...routeProps}>
       { loggedIn ? children : <Redirect to="/login" /> }

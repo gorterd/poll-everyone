@@ -1,1 +1,0 @@
-json.partial! 'api/participants/participant', participant: @participant

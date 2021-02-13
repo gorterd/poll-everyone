@@ -14,12 +14,14 @@ module ApplicationCable
     end
 
     def anonymous
-      anon = UnregisteredParticipant.find_by( participant_session_token: cookies.signed[:participant_session_token] )
+      anon = UnregisteredParticipant.find_by( 
+        participant_session_token: cookies.signed[:participant_session_token] 
+      )
+      
       unless anon
         anon = UnregisteredParticipant.create()
         cookies.signed[:participant_session_token] = { 
           value: anon.participant_session_token, 
-          path: '/participate',
           expires: 1.year 
         }
       end

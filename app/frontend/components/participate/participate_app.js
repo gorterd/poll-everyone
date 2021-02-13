@@ -1,12 +1,12 @@
 import React, { useCallback } from 'react'
 import { Route, Link, NavLink } from 'react-router-dom'
-import ParticipantPoll from './participate_poll'
-import ParticipantHome from './participate_home'
+import ParticipatePresentation from './participate_pres'
+import ParticipateHome from './participate_home'
 import logoImg from '../../images/nav/logo.png'
 import { useDelayedPrefetch } from '../../hooks/effect'
 import { fetchFooter, fetchHomeSplash, fetchNavbar } from '../lazy_load_index'
 
-const ParticipantApp = () => {
+const ParticipateApp = () => {
   const prefetch = useCallback(() => {
     fetchHomeSplash()
     fetchNavbar()
@@ -32,13 +32,13 @@ const ParticipantApp = () => {
         </NavLink>
       </nav>
       <Route exact path='/participate'>
-        <ParticipantHome />
+        <ParticipateHome />
       </Route>
       <Route path='/participate/:username'>
-        <ParticipantPoll />
+        <ParticipatePresentation />
       </Route>
     </section>
   )
 }
 
-export default ParticipantApp
+export default ParticipateApp

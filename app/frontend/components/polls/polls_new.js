@@ -6,8 +6,8 @@ import GroupSearch from '../shared/group_search'
 import multipleChoiceOptionImg from '../../images/icons/multiple-choice-option.png'
 import { pollDataOrderedGroupsSelector } from '../../util/query_selectors'
 import { useCreatePoll } from '../../hooks/api/mutation'
-import { useCachedPollData } from '../../hooks/api/cache'
 import { classNames } from '../../util/general_util'
+import { usePolls } from '../../hooks/api/query'
 
 const forms = {
   multiple_choice: MultipleChoiceForm,
@@ -16,8 +16,7 @@ const forms = {
 export default function NewPollForm({ modalData }) {
   const dispatch = useDispatch()
   const { mutateAsync: createPoll } = useCreatePoll()
-  const pollData = useCachedPollData()
-  const groups = pollDataOrderedGroupsSelector(pollData)
+  const { data: groups } = usePolls({ select: pollDataOrderedGroupsSelector })
 
   const [ activeOption, setActiveOption ] = useState('multiple_choice')
   const [ group, setGroup] = useState(modalData.group)

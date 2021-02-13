@@ -52,11 +52,6 @@
     "node": "^10.22.1",
     "yarn": "^1.22.5"
   },
-  "babel": {
-    "presets": [
-      "./node_modules/@rails/webpacker/package/babel/preset.js"
-    ]
-  },
   "browserslist": [
     "defaults"
   ]

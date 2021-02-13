@@ -14,7 +14,7 @@ import {
   Footer,
   EditPoll,
   Login,
-  ParticipantApp,
+  ParticipateApp,
   HomeSplash,
   SignupSplash,
   Signup,
@@ -46,7 +46,7 @@ export default function App() {
       <React.Suspense fallback={<Fallback componentName='app'/>}>
         <Switch>
           <Route path='/participate'>
-            <ParticipantApp/>
+            <ParticipateApp/>
           </Route>
           <>
             <section className='content'>

@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import { validEmail, validName, validPassword } from '../../util/validation_util'
 import SignupInput from './signup/signup_input'
 import AttributedImage from '../shared/attributed_image'
 import signupSplashImg from '../../images/splash/signup-splash-02.png'
@@ -9,10 +8,10 @@ import { useHistory } from 'react-router-dom'
 import { objMap, hasTruthyValue } from '../../util/general_util'
 
 const validations = {
-  firstName: validName,
-  lastName: validName,
-  email: validEmail,
-  password: validPassword,
+  firstName: name => name.length > 0,
+  lastName: name => name.length > 0,
+  email: email => /^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+\.[a-z]{2,}$/.test(email),
+  password: pw => pw.length > 6,
   terms: checked => checked,
 }
 

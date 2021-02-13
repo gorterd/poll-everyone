@@ -29,45 +29,27 @@ demo = User.create!(
   password: "its_all_a_simulation"
 )
 
-8.times do 
-  User.create!(
-    first_name: Faker::Name.first_name,
-    last_name: Faker::Name.last_name,
-    email: Faker::Internet.safe_email,
-    password: "123456789"
-  )
-end
-
-user_ids = User.all.pluck(:id)
-
-user_ids.each do |user_id|
+[easy, demo].each do |user|
   2.times do 
-    Group.create!(
-    title: Faker::Dessert.variety,
-    user_id: user_id
-    )
+    Group.create! title: Faker::Dessert.variety, user: user
   end
 end
 
-group_ids = Group.all.pluck(:id)
-
-group_ids.each do |group_id|
+Group.all.each do |group|
   3.times do 
     Poll.create!(
       title: Faker::TvShows::BojackHorseman.tongue_twister,
-      group_id: group_id
+      group: group
     )
   end
 end
 
-poll_ids = Poll.all.pluck(:id)
-
-poll_ids.each do |poll_id|
+Poll.all.each do |poll|
   4.times do 
     AnswerOption.create!(
       body: Faker::Movies::HitchhikersGuideToTheGalaxy.quote,
       correct: [true, false].sample,
-      poll_id: poll_id
+      poll: poll
     )
   end
 end

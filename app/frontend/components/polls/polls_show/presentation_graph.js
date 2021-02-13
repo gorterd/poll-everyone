@@ -1,130 +1,109 @@
-import React from 'react'
-import {
-  BarChart,
-  XAxis,
-  YAxis,
-  Bar,
-  LabelList
-} from 'recharts'
+import React, { useCallback, useMemo } from 'react'
+import { BarChart, XAxis, YAxis, Bar, LabelList } from 'recharts'
 
-export default function PresentationGraph({ formattedData, graphDimensions, isAnimationActive }) { 
-  let graphContainerReady = graphDimensions.width && graphDimensions.height 
-  if (!formattedData || !graphContainerReady) return null
+const yAxisLine = { strokeWidth: 2.5, stroke: '#6b99c7' }
+const barFill = '#6b99c7'
+const fontFamily = 'sans-serif'
 
-  const graphWidth = Math.min(graphDimensions.width, graphDimensions.height * 3)
-  const graphHeight = Math.min(graphDimensions.height, graphDimensions.width * formattedData.length / 4 )
-  const maxLabelHeight = (graphHeight / formattedData.length) * 0.8
+const PresentationGraph = ({ 
+  formattedData, 
+  graphDimensions: dims, 
+  isAnimationActive,
+  activated
+}) => { 
+  
+  const numRows = formattedData.length
+  const graphWidth = Math.min(dims.width, dims.height * 2.5)
+  const graphHeight = Math.min(dims.height, dims.width * numRows / 3)
+  const maxLabelHeight = graphHeight / Math.max(numRows, 3)
   const barHeight = maxLabelHeight * 0.75
   const largeBodyFont = barHeight * 0.5
-  const rectHeight = barHeight * .65
-  const barFontSize = rectHeight
+  const rectHeight = barHeight * 0.6
+  const barFontSize = rectHeight * 0.9
 
-  const maxBody = formattedData.reduce((maxBody, answerData) => {
-    return maxBody.length > answerData.body.length ? maxBody : answerData.body
-  }, 0)
-  
-  const marginPercentage = .25 + Math.min((maxBody.length / 30) * .15, .15)
-  const leftMargin = graphWidth * marginPercentage
+  const maxBody = formattedData.reduce((maxBody, answerData) => 
+    maxBody.length > answerData.body.length 
+      ? maxBody 
+      : answerData.body
+  , 0)
+  const marginPercent = 0.15 + Math.min((maxBody.length / 30) * 0.25, 0.25)
+  const leftMargin = graphWidth * marginPercent
 
-  const yAxisLine = { strokeWidth: 3, stroke: '#6b99c7' }
-  const barFill = '#6b99c7'
-  const fontFamily = 'sans-serif'
+  const ctx = useMemo(() => 
+    document.createElement('canvas').getContext('2d')
+  , [])
 
-  const ctx = document.createElement('canvas').getContext('2d') 
-  const { fontSize, lineHeight } = setFontSizeAndLineHeight()
-  
-  function setFontSizeAndLineHeight(){
+  const wordsWillFit = useCallback( lineWords => 
+    ctx.measureText(lineWords.join(' ')).width < leftMargin * 1.05
+  , [ctx, leftMargin])
+
+  const { fontSize, lineHeight } = useMemo(() => {
     let fontSize = largeBodyFont, lineHeight
-    
+
     while (fontSize--) {
       ctx.font = `${fontSize}px ${fontFamily}`
       lineHeight = fontSize * 1.15
-      
-      let maxLines = Math.floor(maxLabelHeight / lineHeight)
-      let lines = generateLines(maxBody)
+
+      const maxLines = Math.floor(maxLabelHeight / lineHeight)
+      const lines = generateLines(wordsWillFit, maxBody)
       if (lines?.length <= maxLines) break
     }
-    
+
     return { fontSize, lineHeight }
-  }
+  }, [largeBodyFont, ctx, maxLabelHeight, maxBody, wordsWillFit])
 
-  function generateLines(text) {
-    const labelWords = text.split(' ')
-    const lines = []
-
-    while (labelWords.length) {
-      let nextLine = getNextLine(labelWords)
-      if (nextLine.length === 0) return null
-      lines.push(nextLine)
-    }
-
-    return lines
-  }
-
-  function getNextLine(labelWords) {
-    const lineWords = []
-    while (labelWords.length && willFit(lineWords.concat(labelWords[0]))) {
-      lineWords.push(labelWords.shift())
-    }
-
-    return lineWords.join(' ')
-  }
-
-  function willFit(lineWords) {
-    const line = lineWords.join(' ')
-    return ctx.measureText(line).width < leftMargin
-  }
-
-  function generateText(lines, { x, y }) {
+  const generateText = useCallback( (lines, { x, y }) => {
     const initY = y - (lineHeight * (lines.length - 1.5) / 2)
-    return lines.map( (line, idx) => {
-      return (
-        <text
-          key={idx}
-          x={x}
-          y={initY + (idx * lineHeight)}
-          textAnchor="end"
-          style={{ fontSize, fontFamily }}
-          className="recharts-text recharts-label"
-        >
-          {line}
-        </text>
-      )
-    })
-  }
+    return lines.map( (line, idx) => 
+      <text
+        key={idx}
+        x={x - 5}
+        y={initY + (idx * lineHeight)}
+        textAnchor="end"
+        style={{ 
+          fontSize, 
+          fontFamily, 
+          fontWeight: (lineHeight > 40 ? 400 : 600)
+        }}
+        className="recharts-text recharts-label"
+      >
+        {line}
+      </text>
+    )
+  }, [fontSize, lineHeight])
 
-  function labelRender(props) {
+  const labelRender = useCallback( props => {
     const { x, y, payload } = props
     const [ key, body, percent ] = JSON.parse(payload.value)
-    const lines = generateLines(body)
+    const lines = generateLines(wordsWillFit, body)
     
     return (
       <g>
         {generateText(lines, props)}
 
-        { percent 
-          ? <rect
+        { percent && activated && 
+          <rect
             x={ x + 12 } 
             y={ y - (rectHeight / 2) }
-            width={ rectHeight * .87 }
+            width={ rectHeight * 0.87 }
             height={ rectHeight }
             fill={'#b5cce3'}
           ></rect>
-          : null 
         }
-
-        <text
-          x={ x + 14 } 
-          y={y + (barFontSize * .35) }          
-          textAnchor="start"
-          style={{ fontFamily, fontWeight: 700, fontSize: barFontSize }}
-          className="recharts-text recharts-label"
-        >
-          {key}
-        </text>
+        { activated && 
+          <text
+            x={ x + 12 + rectHeight * .1 } 
+            y={y + (barFontSize * 0.35) }          
+            textAnchor="start"
+            style={{ fontFamily, fontWeight: 700, fontSize: barFontSize }}
+            className="recharts-text recharts-label"
+          >
+            {key}
+          </text>
+        }
       </g>
     )
-  }
+  }, [activated, barFontSize, rectHeight, generateText, wordsWillFit])
 
   return ( 
     <BarChart
@@ -158,3 +137,28 @@ export default function PresentationGraph({ formattedData, graphDimensions, isAn
     </BarChart>
   )
 }
+
+function generateLines(wordsWillFitFn, text) {
+  const labelWords = text.split(' ')
+  const lines = []
+
+  while (labelWords.length) {
+    let nextLine = getNextLine(wordsWillFitFn, labelWords)
+    if (nextLine.length === 0) return null
+    lines.push(nextLine)
+  }
+
+  return lines
+}
+
+function getNextLine(wordsWillFitFn, labelWords) {
+  const lineWords = []
+  while (
+    labelWords.length
+    && wordsWillFitFn(lineWords.concat(labelWords[0]))
+  ) lineWords.push(labelWords.shift())
+
+  return lineWords.join(' ')
+}
+
+export default PresentationGraph

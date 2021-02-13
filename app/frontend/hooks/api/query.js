@@ -1,35 +1,24 @@
-import { isEmpty } from 'lodash'
 import { useQuery } from 'react-query'
 import ajax from '../../util/ajax'
 
-export const useCurrentUser = (options = {}) => useQuery(
-  'currentUser', 
-  () => ajax({ url: '/api/users/current' }), 
+export const useCurrent = (options = {}) => useQuery(
+  'current', 
+  () => ajax({ url: '/api/session/current' }), 
   {
+    staleTime: Infinity,
     ...options,
   }
 )
 
-export const useLoggedIn = options => !isEmpty(useCurrentUser(options).data)
+export const useLoggedIn = options => useCurrent(options).data?.type === 'User'
 
-export const usePresentation = (type, id, username, options = {}) => useQuery(
-  ['presentation', { type, id, username }], 
-  () => ajax({
-    url: '/api/users/presentation',
-    data: { type, id, username }
-  }), 
-  options 
+export const usePolls = (options = {}) => useQuery(
+  'polls', 
+  () => ajax({ url: '/api/groups' }),
+  {
+    ...options
+  }
 )
-
-export const useRecentPresentations = (type, id, options = {}) => useQuery(
-  ['recentPresentations', { type, id }], 
-  () => ajax({
-    url: '/api/participants/recents',
-    data: { type, id }
-  }), 
-  options
-)
-
 
 export const usePoll = (pollId, options = {}) => useQuery(
   ['polls', pollId], 
@@ -40,12 +29,20 @@ export const usePoll = (pollId, options = {}) => useQuery(
   options
 )
 
+export const usePresentation = (type, id, username, options = {}) => useQuery(
+  ['presentation', type, id, username ], 
+  () => ajax({
+    url: '/api/users/presentation',
+    data: { type, id, username }
+  }), 
+  options
+)
 
-export const usePollData = (options = {}) => useQuery(
-  'polls', 
-  () => ajax({ url: '/api/groups' }),
-  {
-    initialData: { groups: {}, polls: {} },
-    ...options
-  }
+export const useRecentPresentations = (type, id, options = {}) => useQuery(
+  ['recentPresentations', { type, id }], 
+  () => ajax({
+    url: '/api/participations/recents',
+    data: { type, id }
+  }), 
+  options
 )

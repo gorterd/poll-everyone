@@ -1,2 +1,2 @@
-json.key_format! camelize: :lower
-json.extract! group, :id, :title, :ord, :polls_count
+json.extract! group, :id, :title, :ord, :poll_ids
+json.polls_count group.polls.size

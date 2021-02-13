@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_06_12_080629) do
+ActiveRecord::Schema.define(version: 2021_02_08_052345) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -31,19 +31,18 @@ ActiveRecord::Schema.define(version: 2020_06_12_080629) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "ord", null: false
-    t.integer "polls_count"
     t.index ["user_id"], name: "index_groups_on_user_id"
   end
 
-  create_table "participants", force: :cascade do |t|
-    t.string "screen_name"
+  create_table "participations", force: :cascade do |t|
+    t.string "participant_type", null: false
+    t.integer "participant_id", null: false
     t.integer "presenter_id", null: false
-    t.string "participatable_type", null: false
-    t.bigint "participatable_id", null: false
+    t.string "screen_name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["participatable_type", "participatable_id"], name: "index_participants_on_participatable_type_and_participatable_id"
-    t.index ["presenter_id"], name: "index_participants_on_presenter_id"
+    t.index ["participant_type", "participant_id"], name: "index_participations_on_participant_type_and_participant_id"
+    t.index ["presenter_id"], name: "index_participations_on_presenter_id"
   end
 
   create_table "polls", force: :cascade do |t|
@@ -57,20 +56,20 @@ ActiveRecord::Schema.define(version: 2020_06_12_080629) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "ord", null: false
-    t.integer "answer_options_count"
     t.boolean "active", default: false, null: false
     t.index ["group_id"], name: "index_polls_on_group_id"
   end
 
   create_table "responses", force: :cascade do |t|
     t.string "body", null: false
-    t.integer "participant_id", null: false
+    t.integer "participation_id", null: false
     t.integer "poll_id", null: false
     t.integer "answer_option_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "screen_name"
     t.index ["answer_option_id"], name: "index_responses_on_answer_option_id"
-    t.index ["participant_id"], name: "index_responses_on_participant_id"
+    t.index ["participation_id"], name: "index_responses_on_participation_id"
     t.index ["poll_id"], name: "index_responses_on_poll_id"
   end
 

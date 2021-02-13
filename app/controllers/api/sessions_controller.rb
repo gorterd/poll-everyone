@@ -2,6 +2,15 @@ class Api::SessionsController < ApplicationController
 
   before_action :ensure_logged_in, only: [:destroy]
 
+  def current
+    if logged_in?
+      render partial: 'api/users/user', locals: { user: current_user }
+    else
+      render partial: 'api/unregistered_participants/unregistered_participant', 
+        locals: { unregistered_participant: current_participant }
+    end
+  end
+
   def create
     login_params = snake_params(:user)
 

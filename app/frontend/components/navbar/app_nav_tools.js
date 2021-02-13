@@ -1,10 +1,10 @@
 import React from 'react'
 import { useLogout } from '../../hooks/api/mutation'
-import { useCurrentUser } from '../../hooks/api/query'
+import { useCurrent } from '../../hooks/api/query'
 import DropdownWrapper from '../wrappers/dropdown'
 
-export default function AppNavbarTools () {
-  const { data: currentUser } = useCurrentUser()
+export default function AppNavbarTools() {
+  const { data: currentUser } = useCurrent()
   const { mutate: logout } = useLogout()
 
   const Button = () => <span className='nav-tool'>

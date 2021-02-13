@@ -8,7 +8,7 @@ class Api::GroupsController < ApplicationController
   end
 
   def index
-    @groups = current_user.groups.includes(polls: :responses)
+    @groups = current_user.groups.includes(polls: [:answer_options, :responses])
     render :index
   end
 
@@ -17,8 +17,8 @@ class Api::GroupsController < ApplicationController
     @group.user = current_user
     poll_ids = snake_params[:poll_ids]
 
-    if poll_ids && Group.save_with_polls(@group, poll_ids.map(&:to_i))
-      @groups = @group.user.groups.includes(:polls)
+    if poll_ids && @group.save_with_polls(poll_ids.map(&:to_i))
+      @groups = @group.user.groups.includes(polls: [:answer_options, :responses])
       render :index
     elsif !poll_ids && @group.save
       render :show
@@ -61,8 +61,8 @@ class Api::GroupsController < ApplicationController
   def move_polls
     poll_ids = snake_params[:poll_ids].map(&:to_i)
 
-    if Poll.move_polls(poll_ids, @group.id)
-      @groups = current_user.groups.includes(polls: :responses)
+    if Poll.move_items(poll_ids, @group.id)
+      @groups = current_user.groups.includes(polls: [:answer_options, :responses])
       render :index
     else
       render json: ['Could not move polls'], status: 422

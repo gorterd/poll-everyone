@@ -9,7 +9,6 @@ export const CLEAR_DROPDOWN = 'CLEAR_DROPDOWN'
 export const COMPONENT_LOADING = 'COMPONENT_LOADING'
 export const COMPONENT_DONE_LOADING = 'COMPONENT_DONE_LOADING'
 
-
 export const openModal = modal => {
   return {
     type: RECEIVE_MODAL,

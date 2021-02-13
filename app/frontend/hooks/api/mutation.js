@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from 'react-query'
 import { useDispatch } from 'react-redux'
-import { clearSelections } from '../../store/actions/selection_actions/poll_selection_actions'
+import { clearSelections } from '../../store/actions/selection_actions'
 import ajax from '../../util/ajax'
 
 const useSession = (mutateFn, options = {}) => {
@@ -13,12 +13,12 @@ const useSession = (mutateFn, options = {}) => {
     },
     onSuccess: (...args) => {
       options.onSuccess?.(queryClient, ...args)
-      queryClient.invalidateQueries('currentUser')
+      queryClient.invalidateQueries('current')
     }
   })
 }
 
-export const checkIfUserExists = (usernameOrEmail) => (
+export const checkIfUserExists = usernameOrEmail => (
   ajax({
     method: 'GET',
     url: '/api/session/exists',
@@ -35,7 +35,7 @@ export const useLogin = () => {
     })
   ), {
     onSuccess: (queryClient, user) => {
-      queryClient.setQueryData('currentUser', () => user)
+      queryClient.setQueryData('current', () => user)
     }
   })
 }
@@ -49,7 +49,7 @@ export const useSignup = () => {
     })
   ), {
     onSuccess: (queryClient, user) => {
-      queryClient.setQueryData('currentUser', () => user)
+      queryClient.setQueryData('current', () => user)
     }
   })
 }
@@ -62,7 +62,7 @@ export const useLogout = () => {
     })
   ), {
     onSuccess: (queryClient) => {
-      queryClient.setQueryData('currentUser', () => ({}))
+      queryClient.setQueryData('current', () => ({}))
     }
   })
 }

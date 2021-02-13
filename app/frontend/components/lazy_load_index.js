@@ -1,6 +1,6 @@
 import { withLazy } from '../util/hoc'
 
-export const [ParticipantApp, fetchParticipantApp] = withLazy(
+export const [ParticipateApp, fetchParticipateApp] = withLazy(
   () => import(
     /* webpackChunkName: "participate" */
     './participate/participate_app'

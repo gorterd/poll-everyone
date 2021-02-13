@@ -10,24 +10,59 @@
 .show-poll-left {
   overflow: scroll;
   flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
   padding: 32px;
   height: 100%;
-
-  background-color: $light-grey;
-
+  background-color: $lightest-grey;
 }
+
 .graph-container {
   width: 100%;
-  height: 80%; 
+  height: clamp(300px, 80%, 900px); 
   min-height: 300px;
   display: flex;
+  flex-direction: column;
+  background-color: $softer-grey;
+  border: 2px solid $soft-grey;
+  
+  h2 {
+    margin: 20px auto;
+    font-size: $fontsize-h2;
+    font-weight: 400;
 
-  & .graph {  
+    strong {
+      font-weight: 700;
+    }
+  }
+
+  .graph {  
+    background-color: $light-grey;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
     width: 100%;
     height: 100%;
+
+    $h1font: clamp(30px, min(calc(4vh), calc(3vw)), 4rem);
+    
+    h1 {
+      text-align: center;
+      font-size: $h1font;
+    }
+
+    .graph-wrapper {
+      width: 100%;
+      margin: 20px auto;
+      height: 80%;
+      max-height: calc(100% - 100px - #{$h1font});
+      display: flex;
+      justify-content: center;
+    }
+  }
+
+  .logo {
+    margin: 15px auto;
+    cursor: default;
   }
 }
 

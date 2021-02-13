@@ -39,13 +39,13 @@ Rails.application.routes.draw do
   namespace :api, defaults: {format: :json} do
     resources :users, only: [:show, :create, :update] do
       collection do
-        get 'current'
         get 'presentation'
       end
     end
     
     resource :session, only: [:create, :destroy]
     get 'session/exists', to: 'sessions#check_if_user_exists'
+    get 'session/current', to: 'sessions#current'
 
     resources :groups, only: [:index, :create, :update, :destroy] do
       resources :polls, only: [:create]
@@ -71,7 +71,7 @@ Rails.application.routes.draw do
 
     resources :answer_options, only: [:update, :destroy]
 
-    get 'participants/recents', to: 'participants#recents'
+    get 'participations/recents', to: 'participations#recents'
   end
 
 

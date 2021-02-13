@@ -1,8 +1,7 @@
 class UnregisteredParticipant < ApplicationRecord
-
-  before_validation :ensure_participant_session_token, on: [:create]
-  has_many :participants, as: :participatable, dependent: :destroy
-  has_many :responses, through: :participants, source: :responses
+  before_validation :ensure_participant_session_token, on: :create
+  has_many :participations, as: :participant, dependent: :destroy
+  has_many :responses, through: :participations, source: :responses
 
   private
 

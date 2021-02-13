@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
 import { usePoll } from '../../hooks/api/query'
 import { useUpdatePoll } from '../../hooks/api/mutation'
@@ -11,19 +11,21 @@ export default function EditPoll () {
   const { pollId } = useParams()
   const [ initialFormData, setInitialFormData ] = useState()
 
-  usePoll(pollId, {
-    onSuccess: (data) => {
-      const formAnswerOptions = orderedAnswerOptionsSelector(data.answerOptions)
-        .map(({ correct, body, id }) => ({ correct, body, id }))
+  const populateInitialFormData = useCallback(data => {
+    const formAnswerOptions = orderedAnswerOptionsSelector(data.answerOptions)
+      .map(({ correct, body, id }) => ({ correct, body, id }))
 
-      setInitialFormData({ 
-        title: data.poll.title,
-        answerOptionsAttributes: formAnswerOptions 
-      })
-    },
-    refetchOnWindowFocus: false,
-    refetchOnReconnect: false
+    setInitialFormData({
+      title: data.poll.title,
+      answerOptionsAttributes: formAnswerOptions
+    })
+  }, [])
+
+  const { data, isSuccess } = usePoll(pollId, { 
+    notifyOnChangeProps: ['isSuccess'] 
   })
+
+  if (isSuccess && !initialFormData) populateInitialFormData(data)
 
   const submitPoll = poll => updatePoll({poll, pollId})
     .then(() => history.goBack())

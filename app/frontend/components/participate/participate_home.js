@@ -1,104 +1,80 @@
-import React from 'react'
-import { withRouter, Link } from 'react-router-dom'
-import { connect } from 'react-redux'
-import { checkIfUserExists, resetSessionErrors } from '../../store/actions/session_actions'
-import { fetchRecentPresentations } from '../../store/actions/presentation_actions'
+import React, { useState } from 'react'
+import { Link, useHistory } from 'react-router-dom'
 import logoAltImg from '../../images/nav/logo-alt.png'
+import { useInputState } from '../../hooks/state'
+import { useCurrent, useRecentPresentations } from '../../hooks/api/query'
+import { classNames } from '../../util/general_util'
+import { checkIfUserExists } from '../../hooks/api/mutation'
 
-class ParticipantHome extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      username: '',
-    }
+const ParticipateHome = () => {
+  const history = useHistory()
+  const [ error, setError ] = useState()
+  const [ username, , { composeOnChange } ] = useInputState()
+  const { data: { type, id } } = useCurrent()
+  const { data: recents = [] } = useRecentPresentations(type, id)
 
-    this.handleChange = this.handleChange.bind(this)
-    this.handleSubmit = this.handleSubmit.bind(this)
-  }
+  const handleChange = composeOnChange((e) => {
+    const validUsernameRegex = /^[a-zA-Z0-9]*$/
+    if (!validUsernameRegex.test(e.target.value)) {
+      setError('Username can only include letters or numbers')
+    } else if (error) {
+      setError('')
+    } 
+  })
 
-  componentDidMount(){
-    const { currentType, currentId, resetSessionErrors, fetchRecentPresentations } = this.props
-    resetSessionErrors()
-    fetchRecentPresentations(currentType, currentId)
-  }
-
-  handleChange(e){
-    this.props.resetSessionErrors()
-    this.setState({ username: e.target.value })
-  }
-
-  handleSubmit(e){
+  const handleSubmit = e => {
     e.preventDefault()
-    this.props.checkIfUserExists(this.state.username).then(() => {
-      this.props.history.push(`/participate/${this.state.username}`)
-    }, e => console.log(e) )
-  }
-
-  render() {
-    const validUsername = /^[a-zA-Z0-9]*$/
-    
-    let errorMsg
-    if (!validUsername.test(this.state.username)){
-      errorMsg = 'Username can only include letters or numbers'
-    } else {
-      errorMsg = this.props.sessionErrors[0] ? 'Presenter not found' : null
-    }
-
-    return (
-      <div className='participant-home'>
-        <div className='participant-home-logo'>
-          <img src={logoAltImg} alt='Logo' />
-          <span> Poll Everyone</span>
-        </div>
-        <div className='participant-join-form-container'>
-          <h2>Join presentation</h2>
-          <form onSubmit={this.handleSubmit}>
-            <div className={`participant-join-input-container ${(errorMsg ? 'input-error' : '')}`}>
-              <div className={'participant-join-input-wrapper'}>
-                <span>#/participate/</span>
-                <input
-                  autoFocus
-                  className='participant-join-input'
-                  type="text"
-                  onChange={this.handleChange}
-                  value={this.state.username}
-                  placeholder='username'
-                />
-              </div>
-              {errorMsg ? <div className="large-input-error-msg">{errorMsg}</div> : null}
-            </div>
-            <button type='submit' className='button-blue' disabled={errorMsg}>Join</button>
-          </form>
-        </div>
-        { this.props.recents.length ? <h3 className='recents-header'>Recent presentations</h3> : null}
-        <div className='recent-presentations'>
-          {this.props.recents.map( (username, idx) => {
-            return <Link key={idx} to={`/participate/${username}`}>
-              <span>#/participate/</span><span>{username}</span>
-            </Link>
-          })}
-
-        </div>
-      </div>
+    checkIfUserExists(username).then(
+      () => history.push(`/participate/${username}`),
+      () => setError('Presenter not found')
     )
   }
+  
+  return (
+    <div className='participant-home'>
+      <div className='participant-home-logo'>
+        <img src={logoAltImg} alt='Logo' />
+        <span> Poll Everyone</span>
+      </div>
+      <div className='participant-join-form-container'>
+        <h2>Join presentation</h2>
+        <form onSubmit={handleSubmit}>
+          <div {...classNames(
+            'participant-join-input-container', 
+            [error, 'input-error']
+          )}>
+            <div className={'participant-join-input-wrapper'}>
+              <span>#/participate/</span>
+              <input
+                autoFocus
+                className='participant-join-input'
+                type="text"
+                onChange={handleChange}
+                value={username}
+                placeholder='username'
+              />
+            </div>
+            { error && <div className="large-input-error-msg">{error}</div> }
+          </div>
+          <button type='submit' className='button-blue' disabled={error}>
+            Join
+          </button>
+        </form>
+      </div>
+      { recents.length && (
+        <h3 className='recents-header'>Recent presentations </h3>  
+      )}
+      <div className='recent-presentations'>
+        {recents.map( ({ username, id }) => (
+          <Link key={id} to={`/participate/${username}`}>
+            <span>#/participate/</span>
+            <span>{username}</span>
+          </Link>
+        ))}
+
+      </div>
+    </div>
+  )
 }
 
-const mapState = state => {
-  return {
-    sessionErrors: state.errors.session,
-    currentType: state.session.currentType,
-    currentId: state.session.currentId,
-    recents: state.presentation.recents || []    
-  }
-}
-
-const mapDispatch = dispatch => {
-  return {
-    resetSessionErrors: () => dispatch(resetSessionErrors()),
-    checkIfUserExists: usernameOrEmail => dispatch(checkIfUserExists(usernameOrEmail)),
-    fetchRecentPresentations: (type, id) => dispatch(fetchRecentPresentations(type, id))
-  }
-}
-
-export default withRouter(connect(mapState, mapDispatch)(ParticipantHome))
+export default ParticipateHome

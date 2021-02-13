@@ -7,8 +7,12 @@ import { checkIfUserExists, useLogin } from '../../hooks/api/mutation'
 export default function Login () {
   const history = useHistory()
   const { mutateAsync: login } = useLogin()
-  const [ usernameOrEmail, usernameInputProps ] = useInputState('')
-  const [ password, passwordInputProps, setPassword ] = useInputState('')
+  const [ usernameOrEmail, usernameInputProps ] = useInputState()
+  const [ 
+    password, 
+    passwordInputProps, 
+    { setValue: setPassword } 
+  ] = useInputState('')
   const [ fullForm, setFullForm ] = useState(false)
   const [ sessionLoading, setSessionLoading ] = useState(false)
   const [ error, setError ] = useState('')
@@ -87,7 +91,7 @@ export default function Login () {
         </form>
 
         <div className="login-form-posttext">
-          <p>Need an account? 
+          <p>Need an account? &nbsp;
             <Link className="login-link" to='/signup/splash'>
               Create one now
             </Link>

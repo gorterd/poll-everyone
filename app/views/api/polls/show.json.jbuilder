@@ -1,6 +1,5 @@
 json.poll do 
   json.partial! 'api/polls/poll', poll: @poll
-  json.answerOptionIds @poll.answer_option_ids
 end
 
 json.answerOptions do

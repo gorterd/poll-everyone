@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import DropdownWrapper from '../../wrappers/dropdown'
 
-import { receiveSelections, clearSelections } from '../../../store/actions/selection_actions/poll_selection_actions'
+import { receiveSelections, clearSelections } from '../../../store/actions/selection_actions'
 import { 
   openModal, 
   setStickyToolbar, 
@@ -15,7 +15,7 @@ import {
 } from '../../../util/redux_selectors'
 import { smoothScrollToY } from '../../../util/general_util'
 import { useBatchDestroy, useMovePolls } from '../../../hooks/api/mutation'
-import { usePollData } from '../../../hooks/api/query'
+import { usePolls } from '../../../hooks/api/query'
 import { pollDataOrderedGroupsSelector } from '../../../util/query_selectors'
 
 export default function GroupsIndexToolbar({ toggleMoveDrawer }) {
@@ -23,7 +23,7 @@ export default function GroupsIndexToolbar({ toggleMoveDrawer }) {
   const dispatch = useDispatch()
   const stickyToolbar = useSelector(stickyToolbarSelector)
   const selectedPolls =  useSelector(selectedPollsSelector)
-  const { data: groups } = usePollData({ select: pollDataOrderedGroupsSelector})
+  const { data: groups = [] } = usePolls({ select: pollDataOrderedGroupsSelector})
   const { mutate: movePolls } = useMovePolls()
   const { mutate: batchDestroy } = useBatchDestroy()
 
@@ -68,7 +68,7 @@ export default function GroupsIndexToolbar({ toggleMoveDrawer }) {
   function ungroup(){
     movePolls({
       pollIds: selectedPollIds,
-      groupId: groups.find(g => g.ord === 0).id
+      groupId: groups.find(g => g.ord === 1).id
     })
   }
 

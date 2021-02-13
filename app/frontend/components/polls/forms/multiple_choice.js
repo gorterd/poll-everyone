@@ -113,7 +113,7 @@ export default function MultipleChoiceForm ({
       setError(answerOptionsAttributesError)
     } else {
       const processedAnswerOptions = filledOptions
-        .map((option, idx) => ({ ...option, ord: idx }))
+        .map((option, idx) => ({ ...option, ord: idx + 1 }))
 
       successCb({
         ...formData,
