@@ -12,6 +12,8 @@ import { useToggleState } from '../../hooks/state'
 import { fetchEditPoll, fetchHomeSplash, fetchPresentPoll } from '../lazy_load_index'
 import { usePolls } from '../../hooks/api/query'
 import { pollDataSelector } from '../../util/query_selectors'
+import { useLazyLoadQuery } from 'react-relay/hooks'
+import { graphql } from 'graphql'
 
 export default function GroupsIndex() {
   const prefetch = useCallback(() => {
@@ -21,6 +23,25 @@ export default function GroupsIndex() {
   }, [])
 
   useDelayedPrefetch(prefetch)
+
+  const d = useLazyLoadQuery(
+    graphql`
+      query pollsIndexQuery {
+        groups {
+          title
+          numPolls
+          ord
+          polls {
+            title
+            active
+            ord
+            numResponses
+          }
+        }
+      }
+    `
+  )
+  console.log(d)
 
   const [ moveDrawerVisible, toggleMoveDrawerVisible ] = useToggleState(false)
   const previousDrawerVisibility = usePrevious(moveDrawerVisible)

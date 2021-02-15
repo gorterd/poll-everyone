@@ -3,9 +3,11 @@ import { Provider } from 'react-redux'
 import { HashRouter } from 'react-router-dom'
 import App from './app'
 import { QueryClientProvider } from 'react-query'
+import { RelayEnvironmentProvider } from 'react-relay/hooks'
+import environment from '../relay/environment'
 
-export default function Root({ store, queryClient }) {
-  return (
+const Root = ({ store, queryClient }) => 
+  <RelayEnvironmentProvider environment={environment}>
     <Provider store={store} >
       <QueryClientProvider client={queryClient}>
         <HashRouter>
@@ -13,5 +15,6 @@ export default function Root({ store, queryClient }) {
         </HashRouter>
       </QueryClientProvider>
     </Provider>
-  )
-}
+  </RelayEnvironmentProvider>
+
+export default Root

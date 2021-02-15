@@ -1,0 +1,128 @@
+type AnswerOption implements Node {
+  _id: Int!
+  body: String!
+  correct: Boolean!
+  createdAt: ISO8601DateTime!
+  id: ID!
+  numOwnResponses: Int!
+  ord: Int!
+  pollId: Int!
+  responses: [Response!]
+  updatedAt: ISO8601DateTime!
+}
+
+type Group implements Node {
+  _id: Int!
+  createdAt: ISO8601DateTime!
+  id: ID!
+  numPolls: Int!
+  ord: Int!
+  polls: [Poll!]
+  title: String!
+  updatedAt: ISO8601DateTime!
+  userId: Int!
+}
+
+"""
+An ISO 8601-encoded datetime
+"""
+scalar ISO8601DateTime
+
+type Mutation {
+  """
+  An example field added by the generator
+  """
+  testField: String!
+}
+
+"""
+An object with an ID.
+"""
+interface Node {
+  """
+  ID of the object.
+  """
+  id: ID!
+}
+
+type Participation implements Node {
+  _id: Int!
+  activePoll: Poll
+  createdAt: ISO8601DateTime!
+  id: ID!
+  numOwnResponses: Int!
+  ownResponses: [Response!]
+  participantId: Int!
+  participantType: String!
+  presenter: User
+  presenterId: Int!
+  screenName: String
+  updatedAt: ISO8601DateTime!
+}
+
+type Poll implements Node {
+  _id: Int!
+  active: Boolean!
+  allowAnonymous: Boolean!
+  allowChanges: Boolean!
+  answerOptions: [AnswerOption!]
+  createdAt: ISO8601DateTime!
+  groupId: Int!
+  id: ID!
+  locked: Boolean!
+  numResponses: Int!
+  numResponsesAllowed: Int!
+  ord: Int!
+  pollType: String!
+  title: String!
+  updatedAt: ISO8601DateTime!
+}
+
+type Query {
+  groups: [Group!]!
+
+  """
+  Fetches an object given its ID.
+  """
+  node(
+    """
+    ID of the object.
+    """
+    id: ID!
+  ): Node
+
+  """
+  Fetches a list of objects given a list of IDs.
+  """
+  nodes(
+    """
+    IDs of the objects.
+    """
+    ids: [ID!]!
+  ): [Node]!
+  participation(username: String!): Participation!
+  polls: [Poll!]!
+}
+
+type Response implements Node {
+  _id: Int!
+  answerOptionId: Int
+  body: String!
+  createdAt: ISO8601DateTime!
+  id: ID!
+  participationId: Int!
+  pollId: Int!
+  screenName: String
+  updatedAt: ISO8601DateTime!
+}
+
+type User implements Node {
+  _id: Int!
+  createdAt: ISO8601DateTime!
+  email: String!
+  firstName: String!
+  id: ID!
+  lastName: String!
+  updatedAt: ISO8601DateTime!
+  username: String!
+}
