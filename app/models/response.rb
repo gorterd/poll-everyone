@@ -8,7 +8,10 @@ class Response < ApplicationRecord
   belongs_to :poll
   belongs_to :answer_option, optional: true
   belongs_to :participation
-  has_one :participant, through: :participation, source: :participant
+
+  def participant
+    participation.participant
+  end
 
   private
 

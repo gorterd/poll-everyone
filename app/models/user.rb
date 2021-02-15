@@ -8,7 +8,7 @@ class User < ApplicationRecord
   after_create :generate_default_group
   
   has_many :groups, -> { order(:ord) }, autosave: true, dependent: :destroy
-  has_many :polls, through: :groups
+  has_many :polls, -> { order(:ord) }, through: :groups
   has_many :participations, as: :participant, dependent: :destroy
   has_many :responses, through: :participations, source: :responses
   
