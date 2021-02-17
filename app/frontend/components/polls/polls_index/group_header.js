@@ -1,19 +1,30 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { graphql, useFragment } from 'react-relay/hooks'
 import { clearGroupSelection, receiveGroupSelection } from '../../../store/actions/selection_actions'
 import { selectedPollsSelector } from '../../../util/redux_selectors'
 
+const groupHeaderFragment = graphql`
+  fragment groupHeader on Group {
+    _id
+    title
+    ord
+    numPolls
+    pollIds
+  }
+`
+
 export default function GroupHeader({
-  group,
+  groupRef,
   drawerVisible,
   toggleDrawerVisible,
   addActivity,
   rename,
 }) {
+  const group = useFragment(groupHeaderFragment, groupRef)
   const dispatch = useDispatch()
-  const { id, title, ord, pollIds } = group
-  const checked = useSelector(selectedPollsSelector).groupIds.includes(id)
-  const pollsCount = pollIds.length
+  const { _id, title, ord, numPolls } = group
+  const checked = useSelector(selectedPollsSelector).groupIds.includes(_id)
 
   const optionalControls = !!ord && (
     <>
@@ -21,7 +32,7 @@ export default function GroupHeader({
     </>
   )
 
-  const activitiesCount = `${pollsCount} activit${(pollsCount == 1) ? 'y' : 'ies'}`
+  const activitiesCount = `${numPolls} activit${(numPolls == 1) ? 'y' : 'ies'}`
 
   const handleCheckbox = e => e.target.checked
     ? dispatch(receiveGroupSelection(group))

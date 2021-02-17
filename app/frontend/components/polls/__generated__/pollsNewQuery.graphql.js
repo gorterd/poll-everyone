@@ -8,25 +8,33 @@
 
 /*::
 import type { ConcreteRequest } from 'relay-runtime';
-export type appQueryVariables = {||};
-export type appQueryResponse = {|
+type groupSearch$ref = any;
+export type pollsNewQueryVariables = {||};
+export type pollsNewQueryResponse = {|
   +groups: $ReadOnlyArray<{|
-    +title: string
+    +_id: number,
+    +$fragmentRefs: groupSearch$ref,
   |}>
 |};
-export type appQuery = {|
-  variables: appQueryVariables,
-  response: appQueryResponse,
+export type pollsNewQuery = {|
+  variables: pollsNewQueryVariables,
+  response: pollsNewQueryResponse,
 |};
 */
 
 
 /*
-query appQuery {
+query pollsNewQuery {
   groups {
-    title
+    _id
+    ...groupSearch
     id
   }
+}
+
+fragment groupSearch on Group {
+  _id
+  title
 }
 */
 
@@ -35,7 +43,7 @@ var v0 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "title",
+  "name": "_id",
   "storageKey": null
 };
 return {
@@ -43,7 +51,7 @@ return {
     "argumentDefinitions": [],
     "kind": "Fragment",
     "metadata": null,
-    "name": "appQuery",
+    "name": "pollsNewQuery",
     "selections": [
       {
         "alias": null,
@@ -53,7 +61,12 @@ return {
         "name": "groups",
         "plural": true,
         "selections": [
-          (v0/*: any*/)
+          (v0/*: any*/),
+          {
+            "args": null,
+            "kind": "FragmentSpread",
+            "name": "groupSearch"
+          }
         ],
         "storageKey": null
       }
@@ -65,7 +78,7 @@ return {
   "operation": {
     "argumentDefinitions": [],
     "kind": "Operation",
-    "name": "appQuery",
+    "name": "pollsNewQuery",
     "selections": [
       {
         "alias": null,
@@ -80,6 +93,13 @@ return {
             "alias": null,
             "args": null,
             "kind": "ScalarField",
+            "name": "title",
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
             "name": "id",
             "storageKey": null
           }
@@ -89,16 +109,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "daa7ad68f52b328ab36b8228fc82df68",
+    "cacheID": "8bd083b3b5df6030be5ae1f8f0300143",
     "id": null,
     "metadata": {},
-    "name": "appQuery",
+    "name": "pollsNewQuery",
     "operationKind": "query",
-    "text": "query appQuery {\n  groups {\n    title\n    id\n  }\n}\n"
+    "text": "query pollsNewQuery {\n  groups {\n    _id\n    ...groupSearch\n    id\n  }\n}\n\nfragment groupSearch on Group {\n  _id\n  title\n}\n"
   }
 };
 })();
 // prettier-ignore
-(node/*: any*/).hash = 'eb619af560c1568a00599eab7cec9747';
+(node/*: any*/).hash = 'b078374eb8a8ab0f6c4e8f863b36bc1e';
 
 module.exports = node;

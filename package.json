@@ -52,7 +52,8 @@
     "webpack": "bin/webpack",
     "start": "bin/webpack-dev-server",
     "server": "bundle exec rails server",
-    "relay": "relay-compiler --src ./app/frontend --schema ./app/frontend/relay/schema.graphql"
+    "relay": "relay-compiler --src ./app/frontend --schema ./schema.graphql",
+    "build-schema": "bundle exec rails graphql:schema:idl && yarn relay"
   },
   "engines": {
     "node": "^10.22.1",

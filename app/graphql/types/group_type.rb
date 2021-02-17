@@ -11,6 +11,7 @@ module Types
     field :updated_at, GraphQL::Types::ISO8601DateTime, null: false
 
     field :polls, [Types::PollType], null: true
+    field :poll_ids, [Integer], null: true
 
     field :num_polls, Integer, null: false
     def num_polls

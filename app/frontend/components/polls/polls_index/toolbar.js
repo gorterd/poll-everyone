@@ -15,15 +15,23 @@ import {
 } from '../../../util/redux_selectors'
 import { smoothScrollToY } from '../../../util/general_util'
 import { useBatchDestroy, useMovePolls } from '../../../hooks/api/mutation'
-import { usePolls } from '../../../hooks/api/query'
-import { pollDataOrderedGroupsSelector } from '../../../util/query_selectors'
+import { graphql, useFragment } from 'react-relay/hooks'
 
-export default function GroupsIndexToolbar({ toggleMoveDrawer }) {
+const pollsIndexToolbarFragment = graphql`
+  fragment toolbar on Group @relay(plural: true) {
+    _id
+    ord
+    pollIds
+  }
+`
+
+const PollsIndexToolbar = ({ toggleMoveDrawer, groupsRef }) => {
+  const groups = useFragment(pollsIndexToolbarFragment, groupsRef)
+
   const intersectionDiv = useRef()
   const dispatch = useDispatch()
   const stickyToolbar = useSelector(stickyToolbarSelector)
   const selectedPolls =  useSelector(selectedPollsSelector)
-  const { data: groups = [] } = usePolls({ select: pollDataOrderedGroupsSelector})
   const { mutate: movePolls } = useMovePolls()
   const { mutate: batchDestroy } = useBatchDestroy()
 
@@ -60,7 +68,7 @@ export default function GroupsIndexToolbar({ toggleMoveDrawer }) {
   }
 
   function selectAll(){
-    const groupIds = groups.map( group => group.id )
+    const groupIds = groups.map( group => group._id )
     const pollIds = groups.reduce( (acc, group) => acc.concat(group.pollIds), [] )
     dispatch(receiveSelections({ groupIds, pollIds }))
   }
@@ -68,7 +76,7 @@ export default function GroupsIndexToolbar({ toggleMoveDrawer }) {
   function ungroup(){
     movePolls({
       pollIds: selectedPollIds,
-      groupId: groups.find(g => g.ord === 1).id
+      groupId: groups.find(g => g.ord === 1)._id
     })
   }
 
@@ -118,3 +126,5 @@ export default function GroupsIndexToolbar({ toggleMoveDrawer }) {
     </>
   )
 }
+
+export default PollsIndexToolbar

@@ -1,4 +1,5 @@
 import React, { useEffect, useReducer, useRef } from 'react'
+import { graphql, useFragment } from 'react-relay/hooks'
 import { useDropdown } from '../../hooks/ui'
 import { clamp } from '../../util/general_util'
 
@@ -8,7 +9,16 @@ const KEY_MOVE = 'KEY_MOVE'
 const SET_DRAWER_GROUPS = 'SET_DRAWER_GROUPS'
 const SELECT_GROUP = 'SELECT_GROUP'
 
-export default function GroupSearch({ setGroup, focusOnTab, groups, placeholderText, defaultGroup }) {
+const groupSearchFragment = graphql`
+  fragment groupSearch on Group @relay(plural: true) {
+    _id
+    title
+  }
+`
+
+export default function GroupSearch({ setGroup, focusOnTab, placeholderText, defaultGroup, groupsRef }) {
+  const groups = useFragment(groupSearchFragment, groupsRef) 
+
   const [state, dispatch] = useReducer((state, action) => {
     switch (action.type) {
       case SELECT_GROUP:
@@ -180,7 +190,7 @@ export default function GroupSearch({ setGroup, focusOnTab, groups, placeholderT
       {dropdownShowing && <ul className='group-search-list'>
         {drawerGroups.map((group, idx) => (
           <li 
-            key={group.id}
+            key={group._id}
             className={focusIndex === idx ? 'focused' : ''}
             onClick={() => selectGroup(group)}
             ref={li => drawerLis.current[idx] = li}

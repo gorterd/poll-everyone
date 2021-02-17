@@ -1,52 +1,39 @@
 import React, { useCallback, useLayoutEffect } from 'react'
 import { useSelector } from 'react-redux'
-import GroupsIndexToolbar from './polls_index/toolbar'
+import PollsIndexToolbar from './polls_index/toolbar'
 import MoveDrawer from './polls_index/move_drawer'
-import GroupPollsIndex from './polls_index/group_polls_list'
-import { 
-  stickyToolbarSelector 
-} from '../../util/redux_selectors'
+import GroupPollsList from './polls_index/group_polls_list'
+import { stickyToolbarSelector } from '../../util/redux_selectors'
 import { useDelayedPrefetch } from '../../hooks/effect'
-import { usePrevious } from '../../hooks/general'
+import { useFreshLazyLoadQuery, usePrevious } from '../../hooks/general'
 import { useToggleState } from '../../hooks/state'
 import { fetchEditPoll, fetchHomeSplash, fetchPresentPoll } from '../lazy_load_index'
-import { usePolls } from '../../hooks/api/query'
-import { pollDataSelector } from '../../util/query_selectors'
-import { useLazyLoadQuery } from 'react-relay/hooks'
-import { graphql } from 'graphql'
+import { graphql } from 'react-relay/hooks'
 
-export default function GroupsIndex() {
+export const pollsIndexQuery = graphql`
+  query pollsIndexQuery {
+    groups {
+      _id
+      ...groupPollsList
+      ...moveDrawer
+      ...toolbar
+    }
+  }
+`
+
+const PollsIndex = () => {
   const prefetch = useCallback(() => {
     fetchHomeSplash()
     fetchEditPoll()
     fetchPresentPoll()
   }, [])
-
   useDelayedPrefetch(prefetch)
 
-  const d = useLazyLoadQuery(
-    graphql`
-      query pollsIndexQuery {
-        groups {
-          title
-          numPolls
-          ord
-          polls {
-            title
-            active
-            ord
-            numResponses
-          }
-        }
-      }
-    `
-  )
-  console.log(d)
+  const { groups } = useFreshLazyLoadQuery(pollsIndexQuery)
 
   const [ moveDrawerVisible, toggleMoveDrawerVisible ] = useToggleState(false)
   const previousDrawerVisibility = usePrevious(moveDrawerVisible)
   const stickyToolbar = useSelector(stickyToolbarSelector)
-  const { data = [] } = usePolls({ select: pollDataSelector })
 
   useLayoutEffect( () => {
     if (moveDrawerVisible && !previousDrawerVisibility && stickyToolbar) {
@@ -56,27 +43,26 @@ export default function GroupsIndex() {
 
   return (
     <section className="polls-index">
-
-      <GroupsIndexToolbar 
+      <PollsIndexToolbar 
         toggleMoveDrawer={toggleMoveDrawerVisible}
+        groupsRef={groups}
       />
       <section className='groups-index-container'>
 
         <MoveDrawer 
           visible={moveDrawerVisible} 
           toggleVisible={toggleMoveDrawerVisible} 
+          groupsRef={groups}
         /> 
 
         <div className='groups-index'>
-          {data?.map( ({ group, polls }) => {
-            return <GroupPollsIndex 
-              key={group.id} 
-              group={group} 
-              polls={polls}
-            />
-          })}
+          {groups.map(group => 
+            <GroupPollsList key={group._id} groupRef={group} />
+          )}
         </div>
       </section>
     </section>
   )
 }
+
+export default PollsIndex

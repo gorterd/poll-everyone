@@ -8,18 +8,14 @@
 
 /*::
 import type { ConcreteRequest } from 'relay-runtime';
+type groupPollsList$ref = any;
+type moveDrawer$ref = any;
+type toolbar$ref = any;
 export type pollsIndexQueryVariables = {||};
 export type pollsIndexQueryResponse = {|
   +groups: $ReadOnlyArray<{|
-    +title: string,
-    +numPolls: number,
-    +ord: number,
-    +polls: ?$ReadOnlyArray<{|
-      +title: string,
-      +active: boolean,
-      +ord: number,
-      +numResponses: number,
-    |}>,
+    +_id: number,
+    +$fragmentRefs: groupPollsList$ref & moveDrawer$ref & toolbar$ref,
   |}>
 |};
 export type pollsIndexQuery = {|
@@ -32,18 +28,59 @@ export type pollsIndexQuery = {|
 /*
 query pollsIndexQuery {
   groups {
-    title
-    numPolls
-    ord
-    polls {
-      title
-      active
-      ord
-      numResponses
-      id
-    }
+    _id
+    ...groupPollsList
+    ...moveDrawer
+    ...toolbar
     id
   }
+}
+
+fragment groupHeader on Group {
+  _id
+  title
+  ord
+  numPolls
+  pollIds
+}
+
+fragment groupPollsList on Group {
+  _id
+  title
+  ord
+  pollIds
+  ...groupHeader
+  polls {
+    _id
+    ...pollListItem
+    id
+  }
+}
+
+fragment groupSearch on Group {
+  _id
+  title
+}
+
+fragment moveDrawer on Group {
+  _id
+  ord
+  ...groupSearch
+}
+
+fragment pollListItem on Poll {
+  _id
+  title
+  active
+  ord
+  numResponses
+  pollType
+}
+
+fragment toolbar on Group {
+  _id
+  ord
+  pollIds
 }
 */
 
@@ -52,14 +89,14 @@ var v0 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "title",
+  "name": "_id",
   "storageKey": null
 },
 v1 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "numPolls",
+  "name": "title",
   "storageKey": null
 },
 v2 = {
@@ -70,20 +107,6 @@ v2 = {
   "storageKey": null
 },
 v3 = {
-  "alias": null,
-  "args": null,
-  "kind": "ScalarField",
-  "name": "active",
-  "storageKey": null
-},
-v4 = {
-  "alias": null,
-  "args": null,
-  "kind": "ScalarField",
-  "name": "numResponses",
-  "storageKey": null
-},
-v5 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
@@ -106,22 +129,20 @@ return {
         "plural": true,
         "selections": [
           (v0/*: any*/),
-          (v1/*: any*/),
-          (v2/*: any*/),
           {
-            "alias": null,
             "args": null,
-            "concreteType": "Poll",
-            "kind": "LinkedField",
-            "name": "polls",
-            "plural": true,
-            "selections": [
-              (v0/*: any*/),
-              (v3/*: any*/),
-              (v2/*: any*/),
-              (v4/*: any*/)
-            ],
-            "storageKey": null
+            "kind": "FragmentSpread",
+            "name": "groupPollsList"
+          },
+          {
+            "args": null,
+            "kind": "FragmentSpread",
+            "name": "moveDrawer"
+          },
+          {
+            "args": null,
+            "kind": "FragmentSpread",
+            "name": "toolbar"
           }
         ],
         "storageKey": null
@@ -150,36 +171,70 @@ return {
           {
             "alias": null,
             "args": null,
+            "kind": "ScalarField",
+            "name": "pollIds",
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "numPolls",
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
             "concreteType": "Poll",
             "kind": "LinkedField",
             "name": "polls",
             "plural": true,
             "selections": [
               (v0/*: any*/),
-              (v3/*: any*/),
+              (v1/*: any*/),
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "active",
+                "storageKey": null
+              },
               (v2/*: any*/),
-              (v4/*: any*/),
-              (v5/*: any*/)
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "numResponses",
+                "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "pollType",
+                "storageKey": null
+              },
+              (v3/*: any*/)
             ],
             "storageKey": null
           },
-          (v5/*: any*/)
+          (v3/*: any*/)
         ],
         "storageKey": null
       }
     ]
   },
   "params": {
-    "cacheID": "2938b70f33884fe863c2ea4be178b572",
+    "cacheID": "f49e44d1e7d0d527f4cd055e493014dc",
     "id": null,
     "metadata": {},
     "name": "pollsIndexQuery",
     "operationKind": "query",
-    "text": "query pollsIndexQuery {\n  groups {\n    title\n    numPolls\n    ord\n    polls {\n      title\n      active\n      ord\n      numResponses\n      id\n    }\n    id\n  }\n}\n"
+    "text": "query pollsIndexQuery {\n  groups {\n    _id\n    ...groupPollsList\n    ...moveDrawer\n    ...toolbar\n    id\n  }\n}\n\nfragment groupHeader on Group {\n  _id\n  title\n  ord\n  numPolls\n  pollIds\n}\n\nfragment groupPollsList on Group {\n  _id\n  title\n  ord\n  pollIds\n  ...groupHeader\n  polls {\n    _id\n    ...pollListItem\n    id\n  }\n}\n\nfragment groupSearch on Group {\n  _id\n  title\n}\n\nfragment moveDrawer on Group {\n  _id\n  ord\n  ...groupSearch\n}\n\nfragment pollListItem on Poll {\n  _id\n  title\n  active\n  ord\n  numResponses\n  pollType\n}\n\nfragment toolbar on Group {\n  _id\n  ord\n  pollIds\n}\n"
   }
 };
 })();
 // prettier-ignore
-(node/*: any*/).hash = '76f8a9b4f78ae6056184914091b86067';
+(node/*: any*/).hash = 'dd3167a3637e46daade7aaf986f0598b';
 
 module.exports = node;

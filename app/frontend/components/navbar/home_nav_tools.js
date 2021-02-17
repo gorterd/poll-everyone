@@ -4,6 +4,8 @@ import { fetchGroupsIndex, fetchLogin, fetchParticipateApp, fetchSignupSplash } 
 import { useDelayedPrefetch } from '../../hooks/effect'
 import { useLoggedIn } from '../../hooks/api/query'
 import { useLogin, useLogout } from '../../hooks/api/mutation'
+import QueryLink from '../shared/link'
+import { pollsIndexQuery } from '../polls/polls_index'
 
 export default function HomeNavTools() {
   const { mutateAsync: login } = useLogin()
@@ -30,11 +32,12 @@ export default function HomeNavTools() {
 
   const tools = loggedIn
     ? [
-      <Link 
+      <QueryLink 
         key='my-polls' 
         className="button button-white" 
         to='/polls'
-      >My polls</Link>,
+        query={pollsIndexQuery}
+      >My polls</QueryLink>,
       <button 
         key='logout' 
         className="nav-tool" 

@@ -4,19 +4,28 @@ import MultipleChoiceForm from './forms/multiple_choice'
 import { exitModal } from '../../store/actions/ui_actions'
 import GroupSearch from '../shared/group_search'
 import multipleChoiceOptionImg from '../../images/icons/multiple-choice-option.png'
-import { pollDataOrderedGroupsSelector } from '../../util/query_selectors'
 import { useCreatePoll } from '../../hooks/api/mutation'
 import { classNames } from '../../util/general_util'
-import { usePolls } from '../../hooks/api/query'
+import { graphql } from 'react-relay/hooks'
+import { useFreshLazyLoadQuery } from '../../hooks/general'
+
+export const pollsNewQuery = graphql`
+  query pollsNewQuery {
+    groups {
+      _id
+      ...groupSearch
+    }
+  }
+`
 
 const forms = {
   multiple_choice: MultipleChoiceForm,
 }
 
 export default function NewPollForm({ modalData }) {
+  const { groups } = useFreshLazyLoadQuery(pollsNewQuery)
   const dispatch = useDispatch()
   const { mutateAsync: createPoll } = useCreatePoll()
-  const { data: groups } = usePolls({ select: pollDataOrderedGroupsSelector })
 
   const [ activeOption, setActiveOption ] = useState('multiple_choice')
   const [ group, setGroup] = useState(modalData.group)
@@ -26,7 +35,7 @@ export default function NewPollForm({ modalData }) {
       ...pollData, 
       pollType: activeOption
     }, 
-    groupId: group?.id || groups[0].id
+    groupId: group?._id || groups[0]._id
   }).then(() => dispatch(exitModal()))
   
 
@@ -72,7 +81,7 @@ export default function NewPollForm({ modalData }) {
                   <GroupSearch
                     defaultGroup={modalData.group?.title}
                     setGroup={setGroup}
-                    groups={groups}
+                    groupsRef={groups}
                     placeholderText='Assign activity to a group'
                   />
 

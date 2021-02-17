@@ -5,15 +5,22 @@ import { openModal, exitModal } from '../../../store/actions/ui_actions'
 import { selectedPollsSelector, stickyToolbarSelector } from '../../../util/redux_selectors'
 import GroupSearch from '../../shared/group_search'
 import { useMovePolls } from '../../../hooks/api/mutation'
-import { usePolls } from '../../../hooks/api/query'
-import { pollDataOrderedGroupsSelector } from '../../../util/query_selectors'
+import { graphql, useFragment } from 'react-relay/hooks'
 
-export default function MoveDrawer({ visible, toggleVisible }) {
+const moveDrawerFragment = graphql`
+  fragment moveDrawer on Group @relay(plural: true) {
+    _id
+    ord
+    ...groupSearch
+  }
+`
+
+export default function MoveDrawer({ visible, toggleVisible, groupsRef }) {
+  const groups = useFragment(moveDrawerFragment, groupsRef)
   const dispatch = useDispatch()
   const selectedPolls = useSelector(selectedPollsSelector)
   const stickyToolbar = useSelector(stickyToolbarSelector)
   const [ group, setGroup ] = useState(undefined)
-  const { data: groups = [] } = usePolls({ select: pollDataOrderedGroupsSelector })
   const { mutateAsync: movePolls } = useMovePolls()
   const groupSearchKey = useRef(0)
   const moveButton = useRef()
@@ -23,7 +30,7 @@ export default function MoveDrawer({ visible, toggleVisible }) {
   const numPolls = pollIds.length
 
   function handleMove(){
-    const groupId = group?.id || groups.find(group => group.ord === 1 ).id
+    const groupId = group?._id || groups.find(group => group.ord === 1 )._id
     const sendMoveRequest = () => {
       return movePolls({pollIds, groupId}).then( () => {
         dispatch(exitModal())
@@ -57,7 +64,7 @@ export default function MoveDrawer({ visible, toggleVisible }) {
             <GroupSearch
               key={groupSearchKey.current}
               setGroup={setGroup}
-              groups={groups}
+              groupsRef={groups}
               placeholderText='Search group name'
               focusOnTab={ disabled ? cancelButton.current : moveButton.current }
             />

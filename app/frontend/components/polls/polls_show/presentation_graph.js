@@ -11,7 +11,6 @@ const PresentationGraph = ({
   isAnimationActive,
   activated
 }) => { 
-  
   const numRows = formattedData.length
   const graphWidth = Math.min(dims.width, dims.height * 2.5)
   const graphHeight = Math.min(dims.height, dims.width * numRows / 3)

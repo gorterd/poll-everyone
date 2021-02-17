@@ -18,23 +18,15 @@ export const clearSelections = () => {
   }
 }
 
-export const receiveGroupSelection = group => {
-  const groupId = group.id
-  const pollIds = group.pollIds
-  return {
-    type: RECEIVE_GROUP_SELECTION,
-    data: { groupId, pollIds }
-  }
-}
+export const receiveGroupSelection = ({ pollIds, _id: groupId }) => ({
+  type: RECEIVE_GROUP_SELECTION,
+  data: { groupId, pollIds }
+})
 
-export const clearGroupSelection = group => {
-  const groupId = group.id
-  const pollIds = group.pollIds
-  return {
-    type: CLEAR_GROUP_SELECTION,
-    data: { groupId, pollIds }
-  }
-}
+export const clearGroupSelection = ({ pollIds, _id: groupId }) => ({
+  type: CLEAR_GROUP_SELECTION,
+  data: { groupId, pollIds }
+})
 
 // expects group and pollId
 export const receivePollSelection = data => {

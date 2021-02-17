@@ -18,6 +18,14 @@ module Types
       require_authorization
       context[:current_user].polls
     end
+    
+    field :poll, Types::PollType, null: false do
+      argument :id, Integer, required: true
+    end
+    def poll(id:)
+      require_authorization
+      Poll.find(id)
+    end
 
     field :participation, Types::ParticipationType, null: false do
       argument :username, String, required: true

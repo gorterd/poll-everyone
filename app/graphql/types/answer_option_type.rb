@@ -12,6 +12,12 @@ module Types
     field :updated_at, GraphQL::Types::ISO8601DateTime, null: false
 
     field :responses, [Types::ResponseType], null: true
+
+    field :num_responses, Integer, null: false
+    def num_responses
+      object.responses.count
+    end
+
     field :num_own_responses, Integer, null: false 
     def num_own_responses
       Response

@@ -1,10 +1,13 @@
 import { useMutation, useQueryClient } from 'react-query'
 import { useDispatch } from 'react-redux'
+import { commitLocalUpdate } from 'react-relay'
+import { useRelayEnvironment } from 'react-relay/hooks'
 import { clearSelections } from '../../store/actions/selection_actions'
 import ajax from '../../util/ajax'
 
 const useSession = (mutateFn, options = {}) => {
   const queryClient = useQueryClient()
+  const environment = useRelayEnvironment()
 
   return useMutation(mutateFn, {
     ...options,
@@ -14,6 +17,7 @@ const useSession = (mutateFn, options = {}) => {
     onSuccess: (...args) => {
       options.onSuccess?.(queryClient, ...args)
       queryClient.invalidateQueries('current')
+      commitLocalUpdate(environment, store => store.invalidateStore())
     }
   })
 }
@@ -69,6 +73,7 @@ export const useLogout = () => {
 
 const useMutatePoll = (mutateFn, options = {}) => {
   const queryClient = useQueryClient()
+  const environment = useRelayEnvironment()
 
   return useMutation(mutateFn, {
     ...options,
@@ -78,6 +83,7 @@ const useMutatePoll = (mutateFn, options = {}) => {
     onSuccess: (...args) => {
       options.onSuccess?.(queryClient, ...args)
       queryClient.invalidateQueries('polls')
+      commitLocalUpdate(environment, store => store.invalidateStore())
     }
   })
 }
@@ -142,6 +148,7 @@ export const useToggleActive = () => {
 const useMutateGroup = (mutateFn, options = {}) => {
   const queryClient = useQueryClient()
   const dispatch = useDispatch()
+  const environment = useRelayEnvironment()
 
   return useMutation(mutateFn, {
     ...options,
@@ -152,6 +159,7 @@ const useMutateGroup = (mutateFn, options = {}) => {
     onSuccess: () => { 
       options.onSuccess?.()
       queryClient.invalidateQueries('polls')
+      commitLocalUpdate(environment, store => store.invalidateStore())
     }
   })
 }
@@ -170,7 +178,7 @@ export const useUpdateGroup = () => {
   return useMutateGroup( group => 
     ajax({
       method: 'PATCH',
-      url: `/api/groups/${group.id}`,
+      url: `/api/groups/${group._id}`,
       data: { group }
     })
   )

@@ -6,13 +6,31 @@ import { useToggleState } from '../../../hooks/state'
 import { stickyToolbarSelector } from '../../../util/redux_selectors'
 import GroupHeader from './group_header'
 import PollListItem from './poll_list_item'
+import { graphql, useFragment } from 'react-relay/hooks'
 
-export default function GroupPollsIndex ({ group, polls }) {
+const groupFragment = graphql`
+  fragment groupPollsList on Group {
+    _id
+    title
+    ord
+    pollIds
+    ...groupHeader
+
+    polls {
+      _id
+      ...pollListItem
+    }
+  }
+`
+
+const GroupPollsList = ({ groupRef }) => {
+  const { polls, ...group } = useFragment(groupFragment, groupRef)
+
   const dispatch = useDispatch()
-  const [drawerVisible, toggleDrawerVisible ] = useToggleState(!group.ord)
+  const [ drawerVisible, toggleDrawerVisible ] = useToggleState(group.ord === 1)
   const stickyToolbar = useSelector(stickyToolbarSelector)
 
-  function addActivity(e) {
+  const addActivity = (e) => {
     e.stopPropagation()
     
     dispatch( openModal({
@@ -22,7 +40,7 @@ export default function GroupPollsIndex ({ group, polls }) {
     }))
   }
 
-  function rename(e) {
+  const rename = (e) => {
     e.stopPropagation()
 
     dispatch( openModal({
@@ -32,36 +50,47 @@ export default function GroupPollsIndex ({ group, polls }) {
     }))
   }
 
-  function togglePollSelect(pollId, selected) {
+  const togglePollSelect = (pollId, selected) => {
     if (selected) {
       dispatch(receivePollSelection({ group, pollId }))
     } else {
-      dispatch(clearPollSelection({ group, pollId}))
+      dispatch(clearPollSelection({ group, pollId }))
     }
   }
 
   const headerProps = {
-    group, 
+    groupRef: group, 
     drawerVisible,
     toggleDrawerVisible,
     addActivity,
     rename,
   }
 
+
   return (
     <div className='group-polls-index-container'>
       <GroupHeader {...headerProps} />
       { drawerVisible && (
         <ul className="group-polls-index">
-          { polls?.map( poll => {
+          {polls.map(poll =>
+            <PollListItem 
+              key={poll._id} 
+              pollRef={poll} 
+              togglePollSelect={togglePollSelect}
+            />
+          )}
+          {/* { polls?.map( (poll, idx) => {
             return <PollListItem 
               key={poll.id} 
               poll={poll} 
+              relayPoll={relayPolls[idx]}
               togglePollSelect={togglePollSelect}
             />
-          })}
+          })} */}
         </ul>
       )}
     </div>
   )
 }
+
+export default GroupPollsList

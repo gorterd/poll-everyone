@@ -5,6 +5,7 @@ type AnswerOption implements Node {
   createdAt: ISO8601DateTime!
   id: ID!
   numOwnResponses: Int!
+  numResponses: Int!
   ord: Int!
   pollId: Int!
   responses: [Response!]
@@ -17,6 +18,7 @@ type Group implements Node {
   id: ID!
   numPolls: Int!
   ord: Int!
+  pollIds: [Int!]
   polls: [Poll!]
   title: String!
   updatedAt: ISO8601DateTime!
@@ -101,6 +103,7 @@ type Query {
     ids: [ID!]!
   ): [Node]!
   participation(username: String!): Participation!
+  poll(id: Int!): Poll!
   polls: [Poll!]!
 }
 

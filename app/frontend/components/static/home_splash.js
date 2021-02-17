@@ -1,9 +1,9 @@
 import React from 'react'
-import AttributedImage from '../shared/attributed_image'
 import { Link } from 'react-router-dom'
+import AttributedImage from '../shared/attributed_image'
 import homeSplashImg from '../../images/splash/home-splash-01.png'
 
-const HomeSplash = () => {  
+const HomeSplash = () => {    
   return (
     <section className='home-splash-container'>
       <div className="home-splash-pane">
