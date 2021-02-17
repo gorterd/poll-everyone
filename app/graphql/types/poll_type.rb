@@ -16,11 +16,8 @@ module Types
     field :created_at, GraphQL::Types::ISO8601DateTime, null: false
     field :updated_at, GraphQL::Types::ISO8601DateTime, null: false
 
-    field :answer_options, [Types::AnswerOptionType], null: true
-
-    field :num_responses, Integer, null: false
-    def num_responses
-      object.responses.count
-    end
+    assoc_field :answer_options, [Types::AnswerOptionType], null: true 
+    assoc_method_field :answer_option_ids, :answer_options, Integer, null: true 
+    assoc_size_field :num_responses, :responses, Integer, null: false
   end
 end

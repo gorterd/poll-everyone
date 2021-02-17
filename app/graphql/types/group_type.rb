@@ -10,12 +10,8 @@ module Types
     field :created_at, GraphQL::Types::ISO8601DateTime, null: false
     field :updated_at, GraphQL::Types::ISO8601DateTime, null: false
 
-    field :polls, [Types::PollType], null: true
-    field :poll_ids, [Integer], null: true
-
-    field :num_polls, Integer, null: false
-    def num_polls
-      object.polls.count
-    end
+    assoc_field :polls, [Types::PollType], null: true
+    assoc_size_field :num_polls, :polls, Integer, null: false
+    assoc_method_field :poll_ids, :polls, [Integer], null: true
   end
 end

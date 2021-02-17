@@ -4,9 +4,6 @@ module Types
     include GraphQL::Types::Relay::HasNodeField
     include GraphQL::Types::Relay::HasNodesField
 
-    # Add root-level fields here.
-    # They will be entry points for queries on your schema.
-
     field :groups, [Types::GroupType], null: false
     def groups
       require_authorization

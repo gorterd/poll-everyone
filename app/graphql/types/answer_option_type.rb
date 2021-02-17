@@ -1,5 +1,16 @@
 module Types
   class AnswerOptionType < Types::BaseObject
+    NUM_OWN_RESPONSES_PROC = proc do |answer_options, context|
+      Response
+        .joins(:participation)
+        .where(answer_option_id: answer_options.map(&:id), participations: { 
+          participant_id: context[:current_participant].id,
+          participant_type: context[:current_participant].class.name,
+        })
+        .group(:answer_option_id)
+        .count
+    end
+
     implements GraphQL::Types::Relay::Node
 
     global_id_field :id
@@ -11,22 +22,13 @@ module Types
     field :created_at, GraphQL::Types::ISO8601DateTime, null: false
     field :updated_at, GraphQL::Types::ISO8601DateTime, null: false
 
-    field :responses, [Types::ResponseType], null: true
+    assoc_field :responses, [Types::ResponseType], null: true
+    assoc_size_field :num_responses, :responses, Integer, null: false
 
-    field :num_responses, Integer, null: false
-    def num_responses
-      object.responses.count
-    end
+    field :num_own_responses, Integer, null: true 
 
-    field :num_own_responses, Integer, null: false 
     def num_own_responses
-      Response
-        .joins(:participation)
-        .where(answer_option_id: object.id, participations: { 
-          participant_id: context[:current_participant].id,
-          participant_type: context[:current_participant].class.name,
-        })
-        .count
+      query_load NUM_OWN_RESPONSES_PROC, default: 0
     end
   end
 end
