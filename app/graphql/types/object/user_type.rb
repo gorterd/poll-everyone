@@ -1,5 +1,5 @@
-module Types
-  class UserType < Types::BaseObject
+module Types::Object
+  class UserType < Types::Base::Object
     implements GraphQL::Types::Relay::Node
 
     global_id_field :id

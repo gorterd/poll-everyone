@@ -2,24 +2,23 @@ class PollEveryoneSchema < GraphQL::Schema
   mutation(Types::MutationType)
   query(Types::QueryType)
 
-  # use GraphQL::Batch
   use GraphQL::Dataloader
 
   # Union and Interface Resolution
   def self.resolve_type(abstract_type, obj, context)
     case obj
     when User
-      Types::UserType
+      Types::Object::UserType
     when Participation
-      Types::ParticipationType
+      Types::Object::ParticipationType
     when Group
-      Types::GroupType
+      Types::Object::GroupType
     when Poll
-      Types::PollType
+      Types::Object::PollType
     when AnswerOption
-      Types::AnswerOptionType
+      Types::Object::AnswerOptionType
     when Response
-      Types::ResponseType
+      Types::Object::ResponseType
     else
       raise "No type for obj: #{obj}"
     end

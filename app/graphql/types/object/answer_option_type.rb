@@ -1,5 +1,5 @@
-module Types
-  class AnswerOptionType < Types::BaseObject
+module Types::Object
+  class AnswerOptionType < Types::Base::Object
     NUM_OWN_RESPONSES_PROC = proc do |answer_options, context|
       Response
         .joins(:participation)
@@ -22,7 +22,7 @@ module Types
     field :created_at, GraphQL::Types::ISO8601DateTime, null: false
     field :updated_at, GraphQL::Types::ISO8601DateTime, null: false
 
-    assoc_field :responses, [Types::ResponseType], null: true
+    assoc_field :responses, [Types::Object::ResponseType], null: true
     assoc_size_field :num_responses, :responses, Integer, null: false
 
     field :num_own_responses, Integer, null: true 

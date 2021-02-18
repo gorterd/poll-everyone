@@ -1,5 +1,5 @@
-module Types
-  class GroupType < Types::BaseObject
+module Types::Object
+  class GroupType < Types::Base::Object
     implements GraphQL::Types::Relay::Node
 
     global_id_field :id
@@ -10,7 +10,7 @@ module Types
     field :created_at, GraphQL::Types::ISO8601DateTime, null: false
     field :updated_at, GraphQL::Types::ISO8601DateTime, null: false
 
-    assoc_field :polls, [Types::PollType], null: true
+    assoc_field :polls, [Types::Object::PollType], null: true
     assoc_size_field :num_polls, :polls, Integer, null: false
     assoc_method_field :poll_ids, :polls, [Integer], null: true
   end

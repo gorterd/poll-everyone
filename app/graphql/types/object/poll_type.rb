@@ -1,5 +1,5 @@
-module Types
-  class PollType < Types::BaseObject
+module Types::Object
+  class PollType < Types::Base::Object
     implements GraphQL::Types::Relay::Node
 
     global_id_field :id
@@ -16,7 +16,7 @@ module Types
     field :created_at, GraphQL::Types::ISO8601DateTime, null: false
     field :updated_at, GraphQL::Types::ISO8601DateTime, null: false
 
-    assoc_field :answer_options, [Types::AnswerOptionType], null: true 
+    assoc_field :answer_options, [Types::Object::AnswerOptionType], null: true 
     assoc_method_field :answer_option_ids, :answer_options, Integer, null: true 
     assoc_size_field :num_responses, :responses, Integer, null: false
   end

@@ -1,22 +1,22 @@
 module Types
-  class QueryType < Types::BaseObject
+  class QueryType < Types::Base::Object
     # Add `node(id: ID!) and `nodes(ids: [ID!]!)`
     include GraphQL::Types::Relay::HasNodeField
     include GraphQL::Types::Relay::HasNodesField
 
-    field :groups, [Types::GroupType], null: false
+    field :groups, [Types::Object::GroupType], null: false
     def groups
       require_authorization
       context[:current_user].groups
     end
 
-    field :polls, [Types::PollType], null: false
+    field :polls, [Types::Object::PollType], null: false
     def polls
       require_authorization
       context[:current_user].polls
     end
     
-    field :poll, Types::PollType, null: false do
+    field :poll, Types::Object::PollType, null: false do
       argument :id, Integer, required: true
     end
     def poll(id:)
@@ -24,7 +24,7 @@ module Types
       Poll.find(id)
     end
 
-    field :participation, Types::ParticipationType, null: false do
+    field :participation, Types::Object::ParticipationType, null: false do
       argument :username, String, required: true
     end
     def participation(username:)
@@ -33,14 +33,6 @@ module Types
         participant_type: context[:current_participant].class.name, 
         presenter_id: User.find_by(username: username).id
       )
-    end
-
-    private
-
-    def require_authorization
-      unless context[:current_user]
-        raise GraphQL::ExecutionError, "Query requires current user" 
-      end
     end
   end
 end

@@ -1,8 +1,8 @@
-module Types
-  class BaseObject < GraphQL::Schema::Object
-    edge_type_class(Types::BaseEdge)
-    connection_type_class(Types::BaseConnection)
-    field_class Types::BaseField
+module Types::Base
+  class Object < GraphQL::Schema::Object
+    edge_type_class(Types::Base::Edge)
+    connection_type_class(Types::Base::Connection)
+    field_class Types::Base::Field
 
     def self.assoc_field(field_name, *args)
       field(field_name, *args)
@@ -36,6 +36,14 @@ module Types
         foreign_key: foreign_key, 
         default: default
       ).load(object)
+    end
+
+    private
+
+    def require_authorization
+      unless context[:current_user]
+        raise GraphQL::ExecutionError, "Query requires current user" 
+      end
     end
   end
 end

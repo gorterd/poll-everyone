@@ -1,5 +1,5 @@
-module Types
-  class ResponseType < Types::BaseObject
+module Types::Object
+  class ResponseType < Types::Base::Object
     implements GraphQL::Types::Relay::Node
 
     global_id_field :id

@@ -9,19 +9,19 @@ class Poll < ApplicationRecord
   validate :not_second_active
 
   before_validation :ensure_poll_type, :ensure_ord, on: :create
-  after_destroy :remove_from_container_order
+  after_destroy :remove_from_container_order # TODO refactor for delete_all
 
   belongs_to :group
   has_one :user, through: :group, source: :user
   has_many :answer_options, 
     -> { order(:ord) },  
     inverse_of: :poll,
-    dependent: :destroy
+    dependent: :destroy # TODO refactor for delete_all
   accepts_nested_attributes_for :answer_options, allow_destroy: true
   has_many :correct_answers, 
     -> { where(correct: true) }, 
     class_name: 'AnswerOption'
-  has_many :responses, dependent: :destroy
+  has_many :responses, dependent: :destroy # TODO refactor for delete_all
 
   def dup_with_answer_options
     poll_params = [
