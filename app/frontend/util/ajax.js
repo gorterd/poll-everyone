@@ -4,7 +4,7 @@ const headers = new Headers({
   'Content-Type': 'application/json'
 })
 
-export default async function ajax({ url, method = 'GET',  data }) {
+export default async function ajax({ url, method = 'GET', data }) {
   const options = { headers, method }
 
   if (data && method === 'GET') {
@@ -15,7 +15,7 @@ export default async function ajax({ url, method = 'GET',  data }) {
 
   const response = await fetch(url, options)
   const responseJSON = await response.json()
-  
+
   return response.ok
     ? responseJSON
     : Promise.reject(responseJSON)

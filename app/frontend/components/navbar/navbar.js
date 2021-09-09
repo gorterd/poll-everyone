@@ -3,12 +3,12 @@ import { NavLink, useRouteMatch } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { exitModal } from '../../store/actions/ui_actions'
 import { modalSelector } from '../../util/redux_selectors'
-import Logo from '../static/logo'
+import Logo from '../shared/logo'
 import AppNavTools from './app_nav_tools'
 import HomeNavTools from './home_nav_tools'
 import { useLoggedIn } from '../../hooks/api/query'
 
-export default function Navbar () {
+export default function Navbar() {
   const dispatch = useDispatch()
   const homeMatch = useRouteMatch({ path: '/', exact: true })
   const appMatch = useRouteMatch(['/polls', '/reports'])
@@ -35,14 +35,14 @@ export default function Navbar () {
     NavLinks = (
       <>
         <li key='github'>
-          <a 
-            className="nav-link" 
+          <a
+            className="nav-link"
             href="https://github.com/gorterd"
           >Github</a>
         </li>
         <li key='linked-in'>
-          <a 
-            className="nav-link" 
+          <a
+            className="nav-link"
             href="https://www.linkedin.com/in/daniel-gorter-87549277"
           >LinkedIn</a>
         </li>
@@ -54,7 +54,7 @@ export default function Navbar () {
   return (
     <nav className={'nav ' + klass}>
       <ul className="nav-links">
-        <li><Logo { ...logoProps } /></li>
+        <li><Logo {...logoProps} /></li>
         {NavLinks}
       </ul>
       <div className='nav-tools-container'>

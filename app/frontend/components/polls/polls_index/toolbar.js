@@ -1,17 +1,17 @@
 import React, { useLayoutEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
-import DropdownWrapper from '../../wrappers/dropdown'
+import DropdownWrapper from '../../shared/dropdown'
 
 import { receiveSelections, clearSelections } from '../../../store/actions/selection_actions'
-import { 
-  openModal, 
-  setStickyToolbar, 
+import {
+  openModal,
+  setStickyToolbar,
 } from '../../../store/actions/ui_actions'
 
-import { 
-  stickyToolbarSelector, 
-  selectedPollsSelector, 
+import {
+  stickyToolbarSelector,
+  selectedPollsSelector,
 } from '../../../util/redux_selectors'
 import { smoothScrollToY } from '../../../util/general_util'
 import { useBatchDestroy, useMovePolls } from '../../../hooks/api/mutation'
@@ -31,26 +31,31 @@ const PollsIndexToolbar = ({ toggleMoveDrawer, groupsRef }) => {
   const intersectionDiv = useRef()
   const dispatch = useDispatch()
   const stickyToolbar = useSelector(stickyToolbarSelector)
-  const selectedPolls =  useSelector(selectedPollsSelector)
+  const selectedPolls = useSelector(selectedPollsSelector)
   const { mutate: movePolls } = useMovePolls()
   const { mutate: batchDestroy } = useBatchDestroy()
 
   const selectedPollIds = selectedPolls.pollIds
   const selectedGroupIds = selectedPolls.groupIds
-  
+
   useLayoutEffect(() => {
-    if ('IntersectionObserver' in window) {
-      const div = intersectionDiv.current
-      const observer = new IntersectionObserver( event => {
-        dispatch(setStickyToolbar(!event[0].isIntersecting))
-      }, { threshold: 1 })
-      
-      observer.observe(div)
-      return () => observer.unobserve(div)
-    }
+    const div = intersectionDiv.current
+
+    let mostRecent
+    const observer = new IntersectionObserver(event => {
+      let ts = mostRecent = Date.now()
+      setTimeout(() => {
+        if (ts === mostRecent) {
+          dispatch(setStickyToolbar(!event[0].isIntersecting))
+        }
+      }, 20)
+    }, { threshold: 1 })
+
+    observer.observe(div)
+    return () => observer.unobserve(div)
   }, [intersectionDiv, dispatch])
 
-  function openNewGroupModal(){
+  function openNewGroupModal() {
     dispatch(openModal({
       type: 'new-group',
       data: selectedPolls,
@@ -67,13 +72,13 @@ const PollsIndexToolbar = ({ toggleMoveDrawer, groupsRef }) => {
     }))
   }
 
-  function selectAll(){
-    const groupIds = groups.map( group => group._id )
-    const pollIds = groups.reduce( (acc, group) => acc.concat(group.pollIds), [] )
+  function selectAll() {
+    const groupIds = groups.map(group => group._id)
+    const pollIds = groups.reduce((acc, group) => acc.concat(group.pollIds), [])
     dispatch(receiveSelections({ groupIds, pollIds }))
   }
 
-  function ungroup(){
+  function ungroup() {
     movePolls({
       pollIds: selectedPollIds,
       groupId: groups.find(g => g.ord === 1)._id
@@ -85,14 +90,14 @@ const PollsIndexToolbar = ({ toggleMoveDrawer, groupsRef }) => {
   const Dropdown = () => (
     <ul>
       <span className='button-white' onClick={selectAll}>All</span>
-      <span 
-        className='button-white' 
-        onClick={ () => dispatch(clearSelections()) }
+      <span
+        className='button-white'
+        onClick={() => dispatch(clearSelections())}
       >None</span>
     </ul>
   )
 
-  const noSelection = !(selectedPollIds.length || selectedGroupIds.length) 
+  const noSelection = !(selectedPollIds.length || selectedGroupIds.length)
   let className = 'groups-index-toolbar'
   if (stickyToolbar) {
     className += ' sticky-toolbar'

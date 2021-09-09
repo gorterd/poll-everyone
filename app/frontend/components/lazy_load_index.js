@@ -1,4 +1,4 @@
-import { withLazy } from '../util/hoc'
+import React from 'react'
 
 export const [ParticipateApp, fetchParticipateApp] = withLazy(
   () => import(
@@ -69,3 +69,10 @@ export const [Login, fetchLogin] = withLazy(
     './session/login'
   )
 )
+
+function withLazy(importCb) {
+  let promise
+  const fetch = () => promise || (promise = importCb())
+  const component = React.lazy(fetch)
+  return [component, fetch]
+}

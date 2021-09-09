@@ -1,13 +1,13 @@
+import { useContext } from 'react'
 import { useMutation, useQueryClient } from 'react-query'
 import { useDispatch } from 'react-redux'
-import { commitLocalUpdate } from 'react-relay'
-import { useRelayEnvironment } from 'react-relay/hooks'
+import { RefetchPollsContext } from '../../components/app_state_wrapper'
 import { clearSelections } from '../../store/actions/selection_actions'
 import ajax from '../../util/ajax'
 
 const useSession = (mutateFn, options = {}) => {
   const queryClient = useQueryClient()
-  const environment = useRelayEnvironment()
+  const { refetchPolls } = useContext(RefetchPollsContext)
 
   return useMutation(mutateFn, {
     ...options,
@@ -17,7 +17,7 @@ const useSession = (mutateFn, options = {}) => {
     onSuccess: (...args) => {
       options.onSuccess?.(queryClient, ...args)
       queryClient.invalidateQueries('current')
-      commitLocalUpdate(environment, store => store.invalidateStore())
+      refetchPolls()
     }
   })
 }
@@ -31,7 +31,7 @@ export const checkIfUserExists = usernameOrEmail => (
 )
 
 export const useLogin = () => {
-  return useSession( user => (
+  return useSession(user => (
     ajax({
       method: 'POST',
       url: '/api/session',
@@ -45,7 +45,7 @@ export const useLogin = () => {
 }
 
 export const useSignup = () => {
-  return useSession( user => (
+  return useSession(user => (
     ajax({
       method: 'POST',
       url: '/api/users',
@@ -59,7 +59,7 @@ export const useSignup = () => {
 }
 
 export const useLogout = () => {
-  return useSession( () => (
+  return useSession(() => (
     ajax({
       method: 'DELETE',
       url: '/api/session',
@@ -73,7 +73,7 @@ export const useLogout = () => {
 
 const useMutatePoll = (mutateFn, options = {}) => {
   const queryClient = useQueryClient()
-  const environment = useRelayEnvironment()
+  const { refetchPolls } = useContext(RefetchPollsContext)
 
   return useMutation(mutateFn, {
     ...options,
@@ -83,13 +83,13 @@ const useMutatePoll = (mutateFn, options = {}) => {
     onSuccess: (...args) => {
       options.onSuccess?.(queryClient, ...args)
       queryClient.invalidateQueries('polls')
-      commitLocalUpdate(environment, store => store.invalidateStore())
+      refetchPolls()
     }
   })
 }
 
 export const useCreatePoll = () => {
-  return useMutatePoll( ({ poll, groupId }) => 
+  return useMutatePoll(({ poll, groupId }) =>
     ajax({
       method: 'POST',
       url: `/api/groups/${groupId}/polls`,
@@ -99,7 +99,7 @@ export const useCreatePoll = () => {
 }
 
 export const useUpdatePoll = () => {
-  return useMutatePoll( ({ poll, pollId }) => 
+  return useMutatePoll(({ poll, pollId }) =>
     ajax({
       method: 'PATCH',
       url: `/api/polls/${pollId}`,
@@ -109,7 +109,7 @@ export const useUpdatePoll = () => {
 }
 
 export const useDuplicatePoll = () => {
-  return useMutatePoll( pollId => 
+  return useMutatePoll(pollId =>
     ajax({
       method: 'POST',
       url: `/api/polls/${pollId}/duplicate`,
@@ -120,7 +120,7 @@ export const useDuplicatePoll = () => {
 
 export const useToggleActive = () => {
 
-  return useMutatePoll( pollId => (
+  return useMutatePoll(pollId => (
     ajax({
       method: 'PATCH',
       url: `/api/polls/${pollId}/toggle_activation`,
@@ -133,7 +133,7 @@ export const useToggleActive = () => {
         const newPoll = { ...poll, active: !poll.active }
         return { ...oldData, poll: newPoll }
       })
-      
+
       queryClient.setQueryData('polls', oldData => {
         if (!oldData) return
         const { polls } = oldData
@@ -148,7 +148,7 @@ export const useToggleActive = () => {
 const useMutateGroup = (mutateFn, options = {}) => {
   const queryClient = useQueryClient()
   const dispatch = useDispatch()
-  const environment = useRelayEnvironment()
+  const { refetchPolls } = useContext(RefetchPollsContext)
 
   return useMutation(mutateFn, {
     ...options,
@@ -156,16 +156,16 @@ const useMutateGroup = (mutateFn, options = {}) => {
       options.onMutate?.()
       dispatch(clearSelections())
     },
-    onSuccess: () => { 
+    onSuccess: () => {
       options.onSuccess?.()
       queryClient.invalidateQueries('polls')
-      commitLocalUpdate(environment, store => store.invalidateStore())
+      refetchPolls()
     }
   })
 }
 
 export const useCreateGroup = () => {
-  return useMutateGroup( data =>
+  return useMutateGroup(data =>
     ajax({
       method: 'POST',
       url: '/api/groups',
@@ -175,7 +175,7 @@ export const useCreateGroup = () => {
 }
 
 export const useUpdateGroup = () => {
-  return useMutateGroup( group => 
+  return useMutateGroup(group =>
     ajax({
       method: 'PATCH',
       url: `/api/groups/${group._id}`,
@@ -185,7 +185,7 @@ export const useUpdateGroup = () => {
 }
 
 export const useBatchDestroy = () => {
-  return useMutateGroup( selections => 
+  return useMutateGroup(selections =>
     ajax({
       method: 'DELETE',
       url: '/api/groups/batch_destroy',
@@ -195,7 +195,7 @@ export const useBatchDestroy = () => {
 }
 
 export const useMovePolls = () => {
-  return useMutateGroup(({pollIds, groupId}) => 
+  return useMutateGroup(({ pollIds, groupId }) =>
     ajax({
       method: 'PATCH',
       url: `/api/groups/${groupId}/move_polls`,

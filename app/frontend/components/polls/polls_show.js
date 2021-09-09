@@ -3,7 +3,7 @@ import { Link, useHistory, useParams } from 'react-router-dom'
 import { isEqual, debounce } from 'lodash'
 import { useQueryClient } from 'react-query'
 
-import cableConsumer from '../../channels/consumer'
+import cableConsumer from '../../util/consumer'
 import { presenterPollDataSelector } from '../../util/query_selectors'
 import { standardGraph } from '../../util/data_formatting'
 import { useDelayedPrefetch } from '../../hooks/effect'
@@ -11,24 +11,24 @@ import { usePrevious } from '../../hooks/general'
 import PresentationGraph from './polls_show/presentation_graph'
 import { useCurrent, usePoll } from '../../hooks/api/query'
 import { useToggleActive } from '../../hooks/api/mutation'
-import { 
-  fetchEditPoll, 
-  fetchFooter, 
-  fetchGroupsIndex, 
-  fetchHomeSplash 
+import {
+  fetchEditPoll,
+  fetchFooter,
+  fetchGroupsIndex,
+  fetchHomeSplash
 } from '../lazy_load_index'
-import Logo from '../static/logo'
+import Logo from '../shared/logo'
 
 export default function PresentPoll() {
   const prefetch = useCallback(() => {
-    fetchEditPoll() 
-    fetchGroupsIndex() 
-    fetchHomeSplash() 
+    fetchEditPoll()
+    fetchGroupsIndex()
+    fetchHomeSplash()
     fetchFooter()
   }, [])
 
   useDelayedPrefetch(prefetch)
-  
+
   const history = useHistory()
   const { data: { username, id: currentId } } = useCurrent()
   const { pollId } = useParams()
@@ -42,7 +42,7 @@ export default function PresentPoll() {
   const prevFormattedData = usePrevious(formattedData)
 
   const graphWrapper = useRef(null)
-  const [graphDimensions, setGraphDimensions ] = useState({width: 0, height: 0})
+  const [graphDimensions, setGraphDimensions] = useState({ width: 0, height: 0 })
 
   const updateGraphDimensions = () => {
     if (!graphWrapper.current) return
@@ -83,7 +83,7 @@ export default function PresentPoll() {
     return () => window.removeEventListener('resize', resizeListener)
   }, [])
 
-  const graphReady = formattedData 
+  const graphReady = formattedData
     && Object.values(graphDimensions).every(dim => dim > 0)
 
   return (
@@ -91,7 +91,7 @@ export default function PresentPoll() {
       <div className='show-poll-left'>
         <div className='graph-container'>
           <h2>
-            { poll?.active 
+            {poll?.active
               ? 'Respond at '
               : 'When poll is active, respond at '
             }
@@ -100,7 +100,7 @@ export default function PresentPoll() {
           <div className='graph'>
             <h1>{poll?.title}</h1>
             <div className='graph-wrapper' ref={graphWrapper}>
-              { graphReady && 
+              {graphReady &&
                 <PresentationGraph
                   formattedData={formattedData}
                   graphDimensions={graphDimensions}
@@ -110,25 +110,25 @@ export default function PresentPoll() {
               }
             </div>
           </div>
-          <Logo onClick={() => {}}/>
+          <Logo onClick={() => { }} />
         </div>
       </div>
 
 
       <div className='show-poll-right'>
         <div className='show-poll-executive-commands'>
-          <Link 
-            className='button-blue' 
+          <Link
+            className='button-blue'
             to={`/polls/${pollId}/edit`}
           >Edit</Link>
 
-          <button 
+          <button
             className='button-transparent'
             onClick={() => toggleActive(pollId)}
           >{poll?.active ? 'Deactivate' : 'Activate'}</button>
 
-          <button 
-            className='button-transparent' 
+          <button
+            className='button-transparent'
             onClick={history.goBack}
           >Back</button>
         </div>

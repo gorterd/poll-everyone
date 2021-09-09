@@ -27,15 +27,15 @@ const GroupPollsList = ({ groupRef }) => {
   const { polls, ...group } = useFragment(groupFragment, groupRef)
 
   const dispatch = useDispatch()
-  const [ drawerVisible, toggleDrawerVisible ] = useToggleState(group.ord === 1)
+  const [drawerVisible, toggleDrawerVisible] = useToggleState(group.ord === 1)
   const stickyToolbar = useSelector(stickyToolbarSelector)
 
   const addActivity = (e) => {
     e.stopPropagation()
-    
-    dispatch( openModal({
-      type: 'new-poll', 
-      data: { group }, 
+
+    dispatch(openModal({
+      type: 'new-poll',
+      data: { group },
       offset: stickyToolbar ? 0 : 72,
     }))
   }
@@ -43,10 +43,10 @@ const GroupPollsList = ({ groupRef }) => {
   const rename = (e) => {
     e.stopPropagation()
 
-    dispatch( openModal({
+    dispatch(openModal({
       type: 'edit-group',
       data: { group },
-      offset: stickyToolbar ? 70: 0,
+      offset: stickyToolbar ? 70 : 0,
     }))
   }
 
@@ -59,34 +59,25 @@ const GroupPollsList = ({ groupRef }) => {
   }
 
   const headerProps = {
-    groupRef: group, 
+    groupRef: group,
     drawerVisible,
     toggleDrawerVisible,
     addActivity,
     rename,
   }
 
-
   return (
     <div className='group-polls-index-container'>
       <GroupHeader {...headerProps} />
-      { drawerVisible && (
+      {drawerVisible && (
         <ul className="group-polls-index">
           {polls.map(poll =>
-            <PollListItem 
-              key={poll._id} 
-              pollRef={poll} 
+            <PollListItem
+              key={poll._id}
+              pollRef={poll}
               togglePollSelect={togglePollSelect}
             />
           )}
-          {/* { polls?.map( (poll, idx) => {
-            return <PollListItem 
-              key={poll.id} 
-              poll={poll} 
-              relayPoll={relayPolls[idx]}
-              togglePollSelect={togglePollSelect}
-            />
-          })} */}
         </ul>
       )}
     </div>

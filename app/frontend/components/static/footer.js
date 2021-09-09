@@ -1,6 +1,6 @@
 import React from 'react'
 import { useStateValue } from '../../hooks/general'
-import Logo from './logo'
+import Logo from '../shared/logo'
 
 const Footer = () => {
   const componentLoading = useStateValue('ui componentLoading')
@@ -10,48 +10,45 @@ const Footer = () => {
     'Languages': [
       'Ruby',
       'JavaScript',
-      'Java',
       'SQL',
       'HTML',
       'CSS',
+      'Bash',
+      'Java',
+      'Elixir'
     ],
-    
+
     'Frameworks & Libraries': [
       'Rails',
       'React',
       'Redux',
-      'JQuery',
+      'MobX-State-Tree',
+      'Relay',
     ],
-    
+
     'Technologies & Tools': [
       'Git',
       'Heroku',
-      'Google Apps Script',
       'Bash',
       'RSpec',
-    ],
-    
-    'Knowledge': [
-      'Data Structures',
-      'RESTful Design',
-      'TDD',
+      'GraphQL'
     ],
   }
 
   let linkLists = []
 
-  for (let category in FOOTER_LINKS){
+  for (let category in FOOTER_LINKS) {
     linkLists.push(
       <ul key={category} className='footer-link-list'>
         <li className='footer-link-category' key={category}><strong>{category}</strong></li>
 
-        {FOOTER_LINKS[category].map( (link, i) => (
+        {FOOTER_LINKS[category].map((link, i) => (
           <li key={i} className='footer-link'>{link}</li>
         ))}
       </ul>
     )
   }
-  
+
   return (
     <section className='footer'>
       <div className='footer-pane'>
@@ -60,7 +57,7 @@ const Footer = () => {
           <div className='footer-links-container'>
             {linkLists}
           </div>
-        </div>  
+        </div>
       </div>
       <div className='footer-social-pane'>
         <div className='footer-social-container'>

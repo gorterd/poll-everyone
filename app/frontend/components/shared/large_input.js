@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
-import { Animated } from '../wrappers/animated'
+import { Animated } from './animated'
 import { classNames } from '../../util/general_util'
 
-export default function LargeInput ({ 
+export default function LargeInput({
   value,
   text,
   errorMsg,
@@ -11,7 +11,7 @@ export default function LargeInput ({
   leftSideProps,
   rightSide: RightSide,
   rightSideProps,
-  ...rest  
+  ...rest
 }) {
   const [active, setActive] = useState(false)
   const showPlaceholder = !(active || value)
@@ -48,15 +48,15 @@ export default function LargeInput ({
     enterAnimation,
     exitAnimation
   }
-  
+
   return (
     <div {...classNames(
       'large-input-container',
       klass,
       [errorMsg, 'input-error']
-    )}>      
+    )}>
       <div {...classNames(
-        'large-input-wrapper', 
+        'large-input-wrapper',
         [active, 'activated'],
       )}>
         {LeftSide && <LeftSide {...leftSideProps} />}
