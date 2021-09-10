@@ -126,7 +126,6 @@ export default function GroupSearch({
         e.preventDefault()
         return dispatch({ type: KEY_MOVE, dir: -1, defaultIndex: null })
       case 'Tab':
-        console.log(focusOnTab)
         if (focusOnTab) {
           e.preventDefault()
           focusOnTab.disabled = false

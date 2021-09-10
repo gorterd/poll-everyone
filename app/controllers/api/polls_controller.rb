@@ -34,7 +34,6 @@ class Api::PollsController < ApplicationController
     if @poll.save
       render :show
     else
-      debugger
       render json: @poll.errors.full_messages, status: 422
     end
   end

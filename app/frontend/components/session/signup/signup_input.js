@@ -24,7 +24,7 @@ const staticProps = {
   },
   terms: {
     type: 'checkbox',
-    text: "Agree to the Terms and Conditions that we definitely don't have.",
+    text: 'Agree to the Terms and Conditions that we definitely don\'t have.',
     id: 'terms-checkbox'
   },
 }
