@@ -10,28 +10,25 @@ const Footer = () => {
     'Languages': [
       'Ruby',
       'JavaScript',
+      'HTML5 & CSS3',
       'SQL',
-      'HTML',
-      'CSS',
-      'Bash',
       'Java',
-      'Elixir'
     ],
 
     'Frameworks & Libraries': [
       'Rails',
       'React',
       'Redux',
-      'MobX-State-Tree',
+      'RSpec & Jest',
       'Relay',
     ],
 
-    'Technologies & Tools': [
+    'Other Technologies & Tools': [
       'Git',
       'Heroku',
-      'Bash',
-      'RSpec',
-      'GraphQL'
+      'MongoDB',
+      'GraphQL',
+      'Webpack & Babel',
     ],
   }
 
@@ -53,7 +50,7 @@ const Footer = () => {
     <section className='footer'>
       <div className='footer-pane'>
         <div className='footer-pane-container'>
-          <Logo />
+          <Logo text='About Me' />
           <div className='footer-links-container'>
             {linkLists}
           </div>

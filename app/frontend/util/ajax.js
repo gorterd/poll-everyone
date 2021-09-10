@@ -20,3 +20,11 @@ export default async function ajax({ url, method = 'GET', data }) {
     ? responseJSON
     : Promise.reject(responseJSON)
 }
+
+export const checkIfUserExists = usernameOrEmail => (
+  ajax({
+    method: 'GET',
+    url: '/api/session/exists',
+    data: { query: usernameOrEmail },
+  })
+)

@@ -7,7 +7,7 @@ export default function ConfirmMoveModal() {
   const { sendMoveRequest, numPolls } = useSelector(modalDataSelector)
 
   const word = numPolls === 1 ? 'poll' : 'polls'
-  const subtext =  (
+  const subtext = (
     <>
       {`You selected ${numPolls} ${word}.`}
       <br />
@@ -20,6 +20,7 @@ export default function ConfirmMoveModal() {
     submissionText: 'Apply',
     submissionHandler: sendMoveRequest,
     subtext,
+    focusSubmit: true,
   }
 
   return <SmallModal {...modalProps} />

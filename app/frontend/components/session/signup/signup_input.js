@@ -24,7 +24,7 @@ const staticProps = {
   },
   terms: {
     type: 'checkbox',
-    text: 'Agree to the nonexistent Terms and Conditions',
+    text: "Agree to the Terms and Conditions that we definitely don't have.",
     id: 'terms-checkbox'
   },
 }
@@ -37,12 +37,7 @@ const errorMessages = {
       Your password needs to be at least 7 characters
     </p>
   ),
-  email: (
-    <>
-      <p className="error-message">That doesn't look right.</p>
-      <strong>(We won't spam you.)</strong>
-    </>
-  ),
+  email: <p className="error-message">That doesn't look right.</p>,
   terms: <p className="error-message">They're not optional, buddy</p>
 }
 
@@ -58,11 +53,11 @@ const SignupInput = ({
       {...staticProps[field]}
     />
 
-    { staticProps[field].type === 'checkbox' && (
+    {staticProps[field].type === 'checkbox' && (
       <label>{staticProps[field].text}</label>
     )}
-    
-    { displayError && (
+
+    {displayError && (
       <div className="signup-error">
         <div className="error-triangle-outline"></div>
         <div className="error-triangle-fill"></div>

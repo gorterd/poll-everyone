@@ -1,5 +1,5 @@
 import React from 'react'
-import { useSelector} from 'react-redux'
+import { useSelector } from 'react-redux'
 import NewPoll from '../polls/polls_new'
 import NewGroupModal from '../polls/polls_index/modals/new_group'
 import EditGroupModal from '../polls/polls_index/modals/rename_group'
@@ -7,23 +7,9 @@ import ConfirmMoveModal from '../polls/polls_index/modals/confirm_move'
 import { modalSelector } from '../../util/redux_selectors'
 import { useDispatch } from 'react-redux'
 import { clearModal, clearStatus, exitModal } from '../../store/actions/ui_actions'
-import { useAnimation } from '../../hooks/ui'
+import { useFade } from '../../hooks/ui'
 
-export const defaultEnterAnimation = {
-  animationName: 'fade-in',
-  animationDuration: '300ms',
-  animationIterationCount: 1,
-  animationFillMode: 'forwards'
-}
-
-export const defaultExitAnimation = {
-  animationName: 'fade-out',
-  animationDuration: '300ms',
-  animationIterationCount: 1,
-  animationFillMode: 'forwards'
-}
-
-export function Modal () {
+export function Modal() {
   const modal = useSelector(modalSelector)
 
   const NEW_POLL = 'new-poll'
@@ -40,33 +26,31 @@ export function Modal () {
     backgroundClass: defaultBackgroundClass,
     backgroundStyle: null,
     renderCondition: false,
-    enterAnimation: defaultEnterAnimation,
-    exitAnimation: defaultExitAnimation,
   }
 
-  const newPollProps = Object.assign({}, DEFAULTS, { 
+  const newPollProps = Object.assign({}, DEFAULTS, {
     modalClass: 'new-poll-modal',
     backgroundClass: 'new-poll-modal-background',
-    backgroundStyle: { 
+    backgroundStyle: {
       height: `calc(100vh - ${modal.offset}px)`,
       zIndex: 1
     },
     component: NewPoll
   })
 
-  const newGroupProps = Object.assign({}, DEFAULTS, { 
+  const newGroupProps = Object.assign({}, DEFAULTS, {
     modalClass: 'new-group-modal',
-    component: NewGroupModal 
+    component: NewGroupModal
   })
 
-  const editGroupProps = Object.assign({}, DEFAULTS, { 
+  const editGroupProps = Object.assign({}, DEFAULTS, {
     modalClass: 'edit-group-modal',
-    component: EditGroupModal 
+    component: EditGroupModal
   })
 
-  const confirmMoveProps = Object.assign({}, DEFAULTS, { 
+  const confirmMoveProps = Object.assign({}, DEFAULTS, {
     modalClass: 'confirm-move-modal',
-    component: ConfirmMoveModal 
+    component: ConfirmMoveModal
   })
 
   if (!(modal.status === 'exiting')) {
@@ -87,7 +71,7 @@ export function Modal () {
         break
     }
   }
-  
+
   return (
     <>
       <AnimatedModal {...newPollProps} />
@@ -100,19 +84,18 @@ export function Modal () {
 
 function AnimatedModal({
   component: Component,
-  modalData, modalClass,
-  backgroundStyle, backgroundClass,
+  modalData,
+  modalClass,
+  backgroundStyle,
+  backgroundClass,
   renderCondition,
-  enterAnimation,
-  exitAnimation
 }) {
 
   const dispatch = useDispatch()
 
-  const [renderState, animationStyle, key] = useAnimation({
+  const [renderState, animationStyle] = useFade({
     renderCondition,
-    enterAnimation,
-    exitAnimation,
+    duration: 300,
     afterEnter: () => dispatch(clearStatus()),
     afterExit: () => dispatch(clearModal()),
   })
@@ -125,7 +108,6 @@ function AnimatedModal({
       className={backgroundClass}
       onClick={closeModal}
       style={style}
-      key={key}
     >
       <div className={modalClass} onClick={e => e.stopPropagation()}>
         <Component modalData={modalData} closeModal={closeModal} />

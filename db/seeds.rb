@@ -15,22 +15,22 @@ User.destroy_all
 
 easy = User.create!(
   first_name: "easy",
-  last_name: "peasy",
+  last_name: "easy",
   username: "easy",
   email: "e@e.com",
-  password: "123123123"
+  password: "123456789"
 )
 
 demo = User.create!(
   first_name: "truman",
   last_name: "burbank",
-  username: "Simulation3845",
-  email: "isThisTheRealLife@isThisJustFantasy.idk",
-  password: "its_all_a_simulation"
+  username: "Truman123",
+  email: "goodAfternoon@goodEvening.gn",
+  password: "simulation"
 )
 
 [easy, demo].each do |user|
-  2.times do 
+  3.times do 
     Group.create! title: Faker::Dessert.variety, user: user
   end
 end
@@ -38,16 +38,16 @@ end
 Group.all.each do |group|
   3.times do 
     Poll.create!(
-      title: Faker::TvShows::BojackHorseman.tongue_twister,
+      title: Faker::Lorem.question,
       group: group
     )
   end
 end
 
 Poll.all.each do |poll|
-  4.times do 
+  rand(2..4).times do 
     AnswerOption.create!(
-      body: Faker::Movies::HitchhikersGuideToTheGalaxy.quote,
+      body: Faker::Company.bs,
       correct: [true, false].sample,
       poll: poll
     )

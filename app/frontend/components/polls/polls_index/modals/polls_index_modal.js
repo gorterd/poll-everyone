@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useLayoutEffect, useRef } from 'react'
 import { useDispatch } from 'react-redux'
 import { exitModal } from '../../../../store/actions/ui_actions'
 
@@ -9,10 +9,16 @@ export default function SmallModal({
   submissionHandler,
   submissionText,
   submissionDisabled,
+  focusSubmit
 }) {
   const dispatch = useDispatch()
   const closeModal = () => dispatch(exitModal())
   const onSubmit = () => submissionHandler(dispatch).then(closeModal)
+  const submitButton = useRef()
+
+  useLayoutEffect(() => {
+    if (focusSubmit) submitButton.current.focus()
+  }, [submitButton, focusSubmit])
 
   return (
     <>
@@ -28,8 +34,8 @@ export default function SmallModal({
         />
       )}
       <div className='buttons'>
-        <button 
-          className='button-transparent' 
+        <button
+          className='button-transparent'
           onClick={closeModal}
         >Cancel</button>
 
@@ -37,6 +43,7 @@ export default function SmallModal({
           className='button-blue'
           disabled={submissionDisabled}
           onClick={onSubmit}
+          ref={submitButton}
         >{submissionText}</button>
       </div>
     </>

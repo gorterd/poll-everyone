@@ -44,7 +44,7 @@ export default function LargeInput({
   }
 
   const animationProps = {
-    interruptAnimation: true,
+    interrupt: true,
     enterAnimation,
     exitAnimation
   }

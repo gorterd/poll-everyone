@@ -71,7 +71,7 @@ class Poll < ApplicationRecord
       other_active = user.active_poll
       if other_active && self != other_active
         other_active.update active: false 
-        touch[:deactivated] = other_active.id
+        touched[:deactivated] = other_active.id
       end
 
       update active: true

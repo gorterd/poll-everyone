@@ -4,12 +4,12 @@ import logoAltImg from '../../images/nav/logo-alt.png'
 import { useInputState } from '../../hooks/state'
 import { useCurrent, useRecentPresentations } from '../../hooks/api/query'
 import { classNames } from '../../util/general_util'
-import { checkIfUserExists } from '../../hooks/api/mutation'
+import { checkIfUserExists } from '../../util/ajax'
 
 const ParticipateHome = () => {
   const history = useHistory()
-  const [ error, setError ] = useState()
-  const [ username, , { composeOnChange } ] = useInputState()
+  const [error, setError] = useState()
+  const [username, , { composeOnChange }] = useInputState()
   const { data: { type, id } } = useCurrent()
   const { data: recents = [] } = useRecentPresentations(type, id)
 
@@ -19,7 +19,7 @@ const ParticipateHome = () => {
       setError('Username can only include letters or numbers')
     } else if (error) {
       setError('')
-    } 
+    }
   })
 
   const handleSubmit = e => {
@@ -29,7 +29,7 @@ const ParticipateHome = () => {
       () => setError('Presenter not found')
     )
   }
-  
+
   return (
     <div className='participant-home'>
       <div className='participant-home-logo'>
@@ -40,7 +40,7 @@ const ParticipateHome = () => {
         <h2>Join presentation</h2>
         <form onSubmit={handleSubmit}>
           <div {...classNames(
-            'participant-join-input-container', 
+            'participant-join-input-container',
             [error, 'input-error']
           )}>
             <div className={'participant-join-input-wrapper'}>
@@ -54,18 +54,18 @@ const ParticipateHome = () => {
                 placeholder='username'
               />
             </div>
-            { error && <div className="large-input-error-msg">{error}</div> }
+            {error && <div className="large-input-error-msg">{error}</div>}
           </div>
           <button type='submit' className='button-blue' disabled={error}>
             Join
           </button>
         </form>
       </div>
-      { recents.length && (
-        <h3 className='recents-header'>Recent presentations </h3>  
+      {recents.length && (
+        <h3 className='recents-header'>Recent presentations </h3>
       )}
       <div className='recent-presentations'>
-        {recents.map( ({ username, id }) => (
+        {recents.map(({ username, id }) => (
           <Link key={id} to={`/participate/${username}`}>
             <span>#/participate/</span>
             <span>{username}</span>

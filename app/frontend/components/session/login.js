@@ -1,21 +1,22 @@
 import React, { useState } from 'react'
-import { useHistory, Link } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import LoginInput from './login/login_input'
 import { useInputState } from '../../hooks/state'
-import { checkIfUserExists, useLogin } from '../../hooks/api/mutation'
+import { useLogin, useDemoLogin } from '../../hooks/api/mutation'
+import { checkIfUserExists } from '../../util/ajax'
 
-export default function Login () {
-  const history = useHistory()
-  const { mutateAsync: login } = useLogin()
-  const [ usernameOrEmail, usernameInputProps ] = useInputState()
-  const [ 
-    password, 
-    passwordInputProps, 
-    { setValue: setPassword } 
+export default function Login() {
+  const { mutate: login } = useLogin()
+  const { mutate: demoLogin } = useDemoLogin()
+  const [usernameOrEmail, usernameInputProps] = useInputState()
+  const [
+    password,
+    passwordInputProps,
+    { setValue: setPassword }
   ] = useInputState('')
-  const [ fullForm, setFullForm ] = useState(false)
-  const [ sessionLoading, setSessionLoading ] = useState(false)
-  const [ error, setError ] = useState('')
+  const [fullForm, setFullForm] = useState(false)
+  const [sessionLoading, setSessionLoading] = useState(false)
+  const [error, setError] = useState('')
 
   const formStep = ({ request, success }, e) => {
     e.preventDefault()
@@ -28,7 +29,6 @@ export default function Login () {
 
   const submit = formStep.bind(null, {
     request: () => login({ usernameOrEmail, password }),
-    success: () => history.push('./polls')
   })
 
   const next = formStep.bind(null, {
@@ -53,7 +53,7 @@ export default function Login () {
       autoFocus: true,
       errorMsg: error,
     }
-  
+
   const buttonText = fullForm
     ? sessionLoading
       ? 'Logging in...'
@@ -91,10 +91,14 @@ export default function Login () {
         </form>
 
         <div className="login-form-posttext">
-          <p>Need an account? &nbsp;
+          <p>Need an account?
             <Link className="login-link" to='/signup/splash'>
               Create one now
             </Link>
+            or
+            <span className="login-link" onClick={() => demoLogin()}>
+              Login as a demo user
+            </span>
           </p>
         </div>
       </div>

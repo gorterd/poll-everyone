@@ -1,10 +1,10 @@
-import { 
-  useRef, 
-  useState, 
-  useLayoutEffect, 
-  useEffect, 
-  useCallback, 
-  useMemo 
+import {
+  useRef,
+  useState,
+  useLayoutEffect,
+  useEffect,
+  useCallback,
+  useMemo
 } from 'react'
 import { useDidUpdate } from './effect'
 import { usePrevious } from './general'
@@ -35,66 +35,90 @@ export const useDropdown = documentClickCb => {
   return [dropdownVisible, dropdownRef, eventHandlers]
 }
 
-export const useAnimation = ({
+const useTransition = ({
   renderCondition,
-  enterAnimation,
-  exitAnimation,
-  interruptAnimation = false,
-  noFirstAnimation = false,
+  duration,
+  enterDuration,
+  exitDuration,
+  interrupt = false,
+  onEnter = () => { },
   afterEnter = () => { },
+  onExit = () => { },
   afterExit = () => { },
 }) => {
-  if (typeof renderCondition === 'undefined') {
-    throw new Error('Must provide a renderCondition')
-  }
+  enterDuration = enterDuration || duration
+  exitDuration = exitDuration || duration
 
-  const enterDuration = enterAnimation?.animationDuration
-  const exitDuration = exitAnimation?.animationDuration
-
-  if (enterAnimation && !enterDuration) {
-    throw new Error('enterAnimation must have animationDuration')
-  }
-
-  if (exitAnimation && !exitDuration) {
-    throw new Error('exitAnimation must have animationDuration')
-  }
-
-  enterAnimation = enterAnimation || { animationDuration: 0 }
-  exitAnimation = exitAnimation || { animationDuration: 0 }
-  
   const prevRenderCondition = usePrevious(renderCondition)
   const [renderState, setRenderState] = useState(renderCondition)
-  const [style, setStyle] = useState(noFirstAnimation ? {} : enterAnimation)
-  const [key, setKey] = useState(0)
   const timeout = useRef()
 
   useDidUpdate(() => {
-    if (prevRenderCondition === renderCondition) return
-
-    if (timeout.current && !interruptAnimation) return
-    clearTimeout(timeout.current)
+    if (
+      prevRenderCondition === renderCondition
+      || (timeout.current && !interrupt)
+    ) return
 
     if (renderCondition) {
       setRenderState(true)
-      setStyle(enterAnimation)
+      onEnter()
 
-      timeout.current = window.setTimeout(() => {
+      timeout.current = setTimeout(() => {
         afterEnter()
         timeout.current = null
-      }, parseInt(enterDuration))
+      }, enterDuration)
     } else {
-      setKey(old => old + 1)
-      setStyle(exitAnimation)
+      onExit()
 
-      timeout.current = window.setTimeout(() => {
+      timeout.current = setTimeout(() => {
         setRenderState(false)
         afterExit()
         timeout.current = null
-      }, parseInt(exitDuration))
+      }, exitDuration)
     }
   })
 
   useEffect(() => () => clearTimeout(timeout.current), [])
+
+  return renderState
+}
+
+export const useFade = (options) => {
+  const transition = `opacity ${options.duration}ms`
+  const fadedOut = { transition, opacity: 0 }
+  const fadedIn = { transition, opacity: 1 }
+
+  const [style, setStyle] = useState(fadedOut)
+  const onEnter = () => setTimeout(() => setStyle(fadedIn), 20)
+  const onExit = () => setStyle(fadedOut)
+
+  const renderState = useTransition({ ...options, onEnter, onExit })
+
+  return [renderState, style]
+}
+
+export const useAnimation = ({
+  enterAnimation,
+  exitAnimation,
+  noFirstAnimation = false,
+  ...options
+}) => {
+  const [style, setStyle] = useState(noFirstAnimation ? {} : enterAnimation)
+  const [key, setKey] = useState(0)
+
+  const onEnter = () => setStyle(enterAnimation)
+  const onExit = () => {
+    setKey(old => old + 1)
+    setStyle(exitAnimation)
+  }
+
+  const renderState = useTransition({
+    ...options,
+    onEnter,
+    onExit,
+    enterDuration: enterAnimation.animationDuration,
+    exitDuration: exitAnimation.animationDuration
+  })
 
   return [renderState, style, key]
 }

@@ -72,9 +72,15 @@ class Api::PollsController < ApplicationController
   private
 
   def poll_params
-    snake_params(:poll)
-      .permit( :title, :poll_type, :locked, :allow_changes, :allow_anonymous, :num_responses_allowed,
-      answer_options_attributes: [:body, :ord, :correct, :id] )
+    snake_params(:poll).permit( 
+        :title, 
+        :poll_type, 
+        :locked, 
+        :allow_changes, 
+        :allow_anonymous, 
+        :num_responses_allowed,
+        answer_options_attributes: [:body, :ord, :correct, :id] 
+    )
   end
 
   def broadcast_poll

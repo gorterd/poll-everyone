@@ -14,7 +14,7 @@ import { useToggleActive } from '../../hooks/api/mutation'
 import {
   fetchEditPoll,
   fetchFooter,
-  fetchGroupsIndex,
+  fetchPollsIndex,
   fetchHomeSplash
 } from '../lazy_load_index'
 import Logo from '../shared/logo'
@@ -22,7 +22,7 @@ import Logo from '../shared/logo'
 export default function PresentPoll() {
   const prefetch = useCallback(() => {
     fetchEditPoll()
-    fetchGroupsIndex()
+    fetchPollsIndex()
     fetchHomeSplash()
     fetchFooter()
   }, [])
@@ -77,7 +77,7 @@ export default function PresentPoll() {
 
     const resizeListener = window.addEventListener(
       'resize',
-      debounce(updateGraphDimensions, 100)
+      debounce(updateGraphDimensions, 70)
     )
 
     return () => window.removeEventListener('resize', resizeListener)
@@ -95,7 +95,7 @@ export default function PresentPoll() {
               ? 'Respond at '
               : 'When poll is active, respond at '
             }
-            <strong>#participate/{username}</strong>
+            <strong>poll-everyone.herokuapp.com/#/participate/{username}</strong>
           </h2>
           <div className='graph'>
             <h1>{poll?.title}</h1>

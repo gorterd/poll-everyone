@@ -16,8 +16,15 @@ const groupSearchFragment = graphql`
   }
 `
 
-export default function GroupSearch({ setGroup, focusOnTab, placeholderText, defaultGroup, groupsRef }) {
-  const groups = useFragment(groupSearchFragment, groupsRef) 
+export default function GroupSearch({
+  setGroup,
+  focusOnTab,
+  placeholderText,
+  defaultGroup,
+  groupsRef,
+  focusSearch
+}) {
+  const groups = useFragment(groupSearchFragment, groupsRef)
 
   const [state, dispatch] = useReducer((state, action) => {
     switch (action.type) {
@@ -69,17 +76,17 @@ export default function GroupSearch({ setGroup, focusOnTab, placeholderText, def
     dropdownShowing,
     searchDiv,
     {
-      toggleDropdown, 
-      showDropdown, 
-      hideDropdown 
+      toggleDropdown,
+      showDropdown,
+      hideDropdown
     }
-  ] = useDropdown() 
+  ] = useDropdown()
 
-  const textMatchesGroup = text => group => 
+  const textMatchesGroup = text => group =>
     new RegExp(`^${text}`, 'i').test(group.title)
 
   const selectGroup = group => {
-    hideDropdown() 
+    hideDropdown()
     dispatch({ type: SELECT_GROUP, searchText: group.title })
   }
 
@@ -92,7 +99,7 @@ export default function GroupSearch({ setGroup, focusOnTab, placeholderText, def
 
   const clearSearch = () => {
     searchInput.current.focus()
-    showDropdown() 
+    showDropdown()
     dispatch({
       type: UPDATE_SEARCH,
       payload: { drawerGroups: Array.from(groups), searchText: '' }
@@ -102,7 +109,7 @@ export default function GroupSearch({ setGroup, focusOnTab, placeholderText, def
   const handleSearch = e => {
     const searchText = e.target.value
     const drawerGroups = groups.filter(textMatchesGroup(searchText))
-    showDropdown() 
+    showDropdown()
     dispatch({
       type: UPDATE_SEARCH,
       payload: { searchText, drawerGroups }
@@ -110,7 +117,7 @@ export default function GroupSearch({ setGroup, focusOnTab, placeholderText, def
   }
 
   const handleKeyDown = e => {
-    if (!dropdownShowing) return 
+    if (!dropdownShowing && e.key !== 'Tab') return
     switch (e.key) {
       case 'ArrowDown':
         e.preventDefault()
@@ -119,6 +126,7 @@ export default function GroupSearch({ setGroup, focusOnTab, placeholderText, def
         e.preventDefault()
         return dispatch({ type: KEY_MOVE, dir: -1, defaultIndex: null })
       case 'Tab':
+        console.log(focusOnTab)
         if (focusOnTab) {
           e.preventDefault()
           focusOnTab.disabled = false
@@ -128,9 +136,9 @@ export default function GroupSearch({ setGroup, focusOnTab, placeholderText, def
       case 'Escape':
       case 'Enter':
         e.stopPropagation()
-        hideDropdown() 
+        hideDropdown()
         dispatch({ type: CLOSE_SEARCH })
-    }  
+    }
   }
 
   useEffect(() => dispatch({
@@ -156,11 +164,15 @@ export default function GroupSearch({ setGroup, focusOnTab, placeholderText, def
   useEffect(() => {
     setGroup(groups.find(group => group.title === searchText))
   }, [searchText, groups, setGroup])
-  
+
+  useEffect(() => {
+    if (focusSearch) searchInput.current.focus()
+  }, [focusSearch])
+
   return (
-    <div 
-      className='group-search-container' 
-      tabIndex='0' 
+    <div
+      className='group-search-container'
+      tabIndex='0'
       onKeyDown={handleKeyDown}
       ref={searchDiv}
     >
@@ -180,8 +192,8 @@ export default function GroupSearch({ setGroup, focusOnTab, placeholderText, def
         </span>
       </form>
 
-      <button 
-        className='button-grey' 
+      <button
+        className='button-grey'
         onClick={toggleDropdown}
       >
         <i className={`fas fa-chevron-${dropdownShowing ? 'up' : 'down'}`}></i>
@@ -189,7 +201,7 @@ export default function GroupSearch({ setGroup, focusOnTab, placeholderText, def
 
       {dropdownShowing && <ul className='group-search-list'>
         {drawerGroups.map((group, idx) => (
-          <li 
+          <li
             key={group._id}
             className={focusIndex === idx ? 'focused' : ''}
             onClick={() => selectGroup(group)}
