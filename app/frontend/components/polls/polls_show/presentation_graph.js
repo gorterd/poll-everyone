@@ -36,12 +36,11 @@ const PresentationGraph = ({
     []
   )
 
-  const wordsWillFit = useCallback(
-    lineWords => ctx.measureText(lineWords.join(' ')).width < leftMargin * 0.9,
-    [ctx, leftMargin]
-  )
+  const wordsWillFit = useCallback(lineWords => (
+    ctx.measureText(lineWords.join(' ')).width < leftMargin * 0.95
+  ), [ctx, leftMargin])
 
-  const { fontSize, lineHeight } = useMemo(() => {
+  const getLabelSize = useCallback((body) => {
     let fontSize = largeBodyFont
     let lineHeight
 
@@ -50,12 +49,21 @@ const PresentationGraph = ({
       lineHeight = fontSize * 1.15
 
       const maxLines = Math.floor(maxLabelHeight / lineHeight)
-      const lines = generateLines(wordsWillFit, maxBody)
+      const lines = generateLines(wordsWillFit, body)
+      console.log(lines)
       if (lines?.length <= maxLines) break
     }
 
     return { fontSize, lineHeight }
-  }, [largeBodyFont, ctx, maxLabelHeight, maxBody, wordsWillFit])
+  }, [largeBodyFont, ctx, maxLabelHeight, wordsWillFit])
+
+  const { fontSize, lineHeight } = useMemo(() => (
+    formattedData
+      .map((answerData) => getLabelSize(answerData.body))
+      .reduce((minSize, size) =>
+        size.fontSize < minSize.fontSize ? size : minSize
+      )
+  ), [formattedData, getLabelSize])
 
   const generateText = useCallback((lines, { x, y }) => {
     const initY = y - (lineHeight * (lines.length - 1.5) / 2)
@@ -68,7 +76,6 @@ const PresentationGraph = ({
         style={{
           fontSize,
           fontFamily,
-          fontWeight: (lineHeight > 40 ? 400 : 600)
         }}
         className="recharts-text recharts-label"
       >
@@ -110,11 +117,12 @@ const PresentationGraph = ({
     )
   }, [activated, barFontSize, rectHeight, generateText, wordsWillFit])
 
+  console.log(fontSize)
   return (
     <BarChart
       data={formattedData}
       layout="vertical"
-      margin={{ left: leftMargin }}
+      margin={{ left: leftMargin, right: 20 }}
       width={graphWidth}
       height={graphHeight}
     >

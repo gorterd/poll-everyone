@@ -9,6 +9,7 @@
 require 'faker'
 
 AnswerOption.destroy_all
+Participation.destroy_all
 Poll.destroy_all
 Group.destroy_all
 User.destroy_all
@@ -28,6 +29,16 @@ demo = User.create!(
   email: "goodAfternoon@goodEvening.gn",
   password: "simulation"
 )
+
+respondents = 5.times.map do
+  User.create!(
+    first_name: "first",
+    last_name: "last",
+    username: Faker::Internet.username,
+    email: Faker::Internet.email,
+    password: "password"
+  )
+end
 
 [easy, demo].each do |user|
   3.times do 
@@ -50,6 +61,18 @@ Poll.all.each do |poll|
       body: Faker::Company.bs,
       correct: [true, false].sample,
       poll: poll
+    )
+  end
+end
+
+AnswerOption.all.each do |answer_option|
+  respondents.sample(rand(0..5)).each do |participant|
+    Response.create!(
+      answer_option: answer_option,
+      participation: Participation.create!(
+        participant: participant,
+        presenter: answer_option.poll.user
+      )
     )
   end
 end

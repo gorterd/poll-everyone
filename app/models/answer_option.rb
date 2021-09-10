@@ -7,5 +7,5 @@ class AnswerOption < ApplicationRecord
   before_validation :ensure_ord, on: :create
 
   belongs_to :poll, inverse_of: :answer_options
-  has_many :responses, dependent: :destroy # TODO refactor for delete_all
+  has_many :responses, dependent: :destroy
 end
