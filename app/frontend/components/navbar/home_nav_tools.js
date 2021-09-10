@@ -1,67 +1,62 @@
 import React, { useCallback } from 'react'
-import { Link, useHistory } from 'react-router-dom'
-import { fetchGroupsIndex, fetchLogin, fetchParticipateApp, fetchSignupSplash } from '../lazy_load_index'
+import { Link } from 'react-router-dom'
+import { fetchPollsIndex, fetchLogin, fetchParticipateApp, fetchSignupSplash } from '../lazy_load_index'
 import { useDelayedPrefetch } from '../../hooks/effect'
 import { useLoggedIn } from '../../hooks/api/query'
-import { useLogin, useLogout } from '../../hooks/api/mutation'
+import { useDemoLogin, useLogout } from '../../hooks/api/mutation'
 import QueryLink from '../shared/link'
 import { pollsIndexQuery } from '../polls/polls_index'
 
 export default function HomeNavTools() {
-  const { mutateAsync: login } = useLogin()
+  const { mutate: demoLogin } = useDemoLogin()
   const { mutate: logout } = useLogout()
   const loggedIn = useLoggedIn()
-  const history = useHistory()
 
   const prefetch = useCallback(() => {
-    fetchGroupsIndex()
     fetchParticipateApp()
-    
-    if (loggedIn) {
+
+    if (!loggedIn) {
       fetchSignupSplash()
       fetchLogin()
+    } else {
+      fetchPollsIndex()
     }
   }, [loggedIn])
-  
-  useDelayedPrefetch(prefetch)
 
-  const loginDemoUser = () => login({
-    usernameOrEmail: 'Simulation3845',
-    password: 'its_all_a_simulation'
-  }).then(() => history.push('/polls'))
+  useDelayedPrefetch(prefetch)
 
   const tools = loggedIn
     ? [
-      <QueryLink 
-        key='my-polls' 
-        className="button button-white" 
+      <QueryLink
+        key='my-polls'
+        className="button button-white"
         to='/polls'
         query={pollsIndexQuery}
       >My polls</QueryLink>,
-      <button 
-        key='logout' 
-        className="nav-tool" 
+      <button
+        key='logout'
+        className="nav-tool"
         onClick={logout}
       >Log out</button>
     ]
     : [
-      <button 
-        key='demo' 
-        className="button button-white" 
-        onClick={loginDemoUser}
+      <button
+        key='demo'
+        className="button button-white"
+        onClick={demoLogin}
       >Demo Login</button>,
-      <Link 
+      <Link
         key='signup'
-        className="button button-white" 
+        className="button button-white"
         to='/signup/splash'
       >Sign up</Link>,
-      <Link 
+      <Link
         key='login'
-        className="nav-tool" 
+        className="nav-tool"
         to='/login'
       >Log in</Link>
     ]
-  
+
   return (
     <>
       <li key='participate'>

@@ -5,10 +5,10 @@ class Group < ApplicationRecord
   validates :title, :ord, presence: true
   
   before_validation :ensure_ord, :ensure_title, on: :create
-  after_destroy :remove_from_container_order # TODO refactor for delete_all
+  after_destroy :remove_from_container_order
   
   belongs_to :user
-  has_many :polls, -> { order(:ord) }, dependent: :destroy # TODO refactor for delete_all
+  has_many :polls, -> { order(:ord) }, dependent: :destroy
 
   def save_with_polls(poll_ids)
     self.class.transaction do 

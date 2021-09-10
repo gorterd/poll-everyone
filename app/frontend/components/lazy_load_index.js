@@ -28,7 +28,7 @@ export const [SignupSplash, fetchSignupSplash] = withLazy(
   )
 )
 
-export const [GroupsIndex, fetchGroupsIndex] = withLazy(
+export const [PollsIndex, fetchPollsIndex] = withLazy(
   () => import(
     /* webpackChunkName: "polls" */
     './polls/polls_index'

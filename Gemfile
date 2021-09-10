@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '2.5.1'
+ruby '2.7.3'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 5.2.4', '>= 5.2.4.3'
@@ -35,8 +35,9 @@ gem 'bcrypt', '~> 3.1.7'
 gem 'bootsnap', '>= 1.1.0', require: false
 
 gem 'faker'
-gem 'webpacker', '~> 6.x'
+gem 'webpacker', '6.0.0.rc.5'
 gem 'graphql'
+gem 'graphql-batch'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
@@ -57,6 +58,7 @@ group :development do
   gem 'better_errors'
   gem 'binding_of_caller'
   gem 'rails_real_favicon'
+  gem 'graphiql-rails'
 end
 
 group :test do
@@ -70,5 +72,3 @@ end
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
-gem 'graphiql-rails', group: :development
-gem 'graphql-batch'

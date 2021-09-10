@@ -8,7 +8,7 @@
 }
 
 .show-poll-left {
-  overflow: scroll;
+  overflow: hidden;
   flex: 1;
   padding: 32px;
   height: 100%;
@@ -26,8 +26,9 @@
   
   h2 {
     margin: 20px auto;
-    font-size: $fontsize-h2;
+    font-size: min(#{$fontsize-h2}, 1.7vw, 3.5vh);
     font-weight: 400;
+    text-align: center;
 
     strong {
       font-weight: 700;
@@ -38,16 +39,17 @@
     background-color: $light-grey;
     display: flex;
     flex-direction: column;
-    justify-content: space-around;
+    justify-content: center;
     align-items: center;
     width: 100%;
-    height: 100%;
+    height: calc(100% - 62px - 40px - min(#{$fontsize-h2}, 1.7vw));
 
-    $h1font: clamp(30px, min(calc(4vh), calc(3vw)), 4rem);
+    $h1font: clamp(30px, min(4vh, 3vw), 4rem);
     
     h1 {
       text-align: center;
-      font-size: $h1font;
+      font-size: min(#{$h1font}, 2.5vw, 3.5vh);
+      max-width: 80%;
     }
 
     .graph-wrapper {

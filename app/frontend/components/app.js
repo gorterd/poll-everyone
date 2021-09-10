@@ -6,18 +6,16 @@ import { AuthRoute, ProtectedRoute } from './shared/routes'
 import { Modal } from './shared/modal'
 
 import { componentDoneLoading, componentLoading } from '../store/actions/ui_actions'
-import Navbar from '../components/navbar/navbar'
-import Footer from './static/footer'
 import {
-  // Navbar,
-  // Footer,
+  Navbar,
+  Footer,
   EditPoll,
   Login,
   ParticipateApp,
   HomeSplash,
   SignupSplash,
   Signup,
-  GroupsIndex,
+  PollsIndex,
   PresentPoll
 } from './lazy_load_index'
 
@@ -62,7 +60,7 @@ export default memo(function App() {
               </AuthRoute>
 
               <ProtectedRoute exact path='/polls'>
-                <GroupsIndex />
+                <PollsIndex />
               </ProtectedRoute>
 
               <ProtectedRoute path='/polls/:pollId/edit'>

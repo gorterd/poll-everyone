@@ -9,28 +9,39 @@
 require 'faker'
 
 AnswerOption.destroy_all
+Participation.destroy_all
 Poll.destroy_all
 Group.destroy_all
 User.destroy_all
 
 easy = User.create!(
   first_name: "easy",
-  last_name: "peasy",
+  last_name: "easy",
   username: "easy",
   email: "e@e.com",
-  password: "123123123"
+  password: "123456789"
 )
 
 demo = User.create!(
   first_name: "truman",
   last_name: "burbank",
-  username: "Simulation3845",
-  email: "isThisTheRealLife@isThisJustFantasy.idk",
-  password: "its_all_a_simulation"
+  username: "Truman123",
+  email: "goodAfternoon@goodEvening.gn",
+  password: "simulation"
 )
 
+respondents = 5.times.map do
+  User.create!(
+    first_name: "first",
+    last_name: "last",
+    username: Faker::Internet.username,
+    email: Faker::Internet.email,
+    password: "password"
+  )
+end
+
 [easy, demo].each do |user|
-  2.times do 
+  3.times do 
     Group.create! title: Faker::Dessert.variety, user: user
   end
 end
@@ -38,18 +49,30 @@ end
 Group.all.each do |group|
   3.times do 
     Poll.create!(
-      title: Faker::TvShows::BojackHorseman.tongue_twister,
+      title: Faker::Lorem.question,
       group: group
     )
   end
 end
 
 Poll.all.each do |poll|
-  4.times do 
+  rand(2..4).times do 
     AnswerOption.create!(
-      body: Faker::Movies::HitchhikersGuideToTheGalaxy.quote,
+      body: Faker::Company.bs,
       correct: [true, false].sample,
       poll: poll
+    )
+  end
+end
+
+AnswerOption.all.each do |answer_option|
+  respondents.sample(rand(0..5)).each do |participant|
+    Response.create!(
+      answer_option: answer_option,
+      participation: Participation.create!(
+        participant: participant,
+        presenter: answer_option.poll.user
+      )
     )
   end
 end

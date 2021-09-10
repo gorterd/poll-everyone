@@ -7,9 +7,9 @@ class User < ApplicationRecord
   before_validation :ensure_session_token, :ensure_username, on: :create
   after_create :generate_default_group
   
-  has_many :groups, -> { order(:ord) }, autosave: true, dependent: :destroy # TODO refactor for delete_all
+  has_many :groups, -> { order(:ord) }, autosave: true, dependent: :destroy 
   has_many :polls, -> { order(:ord) }, through: :groups
-  has_many :participations, as: :participant, dependent: :destroy # TODO refactor for delete_all
+  has_many :participations, as: :participant, dependent: :destroy 
   has_many :responses, through: :participations, source: :responses
   
   attr_reader :password

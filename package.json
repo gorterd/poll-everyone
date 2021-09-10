@@ -38,7 +38,7 @@
     "webpack-dev-server": "^3.11.2"
   },
   "scripts": {
-    "build": "yarn relay && bin/webpack",
+    "build": "yarn relay",
     "start": "yarn relay && bin/webpack-dev-server",
     "relay": "yarn relay-compiler --src ./app/frontend --schema ./schema.graphql",
     "build-schema": "bin/rails graphql:schema:idl && yarn relay"

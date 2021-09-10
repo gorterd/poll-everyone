@@ -5,8 +5,8 @@ import { useInputState } from '../../../../hooks/state'
 import { modalDataSelector } from '../../../../util/redux_selectors'
 import SmallModal from './polls_index_modal'
 
-export default function NewGroupModal () {
-  const [ title, inputProps ] = useInputState()
+export default function NewGroupModal() {
+  const [title, inputProps] = useInputState()
   const { pollIds } = useSelector(modalDataSelector)
   const { mutate: createGroup } = useCreateGroup()
 
@@ -23,15 +23,16 @@ export default function NewGroupModal () {
     subtext = `${numPolls} selected poll${numPolls > 1 ? 's' : ''} will be moved into this group.`
   } else {
     header = 'Create empty group'
-    subtext = 'No activities selected.' 
+    subtext = 'No activities selected.'
   }
-  
+
   const modalProps = {
     header,
     subtext,
     submissionHandler,
     inputProps: { ...inputProps, placeholder: 'Group name' },
     submissionText: 'Create group',
+    submissionDisabled: !title
   }
 
   return <SmallModal {...modalProps} />

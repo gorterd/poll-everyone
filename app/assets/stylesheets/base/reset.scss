@@ -44,6 +44,10 @@ input[type="submit"] {
 
 // Broad Parent Styling
 
+html {
+  overflow: overlay;
+}
+
 .app {
   background: $light-grey;
   font-family: 'Source Sans Pro', 'sans-serif';

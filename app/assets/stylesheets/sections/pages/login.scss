@@ -10,7 +10,7 @@
 .login-form-container {
   width: 468px;
   margin: 25px auto;
-  overflow-y: scroll;
+  overflow-y: auto;
 
   >*{
     margin: 20px 0;
@@ -26,7 +26,11 @@
     line-height: 1.5rem;
     text-align: center;
 
-    a, .login-link { text-decoration: underline;}
+    a, .login-link { 
+      text-decoration: underline;
+      margin: 0 5px;
+      cursor: pointer;
+    }
   }
 
   form .button { 

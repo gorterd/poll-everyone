@@ -64,7 +64,6 @@ export default (state = nullSelection, action) => {
       return { groupIds: newGroupIds, pollIds: newPollIds }
     }
     case CLEAR_SELECTIONS:
-      console.log(nullSelection)
       return nullSelection
     default:
       return state

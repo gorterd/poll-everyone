@@ -3,12 +3,11 @@ import { Redirect, Route } from 'react-router-dom'
 import { useLoggedIn } from '../../hooks/api/query'
 
 export const AuthRoute = ({ children, ...routeProps }) => {
-  // const loggedIn = useLoggedIn()
   const loggedIn = useLoggedIn()
 
   return (
     <Route {...routeProps}>
-      { loggedIn ? <Redirect to="/polls" /> : children }
+      {loggedIn ? <Redirect to="/polls" /> : children}
     </Route>
   )
 }
@@ -18,7 +17,7 @@ export const ProtectedRoute = ({ children, ...routeProps }) => {
 
   return (
     <Route {...routeProps}>
-      { loggedIn ? children : <Redirect to="/login" /> }
+      {loggedIn ? children : <Redirect to="/login" />}
     </Route>
   )
 }

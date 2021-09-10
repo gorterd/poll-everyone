@@ -44,6 +44,7 @@ const PollsIndex = () => {
 
   useEffect(() => {
     setRefetchPolls(() => refetch)
+    return () => setRefetchPolls(() => () => { })
   }, [setRefetchPolls, refetch])
 
   return (
