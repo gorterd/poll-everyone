@@ -12,7 +12,6 @@ $fontweight-h3: 400;
 $fontweight-h4: 600;
 $fontweight-strong: 600;
 
-
 // color
 $lightest-grey: #f7f7f7;
 $light-grey: #ededed;
@@ -53,3 +52,8 @@ $deep-sky-blue: #419cd9;
 $gradient: linear-gradient(90deg, $royal-blue, $dark-royal);
 $gradient-disabled: linear-gradient(90deg, $royal-blue-disabled, #659fc5);
 $gradient-black: linear-gradient(135deg, $soft-charcoal, $almost-black);
+
+// misc
+
+$navbar-offset: 72px;
+$navbarless-height: calc(100vh - #{$navbar-offset});

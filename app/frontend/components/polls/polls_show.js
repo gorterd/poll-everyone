@@ -77,7 +77,7 @@ export default function PresentPoll() {
 
     const resizeListener = window.addEventListener(
       'resize',
-      debounce(updateGraphDimensions, 70)
+      debounce(updateGraphDimensions, 20)
     )
 
     return () => window.removeEventListener('resize', resizeListener)
@@ -95,7 +95,7 @@ export default function PresentPoll() {
               ? 'Respond at '
               : 'When poll is active, respond at '
             }
-            <strong>poll-everyone.herokuapp.com/#/participate/{username}</strong>
+            <strong>{location.host}/#/participate/{username}</strong>
           </h2>
           <div className='graph'>
             <h1>{poll?.title}</h1>

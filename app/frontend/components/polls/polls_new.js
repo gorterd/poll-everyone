@@ -48,51 +48,49 @@ export default function NewPollForm({ modalData }) {
         >X</button>
       </div>
 
-      <div className='new-poll-main'>
-        <div className='new-poll-form-container'>
+      <div className='new-poll-form-container'>
 
-          <ul className='new-poll-options'>
-            <li
-              {...classNames(
-                'new-poll-option',
-                [activeOption === 'multiple_choice', 'active-option']
-              )}
-              onClick={() => setActiveOption('multiple_choice')}
-            >
-              <img src={multipleChoiceOptionImg} alt='multiple-choice' />
-              <span>Multiple choice</span>
-            </li>
-          </ul>
-
-          <Form
-            render={({
-              form,
-              handleSubmit,
-            }) => (
-              <>
-                <div className='new-poll-form'>
-                  <span>Ask a question and let participants choose from a list of answers.</span>
-                  {form}
-                </div>
-
-                <div className='new-poll-bottom-bar'>
-                  <GroupSearch
-                    defaultGroup={modalData.group?.title}
-                    setGroup={setGroup}
-                    groupsRef={groups}
-                    placeholderText='Assign activity to a group'
-                  />
-
-                  <button
-                    className='button-blue'
-                    tabIndex='2'
-                    onClick={() => handleSubmit(submitPoll)}
-                  >Create</button>
-                </div>
-              </>
+        <ul className='new-poll-options'>
+          <li
+            {...classNames(
+              'new-poll-option',
+              [activeOption === 'multiple_choice', 'active-option']
             )}
-          />
-        </div>
+            onClick={() => setActiveOption('multiple_choice')}
+          >
+            <img src={multipleChoiceOptionImg} alt='multiple-choice' />
+            <span>Multiple choice</span>
+          </li>
+        </ul>
+
+        <Form
+          render={({
+            form,
+            handleSubmit,
+          }) => (
+            <>
+              <div className='new-poll-form'>
+                <span>Ask a question and let participants choose from a list of answers.</span>
+                {form}
+              </div>
+
+              <div className='new-poll-bottom-bar'>
+                <GroupSearch
+                  defaultGroup={modalData.group?.title}
+                  setGroup={setGroup}
+                  groupsRef={groups}
+                  placeholderText='Assign activity to a group'
+                />
+
+                <button
+                  className='button-blue'
+                  tabIndex='2'
+                  onClick={() => handleSubmit(submitPoll)}
+                >Create</button>
+              </div>
+            </>
+          )}
+        />
       </div>
     </section>
   )

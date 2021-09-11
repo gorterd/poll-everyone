@@ -1,4 +1,4 @@
-export function clamp(val, min, max) {
+export const clamp = (val, min, max) => {
   if (val < min) return min
   if (val > max) return max
   return val
@@ -13,9 +13,9 @@ export const hasTruthyValue = arrayOrObject =>
     ? arrayOrObject.some(value => value)
     : Object.values(arrayOrObject).some(value => value)
 
-export function classNames(...args) {
+export const classNames = (...args) => {
   const klassNames = args
-    .map( arg => {
+    .map(arg => {
       if (arg instanceof Array) {
         return arg[0] ? arg[1] : null
       } else {
@@ -28,11 +28,19 @@ export function classNames(...args) {
   return { className: klassNames }
 }
 
-export function smoothScrollToY(y, { 
-  bailOut = 1000, 
+let ctx
+export const measureTextWidth = (text, fontSize, fontFamily) => {
+  if (!ctx) ctx = document.createElement('canvas').getContext('2d')
+
+  ctx.font = `${fontSize}px ${fontFamily}`
+  return ctx.measureText(text).width
+}
+
+export const smoothScrollToY = (y, {
+  bailOut = 1000,
   pause = 0,
   threshold = 5
-}) {
+}) => {
   if (Math.abs(window.scrollY - y) < threshold) {
     window.scrollTo({ top: y })
     return Promise.resolve()
@@ -40,7 +48,7 @@ export function smoothScrollToY(y, {
 
   window.scrollTo({ top: y, behavior: 'smooth' })
 
-  return new Promise( (resolve) => { 
+  return new Promise((resolve) => {
     const asyncActivities = {}
 
     asyncActivities.timeout = setTimeout(() => {
@@ -55,7 +63,7 @@ export function smoothScrollToY(y, {
         window.setTimeout(() => resolve(true), pause)
       }
     }
-    
+
     window.addEventListener('scroll', asyncActivities.listener)
   })
 }

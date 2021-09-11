@@ -30,7 +30,7 @@ h3 {
 
 // layout
 
-@mixin fullpage($offset){
+@mixin fullpage($offset: 0px){
   position: fixed;
   bottom: 0;
   height: calc(100vh - #{$offset});

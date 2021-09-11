@@ -56,23 +56,23 @@ Group.all.each do |group|
 end
 
 Poll.all.each do |poll|
-  rand(2..4).times do 
+  answer_options = rand(2..4).times.map do 
     AnswerOption.create!(
       body: Faker::Company.bs,
       correct: [true, false].sample,
       poll: poll
     )
   end
-end
 
-AnswerOption.all.each do |answer_option|
-  respondents.sample(rand(0..5)).each do |participant|
-    Response.create!(
-      answer_option: answer_option,
-      participation: Participation.create!(
-        participant: participant,
-        presenter: answer_option.poll.user
+  if [true, false].sample
+    respondents.sample(rand(0..5)).each do |participant|
+      Response.create!(
+        answer_option: answer_options.sample,
+        participation: Participation.create!(
+          participant: participant,
+          presenter: poll.user
+        )
       )
-    )
+    end
   end
 end

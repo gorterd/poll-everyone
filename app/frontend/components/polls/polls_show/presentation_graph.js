@@ -1,10 +1,13 @@
-/* eslint-disable indent */
+import { curry } from 'lodash'
 import React, { useCallback, useMemo } from 'react'
 import { BarChart, XAxis, YAxis, Bar, LabelList } from 'recharts'
+import { useStableMutable } from '../../../hooks/general'
+import { measureTextWidth } from '../../../util/general_util'
 
-const yAxisLine = { strokeWidth: 2.5, stroke: '#6b99c7' }
-const barFill = '#6b99c7'
 const fontFamily = 'sans-serif'
+const labelTextClassName = 'recharts-text recharts-label'
+const blue = '#6b99c7'
+const lightBlue = '#b5cce3'
 
 const PresentationGraph = ({
   formattedData,
@@ -15,55 +18,34 @@ const PresentationGraph = ({
   const numRows = formattedData.length
   const graphWidth = Math.min(dims.width, dims.height * 2.5)
   const graphHeight = Math.min(dims.height, dims.width * numRows / 3)
-  const maxLabelHeight = graphHeight / Math.max(numRows, 3) * 0.9
-  const barHeight = maxLabelHeight * 0.75
-  const largeBodyFont = barHeight * 0.5
-  const rectHeight = barHeight * 0.6
-  const barFontSize = rectHeight * 0.9
 
-  const maxBody = formattedData.reduce((maxBody, answerData) =>
-    maxBody.length > answerData.body.length
-      ? maxBody
-      : answerData.body
-    , 0
-  )
+  const measurements = useMemo(() => {
+    const maxLabelHeight = graphHeight / Math.max(numRows, 3) * 0.9
+    const barHeight = maxLabelHeight * 0.75
+    const rectHeight = barHeight * 0.6
 
-  const marginPercent = 0.15 + Math.min((maxBody.length / 30) * 0.25, 0.25)
+    return {
+      maxLabelHeight,
+      barHeight,
+      rectHeight,
+      rectWidth: rectHeight * 0.87,
+      initialLabelFontSize: barHeight * 0.5,
+      barFontSize: rectHeight * 0.9
+    }
+  }, [graphHeight, numRows])
+
+  const answerBodies = useStableMutable(formattedData.map(({ body }) => body))
+  const maxBodyLength = Math.max(...answerBodies.map(b => b.length))
+  const marginPercent = 0.1 + Math.min((maxBodyLength / 30) * 0.25, 0.25)
   const leftMargin = graphWidth * marginPercent
 
-  const ctx = useMemo(
-    () => document.createElement('canvas').getContext('2d'),
-    []
-  )
-
-  const wordsWillFit = useCallback(lineWords => (
-    ctx.measureText(lineWords.join(' ')).width < leftMargin * 0.95
-  ), [ctx, leftMargin])
-
-  const getLabelSize = useCallback((body) => {
-    let fontSize = largeBodyFont
-    let lineHeight
-
-    while (fontSize--) {
-      ctx.font = `${fontSize}px ${fontFamily}`
-      lineHeight = fontSize * 1.15
-
-      const maxLines = Math.floor(maxLabelHeight / lineHeight)
-      const lines = generateLines(wordsWillFit, body)
-      console.log(lines)
-      if (lines?.length <= maxLines) break
-    }
-
-    return { fontSize, lineHeight }
-  }, [largeBodyFont, ctx, maxLabelHeight, wordsWillFit])
-
-  const { fontSize, lineHeight } = useMemo(() => (
-    formattedData
-      .map((answerData) => getLabelSize(answerData.body))
-      .reduce((minSize, size) =>
-        size.fontSize < minSize.fontSize ? size : minSize
-      )
-  ), [formattedData, getLabelSize])
+  const { doWordsFit, fontSize, lineHeight } = useTextSize({
+    textBodies: answerBodies,
+    initialFontSize: measurements.initialLabelFontSize,
+    width: leftMargin,
+    height: measurements.maxLabelHeight,
+    fontFamily,
+  })
 
   const generateText = useCallback((lines, { x, y }) => {
     const initY = y - (lineHeight * (lines.length - 1.5) / 2)
@@ -72,12 +54,9 @@ const PresentationGraph = ({
         key={idx}
         x={x - 5}
         y={initY + (idx * lineHeight)}
-        textAnchor="end"
-        style={{
-          fontSize,
-          fontFamily,
-        }}
-        className="recharts-text recharts-label"
+        textAnchor='end'
+        style={{ fontSize, fontFamily }}
+        className={labelTextClassName}
       >
         {line}
       </text>
@@ -87,8 +66,8 @@ const PresentationGraph = ({
   const labelRender = useCallback(props => {
     const { x, y, payload } = props
     const [key, body, percent] = JSON.parse(payload.value)
-    const lines = generateLines(wordsWillFit, body)
-
+    const lines = generateLines(body, doWordsFit)
+    const { rectWidth, rectHeight, barFontSize } = measurements
     return (
       <g>
         {generateText(lines, props)}
@@ -97,81 +76,131 @@ const PresentationGraph = ({
           <rect
             x={x + 12}
             y={y - (rectHeight / 2)}
-            width={rectHeight * 0.87}
+            width={rectWidth}
             height={rectHeight}
-            fill={'#b5cce3'}
+            fill={lightBlue}
           ></rect>
         }
         {activated &&
           <text
             x={x + 12 + rectHeight * .1}
             y={y + (barFontSize * 0.35)}
-            textAnchor="start"
+            textAnchor='start'
             style={{ fontFamily, fontWeight: 700, fontSize: barFontSize }}
-            className="recharts-text recharts-label"
+            className={labelTextClassName}
           >
             {key}
           </text>
         }
       </g>
     )
-  }, [activated, barFontSize, rectHeight, generateText, wordsWillFit])
+  }, [activated, measurements, generateText, doWordsFit])
 
-  console.log(fontSize)
-  return (
-    <BarChart
-      data={formattedData}
-      layout="vertical"
-      margin={{ left: leftMargin, right: 20 }}
-      width={graphWidth}
-      height={graphHeight}
-    >
-      <XAxis type="number" hide={true} />
-      <Bar
-        dataKey="percent"
-        fill={barFill}
-        barSize={barHeight}
-        isAnimationActive={isAnimationActive}
+  const percentRender = useCallback(({ value, x, y, width, height }) => {
+    if (value === '0%') return null
+    const { barFontSize, rectWidth } = measurements
+    const textWidth = measureTextWidth(value, barFontSize, fontFamily)
+    const fitsInBar = textWidth + rectWidth + 10 < width
+    const fill = fitsInBar ? '#ffffff' : '#000000'
+
+    return (
+      <text
+        x={x + width + (fitsInBar ? -1 * textWidth : 5)}
+        y={y + (height / 2) + (barFontSize * 0.35)}
+        style={{ fontSize: barFontSize, fill }}
+        className={labelTextClassName}
       >
-        <LabelList
-          dataKey="percentString"
-          position="insideRight"
-          formatter={v => v === '0%' ? '' : v}
-          style={{ fontSize: barFontSize, fill: '#ffffff' }}
+        {value}
+      </text>
+    )
+  }, [measurements])
+
+  return graphHeight > 100 && graphWidth > 200
+    ? (
+      <BarChart
+        data={formattedData}
+        layout='vertical'
+        margin={{ left: leftMargin, right: 20 }}
+        width={graphWidth}
+        height={graphHeight}
+      >
+        <XAxis type='number' hide={true} />
+        <Bar
+          dataKey='percent'
+          fill={blue}
+          barSize={measurements.barHeight}
+          isAnimationActive={isAnimationActive}
+        >
+          <LabelList dataKey='percentString' content={percentRender} />
+        </Bar>
+        <YAxis
+          type='category'
+          axisLine={{ strokeWidth: 2.5, stroke: blue }}
+          tickLine={false}
+          dataKey='label'
+          tick={labelRender}
         />
-      </Bar>
-      <YAxis
-        type="category"
-        axisLine={yAxisLine}
-        tickLine={false}
-        dataKey="label"
-        tick={labelRender}
-      />
-    </BarChart>
-  )
+      </BarChart>
+    )
+    : <p>Graph cannot render at this size.</p>
 }
 
-function generateLines(wordsWillFitFn, text) {
-  const labelWords = text.split(' ')
+function useTextSize({
+  textBodies,
+  initialFontSize,
+  width,
+  height,
+  fontFamily,
+}) {
+  const LINE_HEIGHT_RATIO = 1.15
+
+  const doWordsFit = useMemo(() => curry((fontSize, words) => {
+    const textWidth = measureTextWidth(words.join(' '), fontSize, fontFamily)
+    return textWidth < width * 0.95
+  }), [width, fontFamily])
+
+  const getLabelFontSize = useCallback(labelBody => {
+    let fontSize = initialFontSize
+
+    const doesLabelBodyFit = () => {
+      const maxLines = Math.floor(height / (fontSize * LINE_HEIGHT_RATIO))
+      const lines = generateLines(labelBody, doWordsFit(fontSize))
+      return lines && lines.length <= maxLines
+    }
+
+    while (!doesLabelBodyFit()) fontSize--
+    return fontSize
+  }, [initialFontSize, height, doWordsFit])
+
+  const fontSize = useMemo(() => (
+    Math.min(...textBodies.map(getLabelFontSize))
+  ), [textBodies, getLabelFontSize])
+
+  return {
+    fontSize,
+    doWordsFit: useMemo(() => doWordsFit(fontSize), [fontSize, doWordsFit]),
+    lineHeight: fontSize * LINE_HEIGHT_RATIO,
+  }
+}
+
+function generateLines(text, doWordsFit) {
+  const words = text.split(' ')
   const lines = []
 
-  while (labelWords.length) {
-    let nextLine = getNextLine(wordsWillFitFn, labelWords)
-    if (nextLine.length === 0) return null
+  function getNextLine() {
+    const lineWords = []
+    while (words.length && doWordsFit(lineWords.concat(words[0])))
+      lineWords.push(words.shift())
+    return lineWords.join(' ')
+  }
+
+  while (words.length) {
+    let nextLine = getNextLine()
+    if (nextLine === '') return null
     lines.push(nextLine)
   }
 
   return lines
-}
-
-function getNextLine(wordsWillFitFn, labelWords) {
-  const lineWords = []
-  while (
-    labelWords.length
-    && wordsWillFitFn(lineWords.concat(labelWords[0]))
-  ) lineWords.push(labelWords.shift())
-
-  return lineWords.join(' ')
 }
 
 export default PresentationGraph

@@ -1,6 +1,5 @@
 .edit-poll-form {
-  $offset: 72px;
-  @include fullpage($offset);
+  @include fullpage($navbar-offset);
   background: $medium-grey;
 
   display: flex;
@@ -111,7 +110,7 @@
 
 .edit-poll-form-right {
   background-color: white;
-  width: 400px;
+  width: Min(400px, 35vw);
   display: flex;
   flex-direction: column;
   justify-content: flex-end;

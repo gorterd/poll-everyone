@@ -175,29 +175,30 @@ export default function GroupSearch({
       onKeyDown={handleKeyDown}
       ref={searchDiv}
     >
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          className='group-search-input'
-          tabIndex='1'
-          placeholder={placeholderText}
-          value={searchText}
-          onChange={handleSearch}
-          onFocus={handleSearch}
-          ref={searchInput}
-        />
-        <span className='clear-group-search' onClick={clearSearch}>
-          <i className="fas fa-times"></i>
-        </span>
-      </form>
+      <div>
+        <form onSubmit={handleSubmit}>
+          <input
+            type="text"
+            className='group-search-input'
+            tabIndex='1'
+            placeholder={placeholderText}
+            value={searchText}
+            onChange={handleSearch}
+            onFocus={handleSearch}
+            ref={searchInput}
+          />
+          <span className='clear-group-search' onClick={clearSearch}>
+            <i className="fas fa-times"></i>
+          </span>
+        </form>
 
-      <button
-        className='button-grey'
-        onClick={toggleDropdown}
-      >
-        <i className={`fas fa-chevron-${dropdownShowing ? 'up' : 'down'}`}></i>
-      </button>
-
+        <button
+          className='button-grey'
+          onClick={toggleDropdown}
+        >
+          <i className={`fas fa-chevron-${dropdownShowing ? 'up' : 'down'}`}></i>
+        </button>
+      </div>
       {dropdownShowing && <ul className='group-search-list'>
         {drawerGroups.map((group, idx) => (
           <li

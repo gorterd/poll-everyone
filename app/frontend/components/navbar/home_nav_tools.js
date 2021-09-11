@@ -43,7 +43,7 @@ export default function HomeNavTools() {
       <button
         key='demo'
         className="button button-white"
-        onClick={demoLogin}
+        onClick={() => demoLogin()}
       >Demo Login</button>,
       <Link
         key='signup'

@@ -1,6 +1,5 @@
 .show-poll-container {
-  $offset: 72px;
-  @include fullpage($offset);
+  @include fullpage($navbar-offset);
   background: white;
 
   display: flex;
@@ -10,15 +9,17 @@
 .show-poll-left {
   overflow: hidden;
   flex: 1;
-  padding: 32px;
   height: 100%;
   background-color: $lightest-grey;
 }
 
 .graph-container {
-  width: 100%;
-  height: clamp(300px, 80%, 900px); 
-  min-height: 300px;
+  $left-height: calc(100vh - #{$navbar-offset});
+  $height: Min(calc(#{$left-height} * 0.85), 55vw); 
+  width: Min(80%, 100vh);
+  height: $height;
+  margin: calc((#{$left-height} - #{$height}) / 3) auto 0 auto;
+  
   display: flex;
   flex-direction: column;
   background-color: $softer-grey;
@@ -44,11 +45,11 @@
     width: 100%;
     height: calc(100% - 62px - 40px - min(#{$fontsize-h2}, 1.7vw));
 
-    $h1font: clamp(30px, min(4vh, 3vw), 4rem);
+    $h1font: clamp(30px, Min(4vh, 3vw), 4rem);
     
     h1 {
       text-align: center;
-      font-size: min(#{$h1font}, 2.5vw, 3.5vh);
+      font-size: Min(#{$h1font}, 2.5vw, 3.5vh);
       max-width: 80%;
     }
 
@@ -59,6 +60,7 @@
       max-height: calc(100% - 100px - #{$h1font});
       display: flex;
       justify-content: center;
+      align-items: center;
     }
   }
 
@@ -70,7 +72,7 @@
 
 .show-poll-right {
   background-color: white;
-  width: 400px;
+  width: Min(400px, 35vw);
   display: flex;
   flex-direction: column;
   justify-content: flex-end;

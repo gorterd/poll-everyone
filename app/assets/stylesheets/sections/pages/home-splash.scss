@@ -1,6 +1,6 @@
 .home-splash-container {
-  margin-top: 72px;
-  min-height: calc(100vh - 72px);
+  margin-top: $navbar-offset;
+  min-height: $navbarless-height;
 }
 
 .home-splash-pane {
