@@ -234,23 +234,24 @@
     display: flex;
     justify-content: flex-end;
     flex-direction: column;
+    align-items: flex-start;
     padding: 18px;
     width: 100%;
 
   }
 
-  h1 { font-size: 2.25rem; line-height: 0.95em;}
-
-
-  
+  h1 { 
+    font-size: 2.25rem; 
+    line-height: 0.95em;
+  }
 
   .move-drawer-search-container {
     display: flex;
     align-items: center;
     justify-content: flex-end;
     height: 80px;
-    width: 925px;
     margin: 18px 0;
+    padding: 0 18px;
     background-color: white;
   
     span { margin: auto; display: block; }
@@ -269,15 +270,19 @@
       border: 1px solid $light-grey
     }
 
+    $search-width: min(400px, 40vw);
+    .group-search-container {
+      margin-left: 40px;
+      width: $search-width;
+    }
+
     .group-search-list {
       max-height: 210px;
       border: 1px solid $light-grey;
+      position: absolute;
+      transform: translateY(44px);
+      width: $search-width;    
     }
-  }
-
-  .group-search-container {
-    width: 675px;
-    margin-right: 18px;
   }
 
   .move-buttons {

@@ -158,14 +158,8 @@
     width: min(454px, 50%);
 
     .group-search-list {
-      position: relative;
-      top: unset;
+      position: static;
     }
-  }
-
-  > div {
-    display: flex;
-    &:focus { outline: none; }
   }
 
   .button-grey {

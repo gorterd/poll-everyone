@@ -1,5 +1,4 @@
 .group-search-container {
-  position: relative;
   display: flex;
   flex-direction: column;
 
@@ -43,11 +42,7 @@
 }
 
 .group-search-list {
-  position: absolute;
-  top: 100%;
   background-color: white;
-  left: 0;
-  right: 0;
   max-height: 140px;
   font-size: $fontsize-strong;
   border-top: 1px solid $medium-grey;

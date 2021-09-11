@@ -13,8 +13,7 @@
  *= require_self
  */
 
- @import "./base/*";
- @import "./shared/*";
-//  @import "./sections/*";
+@import "./base/*";
+@import "./shared/*";
 @import "./sections/pages/*";
- @import "./sections/partials/*";
+@import "./sections/partials/*";
