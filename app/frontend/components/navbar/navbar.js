@@ -38,12 +38,14 @@ export default function Navbar() {
           <a
             className="nav-link"
             href="https://github.com/gorterd"
+            target="_blank" rel="noreferrer"
           >Github</a>
         </li>
         <li key='linked-in'>
           <a
             className="nav-link"
             href="https://www.linkedin.com/in/daniel-gorter-87549277"
+            target="_blank" rel="noreferrer"
           >LinkedIn</a>
         </li>
       </>

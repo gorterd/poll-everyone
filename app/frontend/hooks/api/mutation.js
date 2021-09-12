@@ -2,7 +2,7 @@ import { useContext } from 'react'
 import { useMutation, useQueryClient } from 'react-query'
 import { useDispatch } from 'react-redux'
 import { useHistory } from 'react-router-dom'
-import { RefetchPollsContext } from '../../components/app_state_wrapper'
+import { FetchPollsContext } from '../../components/app_state_wrapper'
 import { clearSelections } from '../../store/actions/selection_actions'
 import ajax from '../../util/ajax'
 
@@ -12,7 +12,7 @@ const useHybridMutation = (mutateFn, {
   onSuccess,
   ...options
 } = {}) => {
-  const { refetchPolls } = useContext(RefetchPollsContext)
+  const { fetchQuery } = useContext(FetchPollsContext)
   const queryClient = useQueryClient()
 
   return useMutation(mutateFn, {
@@ -23,7 +23,7 @@ const useHybridMutation = (mutateFn, {
     onSuccess: (...args) => {
       onSuccess?.(queryClient, ...args)
       if (key) queryClient.invalidateQueries(key)
-      refetchPolls()
+      fetchQuery()
     }
   })
 }

@@ -1,37 +1,36 @@
 /* eslint-disable no-undef */
-import React, { createContext, useLayoutEffect, useMemo, useState } from 'react'
+import React, {
+  createContext,
+  useCallback,
+  useLayoutEffect,
+  useMemo,
+  useState
+} from 'react'
 import { useDispatch } from 'react-redux'
-import { ReactQueryDevtools } from 'react-query/devtools'
 import { useLocation } from 'react-router-dom'
 
 import { useStateValue, usePrevious } from '../hooks/general'
 import { exitModal } from '../store/actions/ui_actions'
+import { useRelayEnvironment, fetchQuery } from 'react-relay/hooks'
+import { pollsIndexQuery } from './polls/polls_index'
 
-export const RefetchPollsContext = createContext()
+export const FetchPollsContext = createContext()
 
 export default function AppStateWrapper({ children }) {
   const [isFrozen, offset] = useScrollRestoration()
-  const [refetchPolls, setRefetchPolls] = useState(() => () => { })
-  const refetchPollsValue = useMemo(
-    () => ({ refetchPolls, setRefetchPolls }),
-    [refetchPolls, setRefetchPolls]
-  )
+  const pollsFetcher = useQueryFetch(pollsIndexQuery)
 
   return (
     <div
       className={'app' + (isFrozen ? ' freeze-scroll' : '')}
       style={isFrozen ? { top: offset } : null}
     >
-      <RefetchPollsContext.Provider value={refetchPollsValue}>
+      <FetchPollsContext.Provider value={pollsFetcher}>
         {children}
-        {process.env.NODE_ENV !== 'production' &&
-          <ReactQueryDevtools initialIsOpen={false} />
-        }
-      </RefetchPollsContext.Provider>
+      </FetchPollsContext.Provider>
     </div>
   )
 }
-
 
 function useScrollRestoration() {
   const scrollY = useStateValue('ui scrollY')
@@ -56,4 +55,22 @@ function useScrollRestoration() {
   }, [curPath, prevPath, modalActive, dispatch])
 
   return [modalActive, scrollY * -1]
+}
+
+function useQueryFetch(query) {
+  const env = useRelayEnvironment()
+  const [refetchQuery, setRefetchQuery] = useState()
+
+  const fetch = useCallback((variables) => {
+    if (refetchQuery) {
+      refetchQuery(variables)
+    } else {
+      fetchQuery(env, query, variables || {}).toPromise()
+    }
+  }, [env, refetchQuery, query])
+
+  return useMemo(
+    () => ({ fetchQuery: fetch, setRefetchQuery }),
+    [fetch, setRefetchQuery]
+  )
 }

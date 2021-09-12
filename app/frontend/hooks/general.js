@@ -1,5 +1,5 @@
 import { isEqual } from 'lodash'
-import { useCallback, useMemo } from 'react'
+import { useCallback } from 'react'
 import { useEffect, useRef, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { fetchQuery, useLazyLoadQuery, useRelayEnvironment } from 'react-relay/hooks'
@@ -27,16 +27,15 @@ export const useStableMutable = (curMutable) => {
 
 export const useRefetchableQuery = ({
   query,
-  variables,
+  setRefetchQuery,
+  variables = {},
   trackLoading = true
 }) => {
-  const defaultVariables = useMemo(() => ({}), [])
-  variables = variables || defaultVariables
   const env = useRelayEnvironment()
   const [loading, setLoading] = useState(false)
   const [queryOptions, setQueryOptions] = useState({})
 
-  const refetch = useCallback(() => {
+  const refetch = useCallback((variables) => {
     if (trackLoading) setLoading(true)
     fetchQuery(env, query, variables).subscribe({
       complete: () => {
@@ -50,10 +49,15 @@ export const useRefetchableQuery = ({
         if (trackLoading) setLoading(false)
       }
     })
-  }, [trackLoading, env, query, variables])
+  }, [trackLoading, env, query])
+
+  useEffect(() => {
+    setRefetchQuery?.(() => refetch)
+    return () => setRefetchQuery?.(null)
+  }, [setRefetchQuery, refetch])
 
   const data = useLazyLoadQuery(query, variables, queryOptions)
-  return [data, refetch, loading]
+  return [data, loading, refetch]
 }
 
 

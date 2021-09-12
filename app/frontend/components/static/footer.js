@@ -58,14 +58,23 @@ const Footer = () => {
       </div>
       <div className='footer-social-pane'>
         <span className="icon icon-std icon-grey">
-          <a href="https://github.com/gorterd">
+          <a href="https://github.com/gorterd" target="_blank" rel="noreferrer">
             <i className="fab fa-github"></i>
           </a>
         </span>
         <span className="icon icon-std icon-grey">
-          <a href="https://www.linkedin.com/in/daniel-gorter-87549277"><i className="fab fa-linkedin"></i></a>
+          <a
+            href="https://www.linkedin.com/in/daniel-gorter-87549277"
+            target="_blank" rel="noreferrer"
+          >
+            <i className="fab fa-linkedin"></i>
+          </a>
         </span>
-        <a className="button button-blue" href="mailto: danieljgorter@gmail.com">Contact me</a>
+        <a
+          className="button button-blue"
+          href="mailto: danieljgorter@gmail.com"
+          target="_blank" rel="noreferrer"
+        >Contact me</a>
       </div>
     </section>
   )
