@@ -61,7 +61,7 @@ const ParticipateHome = () => {
           </button>
         </form>
       </div>
-      {recents.length && (
+      {recents.length > 0 && (
         <h3 className='recents-header'>Recent presentations </h3>
       )}
       <div className='recent-presentations'>
@@ -71,7 +71,6 @@ const ParticipateHome = () => {
             <span>{username}</span>
           </Link>
         ))}
-
       </div>
     </div>
   )
