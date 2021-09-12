@@ -28,11 +28,13 @@
   h2 {
     margin: 20px auto;
     font-size: min(#{$fontsize-h2}, 1.7vw, 3.5vh);
+    padding: 0 15px;
     font-weight: 400;
     text-align: center;
 
     strong {
       font-weight: 700;
+      white-space: nowrap;
     }
   }
 

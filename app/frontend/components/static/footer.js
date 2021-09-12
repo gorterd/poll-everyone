@@ -48,8 +48,8 @@ const Footer = () => {
 
   return (
     <section className='footer'>
-      <div className='footer-pane'>
-        <div className='footer-pane-container'>
+      <div className='footer-pane-primary'>
+        <div className='footer-pane-primary_content'>
           <Logo text='About Me' />
           <div className='footer-links-container'>
             {linkLists}
@@ -57,21 +57,15 @@ const Footer = () => {
         </div>
       </div>
       <div className='footer-social-pane'>
-        <div className='footer-social-container'>
-          <div className='footer-social-left'>
-          </div>
-          <div className='footer-social-right'>
-            <span className="icon icon-std icon-grey">
-              <a href="https://github.com/gorterd">
-                <i className="fab fa-github"></i>
-              </a>
-            </span>
-            <span className="icon icon-std icon-grey">
-              <a href="https://www.linkedin.com/in/daniel-gorter-87549277"><i className="fab fa-linkedin"></i></a>
-            </span>
-            <a className="button button-blue" href="mailto: danieljgorter@gmail.com">Contact me</a>
-          </div>
-        </div>
+        <span className="icon icon-std icon-grey">
+          <a href="https://github.com/gorterd">
+            <i className="fab fa-github"></i>
+          </a>
+        </span>
+        <span className="icon icon-std icon-grey">
+          <a href="https://www.linkedin.com/in/daniel-gorter-87549277"><i className="fab fa-linkedin"></i></a>
+        </span>
+        <a className="button button-blue" href="mailto: danieljgorter@gmail.com">Contact me</a>
       </div>
     </section>
   )

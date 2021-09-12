@@ -16,7 +16,7 @@
 }
 
 .first-pane-text {
-  width: 515px;
+  width: min(515px, 45vw);
   padding: 20px;
   display: flex;
   flex-direction: column;
@@ -36,6 +36,6 @@
 
 
 .home-splash-img {
-  width: 470px; 
+  width: min(470px, 40vw); 
   border-radius: 10px;
 }
