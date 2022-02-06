@@ -1,6 +1,4 @@
-# README
-
-## Welcome!
+# Welcome!
 
 [Poll Everyone][live], a clone of [Poll Everywhere][original], is a live polling / survey web application that allows:
 
@@ -8,7 +6,7 @@
 * participants to answer activated polls from their own devices via a custom link
 * audiences and presenters to view results in real time
 
-## Technologies Used
+# Technologies Used
 
 * Backend
     * Ruby on Rails
@@ -22,14 +20,14 @@
     * Recharts for graphing poll results
     * SCSS
 
-## Highlights
+# Highlights
 
 * Custom list order management using SQL window functions & more ([Orderable][orderable])
 * Many custom hooks ([See here][hooks])
 * A highly customized Recharts graph with dynamic sizing and labeling ([check it out][graph])
 * Some overkill, [like waiting a second][font-loading] to render until the font has loaded (no [FOUT][fout]😤) and [prefetching][prefetch-hook] dynamic [imports][prefetch-import] in routed [components][prefetch-component].
 
-## Notes
+# Notes
 
 * Poll Everywhere has undergone a redesign since I cloned it; [check out these screen grabs][screens] to see the previous design.
 
@@ -41,7 +39,7 @@
     * Finally, I wanted to learn GraphQL, and was curious about the React Suspense integration provided by Relay, so I partially migrated over to Relay / GraphQL
     * Because of this in-progress, hybrid solution, I didn't implement optimistic updates for mutations made on the dashboard.
 
-## Next Steps
+# Next Steps
 
 * Complete GraphQL implementation
 
@@ -50,8 +48,6 @@
 * Add drag and drop functionality to polls in the polls index
 
 * Build out poll configurations and settings
-
-
 
 [live]: https://poll-everyone.herokuapp.com/
 [original]: https://www.polleverywhere.com/
